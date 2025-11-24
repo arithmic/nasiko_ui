@@ -1,0 +1,36 @@
+name: nasiko_ui
+description: "A new Flutter package project."
+version: 0.0.1
+homepage: https://github.com/yourusername/nasiko_ui
+
+environment:
+  sdk: ^3.9.0
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-VariableFont_opsz.ttf
+        - asset: assets/fonts/Inter-Italic-VariableFont_opsz.ttf
+          style: italic
+
+    - family: ChivoMono
+      fonts:
+        - asset: assets/fonts/ChivoMono-Regular.ttf
+        - asset: assets/fonts/ChivoMono-Medium.ttf
+          weight: 500
