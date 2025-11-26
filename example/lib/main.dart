@@ -1685,6 +1685,7 @@ class _ListExampleState extends State<_ListExample> {
       children: [
         // --- Item 1: Root (Expanded) ---
         NasikoListItem(
+          
           title: 'POST/ chat',
           imageUrl: imageUrl,
           leadingIcon: Icons.hexagon_outlined,
