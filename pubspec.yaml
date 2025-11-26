@@ -1,7 +1,9 @@
 name: nasiko_ui
 description: "A new Flutter package project."
 version: 0.0.1
-homepage: https://github.com/yourusername/nasiko_ui
+homepage: https://github.com/arithmic/nasiko_ui
+repository: https://github.com/arithmic/nasiko_ui
+issue_tracker: https://github.com/arithmic/nasiko_ui/issues
 
 environment:
   sdk: ^3.9.0
@@ -21,6 +23,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/fonts/
 
   fonts:
     - family: Inter
@@ -29,7 +32,7 @@ flutter:
         - asset: assets/fonts/Inter-Italic-VariableFont_opsz.ttf
           style: italic
 
-    - family: ChivoMono
+    - family: Chivo Mono
       fonts:
         - asset: assets/fonts/ChivoMono-Regular.ttf
         - asset: assets/fonts/ChivoMono-Medium.ttf

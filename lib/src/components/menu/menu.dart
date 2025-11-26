@@ -27,20 +27,15 @@ class _NasikoMenuItem extends StatelessWidget {
 
     // Determine the styles based on the selection state
     final Color backgroundColor = isSelected
-        ? colors
-              .backgroundSecondaryBrand // yellow/100
+        ? colors.backgroundSecondaryBrand
         : Colors.transparent;
 
     final Color textColor = isSelected
-        ? colors
-              .foregroundPrimary // neutral/700
-        : colors.foregroundSecondary; // neutral/500
+        ? colors.foregroundPrimary
+        : colors.foregroundSecondary;
 
     final Border border = isSelected
-        ? Border.all(
-            color: colors.borderSecondary, // yellow/600
-            width: borderWidths.w1,
-          )
+        ? Border.all(color: colors.borderSecondary, width: borderWidths.w1)
         : Border.all(color: Colors.transparent, width: borderWidths.w1);
 
     // Use AnimatedContainer to smoothly transition between states
@@ -79,7 +74,7 @@ class _NasikoMenuItem extends StatelessWidget {
 ///
 /// Displays a title and a list of items, highlighting the
 /// currently selected item.
-class NasikoMenu extends StatelessWidget {
+class NasikoMenu extends StatefulWidget {
   const NasikoMenu({
     super.key,
     required this.title,
@@ -109,6 +104,25 @@ class NasikoMenu extends StatelessWidget {
   final double height;
 
   @override
+  State<NasikoMenu> createState() => _NasikoMenuState();
+}
+
+class _NasikoMenuState extends State<NasikoMenu> {
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colors = context.colors;
     final spacing = context.spacing;
@@ -125,16 +139,16 @@ class NasikoMenu extends StatelessWidget {
           padding: EdgeInsets.only(left: spacing.s4, bottom: spacing.s8),
           child: Row(
             children: [
-              if (titleIcon != null) ...[
+              if (widget.titleIcon != null) ...[
                 Icon(
-                  titleIcon,
-                  color: colors.foregroundPrimary, // Using primary color
+                  widget.titleIcon,
+                  color: colors.foregroundPrimary,
                   size: iconSizes.s, // 20px
                 ),
                 SizedBox(width: spacing.s8),
               ],
               Text(
-                title,
+                widget.title,
                 style: typography.bodyPrimaryBold.copyWith(
                   color: colors.foregroundPrimary,
                 ),
@@ -145,24 +159,26 @@ class NasikoMenu extends StatelessWidget {
 
         // 2. Menu Container
         Container(
-          height: height,
+          height: widget.height,
           decoration: BoxDecoration(
-            color: colors.backgroundGroup, // neutral/50
+            color: colors.backgroundGroup,
             borderRadius: BorderRadius.circular(radii.r12),
           ),
           child: Padding(
             padding: EdgeInsets.all(spacing.s8),
             child: Scrollbar(
+              controller: _scrollController,
               thumbVisibility: true,
               child: ListView.separated(
-                itemCount: items.length,
+                controller: _scrollController,
+                itemCount: widget.items.length,
                 separatorBuilder: (context, index) =>
                     SizedBox(height: spacing.s4),
                 itemBuilder: (context, index) {
                   return _NasikoMenuItem(
-                    label: items[index],
-                    isSelected: selectedIndex == index,
-                    onTap: () => onItemSelected(index),
+                    label: widget.items[index],
+                    isSelected: widget.selectedIndex == index,
+                    onTap: () => widget.onItemSelected(index),
                   );
                 },
               ),

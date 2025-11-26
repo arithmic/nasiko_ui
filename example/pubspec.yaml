@@ -20,15 +20,15 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  fonts:
-    - family: Inter
-      fonts:
-        - asset: packages/nasiko_ui/assets/fonts/Inter-VariableFont_opsz.ttf
-        - asset: packages/nasiko_ui/assets/fonts/Inter-Italic-VariableFont_opsz.ttf
-          style: italic
+  # fonts:
+  #   - family: Inter
+  #     fonts:
+  #       - asset: assets/fonts/Inter-VariableFont_opsz.ttf
+  #       - asset: assets/fonts/Inter-Italic-VariableFont_opsz.ttf
+  #         style: italic
 
-    - family: Chivo Mono
-      fonts:
-        - asset: packages/nasiko_ui/assets/fonts/ChivoMono-Regular.ttf
-        - asset: packages/nasiko_ui/assets/fonts/ChivoMono-Medium.ttf
-          weight: 500
+  #   - family: Chivo Mono
+  #     fonts:
+  #       - asset: assets/fonts/ChivoMono-Regular.ttf
+  #       - asset: assets/fonts/ChivoMono-Medium.ttf
+  #         weight: 500

@@ -8,10 +8,7 @@ class NasikoTabItem {
   final String label;
   final IconData icon;
 
-  const NasikoTabItem({
-    required this.label,
-    required this.icon,
-  });
+  const NasikoTabItem({required this.label, required this.icon});
 }
 
 /// A horizontal, scrollable tab bar for the Nasiko Design System.
@@ -48,7 +45,10 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
       onTap: onTap,
       isScrollable: true, // Allows horizontal scrolling
       padding: EdgeInsets.zero,
-      
+
+      // *** FIX: Set tabAlignment to prevent automatic scrollbar ***
+      tabAlignment: TabAlignment.start,
+
       // Padding for each individual tab
       labelPadding: EdgeInsets.symmetric(
         horizontal: spacing.s16,
@@ -71,11 +71,9 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       indicatorSize: TabBarIndicatorSize.label, // Confines line to the label
-
       // --- Full-Width Underline (Gray) ---
       dividerColor: colors.borderPrimary, // neutral/300
       dividerHeight: borderWidths.w1, // 1px
-
       // Build the list of Tab widgets
       tabs: tabs.map((item) {
         return Tab(

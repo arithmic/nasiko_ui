@@ -15,6 +15,8 @@ class ExampleApp extends StatefulWidget {
 class _ExampleAppState extends State<ExampleApp> {
   ThemeMode _themeMode = ThemeMode.light;
 
+  bool _isSwitchActive = true;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -30,6 +32,12 @@ class _ExampleAppState extends State<ExampleApp> {
                 : ThemeMode.light;
           });
         },
+        isSwitchActive: _isSwitchActive,
+        onSwitchToggled: (value) {
+          setState(() {
+            _isSwitchActive = value;
+          });
+        },
       ),
     );
   }
@@ -38,7 +46,15 @@ class _ExampleAppState extends State<ExampleApp> {
 class ExampleHomePage extends StatelessWidget {
   final VoidCallback onThemeToggle;
 
-  const ExampleHomePage({required this.onThemeToggle, super.key});
+  final bool isSwitchActive;
+  final ValueChanged<bool> onSwitchToggled;
+
+  const ExampleHomePage({
+    required this.onThemeToggle,
+    required this.isSwitchActive,
+    required this.onSwitchToggled,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1302,100 +1318,136 @@ class ExampleHomePage extends StatelessWidget {
   }
 
   // Helper widget to simulate the 'Active' status pill in the design
-  Widget _buildStatusPill(
-    BuildContext context, {
-    required String label,
-    required Color color,
-  }) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: context.spacing.s8,
-        vertical: context.spacing.s4,
-      ),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.15), // Light background tint
-        borderRadius: BorderRadius.circular(
-          context.radius.r40,
-        ), // Fully rounded
-        border: Border.all(color: color, width: context.borderWidth.w1),
-      ),
-      child: Text(
-        label,
-        style: context.typography.caption.copyWith(
-          color: color,
-          fontWeight: FontWeight.w600,
-          fontStyle:
-              FontStyle.normal, // Override the default italic caption style
-        ),
-      ),
-    );
-  }
+  // Widget _buildStatusPill(
+  //   BuildContext context, {
+  //   required String label,
+  //   required Color color,
+  // }) {
+  //   return Container(
+  //     padding: EdgeInsets.symmetric(
+  //       horizontal: context.spacing.s8,
+  //       vertical: context.spacing.s4,
+  //     ),
+  //     decoration: BoxDecoration(
+  //       color: color.withOpacity(0.15), // Light background tint
+  //       borderRadius: BorderRadius.circular(
+  //         context.radius.r40,
+  //       ), // Fully rounded
+  //       border: Border.all(color: color, width: context.borderWidth.w1),
+  //     ),
+  //     child: Text(
+  //       label,
+  //       style: context.typography.caption.copyWith(
+  //         color: color,
+  //         fontWeight: FontWeight.w600,
+  //         fontStyle:
+  //             FontStyle.normal, // Override the default italic caption style
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildTableExample(BuildContext context) {
-    final colors = context.colors;
-    final typography = context.typography;
-
-    // 1. Define Columns
+    // Define columns matching the design
     final columns = [
-      const NasikoTableColumn(title: 'Name', flex: 3, isSortable: true),
+      const NasikoTableColumn(title: '.Cell Item', flex: 3),
       const NasikoTableColumn(
-        title: 'Status',
+        title: '.Cell',
         flex: 2,
         alignment: Alignment.center,
       ),
       const NasikoTableColumn(
-        title: 'Value',
-        flex: 1,
+        title: '.Column',
+        flex: 2,
         alignment: Alignment.centerRight,
-        isSortable: true,
       ),
     ];
 
-    // 2. Define Data (List of Lists of Widgets)
+    // Create rows with different cell content types
     final data = [
-      // Row 1
+      // Row 1: Copy cells
       [
-        Text('Application Server', style: typography.bodyPrimary),
-        _buildStatusPill(
-          context,
-          label: 'Active',
-          color: colors.foregroundSuccess,
-        ),
-        Text('32.1k', style: typography.bodyPrimary),
+        const NasikoTableCopyCell(),
+        const NasikoTableCopyCell(),
+        const NasikoTableCopyCell(),
       ],
-      // Row 2 (Simulating hover state visually)
+
+      // Row 2: Copy cells
       [
-        Text('Database Cluster', style: typography.bodyPrimary),
-        _buildStatusPill(
-          context,
-          label: 'Degraded',
-          color: colors.foregroundWarning,
-        ),
-        Text('15.4k', style: typography.bodyPrimary),
+        const NasikoTableCopyCell(),
+        const NasikoTableCopyCell(),
+        const NasikoTableCopyCell(),
       ],
-      // Row 3
+
+      // Row 3: Complex cell with button
       [
-        Text('Web Frontend (EU)', style: typography.bodyPrimary),
-        _buildStatusPill(
-          context,
-          label: 'Offline',
-          color: colors.foregroundError,
-        ),
-        Text('2.5k', style: typography.bodyPrimary),
+        const NasikoTableCellItem(showButton: true),
+        const NasikoTableCopyCell(),
+        const NasikoTableCopyCell(),
       ],
-      // Row 4
+
+      // Row 4: Complex cell with icons
       [
-        Text('API Gateway (US)', style: typography.bodyPrimary),
-        _buildStatusPill(
-          context,
-          label: 'Active',
-          color: colors.foregroundSuccess,
-        ),
-        Text('88.9k', style: typography.bodyPrimary),
+        const NasikoTableCellItem(showIcons: true),
+        const NasikoTableCopyCell(),
+        const NasikoTableCopyCell(),
+      ],
+
+      // Row 5: Complex cell with tags
+      [
+        const NasikoTableCellItem(showTags: true),
+        const NasikoTableCopyCell(),
+        const NasikoTableCopyCell(),
+      ],
+
+      // Row 6: Complex cell with checkbox
+      [
+        const NasikoTableCellItem(showCheckbox: true),
+        const NasikoTableCopyCell(),
+        const NasikoTableCopyCell(),
+      ],
+
+      // Row 7: Complex cell with radio
+      [
+        const NasikoTableCellItem(showRadio: true),
+        const NasikoTableCopyCell(),
+        const NasikoTableCopyCell(),
+      ],
+
+      // Row 8: Complex cell with avatar
+      [
+        const NasikoTableCellItem(showAvatar: true),
+        const NasikoTableCopyCell(),
+        const NasikoTableCopyCell(),
+      ],
+
+      // Row 9: Complex cell with switch
+      [
+        const NasikoTableCellItem(showSwitch: true),
+        const NasikoTableCopyCell(),
+        const NasikoTableCopyCell(),
+      ],
+
+      // Row 10: Complex cell with status
+      [
+        const NasikoTableCellItem(showStatus: true),
+        const NasikoTableCopyCell(),
+        const NasikoTableCopyCell(),
+      ],
+
+      // Add more rows as needed
+      [
+        const NasikoTableCopyCell(),
+        const NasikoTableCopyCell(),
+        const NasikoTableCopyCell(),
       ],
     ];
 
-    return NasikoTable(columns: columns, data: data);
+    return NasikoTable(
+      columns: columns,
+      data: data,
+      bodyHeight: 500, // Adjust as needed
+    );
   }
 
   Widget _buildToastExample(BuildContext context) {
@@ -1440,55 +1492,53 @@ class ExampleHomePage extends StatelessWidget {
 
   Widget _buildSwitchExample(BuildContext context) {
     final spacing = context.spacing;
+    final colors = context.colors;
     final typography = context.typography;
 
-    return StatefulBuilder(
-      builder: (BuildContext context, StateSetter setState) {
-        // Use a local state for the switch demonstration
-        bool isToggled = true;
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Row 1: Active/Inactive Switch
+        Text('Interactive Switch', style: typography.bodyPrimaryBold),
+        SizedBox(height: spacing.s12),
+        Row(
           children: [
-            // Row 1: Active/Inactive Switch
-            Text('Active/Inactive Switch', style: typography.bodyPrimaryBold),
-            SizedBox(height: spacing.s12),
-            Row(
-              children: [
-                // Active Switch (ON state)
-                NasikoSwitch(
-                  value: isToggled,
-                  onChanged: (newValue) {
-                    setState(() {
-                      isToggled = newValue;
-                    });
-                  },
-                ),
-                SizedBox(width: spacing.s16),
-                Text(
-                  isToggled ? 'ON (Active)' : 'OFF (Inactive)',
-                  style: typography.bodyPrimary.copyWith(
-                    color: isToggled
-                        ? context.colors.foregroundBrand
-                        : context.colors.foregroundSecondary,
-                  ),
-                ),
-              ],
+            // This uses the 'isSwitchActive' state passed from the parent StatefulWidget
+            NasikoSwitch(
+              value: isSwitchActive,
+              // This calls the 'onSwitchToggled' function, which executes setState in the parent
+              onChanged: onSwitchToggled,
             ),
-
-            SizedBox(height: spacing.s24),
-
-            // Row 2: Disabled Switch
+            SizedBox(width: spacing.s16),
             Text(
-              'Disabled Switch (Value OFF)',
-              style: typography.bodyPrimaryBold,
+              isSwitchActive ? 'ON (Active)' : 'OFF (Inactive)',
+              style: typography.bodyPrimary.copyWith(
+                color: isSwitchActive
+                    ? colors.foregroundBrand
+                    : colors.foregroundSecondary,
+              ),
             ),
-            SizedBox(height: spacing.s12),
-            // Disabled Switch (Value is OFF, onChanged is null)
-            NasikoSwitch(value: false, onChanged: null),
           ],
-        );
-      },
+        ),
+
+        // --- Separator ---
+        SizedBox(height: spacing.s24),
+
+        // Row 2: Disabled Switch
+        Text('Disabled Switch (Value OFF)', style: typography.bodyPrimaryBold),
+        SizedBox(height: spacing.s12),
+        // Disabled Switch (The 'onChanged' property is null)
+        NasikoSwitch(value: false, onChanged: null),
+
+        // --- Separator ---
+        SizedBox(height: spacing.s24),
+
+        // Row 3: Disabled Switch
+        Text('Disabled Switch (Value ON)', style: typography.bodyPrimaryBold),
+        SizedBox(height: spacing.s12),
+        // Disabled Switch (Value is ON, onChanged is null)
+        NasikoSwitch(value: true, onChanged: null),
+      ],
     );
   }
 }
@@ -1629,7 +1679,7 @@ class _ListExampleState extends State<_ListExample> {
   Widget build(BuildContext context) {
     // A placeholder image URL
     const String imageUrl =
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-f-I-c-TISUj-3-e-3e-w-w-w-w-w-w-w-w&s';
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4JCuHyuURcCyeNEc9v4iOma3HVgZgDSMaIQ&s';
 
     return NasikoList(
       children: [
