@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nasiko_ui/src/tokens/tokens.dart';
 
-/// A model representing a single dropdown item.
-class NasikoDropdownItem<T> {
-  const NasikoDropdownItem({
+/// A model representing a single section item.
+class SectionItem<T> {
+  const SectionItem({
     required this.value,
     required this.label,
     this.icon,
@@ -23,12 +23,12 @@ class NasikoDropdownItem<T> {
   final String? shortcut;
 }
 
-/// A dropdown select component with expandable menu.
+/// A section select component with expandable menu.
 ///
 /// Displays a trigger button that opens a scrollable list of options.
 /// Supports optional leading icons, keyboard shortcuts, and selection state.
-class NasikoDropdown<T> extends StatefulWidget {
-  const NasikoDropdown({
+class SectionList<T> extends StatefulWidget {
+  const SectionList({
     super.key,
     required this.items,
     required this.selectedValue,
@@ -39,8 +39,8 @@ class NasikoDropdown<T> extends StatefulWidget {
     this.enabled = true,
   });
 
-  /// The list of dropdown items to display.
-  final List<NasikoDropdownItem<T>> items;
+  /// The list of section items to display.
+  final List<SectionItem<T>> items;
 
   /// The currently selected value.
   final T? selectedValue;
@@ -54,17 +54,17 @@ class NasikoDropdown<T> extends StatefulWidget {
   /// Hint text when no item is selected.
   final String hint;
 
-  /// Maximum height of the dropdown menu.
+  /// Maximum height of the section menu.
   final double maxHeight;
 
-  /// Whether the dropdown is enabled.
+  /// Whether the section is enabled.
   final bool enabled;
 
   @override
-  State<NasikoDropdown<T>> createState() => _NasikoDropdownState<T>();
+  State<SectionList<T>> createState() => _SectionListState<T>();
 }
 
-class _NasikoDropdownState<T> extends State<NasikoDropdown<T>>
+class _SectionListState<T> extends State<SectionList<T>>
     with SingleTickerProviderStateMixin {
   final LayerLink _layerLink = LayerLink();
   OverlayEntry? _overlayEntry;
@@ -123,12 +123,12 @@ class _NasikoDropdownState<T> extends State<NasikoDropdown<T>>
     _overlayEntry = null;
   }
 
-  void _selectItem(NasikoDropdownItem<T> item) {
+  void _selectItem(SectionItem<T> item) {
     widget.onChanged(item.value);
     _closeDropdown();
   }
 
-  NasikoDropdownItem<T>? get _selectedItem {
+  SectionItem<T>? get _selectedItem {
     if (widget.selectedValue == null) return null;
     try {
       return widget.items.firstWhere(
@@ -197,7 +197,7 @@ class _NasikoDropdownState<T> extends State<NasikoDropdown<T>>
                                   final isSelected =
                                       item.value == widget.selectedValue;
 
-                                  return _DropdownMenuItem<T>(
+                                  return _SectionListItem<T>(
                                     item: item,
                                     isSelected: isSelected,
                                     onTap: () => _selectItem(item),
@@ -318,23 +318,23 @@ class _NasikoDropdownState<T> extends State<NasikoDropdown<T>>
   }
 }
 
-/// Internal dropdown menu item widget.
-class _DropdownMenuItem<T> extends StatefulWidget {
-  const _DropdownMenuItem({
+/// Internal section menu item widget.
+class _SectionListItem<T> extends StatefulWidget {
+  const _SectionListItem({
     required this.item,
     required this.isSelected,
     required this.onTap,
   });
 
-  final NasikoDropdownItem<T> item;
+  final SectionItem<T> item;
   final bool isSelected;
   final VoidCallback onTap;
 
   @override
-  State<_DropdownMenuItem<T>> createState() => _DropdownMenuItemState<T>();
+  State<_SectionListItem<T>> createState() => _SectionListItemState<T>();
 }
 
-class _DropdownMenuItemState<T> extends State<_DropdownMenuItem<T>> {
+class _SectionListItemState<T> extends State<_SectionListItem<T>> {
   bool _isHovered = false;
 
   @override

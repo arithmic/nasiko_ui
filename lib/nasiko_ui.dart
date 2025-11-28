@@ -9,7 +9,7 @@ export 'src/components/checkbox/checkbox.dart';
 export 'src/components/checkbox/checkbox_tile.dart';
 export 'src/components/chip/chips.dart';
 export 'src/components/divider/divider.dart';
-export 'src/components/dropdown/dropdown.dart';
+export 'src/components/section/section.dart';
 export 'src/components/input_fields/input_field.dart';
 export 'src/components/list/list.dart';
 export 'src/components/list/list_item.dart';
