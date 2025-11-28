@@ -148,7 +148,6 @@ class _NasikoDropdownState<T> extends State<NasikoDropdown<T>>
         final colors = this.context.colors;
         final spacing = this.context.spacing;
         final radii = this.context.radius;
-        final typography = this.context.typography;
         final borderWidths = this.context.borderWidth;
 
         return GestureDetector(
@@ -379,8 +378,10 @@ class _DropdownMenuItemState<T> extends State<_DropdownMenuItem<T>> {
           ),
           child: Text(
             widget.item.label,
-            style: typography.bodySecondary.copyWith(
-              color: colors.foregroundPrimary,
+            style: typography.bodySecondaryBold.copyWith(
+              color: widget.isSelected
+                  ? colors.foregroundPrimary
+                  : colors.foregroundSecondary,
             ),
           ),
         ),
