@@ -21,22 +21,22 @@ const Color neutral900 = Color(0xFF0F172A);
 // Yellow
 const Color yellow50 = Color(0xFFFDF7E6);
 const Color yellow100 = Color(0xFFFBF0CE);
-const Color yellow200 = Color(0xFFF7E39C);
-const Color yellow300 = Color(0xFFF2D66B);
-const Color yellow400 = Color(0xFFEBC739);
-const Color yellow500 = Color(0xFFE4B808);
-const Color yellow600 = Color(0xFFE99F06);
-const Color yellow700 = Color(0xFFC08405);
-const Color yellow800 = Color(0xFF9A6904);
-const Color yellow900 = Color(0xFF785602);
+const Color yellow200 = Color(0xFFF7E19C);
+const Color yellow300 = Color(0xFFF2D16B);
+const Color yellow400 = Color(0xFFEEC239);
+const Color yellow500 = Color(0xFFEAB308);
+const Color yellow600 = Color(0xFFBB8F06);
+const Color yellow700 = Color(0xFF8C6B05);
+const Color yellow800 = Color(0xFF695104);
+const Color yellow900 = Color(0xFF463602);
 
 // Orange
 const Color orange50 = Color(0xFFFFF7ED);
-const Color orange100 = Color(0xFFFEEDD5);
-const Color orange200 = Color(0xFFFDDBAA);
-const Color orange300 = Color(0xFFFDC97A);
-const Color orange400 = Color(0xFFFDB73C);
-const Color orange500 = Color(0xFFFB923C);
+const Color orange100 = Color(0xFFFFEDD5);
+const Color orange200 = Color(0xFFFED7AA);
+const Color orange300 = Color(0xFFFDBA74);
+const Color orange400 = Color(0xFFFB923C);
+const Color orange500 = Color(0xFFF97316);
 const Color orange600 = Color(0xFFEA580C);
 const Color orange700 = Color(0xFFC2410C);
 const Color orange800 = Color(0xFF9A3412);
