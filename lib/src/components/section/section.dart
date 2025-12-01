@@ -4,17 +4,11 @@ import 'package:flutter/material.dart';
 /// Improved SectionItem and SectionList matching the provided design.
 /// Uses optional design tokens via BuildContext extensions if available; falls back to Theme.
 class SectionItem<T> {
-  const SectionItem({
-    required this.value,
-    required this.label,
-    this.icon,
-    this.isCaption = false,
-  });
+  const SectionItem({required this.value, required this.label, this.icon});
 
   final T value;
   final String label;
   final IconData? icon;
-  final bool isCaption;
 }
 
 /// Inline, accordion-style section list with precise styling to match screenshots.
@@ -125,18 +119,6 @@ class _SectionListFixedState<T> extends State<SectionListFixed<T>>
 
     final children = widget.items
         .map((item) {
-          if (item.isCaption) {
-            return Padding(
-              padding: EdgeInsets.only(left: widget.indent, top: 8, bottom: 4),
-              child: Text(
-                item.label,
-                style: theme.textTheme.bodyMedium!.copyWith(
-                  color: Color(0xFF7E8691),
-                ),
-              ),
-            );
-          }
-
           final isSelected = item.value == widget.selectedValue;
           if (isSelected) {
             // pill style
