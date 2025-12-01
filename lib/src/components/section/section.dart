@@ -1,64 +1,58 @@
+// section_list.dart
 import 'package:flutter/material.dart';
-import 'package:nasiko_ui/src/tokens/tokens.dart';
 
-/// A model representing a single section item.
+/// Generic model representing a single section item.
 class SectionItem<T> {
-  const SectionItem({
-    required this.value,
-    required this.label,
-    this.icon,
-    this.shortcut,
-  });
+  const SectionItem({required this.value, required this.label, this.icon});
 
-  /// The value associated with this item.
   final T value;
-
-  /// The display label for this item.
   final String label;
-
-  /// Optional leading icon for this item.
   final IconData? icon;
-
-  /// Optional keyboard shortcut text (e.g., "⌘⇧B").
-  final String? shortcut;
 }
 
-/// A section select component with expandable menu.
-///
-/// Displays a trigger button that opens a scrollable list of options.
-/// Supports optional leading icons, keyboard shortcuts, and selection state.
+/// Inline, non-floating expandable list used as a generic section.
+/// Replaces previous floating "dropdown" semantics with inline expansion.
 class SectionList<T> extends StatefulWidget {
   const SectionList({
     super.key,
-    required this.items,
-    required this.selectedValue,
-    required this.onChanged,
     this.leadingIcon,
-    this.hint = 'Select an option',
-    this.maxHeight = 300.0,
-    this.enabled = true,
+    required this.hint,
+    required this.items,
+    this.selectedValue,
+    required this.onChanged,
+    this.initiallyExpanded = false,
+    this.indent = 28.0,
+    this.itemBuilder,
   });
 
-  /// The list of section items to display.
-  final List<SectionItem<T>> items;
-
-  /// The currently selected value.
-  final T? selectedValue;
-
-  /// Callback when selection changes.
-  final ValueChanged<T> onChanged;
-
-  /// Optional leading icon for the trigger button.
+  /// Optional leading icon shown on the header row.
   final IconData? leadingIcon;
 
-  /// Hint text when no item is selected.
+  /// Header text for the section.
   final String hint;
 
-  /// Maximum height of the section menu.
-  final double maxHeight;
+  /// Items shown when expanded.
+  final List<SectionItem<T>> items;
 
-  /// Whether the section is enabled.
-  final bool enabled;
+  /// Currently selected value (if any).
+  final T? selectedValue;
+
+  /// Called when a child is tapped.
+  final ValueChanged<T> onChanged;
+
+  /// Whether the section starts expanded.
+  final bool initiallyExpanded;
+
+  /// Left padding applied to the expanded items.
+  final double indent;
+
+  /// Optional custom item renderer. If null, a default ListTile-like row is used.
+  final Widget Function(
+    BuildContext context,
+    SectionItem<T> item,
+    bool isSelected,
+  )?
+  itemBuilder;
 
   @override
   State<SectionList<T>> createState() => _SectionListState<T>();
@@ -66,326 +60,151 @@ class SectionList<T> extends StatefulWidget {
 
 class _SectionListState<T> extends State<SectionList<T>>
     with SingleTickerProviderStateMixin {
-  final LayerLink _layerLink = LayerLink();
-  OverlayEntry? _overlayEntry;
-  bool _isOpen = false;
-  late AnimationController _animationController;
-  late Animation<double> _expandAnimation;
-  final ScrollController _scrollController = ScrollController();
+  late bool _expanded;
+  late final AnimationController _controller;
+  late final Animation<double> _heightFactor;
 
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
+    _expanded = widget.initiallyExpanded;
+    _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 180),
     );
-    _expandAnimation = CurvedAnimation(
-      parent: _animationController,
+    _heightFactor = CurvedAnimation(
+      parent: _controller,
       curve: Curves.easeInOut,
     );
+    if (_expanded) _controller.value = 1.0;
+  }
+
+  @override
+  void didUpdateWidget(covariant SectionList<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // keep expansion if items were changed but expansion state stable
+    if (_expanded) {
+      // no-op; preserve open state unless parent changed intentionally
+    }
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
-    _scrollController.dispose();
-    _removeOverlay();
+    _controller.dispose();
     super.dispose();
   }
 
-  void _toggleDropdown() {
-    if (!widget.enabled) return;
-
-    if (_isOpen) {
-      _closeDropdown();
+  void _toggleExpanded() {
+    setState(() => _expanded = !_expanded);
+    if (_expanded) {
+      _controller.forward();
     } else {
-      _openDropdown();
+      _controller.reverse();
     }
   }
 
-  void _openDropdown() {
-    _overlayEntry = _createOverlayEntry();
-    Overlay.of(context).insert(_overlayEntry!);
-    setState(() => _isOpen = true);
-    _animationController.forward();
-  }
-
-  void _closeDropdown() {
-    _animationController.reverse().then((_) {
-      _removeOverlay();
-      setState(() => _isOpen = false);
-    });
-  }
-
-  void _removeOverlay() {
-    _overlayEntry?.remove();
-    _overlayEntry = null;
-  }
-
-  void _selectItem(SectionItem<T> item) {
-    widget.onChanged(item.value);
-    _closeDropdown();
-  }
-
-  SectionItem<T>? get _selectedItem {
-    if (widget.selectedValue == null) return null;
-    try {
-      return widget.items.firstWhere(
-        (item) => item.value == widget.selectedValue,
-      );
-    } catch (_) {
-      return null;
-    }
-  }
-
-  OverlayEntry _createOverlayEntry() {
-    final renderBox = context.findRenderObject() as RenderBox;
-    final size = renderBox.size;
-
-    return OverlayEntry(
-      builder: (context) {
-        final colors = this.context.colors;
-        final spacing = this.context.spacing;
-        final radii = this.context.radius;
-        final borderWidths = this.context.borderWidth;
-
-        return GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: _closeDropdown,
-          child: Stack(
-            children: [
-              CompositedTransformFollower(
-                link: _layerLink,
-                showWhenUnlinked: false,
-                offset: Offset(0, size.height + spacing.s4),
-                child: GestureDetector(
-                  onTap: () {}, // Prevent closing when tapping menu
-                  child: FadeTransition(
-                    opacity: _expandAnimation,
-                    child: SizeTransition(
-                      sizeFactor: _expandAnimation,
-                      axisAlignment: -1,
-                      child: Material(
-                        elevation: 0,
-                        color: Colors.transparent,
-                        child: Container(
-                          width: size.width,
-                          constraints: BoxConstraints(
-                            maxHeight: widget.maxHeight,
-                          ),
-                          decoration: BoxDecoration(
-                            color: colors.backgroundGroup,
-                            borderRadius: BorderRadius.circular(radii.r12),
-                            border: Border.all(
-                              color: colors.borderPrimary,
-                              width: borderWidths.w1,
-                            ),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(radii.r12),
-                            child: Scrollbar(
-                              controller: _scrollController,
-                              thumbVisibility: true,
-                              child: ListView.builder(
-                                controller: _scrollController,
-                                shrinkWrap: true,
-                                padding: EdgeInsets.all(spacing.s8),
-                                itemCount: widget.items.length,
-                                itemBuilder: (context, index) {
-                                  final item = widget.items[index];
-                                  final isSelected =
-                                      item.value == widget.selectedValue;
-
-                                  return _SectionListItem<T>(
-                                    item: item,
-                                    isSelected: isSelected,
-                                    onTap: () => _selectItem(item),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+  Widget _buildHeader(BuildContext context) {
+    final theme = Theme.of(context);
+    final selected = widget.items.any((it) => it.value == widget.selectedValue);
+    return InkWell(
+      onTap: _toggleExpanded,
+      borderRadius: BorderRadius.circular(6),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+        child: Row(
+          children: [
+            if (widget.leadingIcon != null) ...[
+              Icon(widget.leadingIcon, size: 20),
+              const SizedBox(width: 12),
             ],
-          ),
-        );
-      },
+            Expanded(
+              child: Text(
+                widget.hint,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            if (selected)
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Icon(Icons.check_circle_rounded, size: 18),
+              ),
+            Icon(
+              _expanded
+                  ? Icons.keyboard_arrow_up_rounded
+                  : Icons.keyboard_arrow_down_rounded,
+              size: 20,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _defaultItemBuilder(
+    BuildContext context,
+    SectionItem<T> item,
+    bool isSelected,
+  ) {
+    return ListTile(
+      dense: true,
+      contentPadding: EdgeInsets.zero,
+      leading: item.icon != null ? Icon(item.icon, size: 18) : null,
+      title: Text(
+        item.label,
+        style: isSelected
+            ? Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600)
+            : Theme.of(context).textTheme.bodyMedium,
+      ),
+      onTap: () => widget.onChanged(item.value),
+      horizontalTitleGap: 8,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
-    final spacing = context.spacing;
-    final radii = context.radius;
-    final typography = context.typography;
-    final iconSizes = context.iconSize;
-    final borderWidths = context.borderWidth;
-
-    final selectedItem = _selectedItem;
-    final displayLabel = selectedItem?.label ?? widget.hint;
-
-    final effectiveOpacity = widget.enabled ? 1.0 : 0.5;
-    final borderColor = _isOpen ? colors.borderSecondary : colors.borderPrimary;
-    final backgroundColor = _isOpen
-        ? colors.backgroundGroup
-        : colors.backgroundSurface;
-
-    return CompositedTransformTarget(
-      link: _layerLink,
-      child: Opacity(
-        opacity: effectiveOpacity,
-        child: GestureDetector(
-          onTap: _toggleDropdown,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 150),
-            padding: EdgeInsets.symmetric(
-              horizontal: spacing.s16,
-              vertical: spacing.s12,
-            ),
-            decoration: BoxDecoration(
-              color: backgroundColor,
-              borderRadius: BorderRadius.circular(radii.r12),
-              border: Border.all(color: borderColor, width: borderWidths.w1),
-            ),
-            child: Row(
-              children: [
-                // Leading icon
-                if (widget.leadingIcon != null) ...[
-                  Icon(
-                    widget.leadingIcon,
-                    size: iconSizes.s,
-                    color: colors.foregroundIconPrimary,
-                  ),
-                  SizedBox(width: spacing.s8),
-                ],
-
-                // Label
-                Expanded(
-                  child: Text(
-                    displayLabel,
-                    style: typography.bodyPrimaryBold.copyWith(
-                      color: colors.foregroundPrimary,
-                    ),
-                  ),
-                ),
-
-                // Keyboard shortcut badge (if selected item has one)
-                if (selectedItem?.shortcut != null) ...[
-                  SizedBox(width: spacing.s8),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: spacing.s8,
-                      vertical: spacing.s4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: colors.backgroundSurface,
-                      borderRadius: BorderRadius.circular(radii.r4),
-                    ),
-                    child: Text(
-                      selectedItem!.shortcut!,
-                      style: typography.bodyTertiary.copyWith(
-                        color: colors.foregroundSecondary,
-                      ),
-                    ),
-                  ),
-                ],
-
-                SizedBox(width: spacing.s8),
-
-                // Chevron icon
-                AnimatedRotation(
-                  turns: _isOpen ? 0.5 : 0,
-                  duration: const Duration(milliseconds: 200),
-                  child: Icon(
-                    Icons.keyboard_arrow_down_rounded,
-                    size: iconSizes.s,
-                    color: colors.foregroundIconPrimary,
-                  ),
-                ),
-              ],
+    final children = widget.items;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildHeader(context),
+        ClipRect(
+          child: AnimatedBuilder(
+            animation: _controller.view,
+            builder: (context, child) {
+              return Align(
+                heightFactor: _heightFactor.value,
+                alignment: Alignment.topCenter,
+                child: child,
+              );
+            },
+            child: Padding(
+              padding: EdgeInsets.only(left: widget.indent),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: children
+                    .map((item) {
+                      final isSelected = item.value == widget.selectedValue;
+                      if (widget.itemBuilder != null) {
+                        return widget.itemBuilder!(context, item, isSelected);
+                      }
+                      return _defaultItemBuilder(context, item, isSelected);
+                    })
+                    .toList(growable: false),
+              ),
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 }
 
-/// Internal section menu item widget.
-class _SectionListItem<T> extends StatefulWidget {
-  const _SectionListItem({
-    required this.item,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final SectionItem<T> item;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  @override
-  State<_SectionListItem<T>> createState() => _SectionListItemState<T>();
-}
-
-class _SectionListItemState<T> extends State<_SectionListItem<T>> {
-  bool _isHovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    final spacing = context.spacing;
-    final radii = context.radius;
-    final typography = context.typography;
-    final borderWidths = context.borderWidth;
-
-    Color backgroundColor;
-    Color borderColor;
-
-    if (widget.isSelected) {
-      backgroundColor = colors.backgroundSecondaryBrand;
-      borderColor = colors.borderSecondary;
-    } else if (_isHovered) {
-      backgroundColor = colors.backgroundSurfaceHover;
-      borderColor = Colors.transparent;
-    } else {
-      backgroundColor = Colors.transparent;
-      borderColor = Colors.transparent;
-    }
-
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          margin: EdgeInsets.only(bottom: spacing.s4),
-          padding: EdgeInsets.symmetric(
-            horizontal: spacing.s12,
-            vertical: spacing.s12,
-          ),
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(radii.r8),
-            border: Border.all(color: borderColor, width: borderWidths.w1),
-          ),
-          child: Text(
-            widget.item.label,
-            style: typography.bodySecondaryBold.copyWith(
-              color: widget.isSelected
-                  ? colors.foregroundPrimary
-                  : colors.foregroundSecondary,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+/// Backwards-compat typedefs (optional) — use these if other code still
+/// references the old names. Remove when you fully migrate callers.
+typedef NasikoDropdownItem<T> = SectionItem<T>;
+typedef NasikoDropdown<T> = SectionList<T>;
