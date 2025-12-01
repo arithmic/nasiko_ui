@@ -516,12 +516,7 @@ class ExampleHomePage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Large buttons
-        Text(
-          'Large',
-          style: context.typography.bodyPrimary.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        Text('Large', style: context.typography.bodyPrimaryBold),
         SizedBox(height: context.spacing.s12),
         Wrap(
           spacing: context.spacing.s12,
@@ -553,12 +548,7 @@ class ExampleHomePage extends StatelessWidget {
         ),
         SizedBox(height: context.spacing.s20),
         // Medium buttons
-        Text(
-          'Medium',
-          style: context.typography.bodyPrimary.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        Text('Medium', style: context.typography.bodyPrimaryBold),
         SizedBox(height: context.spacing.s12),
         Wrap(
           spacing: context.spacing.s12,
@@ -572,7 +562,7 @@ class ExampleHomePage extends StatelessWidget {
             PrimaryButton(
               size: NasikoButtonSize.medium,
               onPressed: () {},
-              label: 'Button',
+              label: 'Try Orchestrator',
               leadingIcon: Icons.check,
             ),
             PrimaryButton(
@@ -590,12 +580,7 @@ class ExampleHomePage extends StatelessWidget {
         ),
         SizedBox(height: context.spacing.s20),
         // Small buttons
-        Text(
-          'Small',
-          style: context.typography.bodyPrimary.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        Text('Small', style: context.typography.bodyPrimaryBold),
         SizedBox(height: context.spacing.s12),
         Wrap(
           spacing: context.spacing.s12,
@@ -634,12 +619,7 @@ class ExampleHomePage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Large buttons
-        Text(
-          'Large',
-          style: context.typography.bodyPrimary.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        Text('Large', style: context.typography.bodyPrimaryBold),
         SizedBox(height: context.spacing.s12),
         Wrap(
           spacing: context.spacing.s12,
@@ -671,12 +651,7 @@ class ExampleHomePage extends StatelessWidget {
         ),
         SizedBox(height: context.spacing.s20),
         // Medium buttons
-        Text(
-          'Medium',
-          style: context.typography.bodyPrimary.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        Text('Medium', style: context.typography.bodyPrimaryBold),
         SizedBox(height: context.spacing.s12),
         Wrap(
           spacing: context.spacing.s12,
@@ -708,12 +683,7 @@ class ExampleHomePage extends StatelessWidget {
         ),
         SizedBox(height: context.spacing.s20),
         // Small buttons
-        Text(
-          'Small',
-          style: context.typography.bodyPrimary.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        Text('Small', style: context.typography.bodyPrimaryBold),
         SizedBox(height: context.spacing.s12),
         Wrap(
           spacing: context.spacing.s12,
