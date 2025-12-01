@@ -238,6 +238,12 @@ class ExampleHomePage extends StatelessWidget {
                 title: 'Switch',
                 child: _buildSwitchExample(context),
               ),
+              SizedBox(height: context.spacing.s28),
+              _buildSection(
+                context,
+                title: 'Navigation Sections',
+                child: const _SectionExample(),
+              ),
             ],
           ),
         ),
@@ -1685,7 +1691,6 @@ class _ListExampleState extends State<_ListExample> {
       children: [
         // --- Item 1: Root (Expanded) ---
         NasikoListItem(
-          
           title: 'POST/ chat',
           imageUrl: imageUrl,
           leadingIcon: Icons.hexagon_outlined,
@@ -1754,6 +1759,116 @@ class _ListExampleState extends State<_ListExample> {
             isDisabled: true, // Disabled state
           ),
       ],
+    );
+  }
+}
+
+class _SectionExample extends StatefulWidget {
+  const _SectionExample();
+
+  @override
+  State<_SectionExample> createState() => _SectionExampleState();
+}
+
+class _SectionExampleState extends State<_SectionExample> {
+  String _selectedSection = 'Orchestrator';
+  String? _selectedChild;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(context.spacing.s16),
+      decoration: BoxDecoration(
+        color: context.colors.backgroundBase,
+        borderRadius: BorderRadius.circular(context.radius.r8),
+        border: Border.all(
+          color: context.colors.borderPrimary,
+          width: context.borderWidth.w1,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Non-expandable section - Orchestrator
+          Section(
+            label: 'Orchestrator',
+            icon: Icons.settings,
+            isSelected: _selectedSection == 'Orchestrator',
+            onTap: () {
+              setState(() {
+                _selectedSection = 'Orchestrator';
+                _selectedChild = null;
+              });
+            },
+          ),
+          SizedBox(height: context.spacing.s8),
+
+          // Expandable section - Agent Registry
+          Section(
+            label: 'Agent Registry',
+            icon: Icons.book,
+            selectedChild: _selectedChild,
+            onChildTap: (childLabel) {
+              setState(() {
+                _selectedSection = 'Agent Registry';
+                _selectedChild = childLabel;
+              });
+            },
+            children: const [
+              SectionItem(label: 'For You'),
+              SectionItem(label: 'Your Agents'),
+              SectionItem(label: 'Add Agent'),
+            ],
+          ),
+          SizedBox(height: context.spacing.s8),
+
+          // Non-expandable section - Observability
+          Section(
+            label: 'Observability',
+            icon: Icons.visibility,
+            isSelected: _selectedSection == 'Observability',
+            onTap: () {
+              setState(() {
+                _selectedSection = 'Observability';
+                _selectedChild = null;
+              });
+            },
+          ),
+          SizedBox(height: context.spacing.s8),
+
+          // Non-expandable section - Operations
+          Section(
+            label: 'Operations',
+            icon: Icons.build,
+            isSelected: _selectedSection == 'Operations',
+            onTap: () {
+              setState(() {
+                _selectedSection = 'Operations';
+                _selectedChild = null;
+              });
+            },
+          ),
+          SizedBox(height: context.spacing.s8),
+
+          // Expandable section - Recent Sessions
+          Section(
+            label: 'Recent Sessions',
+            icon: Icons.history,
+            selectedChild: _selectedChild,
+            onChildTap: (childLabel) {
+              setState(() {
+                _selectedSection = 'Recent Sessions';
+                _selectedChild = childLabel;
+              });
+            },
+            children: const [
+              SectionItem(label: 'Session 1'),
+              SectionItem(label: 'Session 2'),
+              SectionItem(label: 'Session 3'),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

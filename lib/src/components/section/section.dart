@@ -1,182 +1,241 @@
-// section_list_fixed.dart
 import 'package:flutter/material.dart';
+import 'package:nasiko_ui/src/tokens/tokens.dart';
 
-/// Improved SectionItem and SectionList matching the provided design.
-/// Uses optional design tokens via BuildContext extensions if available; falls back to Theme.
-class SectionItem<T> {
-  const SectionItem({required this.value, required this.label, this.icon});
+/// A model representing a single section item.
+class SectionItem {
+  const SectionItem({required this.label, this.icon, this.onTap});
 
-  final T value;
+  /// The display label for this item.
   final String label;
+
+  /// Optional leading icon for this item.
   final IconData? icon;
+
+  /// Callback when item is tapped (for non-expandable sections).
+  final VoidCallback? onTap;
 }
 
-/// Inline, accordion-style section list with precise styling to match screenshots.
-class SectionListFixed<T> extends StatefulWidget {
-  const SectionListFixed({
+/// A navigation section component for sidebars.
+///
+/// Supports two types:
+/// 1. Simple (non-expandable) - Clicking navigates to a page, shows selected state
+/// 2. Expandable - Clicking toggles expand/collapse, shows children inline below
+class Section extends StatefulWidget {
+  const Section({
     super.key,
-    this.leadingIcon,
-    required this.hint,
-    required this.items,
-    this.selectedValue,
-    required this.onChanged,
-    this.initiallyExpanded = false,
-    this.indent = 24.0,
+    required this.label,
+    required this.icon,
+    this.children,
+    this.selectedChild,
+    this.isSelected = false,
+    this.onTap,
+    this.onChildTap,
   });
 
-  final IconData? leadingIcon;
-  final String hint;
-  final List<SectionItem<T>> items;
-  final T? selectedValue;
-  final ValueChanged<T> onChanged;
-  final bool initiallyExpanded;
-  final double indent;
+  /// The display label for this section.
+  final String label;
+
+  /// Leading icon for this section.
+  final IconData icon;
+
+  /// Optional list of child items (makes this section expandable).
+  final List<SectionItem>? children;
+
+  /// The label of the currently selected child item.
+  final String? selectedChild;
+
+  /// Whether this section is currently selected (for non-expandable sections).
+  final bool isSelected;
+
+  /// Callback when section is tapped (for non-expandable sections).
+  final VoidCallback? onTap;
+
+  /// Callback when a child item is tapped.
+  final ValueChanged<String>? onChildTap;
+
+  bool get isExpandable => children != null && children!.isNotEmpty;
 
   @override
-  State<SectionListFixed<T>> createState() => _SectionListFixedState<T>();
+  State<Section> createState() => _SectionState();
 }
 
-class _SectionListFixedState<T> extends State<SectionListFixed<T>>
-    with SingleTickerProviderStateMixin {
-  late bool _expanded;
-  late final AnimationController _controller;
-  late final Animation<double> _heightFactor;
+class _SectionState extends State<Section> {
+  bool _isExpanded = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _expanded = widget.initiallyExpanded;
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 200),
-    );
-    _heightFactor = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    );
-    if (_expanded) _controller.value = 1.0;
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _toggle() {
-    setState(() => _expanded = !_expanded);
-    if (_expanded) {
-      _controller.forward();
-    } else {
-      _controller.reverse();
+  void _toggleExpanded() {
+    if (widget.isExpandable) {
+      setState(() => _isExpanded = !_isExpanded);
+    } else if (widget.onTap != null) {
+      widget.onTap!();
     }
-  }
-
-  TextStyle _headerStyle(BuildContext context) {
-    final theme = Theme.of(context);
-    return theme.textTheme.titleLarge!.copyWith(
-      fontSize: 20,
-      fontWeight: FontWeight.w600,
-    );
-  }
-
-  TextStyle _itemStyle(BuildContext context) {
-    final theme = Theme.of(context);
-    return theme.textTheme.titleMedium!;
   }
 
   @override
   Widget build(BuildContext context) {
-    // token fallbacks: attempt to use the tokens if available on context; otherwise fall back.
-    final theme = Theme.of(context);
-    final colors = theme.colorScheme;
-    final spacing = 12.0;
+    final colors = context.colors;
+    final spacing = context.spacing;
+    final radii = context.radius;
+    final typography = context.typography;
+    final iconSizes = context.iconSize;
+    final borderWidths = context.borderWidth;
 
-    // header row
-    final header = InkWell(
-      onTap: _toggle,
-      borderRadius: BorderRadius.circular(8),
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 12.0),
-        child: Row(
-          children: [
-            if (widget.leadingIcon != null) ...[
-              Icon(widget.leadingIcon, size: 22, color: Color(0xFF495063)),
-              SizedBox(width: 12),
-            ],
-            Expanded(child: Text(widget.hint, style: _headerStyle(context))),
-            Icon(
-              _expanded
-                  ? Icons.keyboard_arrow_up_rounded
-                  : Icons.keyboard_arrow_down_rounded,
-              size: 22,
-              color: Color(0xFF6B7280),
-            ),
-          ],
-        ),
-      ),
-    );
-
-    final children = widget.items
-        .map((item) {
-          final isSelected = item.value == widget.selectedValue;
-          if (isSelected) {
-            // pill style
-            return Padding(
-              padding: EdgeInsets.only(
-                left: widget.indent,
-                right: 12,
-                top: 6,
-                bottom: 6,
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Color(0xFFF7E9C7),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Color(0xFFB8871E)),
-                ),
-                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 14),
-                child: Text(
-                  item.label,
-                  style: theme.textTheme.titleMedium!.copyWith(
-                    color: Color(0xFF2E3440),
-                  ),
-                ),
-              ),
-            );
-          } else {
-            return ListTile(
-              dense: true,
-              visualDensity: VisualDensity.compact,
-              contentPadding: EdgeInsets.only(left: widget.indent, right: 12),
-              leading: item.icon != null
-                  ? Icon(item.icon, size: 18, color: Color(0xFF495063))
-                  : null,
-              title: Text(item.label, style: _itemStyle(context)),
-              onTap: () => widget.onChanged(item.value),
-              minLeadingWidth: 0,
-              horizontalTitleGap: 8,
-            );
-          }
-        })
-        .toList(growable: false);
+    final backgroundColor = widget.isSelected
+        ? colors.backgroundSecondaryBrand
+        : Colors.transparent;
+    final borderColor = widget.isSelected
+        ? colors.borderSecondary
+        : Colors.transparent;
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        header,
-        ClipRect(
-          child: AnimatedBuilder(
-            animation: _controller.view,
-            builder: (context, child) => Align(
-              alignment: Alignment.topCenter,
-              heightFactor: _heightFactor.value,
-              child: child,
+        // Main section button
+        GestureDetector(
+          onTap: _toggleExpanded,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            padding: EdgeInsets.symmetric(
+              horizontal: spacing.s16,
+              vertical: spacing.s12,
             ),
-            child: Column(children: children),
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              borderRadius: BorderRadius.circular(radii.r12),
+              border: Border.all(color: borderColor, width: borderWidths.w1),
+            ),
+            child: Row(
+              children: [
+                // Leading icon
+                Icon(
+                  widget.icon,
+                  size: iconSizes.s,
+                  color: colors.foregroundIconPrimary,
+                ),
+                SizedBox(width: spacing.s12),
+
+                // Label
+                Expanded(
+                  child: Text(
+                    widget.label,
+                    style: typography.bodyPrimaryBold.copyWith(
+                      color: colors.foregroundPrimary,
+                    ),
+                  ),
+                ),
+
+                // Chevron icon (only for expandable sections)
+                if (widget.isExpandable) ...[
+                  SizedBox(width: spacing.s8),
+                  AnimatedRotation(
+                    turns: _isExpanded ? 0.5 : 0,
+                    duration: const Duration(milliseconds: 200),
+                    child: Icon(
+                      Icons.keyboard_arrow_down_rounded,
+                      size: iconSizes.s,
+                      color: colors.foregroundIconPrimary,
+                    ),
+                  ),
+                ],
+              ],
+            ),
           ),
         ),
+
+        // Expanded children
+        if (widget.isExpandable && _isExpanded) ...[
+          SizedBox(height: spacing.s4),
+          Padding(
+            padding: EdgeInsets.only(left: spacing.s12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: widget.children!.map((child) {
+                return _SectionChildItem(
+                  item: child,
+                  isSelected: child.label == widget.selectedChild,
+                  onTap: () {
+                    if (widget.onChildTap != null) {
+                      widget.onChildTap!(child.label);
+                    }
+                    if (child.onTap != null) {
+                      child.onTap!();
+                    }
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+        ],
       ],
+    );
+  }
+}
+
+/// Internal child item widget.
+class _SectionChildItem extends StatefulWidget {
+  const _SectionChildItem({
+    required this.item,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final SectionItem item;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  State<_SectionChildItem> createState() => _SectionChildItemState();
+}
+
+class _SectionChildItemState extends State<_SectionChildItem> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final spacing = context.spacing;
+    final radii = context.radius;
+    final typography = context.typography;
+    final borderWidths = context.borderWidth;
+
+    Color backgroundColor;
+    Color borderColor;
+
+    if (widget.isSelected) {
+      backgroundColor = colors.backgroundSecondaryBrand;
+      borderColor = colors.borderSecondary;
+    } else if (_isHovered) {
+      backgroundColor = colors.backgroundSurfaceHover;
+      borderColor = Colors.transparent;
+    } else {
+      backgroundColor = Colors.transparent;
+      borderColor = Colors.transparent;
+    }
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          margin: EdgeInsets.only(bottom: spacing.s4),
+          padding: EdgeInsets.symmetric(
+            horizontal: spacing.s16,
+            vertical: spacing.s12,
+          ),
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(radii.r8),
+            border: Border.all(color: borderColor, width: borderWidths.w1),
+          ),
+          child: Text(
+            widget.item.label,
+            style: typography.bodySecondary.copyWith(
+              color: colors.foregroundPrimary,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
