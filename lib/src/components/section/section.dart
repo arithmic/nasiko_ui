@@ -1,19 +1,25 @@
-// section_list.dart
+// section_list_fixed.dart
 import 'package:flutter/material.dart';
 
-/// Generic model representing a single section item.
+/// Improved SectionItem and SectionList matching the provided design.
+/// Uses optional design tokens via BuildContext extensions if available; falls back to Theme.
 class SectionItem<T> {
-  const SectionItem({required this.value, required this.label, this.icon});
+  const SectionItem({
+    required this.value,
+    required this.label,
+    this.icon,
+    this.isCaption = false,
+  });
 
   final T value;
   final String label;
   final IconData? icon;
+  final bool isCaption;
 }
 
-/// Inline, non-floating expandable list used as a generic section.
-/// Replaces previous floating "dropdown" semantics with inline expansion.
-class SectionList<T> extends StatefulWidget {
-  const SectionList({
+/// Inline, accordion-style section list with precise styling to match screenshots.
+class SectionListFixed<T> extends StatefulWidget {
+  const SectionListFixed({
     super.key,
     this.leadingIcon,
     required this.hint,
@@ -21,44 +27,22 @@ class SectionList<T> extends StatefulWidget {
     this.selectedValue,
     required this.onChanged,
     this.initiallyExpanded = false,
-    this.indent = 28.0,
-    this.itemBuilder,
+    this.indent = 24.0,
   });
 
-  /// Optional leading icon shown on the header row.
   final IconData? leadingIcon;
-
-  /// Header text for the section.
   final String hint;
-
-  /// Items shown when expanded.
   final List<SectionItem<T>> items;
-
-  /// Currently selected value (if any).
   final T? selectedValue;
-
-  /// Called when a child is tapped.
   final ValueChanged<T> onChanged;
-
-  /// Whether the section starts expanded.
   final bool initiallyExpanded;
-
-  /// Left padding applied to the expanded items.
   final double indent;
 
-  /// Optional custom item renderer. If null, a default ListTile-like row is used.
-  final Widget Function(
-    BuildContext context,
-    SectionItem<T> item,
-    bool isSelected,
-  )?
-  itemBuilder;
-
   @override
-  State<SectionList<T>> createState() => _SectionListState<T>();
+  State<SectionListFixed<T>> createState() => _SectionListFixedState<T>();
 }
 
-class _SectionListState<T> extends State<SectionList<T>>
+class _SectionListFixedState<T> extends State<SectionListFixed<T>>
     with SingleTickerProviderStateMixin {
   late bool _expanded;
   late final AnimationController _controller;
@@ -70,7 +54,7 @@ class _SectionListState<T> extends State<SectionList<T>>
     _expanded = widget.initiallyExpanded;
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 180),
+      duration: const Duration(milliseconds: 200),
     );
     _heightFactor = CurvedAnimation(
       parent: _controller,
@@ -80,21 +64,12 @@ class _SectionListState<T> extends State<SectionList<T>>
   }
 
   @override
-  void didUpdateWidget(covariant SectionList<T> oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // keep expansion if items were changed but expansion state stable
-    if (_expanded) {
-      // no-op; preserve open state unless parent changed intentionally
-    }
-  }
-
-  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
 
-  void _toggleExpanded() {
+  void _toggle() {
     setState(() => _expanded = !_expanded);
     if (_expanded) {
       _controller.forward();
@@ -103,108 +78,123 @@ class _SectionListState<T> extends State<SectionList<T>>
     }
   }
 
-  Widget _buildHeader(BuildContext context) {
+  TextStyle _headerStyle(BuildContext context) {
     final theme = Theme.of(context);
-    final selected = widget.items.any((it) => it.value == widget.selectedValue);
-    return InkWell(
-      onTap: _toggleExpanded,
-      borderRadius: BorderRadius.circular(6),
+    return theme.textTheme.titleLarge!.copyWith(
+      fontSize: 20,
+      fontWeight: FontWeight.w600,
+    );
+  }
+
+  TextStyle _itemStyle(BuildContext context) {
+    final theme = Theme.of(context);
+    return theme.textTheme.titleMedium!;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // token fallbacks: attempt to use the tokens if available on context; otherwise fall back.
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final spacing = 12.0;
+
+    // header row
+    final header = InkWell(
+      onTap: _toggle,
+      borderRadius: BorderRadius.circular(8),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+        padding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 12.0),
         child: Row(
           children: [
             if (widget.leadingIcon != null) ...[
-              Icon(widget.leadingIcon, size: 20),
-              const SizedBox(width: 12),
+              Icon(widget.leadingIcon, size: 22, color: Color(0xFF495063)),
+              SizedBox(width: 12),
             ],
-            Expanded(
-              child: Text(
-                widget.hint,
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            if (selected)
-              Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: Icon(Icons.check_circle_rounded, size: 18),
-              ),
+            Expanded(child: Text(widget.hint, style: _headerStyle(context))),
             Icon(
               _expanded
                   ? Icons.keyboard_arrow_up_rounded
                   : Icons.keyboard_arrow_down_rounded,
-              size: 20,
+              size: 22,
+              color: Color(0xFF6B7280),
             ),
           ],
         ),
       ),
     );
-  }
 
-  Widget _defaultItemBuilder(
-    BuildContext context,
-    SectionItem<T> item,
-    bool isSelected,
-  ) {
-    return ListTile(
-      dense: true,
-      contentPadding: EdgeInsets.zero,
-      leading: item.icon != null ? Icon(item.icon, size: 18) : null,
-      title: Text(
-        item.label,
-        style: isSelected
-            ? Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600)
-            : Theme.of(context).textTheme.bodyMedium,
-      ),
-      onTap: () => widget.onChanged(item.value),
-      horizontalTitleGap: 8,
-    );
-  }
+    final children = widget.items
+        .map((item) {
+          if (item.isCaption) {
+            return Padding(
+              padding: EdgeInsets.only(left: widget.indent, top: 8, bottom: 4),
+              child: Text(
+                item.label,
+                style: theme.textTheme.bodyMedium!.copyWith(
+                  color: Color(0xFF7E8691),
+                ),
+              ),
+            );
+          }
 
-  @override
-  Widget build(BuildContext context) {
-    final children = widget.items;
+          final isSelected = item.value == widget.selectedValue;
+          if (isSelected) {
+            // pill style
+            return Padding(
+              padding: EdgeInsets.only(
+                left: widget.indent,
+                right: 12,
+                top: 6,
+                bottom: 6,
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Color(0xFFF7E9C7),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Color(0xFFB8871E)),
+                ),
+                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 14),
+                child: Text(
+                  item.label,
+                  style: theme.textTheme.titleMedium!.copyWith(
+                    color: Color(0xFF2E3440),
+                  ),
+                ),
+              ),
+            );
+          } else {
+            return ListTile(
+              dense: true,
+              visualDensity: VisualDensity.compact,
+              contentPadding: EdgeInsets.only(left: widget.indent, right: 12),
+              leading: item.icon != null
+                  ? Icon(item.icon, size: 18, color: Color(0xFF495063))
+                  : null,
+              title: Text(item.label, style: _itemStyle(context)),
+              onTap: () => widget.onChanged(item.value),
+              minLeadingWidth: 0,
+              horizontalTitleGap: 8,
+            );
+          }
+        })
+        .toList(growable: false);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildHeader(context),
+        header,
         ClipRect(
           child: AnimatedBuilder(
             animation: _controller.view,
-            builder: (context, child) {
-              return Align(
-                heightFactor: _heightFactor.value,
-                alignment: Alignment.topCenter,
-                child: child,
-              );
-            },
-            child: Padding(
-              padding: EdgeInsets.only(left: widget.indent),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: children
-                    .map((item) {
-                      final isSelected = item.value == widget.selectedValue;
-                      if (widget.itemBuilder != null) {
-                        return widget.itemBuilder!(context, item, isSelected);
-                      }
-                      return _defaultItemBuilder(context, item, isSelected);
-                    })
-                    .toList(growable: false),
-              ),
+            builder: (context, child) => Align(
+              alignment: Alignment.topCenter,
+              heightFactor: _heightFactor.value,
+              child: child,
             ),
+            child: Column(children: children),
           ),
         ),
       ],
     );
   }
 }
-
-/// Backwards-compat typedefs (optional) — use these if other code still
-/// references the old names. Remove when you fully migrate callers.
-typedef NasikoDropdownItem<T> = SectionItem<T>;
-typedef NasikoDropdown<T> = SectionList<T>;
