@@ -325,7 +325,7 @@ class _NasikoCardState extends State<NasikoCard> {
         child: PrimaryButton(
           onPressed: null,
           label: widget.disabledButtonLabel!,
-          size: NasikoButtonSize.medium,
+          size: NasikoButtonSize.small,
         ),
       );
     }
@@ -339,7 +339,7 @@ class _NasikoCardState extends State<NasikoCard> {
               onPressed: widget.enabled ? widget.onPrimaryPressed : null,
               label: widget.primaryButtonLabel!,
               leadingIcon: widget.primaryButtonIcon,
-              size: NasikoButtonSize.medium,
+              size: NasikoButtonSize.small,
             ),
           ),
         if (widget.primaryButtonLabel != null &&
@@ -351,7 +351,7 @@ class _NasikoCardState extends State<NasikoCard> {
               onPressed: widget.enabled ? widget.onSecondaryPressed : null,
               label: widget.secondaryButtonLabel!,
               leadingIcon: widget.secondaryButtonIcon,
-              size: NasikoButtonSize.medium,
+              size: NasikoButtonSize.small,
             ),
           ),
       ],
