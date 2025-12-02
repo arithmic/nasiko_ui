@@ -7,7 +7,8 @@ import 'package:nasiko_ui/src/tokens/tokens.dart';
 /// A data class to hold the content for a single [NasikoTabBar] tab.
 class NasikoTabItem {
   final String label;
-  final HugeIcons icon;
+  // Only Hugeicons library's icon will be called
+  final List<List<dynamic>> icon;
 
   const NasikoTabItem({required this.label, required this.icon});
 }
@@ -82,8 +83,8 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                item.icon,
+              HugeIcon(
+                icon: item.icon,
                 size: iconSizes.s, // 20px
               ),
               SizedBox(width: spacing.s8),
