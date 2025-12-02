@@ -95,12 +95,12 @@ class _SectionState extends State<Section> {
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 150),
             padding: EdgeInsets.symmetric(
-              horizontal: spacing.s16,
+              horizontal: spacing.s8,
               vertical: spacing.s12,
             ),
             decoration: BoxDecoration(
               color: backgroundColor,
-              borderRadius: BorderRadius.circular(radii.r12),
+              borderRadius: BorderRadius.circular(radii.r8),
               border: Border.all(color: borderColor, width: borderWidths.w1),
             ),
             child: Row(
