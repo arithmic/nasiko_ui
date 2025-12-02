@@ -123,8 +123,13 @@ class SecondaryButton extends StatelessWidget {
             color: colors.borderDisabled,
             width: borderWidths.w1,
           );
+        } else if (states.contains(WidgetState.hovered)) {
+          borderSide = BorderSide(
+            color: Colors.transparent,
+            width: borderWidths.w1,
+          );
         } else {
-          // Default, Focus & Hover states
+          // Default, Focus states
           borderSide = BorderSide(
             color: colors.borderSecondary,
             width: borderWidths.w1,
