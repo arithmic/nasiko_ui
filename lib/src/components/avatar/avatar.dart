@@ -15,6 +15,7 @@ class NasikoAvatar extends StatelessWidget {
     this.text,
     this.icon,
     this.backgroundColor,
+    this.foregroundColor,
   });
 
   /// The size of the avatar. Defaults to [NasikoAvatarSize.medium].
@@ -35,6 +36,10 @@ class NasikoAvatar extends StatelessWidget {
   /// Optional custom background color. If not provided,
   /// defaults to [NasikoColorTheme.backgroundGroup].
   final Color? backgroundColor;
+
+  /// Optional custom foreground color. If not provided,
+  /// defaults to [NasikoColorTheme.foregroundPrimary].
+  final Color? foregroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +74,7 @@ class NasikoAvatar extends StatelessWidget {
     ImageProvider? backgroundImage;
     Widget? child;
     Color? bgColor = backgroundColor ?? colors.backgroundGroup;
+    Color? fgColor = foregroundColor ?? colors.foregroundPrimary;
 
     if (imageUrl != null) {
       // Image avatar
@@ -76,16 +82,13 @@ class NasikoAvatar extends StatelessWidget {
       bgColor = null; // Use image
     } else if (text != null) {
       // Text avatar
-      child = Text(
-        text!,
-        style: textStyle.copyWith(color: colors.foregroundPrimary),
-      );
+      child = Text(text!, style: textStyle.copyWith(color: fgColor));
     } else {
       // Icon avatar (or default)
       child = Icon(
         icon ?? Icons.sentiment_satisfied_alt_outlined,
         size: iconSize,
-        color: colors.foregroundSecondary,
+        color: fgColor,
       );
     }
 
