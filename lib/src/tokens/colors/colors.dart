@@ -26,6 +26,9 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
     required this.backgroundSecondaryBrandHover,
     required this.backgroundSecondaryBrandActive,
 
+    // Background Tertiary
+    required this.backgroundTertiary,
+
     // Background Feedback
     required this.backgroundSuccess,
     required this.backgroundWarning,
@@ -90,6 +93,9 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
   final Color backgroundSecondaryBrandHover;
   final Color backgroundSecondaryBrandActive;
 
+  // Background Tertiary
+  final Color backgroundTertiary;
+
   // Background Feedback
   final Color backgroundSuccess;
   final Color backgroundWarning;
@@ -149,6 +155,7 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
     Color? backgroundSecondaryBrand,
     Color? backgroundSecondaryBrandHover,
     Color? backgroundSecondaryBrandActive,
+    Color? backgroundTertiary,
     Color? backgroundSuccess,
     Color? backgroundWarning,
     Color? backgroundError,
@@ -204,6 +211,7 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
           backgroundSecondaryBrandHover ?? this.backgroundSecondaryBrandHover,
       backgroundSecondaryBrandActive:
           backgroundSecondaryBrandActive ?? this.backgroundSecondaryBrandActive,
+      backgroundTertiary: backgroundTertiary ?? this.backgroundTertiary,
       backgroundSuccess: backgroundSuccess ?? this.backgroundSuccess,
       backgroundWarning: backgroundWarning ?? this.backgroundWarning,
       backgroundError: backgroundError ?? this.backgroundError,
@@ -313,6 +321,11 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
       backgroundSecondaryBrandActive: Color.lerp(
         backgroundSecondaryBrandActive,
         other.backgroundSecondaryBrandActive,
+        t,
+      )!,
+      backgroundTertiary: Color.lerp(
+        backgroundTertiary,
+        other.backgroundTertiary,
         t,
       )!,
       backgroundSuccess: Color.lerp(
@@ -455,6 +468,9 @@ const NasikoColorTheme lightColors = NasikoColorTheme(
   backgroundSecondaryBrandHover: yellow200,
   backgroundSecondaryBrandActive: yellow100,
 
+  // Backgorund Tertiary
+  backgroundTertiary: purple500,
+
   // Background Feedback
   backgroundSuccess: green100,
   backgroundWarning: orange100,
@@ -523,6 +539,9 @@ const NasikoColorTheme darkColors = NasikoColorTheme(
   backgroundSecondaryBrand: yellow900,
   backgroundSecondaryBrandHover: yellow800,
   backgroundSecondaryBrandActive: yellow900,
+
+  // Backgorund Tertiary
+  backgroundTertiary: purple500,
 
   // Background Feedback
   backgroundSuccess: green900,
