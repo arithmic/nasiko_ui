@@ -1,12 +1,13 @@
 // lib/src/components/tabs/nasiko_tab_bar.dart
 
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/src/tokens/tokens.dart';
 
 /// A data class to hold the content for a single [NasikoTabBar] tab.
 class NasikoTabItem {
   final String label;
-  final IconData icon;
+  final HugeIcons icon;
 
   const NasikoTabItem({required this.label, required this.icon});
 }
