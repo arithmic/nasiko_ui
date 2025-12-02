@@ -8,7 +8,7 @@ import 'package:nasiko_ui/src/tokens/tokens.dart';
 class NasikoTabItem {
   final String label;
   // Only Hugeicons library's icon will be called
-  final List<List<dynamic>> icon;
+  final HugeIcon icon;
 
   const NasikoTabItem({required this.label, required this.icon});
 }
@@ -83,10 +83,7 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              HugeIcon(
-                icon: item.icon,
-                size: iconSizes.s, // 20px
-              ),
+              item.icon,
               SizedBox(width: spacing.s8),
               Text(item.label),
             ],
