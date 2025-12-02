@@ -7,7 +7,7 @@ import 'package:nasiko_ui/src/tokens/tokens.dart';
 /// A data class to hold the content for a single [NasikoTabBar] tab.
 class NasikoTabItem {
   final String label;
-  // Only Hugeicons library's icon will be called
+  // Only Hugeicons library's icon is called
   final HugeIcon icon;
 
   const NasikoTabItem({required this.label, required this.icon});
@@ -40,7 +40,6 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
     final spacing = context.spacing;
     final typography = context.typography;
     final borderWidths = context.borderWidth;
-    final iconSizes = context.iconSize;
 
     return TabBar(
       controller: controller,
@@ -48,7 +47,7 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
       isScrollable: true, // Allows horizontal scrolling
       padding: EdgeInsets.zero,
 
-      // *** FIX: Set tabAlignment to prevent automatic scrollbar ***
+      // Set tabAlignment to prevent automatic scrollbar ***
       tabAlignment: TabAlignment.start,
 
       // Padding for each individual tab

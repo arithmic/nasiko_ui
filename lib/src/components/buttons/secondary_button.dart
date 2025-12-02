@@ -111,7 +111,7 @@ class SecondaryButton extends StatelessWidget {
           return colors.foregroundOnAction;
         }
         // Default, Focus, Pressed
-        return colors.foregroundSecondary;
+        return colors.foregroundPrimary;
       }),
 
       // --- Shape & Border ---
@@ -123,15 +123,10 @@ class SecondaryButton extends StatelessWidget {
             color: colors.borderDisabled,
             width: borderWidths.w1,
           );
-        } else if (states.contains(WidgetState.focused)) {
-          borderSide = BorderSide(
-            color: colors.borderHover, // yellow800
-            width: borderWidths.w1,
-          );
         } else {
-          // Default and Hover states
+          // Default, Focus & Hover states
           borderSide = BorderSide(
-            color: colors.borderPrimary,
+            color: colors.borderSecondary,
             width: borderWidths.w1,
           );
         }
