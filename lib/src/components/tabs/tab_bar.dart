@@ -7,7 +7,8 @@ import 'package:nasiko_ui/src/tokens/tokens.dart';
 /// A data class to hold the content for a single [NasikoTabBar] tab.
 class NasikoTabItem {
   final String label;
-  // Only Hugeicons library's icon is called
+
+  /// Only Hugeicons library's icon is called
   final HugeIcon icon;
 
   const NasikoTabItem({required this.label, required this.icon});

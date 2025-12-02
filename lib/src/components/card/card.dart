@@ -136,7 +136,7 @@ class _NasikoCardState extends State<NasikoCard> {
         boxShadow: _isHovered && widget.enabled
             ? [
                 BoxShadow(
-                  color: colors.backgroundOverlay.withOpacity(0.08),
+                  color: colors.backgroundOverlay.withValues(alpha: 0.08),
                   blurRadius: 8,
                   offset: const Offset(0, 4),
                 ),
@@ -186,6 +186,8 @@ class _NasikoCardState extends State<NasikoCard> {
                       style: typography.bodySecondary.copyWith(
                         color: colors.foregroundSecondary,
                       ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
 
@@ -302,16 +304,17 @@ class _NasikoCardState extends State<NasikoCard> {
   Widget _buildTagsRow(BuildContext context) {
     final spacing = context.spacing;
 
-    return Wrap(
-      spacing: spacing.s8,
-      runSpacing: spacing.s8,
-      children: widget.tags.map((tag) {
+    return ListView.separated(
+      scrollDirection: Axis.horizontal,
+      itemCount: widget.tags.length,
+      itemBuilder: (context, index) {
+        final tag = widget.tags[index];
         return NasikoChip(
           label: tag,
-          variant: NasikoChipVariant.neutral,
           enabled: widget.enabled,
         );
-      }).toList(),
+      },
+      separatorBuilder: (context, index) => SizedBox(width: spacing.s8),
     );
   }
 

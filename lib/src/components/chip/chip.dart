@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:nasiko_ui/src/tokens/tokens.dart';
+
 import 'chip_variant.dart';
 
 /// A chip component that can be actionable (with delete) or non-actionable.
@@ -69,8 +70,8 @@ class NasikoChip extends StatelessWidget {
     } else {
       switch (variant) {
         case NasikoChipVariant.neutral:
-          backgroundColor = colors.backgroundSurface;
-          hoverColor = colors.backgroundSurfaceHover;
+          backgroundColor = colors.backgroundGroup;
+          hoverColor = colors.backgroundSurface;
           pressedColor = colors.backgroundSurfaceActive;
           foregroundColor = colors.foregroundPrimary;
           borderColor = colors.borderPrimary;
@@ -95,30 +96,21 @@ class NasikoChip extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(999), // Pill shape
-        border: Border.all(
-          color: borderColor,
-          width: 1,
-        ),
+        border: Border.all(color: borderColor, width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           // Leading Icon
           if (leadingIcon != null) ...[
-            Icon(
-              leadingIcon,
-              size: iconSizes.s,
-              color: foregroundColor,
-            ),
+            Icon(leadingIcon, size: iconSizes.s, color: foregroundColor),
             SizedBox(width: spacing.s8),
           ],
 
           // Label
           Text(
             label,
-            style: typography.bodySecondary.copyWith(
-              color: foregroundColor,
-            ),
+            style: typography.bodyTertiaryBold.copyWith(color: foregroundColor),
           ),
 
           // Delete Icon (only for actionable chips)
@@ -209,10 +201,7 @@ class _InteractiveChipState extends State<_InteractiveChip> {
           decoration: BoxDecoration(
             color: _currentColor,
             borderRadius: BorderRadius.circular(999),
-            border: Border.all(
-              color: widget.borderColor,
-              width: 1,
-            ),
+            border: Border.all(color: widget.borderColor, width: 1),
           ),
           child: (widget.child as Container).child,
         ),

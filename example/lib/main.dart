@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
 void main() {
@@ -151,8 +152,8 @@ class ExampleHomePage extends StatelessWidget {
               SizedBox(height: context.spacing.s28),
               _buildSection(
                 context,
-                title: 'Interactive Components',
-                child: _buildComponentsExample(context),
+                title: 'Cards',
+                child: _buildCardsExample(context),
               ),
               SizedBox(height: context.spacing.s28),
               _buildSection(
@@ -881,52 +882,14 @@ class ExampleHomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildComponentsExample(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: context.colors.backgroundBrand,
-            foregroundColor: context.colors.foregroundPrimary,
-            padding: EdgeInsets.symmetric(
-              horizontal: context.spacing.s16,
-              vertical: context.spacing.s12,
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(context.radius.r8),
-            ),
-          ),
-          onPressed: () {},
-          child: Text(
-            'Primary Button',
-            style: context.typography.buttonPrimary,
-          ),
-        ),
-        SizedBox(height: context.spacing.s16),
-        OutlinedButton(
-          style: OutlinedButton.styleFrom(
-            side: BorderSide(
-              color: context.colors.borderPrimary,
-              width: context.borderWidth.w1,
-            ),
-            padding: EdgeInsets.symmetric(
-              horizontal: context.spacing.s16,
-              vertical: context.spacing.s12,
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(context.radius.r8),
-            ),
-          ),
-          onPressed: () {},
-          child: Text(
-            'Secondary Button',
-            style: context.typography.buttonSecondary.copyWith(
-              color: context.colors.foregroundPrimary,
-            ),
-          ),
-        ),
-      ],
+  Widget _buildCardsExample(BuildContext context) {
+    return NasikoCard(
+      title: 'Document Expert',
+      tags: ['document analysis', 'chat', 'history'],
+      subtitle:
+          'A helpful assistant that answers user questions based on the provided document. It supports file uploads for document processing and maintains a chat history for each session.',
+      primaryButtonLabel: 'Start Session',
+      secondaryButtonLabel: 'Learn More',
     );
   }
 
@@ -962,14 +925,34 @@ class ExampleHomePage extends StatelessWidget {
 
   Widget _buildTabBarExample(BuildContext context) {
     final List<NasikoTabItem> tabs = [
-      const NasikoTabItem(label: 'Trace', icon: Icons.timeline),
-      const NasikoTabItem(label: 'Trace', icon: Icons.gesture),
-      const NasikoTabItem(label: 'Trace', icon: Icons.gesture),
-      const NasikoTabItem(label: 'Trace', icon: Icons.gesture),
-      const NasikoTabItem(label: 'Trace', icon: Icons.gesture),
-      const NasikoTabItem(label: 'Trace', icon: Icons.gesture),
-      const NasikoTabItem(label: 'Trace', icon: Icons.gesture),
-      const NasikoTabItem(label: 'Trace', icon: Icons.gesture),
+      const NasikoTabItem(
+        label: 'Trace',
+        icon: HugeIcon(icon: HugeIcons.strokeRoundedNeuralNetwork),
+      ),
+      const NasikoTabItem(
+        label: 'Trace',
+        icon: HugeIcon(icon: HugeIcons.strokeRoundedNeuralNetwork),
+      ),
+      const NasikoTabItem(
+        label: 'Trace',
+        icon: HugeIcon(icon: HugeIcons.strokeRoundedNeuralNetwork),
+      ),
+      const NasikoTabItem(
+        label: 'Trace',
+        icon: HugeIcon(icon: HugeIcons.strokeRoundedNeuralNetwork),
+      ),
+      const NasikoTabItem(
+        label: 'Trace',
+        icon: HugeIcon(icon: HugeIcons.strokeRoundedNeuralNetwork),
+      ),
+      const NasikoTabItem(
+        label: 'Trace',
+        icon: HugeIcon(icon: HugeIcons.strokeRoundedNeuralNetwork),
+      ),
+      const NasikoTabItem(
+        label: 'Trace',
+        icon: HugeIcon(icon: HugeIcons.strokeRoundedNeuralNetwork),
+      ),
     ];
 
     return DefaultTabController(
