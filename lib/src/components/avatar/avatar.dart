@@ -14,6 +14,7 @@ class NasikoAvatar extends StatelessWidget {
     this.imageUrl,
     this.text,
     this.icon,
+    this.backgroundColor,
   });
 
   /// The size of the avatar. Defaults to [NasikoAvatarSize.medium].
@@ -31,6 +32,10 @@ class NasikoAvatar extends StatelessWidget {
   /// and `text` are null.
   final IconData? icon;
 
+  /// Optional custom background color. If not provided,
+  /// defaults to [NasikoColorTheme.backgroundGroup].
+  final Color? backgroundColor;
+
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
@@ -44,18 +49,18 @@ class NasikoAvatar extends StatelessWidget {
 
     switch (size) {
       case NasikoAvatarSize.large:
-        radius = 28.0; // 56px diameter
+        radius = 32.0; // 64px diameter
         textStyle = typography.buttonPrimary; // 20px
-        iconSize = iconSizes.l; // 28px
+        iconSize = iconSizes.m; // 24px
         break;
       case NasikoAvatarSize.medium:
-        radius = 20.0; // 40px diameter
+        radius = 24.0; // 48px diameter
         textStyle = typography.buttonSecondary; // 18px
         iconSize = iconSizes.m; // 24px
         break;
       case NasikoAvatarSize.small:
-        radius = 16.0; // 32px diameter
-        textStyle = typography.bodySecondaryBold; // 16px
+        radius = 18.0; // 36px diameter
+        textStyle = typography.bodySecondary; // 16px
         iconSize = iconSizes.s; // 20px
         break;
     }
@@ -63,12 +68,12 @@ class NasikoAvatar extends StatelessWidget {
     // 2. Determine the content of the avatar
     ImageProvider? backgroundImage;
     Widget? child;
-    Color? backgroundColor = colors.backgroundSurface; // neutral/100
+    Color? bgColor = backgroundColor ?? colors.backgroundGroup;
 
     if (imageUrl != null) {
       // Image avatar
       backgroundImage = NetworkImage(imageUrl!);
-      backgroundColor = null; // Use image
+      bgColor = null; // Use image
     } else if (text != null) {
       // Text avatar
       child = Text(
@@ -87,7 +92,7 @@ class NasikoAvatar extends StatelessWidget {
     // 3. Render the CircleAvatar
     return CircleAvatar(
       radius: radius,
-      backgroundColor: backgroundColor,
+      backgroundColor: bgColor,
       backgroundImage: backgroundImage,
       // The child is only rendered if there is no background image
       child: backgroundImage == null ? child : null,
