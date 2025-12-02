@@ -1,5 +1,3 @@
-// lib/src/components/avatar/nasiko_avatar.dart
-
 import 'package:flutter/material.dart';
 import 'package:nasiko_ui/src/components/avatar/avatar_size.dart';
 import 'package:nasiko_ui/src/tokens/tokens.dart';

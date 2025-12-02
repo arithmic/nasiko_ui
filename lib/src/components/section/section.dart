@@ -204,8 +204,8 @@ class _SectionChildItemState extends State<_SectionChildItem> {
       backgroundColor = colors.backgroundSecondaryBrand;
       borderColor = colors.borderSecondary;
     } else if (_isHovered) {
-      backgroundColor = colors.backgroundSurfaceHover;
-      borderColor = Colors.transparent;
+      backgroundColor = Colors.transparent;
+      borderColor = colors.borderSecondary;
     } else {
       backgroundColor = Colors.transparent;
       borderColor = Colors.transparent;
@@ -220,8 +220,8 @@ class _SectionChildItemState extends State<_SectionChildItem> {
           duration: const Duration(milliseconds: 150),
           margin: EdgeInsets.only(bottom: spacing.s4),
           padding: EdgeInsets.symmetric(
-            horizontal: spacing.s16,
-            vertical: spacing.s12,
+            horizontal: spacing.s12,
+            vertical: spacing.s8,
           ),
           decoration: BoxDecoration(
             color: backgroundColor,
@@ -230,9 +230,13 @@ class _SectionChildItemState extends State<_SectionChildItem> {
           ),
           child: Text(
             widget.item.label,
-            style: typography.bodySecondary.copyWith(
-              color: colors.foregroundPrimary,
-            ),
+            style: widget.isSelected
+                ? typography.bodySecondaryBold.copyWith(
+                    color: colors.foregroundPrimary,
+                  )
+                : typography.bodySecondary.copyWith(
+                    color: colors.foregroundSecondary,
+                  ),
           ),
         ),
       ),
