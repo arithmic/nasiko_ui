@@ -1,6 +1,7 @@
 // lib/src/components/input_fields/nasiko_input_field.dart
 
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/src/tokens/tokens.dart';
 
 /// A standardized input field for the Nasiko Design System.
@@ -30,7 +31,8 @@ class NasikoInputField extends StatelessWidget {
   final String? label;
 
   /// An optional icon displayed next to the label.
-  final IconData? labelInfoIcon;
+  /// Only Hugeicons library is used. For ex: `HugeIcons.strokeRoundedAddCircle`.
+  final HugeIconsType? labelInfoIcon;
 
   /// Text displayed inside the field when it's empty.
   final String? hintText;
@@ -39,10 +41,10 @@ class NasikoInputField extends StatelessWidget {
   final String? helperText;
 
   /// An icon displayed at the beginning of the input field.
-  final IconData? leadingIcon;
+  final HugeIconsType? leadingIcon;
 
   /// An icon displayed at the end of the input field.
-  final IconData? trailingIcon;
+  final HugeIconsType? trailingIcon;
 
   /// Whether to obscure the text (e.g., for passwords).
   final bool obscureText;
@@ -79,14 +81,14 @@ class NasikoInputField extends StatelessWidget {
       borderRadius: BorderRadius.circular(radii.r8),
       borderSide: BorderSide(
         color: colors.borderSecondary, // Your brand border color
-        width: borderWidths.w2, // Thicker border on focus
+        width: borderWidths.w1, // Thicker border on focus
       ),
     );
 
     // Add error/disabled borders for a complete component
     final errorBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(radii.r8),
-      borderSide: BorderSide(color: colors.borderError, width: borderWidths.w2),
+      borderSide: BorderSide(color: colors.borderError, width: borderWidths.w1),
     );
 
     final disabledBorder = OutlineInputBorder(
@@ -104,7 +106,7 @@ class NasikoInputField extends StatelessWidget {
         // 1. Optional Label (outside the field)
         if (label != null) ...[
           _buildLabel(context),
-          SizedBox(height: spacing.s4),
+          SizedBox(height: spacing.s12),
         ],
 
         // 2. The Text Field
@@ -114,6 +116,7 @@ class NasikoInputField extends StatelessWidget {
           onChanged: onChanged,
           obscureText: obscureText,
           keyboardType: keyboardType,
+          cursorColor: colors.borderSecondary,
           style: typography.bodySecondary.copyWith(
             color: colors.foregroundPrimary, // Input text style
           ),
@@ -126,27 +129,25 @@ class NasikoInputField extends StatelessWidget {
 
             // --- Icons ---
             prefixIcon: leadingIcon != null
-                ? Icon(
-                    leadingIcon,
+                ? HugeIcon(
+                    icon: leadingIcon!,
                     size: iconSizes.s, // 20px
-                    color: colors.foregroundSecondary,
+                    color: colors.foregroundIconPrimary,
                   )
                 : null,
             suffixIcon: trailingIcon != null
-                ? Icon(
-                    trailingIcon,
+                ? HugeIcon(
+                    icon: trailingIcon!,
                     size: iconSizes.s, // 20px
-                    color: colors.foregroundSecondary,
+                    color: colors.foregroundIconPrimary,
                   )
                 : null,
 
             // --- Styling ---
             filled: true,
-            fillColor: colors.backgroundSurface, // neutral/100
-            contentPadding: EdgeInsets.symmetric(
-              vertical: spacing.s12,
-              horizontal: spacing.s16,
-            ),
+            fillColor: colors.backgroundGroup, // neutral50
+            hoverColor: colors.backgroundSurface,
+            contentPadding: EdgeInsets.all(spacing.s12),
 
             // --- Borders ---
             border: defaultBorder,
@@ -159,7 +160,7 @@ class NasikoInputField extends StatelessWidget {
 
         // 3. Optional Helper Text (below the field)
         if (helperText != null) ...[
-          SizedBox(height: spacing.s4),
+          SizedBox(height: spacing.s8),
           Text(
             helperText!,
             style: typography.bodyTertiary.copyWith(
@@ -187,14 +188,16 @@ class NasikoInputField extends StatelessWidget {
           ),
         ),
         if (labelInfoIcon != null) ...[
-          SizedBox(width: spacing.s4),
-          Icon(
-            labelInfoIcon,
-            size: iconSizes.xs, // 16px
-            color: colors.foregroundSecondary,
+          SizedBox(width: spacing.s8),
+          HugeIcon(
+            icon: labelInfoIcon!,
+            size: iconSizes.s, // 20px
+            color: colors.foregroundIconPrimary,
           ),
         ],
       ],
     );
   }
 }
+
+typedef HugeIconsType = List<List<dynamic>>;

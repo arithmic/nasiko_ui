@@ -899,7 +899,7 @@ class ExampleHomePage extends StatelessWidget {
       children: [
         NasikoInputField(
           label: 'Label',
-          labelInfoIcon: Icons.help_outline,
+          labelInfoIcon: HugeIcons.strokeRoundedMail01,
           hintText: 'Email',
           helperText: 'Hint',
           leadingIcon: Icons.email_outlined,

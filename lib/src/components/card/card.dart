@@ -5,7 +5,6 @@ import 'package:nasiko_ui/src/components/buttons/button_size.dart';
 import 'package:nasiko_ui/src/components/buttons/primary_button.dart';
 import 'package:nasiko_ui/src/components/buttons/secondary_button.dart';
 import 'package:nasiko_ui/src/components/chip/chip.dart';
-import 'package:nasiko_ui/src/components/chip/chip_variant.dart';
 import 'package:nasiko_ui/src/tokens/tokens.dart';
 
 /// A content card component that displays rich content with optional image,
@@ -309,10 +308,7 @@ class _NasikoCardState extends State<NasikoCard> {
       itemCount: widget.tags.length,
       itemBuilder: (context, index) {
         final tag = widget.tags[index];
-        return NasikoChip(
-          label: tag,
-          enabled: widget.enabled,
-        );
+        return NasikoChip(label: tag, enabled: widget.enabled);
       },
       separatorBuilder: (context, index) => SizedBox(width: spacing.s8),
     );
