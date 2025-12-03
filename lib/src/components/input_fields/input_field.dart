@@ -41,9 +41,11 @@ class NasikoInputField extends StatelessWidget {
   final String? helperText;
 
   /// An icon displayed at the beginning of the input field.
+  /// Only Hugeicons library is used. For ex: `HugeIcons.strokeRoundedAddCircle`.
   final HugeIconsType? leadingIcon;
 
   /// An icon displayed at the end of the input field.
+  /// Only Hugeicons library is used. For ex: `HugeIcons.strokeRoundedAddCircle`.
   final HugeIconsType? trailingIcon;
 
   /// Whether to obscure the text (e.g., for passwords).
