@@ -42,12 +42,9 @@ class NasikoToastService {
         // Add padding around the toast to match the design spacing
         padding: EdgeInsets.all(context.spacing.s16),
 
-        // This makes the SnackBar position itself centrally,
-        // which matches the floating toast design
         margin: EdgeInsets.only(
           left: context.spacing.s24,
-          right: context.spacing.s24,
-          bottom: context.spacing.s48, // Lift it slightly off the bottom edge
+          bottom: context.spacing.s48,
         ),
       ),
     );
