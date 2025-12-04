@@ -902,8 +902,8 @@ class ExampleHomePage extends StatelessWidget {
           labelInfoIcon: HugeIcons.strokeRoundedMail01,
           hintText: 'Email',
           helperText: 'Hint',
-          leadingIcon: Icons.email_outlined,
-          trailingIcon: Icons.info_outline,
+          leadingIcon: HugeIcons.strokeRoundedMail01,
+          trailingIcon: HugeIcons.strokeRoundedInformationCircle,
           onChanged: (value) {
             // Handle change
           },
@@ -913,7 +913,7 @@ class ExampleHomePage extends StatelessWidget {
           label: 'Password',
           hintText: 'Enter your password',
           helperText: 'Must be 8 characters.',
-          leadingIcon: Icons.lock_outline,
+          leadingIcon: HugeIcons.strokeRoundedLock,
           obscureText: true,
           onChanged: (value) {
             // Handle change

@@ -1,4 +1,4 @@
-// lib/src/components/toast/nasiko_toast_service.dart
+// lib/src/components/toast/toast_service.dart
 
 import 'package:flutter/material.dart';
 import 'package:nasiko_ui/src/components/toast/toast.dart';
@@ -15,6 +15,8 @@ class NasikoToastService {
     required String message,
     required NasikoToastType type,
     Duration duration = const Duration(seconds: 3),
+    VoidCallback? onCancel,
+    bool showCancel = true,
   }) {
     // 1. Ensure any previous toast is dismissed immediately
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -23,9 +25,17 @@ class NasikoToastService {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         // Use the custom Toast widget as content
-        content: NasikoToast(type: type, message: message),
+        content: NasikoToast(
+          type: type,
+          message: message,
+          onCancel:
+              onCancel ??
+              () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              },
+          showCancel: showCancel,
+        ),
         duration: duration,
-        // Make the background transparent so the Toast's color shows through
         backgroundColor: Colors.transparent,
         elevation: 0,
         behavior: SnackBarBehavior.floating,
@@ -51,5 +61,13 @@ class NasikoToastService {
 
   static void showError(BuildContext context, String message) {
     show(context, message: message, type: NasikoToastType.error);
+  }
+
+  static void showWarning(BuildContext context, String message) {
+    show(context, message: message, type: NasikoToastType.warning);
+  }
+
+  static void showInfo(BuildContext context, String message) {
+    show(context, message: message, type: NasikoToastType.info);
   }
 }

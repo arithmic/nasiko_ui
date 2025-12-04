@@ -17,6 +17,7 @@ Nasiko UI provides a comprehensive set of pre-built components that follow the d
 - [List](#list)
 - [Menu](#menu)
 - [Modal](#modal)
+- [Section](#section)
 - [Switch](#switch)
 - [Table](#table)
 - [Tab Bar](#tab-bar)
@@ -224,6 +225,14 @@ NasikoAvatar(
   icon: Icons.person,
   size: NasikoAvatarSize.small,
 )
+
+// Custom background color
+NasikoAvatar(
+  text: 'AB',
+  size: NasikoAvatarSize.medium,
+  backgroundColor: Colors.purple,
+  foregroundColor: Colors.white,
+)
 \`\`\`
 
 ### Properties
@@ -234,6 +243,8 @@ NasikoAvatar(
 | `imageUrl` | `String?` | `null` | Network image URL (highest priority) |
 | `text` | `String?` | `null` | Text to display (e.g., initials) |
 | `icon` | `IconData?` | `null` | Icon to display (lowest priority) |
+| `backgroundColor` | `Color?` | `backgroundGroup` | Custom background color (optional) |
+| `foregroundColor` | `Color?` | `foregroundPrimary` | Custom text/icon color (optional) |
 
 ### NasikoAvatarSize
 
@@ -468,6 +479,52 @@ NasikoCheckboxTile(
 
 ---
 
+## Chip
+
+Chip components for representing small pieces of information.
+
+### NasikoChip
+
+A simple chip with text.
+
+\`\`\`dart
+NasikoChip(
+  label: 'New',
+  backgroundColor: Colors.green,
+)
+\`\`\`
+
+#### Properties
+
+| Property | Type | Description |
+|----------|------|---------|-------------|
+| `label` | `String` | Chip text |
+| `backgroundColor` | `Color` | Chip background color |
+| `onTap` | `VoidCallback?` | Tap callback |
+
+### NasikoChipIcon
+
+A chip with an icon.
+
+\`\`\`dart
+NasikoChipIcon(
+  icon: Icons.notifications,
+  backgroundColor: Colors.green,
+)
+\`\`\`
+
+#### Properties
+
+| Property | Type | Description |
+|----------|------|---------|-------------|
+| `icon` | `IconData` | Chip icon |
+| `backgroundColor` | `Color` | Chip background color |
+| `onTap` | `VoidCallback?` | Tap callback |
+| `enabled` | `bool` | `true` | Whether the chip is enabled |
+| `onDelete` | `VoidCallback?` | `null` | Callback for delete action. Shows remove icon when set |
+
+---
+
 ## Divider
 
 A horizontal or vertical line separator.
@@ -687,6 +744,117 @@ NasikoModal(
 
 ---
 
+## Section
+
+A navigation section component for sidebars, supporting both simple navigable items and expandable sections with children.
+
+### Section Types
+
+1. **Simple (Non-expandable)** - Clicking navigates to a page, shows selected state
+2. **Expandable** - Clicking toggles expand/collapse, reveals child items inline
+
+\`\`\`dart
+// Non-expandable section (simple navigation)
+Section(
+  label: 'Orchestrator',
+  icon: Icons.hub,
+  isSelected: true,
+  onTap: () => navigateTo('/orchestrator'),
+)
+
+// Expandable section with children
+Section(
+  label: 'Agent Registry',
+  icon: Icons.book,
+  children: [
+    SectionItem(
+      label: 'For You',
+      onTap: () => navigateTo('/agents/for-you'),
+    ),
+    SectionItem(
+      label: 'Your Agents',
+      onTap: () => navigateTo('/agents/yours'),
+    ),
+    SectionItem(
+      label: 'Add Agent',
+      onTap: () => navigateTo('/agents/add'),
+    ),
+  ],
+  selectedChild: 'Your Agents',
+  onChildTap: (label) => print('Selected: $label'),
+)
+
+// Complete sidebar example
+Column(
+  children: [
+    Section(
+      label: 'Orchestrator',
+      icon: Icons.hub,
+      isSelected: _selectedSection == 'Orchestrator',
+      onTap: () => setState(() =>_selectedSection = 'Orchestrator'),
+    ),
+    SizedBox(height: 8),
+    Section(
+      label: 'Agent Registry',
+      icon: Icons.book,
+      children: [
+        SectionItem(label: 'For You'),
+        SectionItem(label: 'Your Agents'),
+        SectionItem(label: 'Add Agent'),
+      ],
+      selectedChild: _selectedChild,
+      onChildTap: (label) => setState(() =>_selectedChild = label),
+    ),
+    SizedBox(height: 8),
+    Section(
+      label: 'Observability',
+      icon: Icons.visibility,
+      isSelected: _selectedSection == 'Observability',
+      onTap: () => setState(() =>_selectedSection = 'Observability'),
+    ),
+  ],
+)
+\`\`\`
+
+### Section Properties
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `label` | `String` | **required** | Section display label |
+| `icon` | `IconData` | **required** | Leading icon |
+| `children` | `List<SectionItem>?` | `null` | Optional child items (makes section expandable) |
+| `selectedChild` | `String?` | `null` | Label of currently selected child item |
+| `isSelected` | `bool` | `false` | Whether this section is selected (non-expandable only) |
+| `onTap` | `VoidCallback?` | `null` | Callback when section is tapped (non-expandable only) |
+| `onChildTap` | `ValueChanged<String>?` | `null` | Callback when a child item is tapped |
+
+### SectionItem Properties
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `label` | `String` | **required** | Item display label |
+| `icon` | `IconData?` | `null` | Optional leading icon |
+| `onTap` | `VoidCallback?` | `null` | Callback when item is tapped |
+
+### States
+
+| State | Section Type | Description |
+|-------|--------------|-------------|
+| Default | Both | Normal appearance with transparent background |
+| Selected | Non-expandable | Brand-colored background with border |
+| Expanded | Expandable | Shows children below with rotated chevron |
+| Child Selected | Expandable | Child item has brand-colored background |
+| Child Hover | Expandable | Child item shows hover background |
+
+### Visual Design
+
+- **Non-expandable sections**: Show selected state with brand background when clicked
+- **Expandable sections**: Display animated chevron that rotates when expanded
+- **Child items**: Indented below parent, show hover and selected states
+- **Animations**: Smooth 150-200ms transitions for expand/collapse and color changes
+
+---
+
 ## Switch
 
 A toggle switch component.
@@ -878,96 +1046,3 @@ NasikoToast(
 |----------|------|---------|-------------|
 | `type` | `NasikoToastType` | Toast type |
 | `message` | `String` | Toast message |
-
----
-
-## Chip
-
-Chip components for displaying tags, filters, or selectable items. Supports both actionable (with delete) and non-actionable variants.
-
-### NasikoChip
-
-A single chip widget with optional leading icon and delete action.
-
-\`\`\`dart
-// Non-actionable chip
-NasikoChip(
-  label: 'Flutter',
-  leadingIcon: Icons.code,
-  variant: NasikoChipVariant.neutral,
-)
-
-// Actionable chip with delete
-NasikoChip(
-  label: 'Selected Tag',
-  leadingIcon: Icons.label,
-  variant: NasikoChipVariant.brand,
-  onTap: () => print('Chip tapped'),
-  onDelete: () => print('Delete chip'),
-)
-
-// Disabled chip
-NasikoChip(
-  label: 'Disabled',
-  isDisabled: true,
-)
-\`\`\`
-
-#### Properties
-
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `label` | `String` | **required** | Chip text |
-| `leadingIcon` | `IconData?` | `null` | Icon before the label |
-| `variant` | `NasikoChipVariant` | `neutral` | Visual style variant |
-| `isDisabled` | `bool` | `false` | Disabled state |
-| `onTap` | `VoidCallback?` | `null` | Chip tap callback |
-| `onDelete` | `VoidCallback?` | `null` | Delete button callback (shows remove icon) |
-
-### NasikoChipGroup
-
-A horizontal scrollable row of chips.
-
-\`\`\`dart
-NasikoChipGroup(
-  chips: [
-    NasikoChip(label: 'All', variant: NasikoChipVariant.brand),
-    NasikoChip(label: 'Design', leadingIcon: Icons.palette),
-    NasikoChip(label: 'Development', leadingIcon: Icons.code),
-    NasikoChip(label: 'Marketing', leadingIcon: Icons.campaign),
-  ],
-  spacing: 8.0,
-)
-\`\`\`
-
-#### Properties
-
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `chips` | `List<NasikoChip>` | **required** | List of chips to display |
-| `spacing` | `double` | `8.0` | Horizontal spacing between chips |
-
-### NasikoChipVariant
-
-| Value | Description |
-|-------|-------------|
-| `neutral` | Gray/neutral background (default, unselected state) |
-| `brand` | Brand/yellow background (selected state) |
-
-### States
-
-Both variants support the following states:
-
-| State | Description |
-|-------|-------------|
-| Default | Normal appearance |
-| Hover | Slightly darker background on mouse hover |
-| Pressed | Darker background when pressed |
-| Disabled | Reduced opacity, non-interactive |
-
-### Actionable vs Non-actionable
-
-| Type | `onDelete` | Trailing Icon | Use Case |
-|------|------------|---------------|----------|
-| Non-actionable | `null` | Hidden | Display-only tags, labels |
-| Actionable | Provided | Remove icon (−) | Removable filters, selections |

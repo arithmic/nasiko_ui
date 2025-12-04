@@ -1,4 +1,4 @@
-// lib/src/components/toast/nasiko_toast.dart
+// lib/src/components/toast/toast.dart
 
 import 'package:flutter/material.dart';
 import 'package:nasiko_ui/src/components/toast/toast_type.dart';
@@ -6,10 +6,18 @@ import 'package:nasiko_ui/src/tokens/tokens.dart';
 
 /// The visual component for a Nasiko Toast notification.
 class NasikoToast extends StatelessWidget {
-  const NasikoToast({super.key, required this.type, required this.message});
+  const NasikoToast({
+    super.key,
+    required this.type,
+    required this.message,
+    this.onCancel,
+    this.showCancel = true,
+  });
 
   final NasikoToastType type;
   final String message;
+  final VoidCallback? onCancel;
+  final bool showCancel;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +27,6 @@ class NasikoToast extends StatelessWidget {
     final radii = context.radius;
     final iconSizes = context.iconSize;
 
-    // Determine colors based on toast type
     final Color backgroundColor;
     final Color foregroundColor;
     final Color iconColor;
@@ -27,29 +34,28 @@ class NasikoToast extends StatelessWidget {
     switch (type) {
       case NasikoToastType.success:
         backgroundColor = colors.backgroundSuccess;
-        foregroundColor = colors.foregroundConstantWhite;
-        iconColor = colors.foregroundConstantWhite;
+        foregroundColor = colors.foregroundSuccess;
+        iconColor = colors.foregroundSuccess;
         break;
       case NasikoToastType.error:
         backgroundColor = colors.backgroundError;
-        foregroundColor = colors.foregroundConstantWhite;
-        iconColor = colors.foregroundConstantWhite;
+        foregroundColor = colors.foregroundError;
+        iconColor = colors.foregroundError;
         break;
       case NasikoToastType.warning:
-        // Use a darker warning background for contrast with white text
-        backgroundColor = context.colors.backgroundWarning;
-        foregroundColor = colors.foregroundConstantWhite;
-        iconColor = colors.foregroundConstantWhite;
+        backgroundColor = colors.backgroundWarning;
+        foregroundColor = colors.foregroundWarning;
+        iconColor = colors.foregroundWarning;
         break;
       case NasikoToastType.info:
         backgroundColor = colors.backgroundInformation;
-        foregroundColor = colors.foregroundConstantWhite;
-        iconColor = colors.foregroundConstantWhite;
+        foregroundColor = colors.foregroundInformation;
+        iconColor = colors.foregroundInformation;
         break;
     }
 
     return Material(
-      color: Colors.transparent, // Required to show the SnackBar content
+      color: Colors.transparent,
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: spacing.s16,
@@ -62,19 +68,38 @@ class NasikoToast extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(type.icon, size: iconSizes.m, color: iconColor),
-            SizedBox(width: spacing.s8),
+            SizedBox(
+              width: iconSizes.m,
+              height: iconSizes.m,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(iconColor),
+              ),
+            ),
+            SizedBox(width: spacing.s12),
             // Message text
             Flexible(
               child: Text(
                 message,
-                style: typography.bodyPrimaryBold.copyWith(
+                style: typography.bodySecondaryBold.copyWith(
                   color: foregroundColor,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
+            if (showCancel) ...[
+              SizedBox(width: spacing.s16),
+              GestureDetector(
+                onTap: onCancel,
+                child: Text(
+                  'Cancel',
+                  style: typography.bodySecondary.copyWith(
+                    color: foregroundColor,
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),
