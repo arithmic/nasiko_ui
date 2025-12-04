@@ -79,7 +79,7 @@ class NasikoToast extends StatelessWidget {
               ),
             ),
             SizedBox(width: spacing.s12),
-            Expanded(
+            Flexible(
               child: Text(
                 message,
                 style: typography.bodySecondaryBold.copyWith(
