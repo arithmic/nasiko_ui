@@ -1,4 +1,5 @@
 // lib/src/components/tabs/nasiko_tab_bar.dart
+
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/src/tokens/tokens.dart';
@@ -7,7 +8,7 @@ import 'package:nasiko_ui/src/tokens/tokens.dart';
 class NasikoTabItem {
   final String label;
 
-  /// Only Hugeicons library's icon is used
+  /// Only Hugeicons library's icon is called
   final HugeIcon icon;
 
   const NasikoTabItem({required this.label, required this.icon});
@@ -15,7 +16,8 @@ class NasikoTabItem {
 
 /// A horizontal, scrollable tab bar for the Nasiko Design System.
 ///
-/// This widget implements [PreferredSizeWidget] so it can be measured by parent widgets.
+/// This widget must be used with a [TabController]. It is recommended
+/// to wrap this component in a [DefaultTabController] in your screen.
 class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
   const NasikoTabBar({
     super.key,
@@ -24,9 +26,16 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
     this.onTap,
   });
 
+  /// The list of [NasikoTabItem] to display in the bar.
   final List<NasikoTabItem> tabs;
+
+  /// The [TabController] to coordinate with the [TabBarView].
   final TabController? controller;
+
+  /// An optional callback that's called when a tab is tapped.
   final ValueChanged<int>? onTap;
+
+  static const double _tabBarHeight = 48.0;
 
   @override
   Widget build(BuildContext context) {
@@ -35,22 +44,16 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
     final typography = context.typography;
     final borderWidths = context.borderWidth;
 
-    // Wrap TabBar in Center to horizontally center the scrollable group
-    return Center(
+    return SizedBox(
+      height: _tabBarHeight,
       child: TabBar(
         controller: controller,
         onTap: onTap,
         isScrollable: true,
         padding: EdgeInsets.zero,
+        tabAlignment: TabAlignment.start,
 
-        // Center the whole scrollable tab group
-        tabAlignment: TabAlignment.center,
-
-        // Padding for each individual tab
-        labelPadding: EdgeInsets.symmetric(
-          horizontal: spacing.s16,
-          vertical: spacing.s12,
-        ),
+        labelPadding: EdgeInsets.symmetric(horizontal: spacing.s16),
 
         // --- Active Tab Styling ---
         labelColor: colors.foregroundBrand,
@@ -66,8 +69,9 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
             color: colors.borderSecondary,
             width: borderWidths.w2,
           ),
+          insets: EdgeInsets.symmetric(horizontal: spacing.s16),
         ),
-        indicatorSize: TabBarIndicatorSize.label,
+        indicatorSize: TabBarIndicatorSize.tab,
 
         // --- Full-Width Underline (Gray) ---
         dividerColor: colors.borderPrimary,
@@ -75,7 +79,9 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
 
         tabs: tabs.map((item) {
           return Tab(
+            height: _tabBarHeight - borderWidths.w1, // Account for divider
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
                 item.icon,
@@ -89,8 +95,6 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  // Provide preferredSize so parents can measure height of this widget.
-  // kTextTabBarHeight is Flutter's default TabBar height.
   @override
-  Size get preferredSize => const Size.fromHeight(kTextTabBarHeight);
+  Size get preferredSize => const Size.fromHeight(_tabBarHeight);
 }
