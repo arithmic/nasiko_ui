@@ -1,5 +1,3 @@
-// lib/src/components/card/card.dart
-
 import 'package:flutter/material.dart';
 import 'package:nasiko_ui/src/components/buttons/button_size.dart';
 import 'package:nasiko_ui/src/components/buttons/primary_button.dart';
@@ -161,13 +159,13 @@ class _NasikoCardState extends State<NasikoCard> {
 
                   // Tags
                   if (widget.tags.isNotEmpty) ...[
-                    SizedBox(height: spacing.s12),
+                    SizedBox(height: spacing.s16),
                     _buildTagsRow(context),
                   ],
 
                   // Subtitle
                   if (widget.subtitle != null) ...[
-                    SizedBox(height: spacing.s12),
+                    SizedBox(height: spacing.s8),
                     Text(
                       widget.subtitle!,
                       style: typography.bodySecondaryBold.copyWith(
