@@ -129,35 +129,36 @@ class NasikoInputField extends StatelessWidget {
               color: colors.foregroundSecondary, // Hint text style
             ),
 
+            prefixIconConstraints: BoxConstraints.tightFor(
+              width: iconSizes.s, // 20px
+              height: iconSizes.s, // 20px
+            ),
+            suffixIconConstraints: BoxConstraints.tightFor(
+              width: iconSizes.s, // 20px
+              height: iconSizes.s, // 20px
+            ),
+
             // --- Icons ---
             prefixIcon: leadingIcon != null
-                ? Center(
-                    widthFactor: 1.0,
-                    heightFactor: 1.0,
-                    child: SizedBox(
-                      // Constrain the size to 20x20
-                      width: iconSizes.s,
-                      height: iconSizes.s,
-                      child: HugeIcon(
-                        icon: leadingIcon!,
-                        size: iconSizes.s,
-                        color: colors.foregroundIconPrimary,
-                      ),
+                ? SizedBox(
+                    // Constrain the size to 20x20
+                    width: iconSizes.s,
+                    height: iconSizes.s,
+                    child: HugeIcon(
+                      icon: leadingIcon!,
+                      size: iconSizes.s,
+                      color: colors.foregroundIconPrimary,
                     ),
                   )
                 : null,
             suffixIcon: trailingIcon != null
-                ? Center(
-                    widthFactor: 1.0,
-                    heightFactor: 1.0,
-                    child: SizedBox(
-                      width: iconSizes.s,
-                      height: iconSizes.s,
-                      child: HugeIcon(
-                        icon: trailingIcon!,
-                        size: iconSizes.s,
-                        color: colors.foregroundIconPrimary,
-                      ),
+                ? SizedBox(
+                    width: iconSizes.s,
+                    height: iconSizes.s,
+                    child: HugeIcon(
+                      icon: trailingIcon!,
+                      size: iconSizes.s,
+                      color: colors.foregroundIconPrimary,
                     ),
                   )
                 : null,
