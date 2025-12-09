@@ -16,7 +16,7 @@ import 'package:nasiko_ui/src/tokens/tokens.dart';
 /// - Disabled: Greyed out with a "Coming Soon" style button
 ///
 /// Example usage:
-/// ```dart
+/// \`\`\`dart
 /// NasikoCard(
 ///   image: Image.network('https://example.com/image.jpg'),
 ///   badgeLabel: 'New',
@@ -30,7 +30,7 @@ import 'package:nasiko_ui/src/tokens/tokens.dart';
 ///   onPrimaryPressed: () {},
 ///   onSecondaryPressed: () {},
 /// )
-/// ```
+/// \`\`\`
 class NasikoCard extends StatefulWidget {
   const NasikoCard({
     super.key,
@@ -146,7 +146,6 @@ class _NasikoCardState extends State<NasikoCard> {
         opacity: contentOpacity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
           children: [
             // Image Section with Badge
             if (widget.image != null) _buildImageSection(context),
@@ -303,14 +302,12 @@ class _NasikoCardState extends State<NasikoCard> {
   Widget _buildTagsRow(BuildContext context) {
     final spacing = context.spacing;
 
-    return ListView.separated(
-      scrollDirection: Axis.horizontal,
-      itemCount: widget.tags.length,
-      itemBuilder: (context, index) {
-        final tag = widget.tags[index];
+    return Wrap(
+      spacing: spacing.s8,
+      runSpacing: spacing.s8,
+      children: widget.tags.map((tag) {
         return NasikoChip(label: tag, enabled: widget.enabled);
-      },
-      separatorBuilder: (context, index) => SizedBox(width: spacing.s8),
+      }).toList(),
     );
   }
 
