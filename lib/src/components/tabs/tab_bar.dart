@@ -24,6 +24,7 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
     required this.tabs,
     this.controller,
     this.onTap,
+    this.tabAlignment = TabAlignment.center,
   });
 
   /// The list of [NasikoTabItem] to display in the bar.
@@ -34,6 +35,8 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
 
   /// An optional callback that's called when a tab is tapped.
   final ValueChanged<int>? onTap;
+
+  final TabAlignment? tabAlignment;
 
   static const double _tabBarHeight = 48.0;
 
@@ -51,8 +54,7 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
         onTap: onTap,
         isScrollable: true,
         padding: EdgeInsets.zero,
-        tabAlignment: TabAlignment.start,
-
+        tabAlignment: tabAlignment,
         labelPadding: EdgeInsets.symmetric(horizontal: spacing.s16),
 
         // --- Active Tab Styling ---
