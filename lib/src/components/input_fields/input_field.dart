@@ -131,17 +131,34 @@ class NasikoInputField extends StatelessWidget {
 
             // --- Icons ---
             prefixIcon: leadingIcon != null
-                ? HugeIcon(
-                    icon: leadingIcon!,
-                    size: iconSizes.s, // 20px
-                    color: colors.foregroundIconPrimary,
+                ? Center(
+                    widthFactor: 1.0,
+                    heightFactor: 1.0,
+                    child: SizedBox(
+                      // Constrain the size to 20x20
+                      width: iconSizes.s,
+                      height: iconSizes.s,
+                      child: HugeIcon(
+                        icon: leadingIcon!,
+                        size: iconSizes.s,
+                        color: colors.foregroundIconPrimary,
+                      ),
+                    ),
                   )
                 : null,
             suffixIcon: trailingIcon != null
-                ? HugeIcon(
-                    icon: trailingIcon!,
-                    size: iconSizes.s, // 20px
-                    color: colors.foregroundIconPrimary,
+                ? Center(
+                    widthFactor: 1.0,
+                    heightFactor: 1.0,
+                    child: SizedBox(
+                      width: iconSizes.s,
+                      height: iconSizes.s,
+                      child: HugeIcon(
+                        icon: trailingIcon!,
+                        size: iconSizes.s,
+                        color: colors.foregroundIconPrimary,
+                      ),
+                    ),
                   )
                 : null,
 
