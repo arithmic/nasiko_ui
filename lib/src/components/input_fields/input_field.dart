@@ -130,20 +130,21 @@ class NasikoInputField extends StatelessWidget {
             ),
 
             prefixIconConstraints: BoxConstraints.tightFor(
-              width: iconSizes.s, // 20px
+              width: spacing.s16 + iconSizes.s, // Total width: 36px
               height: iconSizes.s, // 20px
             ),
             suffixIconConstraints: BoxConstraints.tightFor(
-              width: iconSizes.s, // 20px
+              width: spacing.s16 + iconSizes.s, // Total width: 36px
               height: iconSizes.s, // 20px
             ),
 
             // --- Icons ---
             prefixIcon: leadingIcon != null
-                ? SizedBox(
+                ? Container(
                     // Constrain the size to 20x20
                     width: iconSizes.s,
                     height: iconSizes.s,
+                    padding: EdgeInsets.only(left: spacing.s16),
                     child: HugeIcon(
                       icon: leadingIcon!,
                       size: iconSizes.s,
@@ -152,9 +153,10 @@ class NasikoInputField extends StatelessWidget {
                   )
                 : null,
             suffixIcon: trailingIcon != null
-                ? SizedBox(
+                ? Container(
                     width: iconSizes.s,
                     height: iconSizes.s,
+                    padding: EdgeInsets.only(right: spacing.s16),
                     child: HugeIcon(
                       icon: trailingIcon!,
                       size: iconSizes.s,
