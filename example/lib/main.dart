@@ -884,7 +884,9 @@ class ExampleHomePage extends StatelessWidget {
 
   Widget _buildCardsExample(BuildContext context) {
     return NasikoCard(
+      width: 400,
       title: 'Document Expert',
+      titleIcon: HugeIcon(icon: HugeIcons.strokeRoundedDocumentCode),
       tags: ['document analysis', 'chat', 'history'],
       subtitle:
           'A helpful assistant that answers user questions based on the provided document. It supports file uploads for document processing and maintains a chat history for each session.',

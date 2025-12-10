@@ -18,7 +18,7 @@ import 'package:nasiko_ui/src/tokens/tokens.dart';
 /// NasikoCard(
 ///   image: Image.network('https://example.com/image.jpg'),
 ///   badgeLabel: 'New',
-///   titleIcon: Icons.settings,
+///   titleIcon: Icon(Icons.settings), // or Image.network() or Image.asset()
 ///   title: 'Card Title',
 ///   tags: ['Tag 1', 'Tag 2', 'Tag 3'],
 ///   subtitle: 'This is a good card.',
@@ -41,9 +41,11 @@ class NasikoCard extends StatefulWidget {
     this.description,
     this.primaryButtonLabel,
     this.primaryButtonIcon,
+    this.primaryButtonTrailingIcon,
     this.onPrimaryPressed,
     this.secondaryButtonLabel,
     this.secondaryButtonIcon,
+    this.secondaryButtonTrailingIcon,
     this.onSecondaryPressed,
     this.disabledButtonLabel,
     this.enabled = true,
@@ -57,8 +59,9 @@ class NasikoCard extends StatefulWidget {
   /// Optional badge label (e.g., "New") displayed in top-right corner of the image.
   final String? badgeLabel;
 
-  /// Optional icon displayed before the title.
-  final IconData? titleIcon;
+  /// Optional icon or image widget displayed before the title.
+  /// Can be an Icon, Image.network, Image.asset, or any other widget.
+  final Widget? titleIcon;
 
   /// The main title text of the card.
   final String title;
@@ -78,6 +81,9 @@ class NasikoCard extends StatefulWidget {
   /// Optional leading icon for the primary button.
   final IconData? primaryButtonIcon;
 
+  /// Optional trailing icon for the primary button.
+  final IconData? primaryButtonTrailingIcon;
+
   /// Callback when the primary button is pressed.
   final VoidCallback? onPrimaryPressed;
 
@@ -86,6 +92,9 @@ class NasikoCard extends StatefulWidget {
 
   /// Optional leading icon for the secondary button.
   final IconData? secondaryButtonIcon;
+
+  /// Optional trailing icon for the secondary button.
+  final IconData? secondaryButtonTrailingIcon;
 
   /// Callback when the secondary button is pressed.
   final VoidCallback? onSecondaryPressed;
@@ -121,6 +130,7 @@ class _NasikoCardState extends State<NasikoCard> {
 
     Widget cardContent = Container(
       width: widget.width,
+      padding: EdgeInsets.all(spacing.s20),
       decoration: BoxDecoration(
         color: colors.backgroundSurface,
         borderRadius: BorderRadius.circular(radii.r12),
@@ -149,51 +159,48 @@ class _NasikoCardState extends State<NasikoCard> {
             if (widget.image != null) _buildImageSection(context),
 
             // Content Section
-            Padding(
-              padding: EdgeInsets.all(spacing.s16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Title Row
-                  _buildTitleRow(context),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Title Row
+                _buildTitleRow(context),
 
-                  // Tags
-                  if (widget.tags.isNotEmpty) ...[
-                    SizedBox(height: spacing.s16),
-                    _buildTagsRow(context),
-                  ],
-
-                  // Subtitle
-                  if (widget.subtitle != null) ...[
-                    SizedBox(height: spacing.s8),
-                    Text(
-                      widget.subtitle!,
-                      style: typography.bodySecondaryBold.copyWith(
-                        color: colors.foregroundPrimary,
-                      ),
-                    ),
-                  ],
-
-                  // Description
-                  if (widget.description != null) ...[
-                    SizedBox(height: spacing.s8),
-                    Text(
-                      widget.description!,
-                      style: typography.bodySecondary.copyWith(
-                        color: colors.foregroundSecondary,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-
-                  // Action Buttons
-                  if (_hasActionButtons) ...[
-                    SizedBox(height: spacing.s16),
-                    _buildActionButtons(context),
-                  ],
+                // Tags
+                if (widget.tags.isNotEmpty) ...[
+                  SizedBox(height: spacing.s16),
+                  _buildTagsRow(context),
                 ],
-              ),
+
+                // Subtitle
+                if (widget.subtitle != null) ...[
+                  SizedBox(height: spacing.s8),
+                  Text(
+                    widget.subtitle!,
+                    style: typography.bodyTertiaryBold.copyWith(
+                      color: colors.foregroundSecondary,
+                    ),
+                  ),
+                ],
+
+                // Description
+                if (widget.description != null) ...[
+                  SizedBox(height: spacing.s8),
+                  Text(
+                    widget.description!,
+                    style: typography.bodyTertiary.copyWith(
+                      color: colors.foregroundPrimary,
+                    ),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+
+                // Action Buttons
+                if (_hasActionButtons) ...[
+                  SizedBox(height: spacing.s16),
+                  _buildActionButtons(context),
+                ],
+              ],
             ),
           ],
         ),
@@ -278,10 +285,10 @@ class _NasikoCardState extends State<NasikoCard> {
     return Row(
       children: [
         if (widget.titleIcon != null) ...[
-          Icon(
-            widget.titleIcon,
-            size: iconSizes.m,
-            color: colors.foregroundIconPrimary,
+          SizedBox(
+            width: iconSizes.m,
+            height: iconSizes.m,
+            child: widget.titleIcon,
           ),
           SizedBox(width: spacing.s8),
         ],
@@ -342,18 +349,20 @@ class _NasikoCardState extends State<NasikoCard> {
               onPressed: widget.enabled ? widget.onPrimaryPressed : null,
               label: widget.primaryButtonLabel!,
               leadingIcon: widget.primaryButtonIcon,
+              trailingIcon: widget.primaryButtonTrailingIcon,
               size: NasikoButtonSize.small,
             ),
           ),
         if (widget.primaryButtonLabel != null &&
             widget.secondaryButtonLabel != null)
-          SizedBox(width: spacing.s12),
+          SizedBox(width: spacing.s8),
         if (widget.secondaryButtonLabel != null)
           Expanded(
             child: SecondaryButton(
               onPressed: widget.enabled ? widget.onSecondaryPressed : null,
               label: widget.secondaryButtonLabel!,
               leadingIcon: widget.secondaryButtonIcon,
+              trailingIcon: widget.secondaryButtonTrailingIcon,
               size: NasikoButtonSize.small,
             ),
           ),
