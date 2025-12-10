@@ -888,7 +888,7 @@ class ExampleHomePage extends StatelessWidget {
       title: 'Document Expert',
       titleIcon: HugeIcon(icon: HugeIcons.strokeRoundedDocumentCode),
       tags: ['document analysis', 'chat', 'history'],
-      subtitle:
+      description:
           'A helpful assistant that answers user questions based on the provided document. It supports file uploads for document processing and maintains a chat history for each session.',
       primaryButtonLabel: 'Start Session',
       secondaryButtonLabel: 'Learn More',

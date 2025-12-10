@@ -51,7 +51,6 @@ class NasikoCard extends StatefulWidget {
     this.enabled = true,
     this.onTap,
     this.width,
-    this.height,
   });
 
   /// Optional image widget to display at the top of the card.
@@ -112,9 +111,6 @@ class NasikoCard extends StatefulWidget {
   /// Optional fixed width for the card. If null, the card expands to fit its parent.
   final double? width;
 
-  /// Optional fixed height for the card. If provided, buttons will be pushed to the bottom.
-  final double? height;
-
   @override
   State<NasikoCard> createState() => _NasikoCardState();
 }
@@ -134,7 +130,6 @@ class _NasikoCardState extends State<NasikoCard> {
 
     Widget cardContent = Container(
       width: widget.width,
-      height: widget.height,
       padding: EdgeInsets.all(spacing.s20),
       decoration: BoxDecoration(
         color: colors.backgroundSurface,
@@ -199,9 +194,6 @@ class _NasikoCardState extends State<NasikoCard> {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
-
-                // Push buttons to bottom when height is constrained
-                if (_hasActionButtons && widget.height != null) const Spacer(),
 
                 // Action Buttons
                 if (_hasActionButtons) ...[
