@@ -190,7 +190,7 @@ class _NasikoCardState extends State<NasikoCard> {
                     style: typography.bodyTertiary.copyWith(
                       color: colors.foregroundPrimary,
                     ),
-                    maxLines: 3,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
