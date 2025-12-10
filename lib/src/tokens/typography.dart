@@ -170,9 +170,9 @@ const _baseButtonPrimary = TextStyle(
 const _baseButtonSecondary = TextStyle(
   fontFamily: _chivoMonoFontFamily,
   fontWeight: FontWeight.w400, // Regular
-  fontSize: 18,
-  height: 20 / 18,
-  letterSpacing: 0.0016 * 18, // 0.16%
+  fontSize: 16,
+  height: 20 / 16,
+  letterSpacing: 0.0016 * 16, // 0.16%
 );
 
 const _baseBodyPrimary = TextStyle(
