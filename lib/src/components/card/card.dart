@@ -300,12 +300,21 @@ class _NasikoCardState extends State<NasikoCard> {
   Widget _buildTagsRow(BuildContext context) {
     final spacing = context.spacing;
 
-    return Wrap(
-      spacing: spacing.s8,
-      runSpacing: spacing.s8,
-      children: widget.tags.map((tag) {
-        return NasikoChip(label: tag, enabled: widget.enabled);
-      }).toList(),
+    return ScrollConfiguration(
+      behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: widget.tags
+              .map(
+                (tag) => Padding(
+                  padding: EdgeInsets.only(right: spacing.s8),
+                  child: NasikoChip(label: tag, enabled: widget.enabled),
+                ),
+              )
+              .toList(),
+        ),
+      ),
     );
   }
 
