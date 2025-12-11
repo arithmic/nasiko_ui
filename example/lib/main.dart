@@ -532,13 +532,13 @@ class ExampleHomePage extends StatelessWidget {
               size: NasikoButtonSize.large,
               onPressed: () {},
               label: 'Button',
-              leadingIcon: Icons.check,
+              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
             ),
             PrimaryButton(
               size: NasikoButtonSize.large,
               onPressed: () {},
               label: 'Button',
-              trailingIcon: Icons.arrow_forward,
+              trailingIcon: HugeIcons.strokeRoundedArrowRight01,
             ),
             PrimaryButton(
               size: NasikoButtonSize.large,
@@ -564,13 +564,13 @@ class ExampleHomePage extends StatelessWidget {
               size: NasikoButtonSize.medium,
               onPressed: () {},
               label: 'Try Orchestrator',
-              leadingIcon: Icons.check,
+              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
             ),
             PrimaryButton(
               size: NasikoButtonSize.medium,
               onPressed: () {},
               label: 'Button',
-              trailingIcon: Icons.arrow_forward,
+              trailingIcon: HugeIcons.strokeRoundedArrowRight01,
             ),
             PrimaryButton(
               size: NasikoButtonSize.medium,
@@ -596,13 +596,13 @@ class ExampleHomePage extends StatelessWidget {
               size: NasikoButtonSize.small,
               onPressed: () {},
               label: 'Button',
-              leadingIcon: Icons.check,
+              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
             ),
             PrimaryButton(
               size: NasikoButtonSize.small,
               onPressed: () {},
               label: 'Button',
-              trailingIcon: Icons.arrow_forward,
+              trailingIcon: HugeIcons.strokeRoundedArrowRight01,
             ),
             PrimaryButton(
               size: NasikoButtonSize.small,
@@ -635,13 +635,13 @@ class ExampleHomePage extends StatelessWidget {
               size: NasikoButtonSize.large,
               onPressed: () {},
               label: 'Button',
-              leadingIcon: Icons.check,
+              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
             ),
             SecondaryButton(
               size: NasikoButtonSize.large,
               onPressed: () {},
               label: 'Button',
-              trailingIcon: Icons.arrow_forward,
+              trailingIcon: HugeIcons.strokeRoundedArrowRight01,
             ),
             SecondaryButton(
               size: NasikoButtonSize.large,
@@ -667,13 +667,13 @@ class ExampleHomePage extends StatelessWidget {
               size: NasikoButtonSize.medium,
               onPressed: () {},
               label: 'Button',
-              leadingIcon: Icons.check,
+              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
             ),
             SecondaryButton(
               size: NasikoButtonSize.medium,
               onPressed: () {},
               label: 'Button',
-              trailingIcon: Icons.arrow_forward,
+              trailingIcon: HugeIcons.strokeRoundedArrowRight01,
             ),
             SecondaryButton(
               size: NasikoButtonSize.medium,
@@ -699,13 +699,13 @@ class ExampleHomePage extends StatelessWidget {
               size: NasikoButtonSize.small,
               onPressed: () {},
               label: 'Button',
-              leadingIcon: Icons.check,
+              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
             ),
             SecondaryButton(
               size: NasikoButtonSize.small,
               onPressed: () {},
               label: 'Button',
-              trailingIcon: Icons.arrow_forward,
+              trailingIcon: HugeIcons.strokeRoundedArrowRight01,
             ),
             SecondaryButton(
               size: NasikoButtonSize.small,
@@ -731,12 +731,12 @@ class ExampleHomePage extends StatelessWidget {
             PrimaryTextButton(
               onPressed: () {},
               label: 'Button',
-              leadingIcon: Icons.check,
+              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
             ),
             PrimaryTextButton(
               onPressed: () {},
               label: 'Button',
-              trailingIcon: Icons.info,
+              trailingIcon: HugeIcons.strokeRoundedInformationCircle,
             ),
             PrimaryTextButton(onPressed: null, label: 'Disabled'),
           ],
@@ -758,12 +758,12 @@ class ExampleHomePage extends StatelessWidget {
             SecondaryTextButton(
               onPressed: () {},
               label: 'Button',
-              leadingIcon: Icons.check,
+              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
             ),
             SecondaryTextButton(
               onPressed: () {},
               label: 'Button',
-              trailingIcon: Icons.info,
+              trailingIcon: HugeIcons.strokeRoundedInformationCircle,
             ),
             SecondaryTextButton(onPressed: null, label: 'Disabled'),
           ],
@@ -788,12 +788,12 @@ class ExampleHomePage extends StatelessWidget {
           runSpacing: context.spacing.s12,
           children: [
             PrimaryIconButton(
-              icon: Icons.star,
+              icon: HugeIcons.strokeRoundedStar,
               onPressed: () {},
               size: NasikoButtonSize.large,
             ),
             PrimaryIconButton(
-              icon: Icons.star,
+              icon: HugeIcons.strokeRoundedStar,
               onPressed: null,
               size: NasikoButtonSize.large,
             ),
@@ -812,12 +812,12 @@ class ExampleHomePage extends StatelessWidget {
           runSpacing: context.spacing.s12,
           children: [
             PrimaryIconButton(
-              icon: Icons.star,
+              icon: HugeIcons.strokeRoundedStar,
               onPressed: () {},
               size: NasikoButtonSize.small,
             ),
             PrimaryIconButton(
-              icon: Icons.star,
+              icon: HugeIcons.strokeRoundedStar,
               onPressed: null,
               size: NasikoButtonSize.small,
             ),
@@ -843,12 +843,12 @@ class ExampleHomePage extends StatelessWidget {
           runSpacing: context.spacing.s12,
           children: [
             SecondaryIconButton(
-              icon: Icons.star,
+              icon: HugeIcons.strokeRoundedStar,
               onPressed: () {},
               size: NasikoButtonSize.large,
             ),
             SecondaryIconButton(
-              icon: Icons.star,
+              icon: HugeIcons.strokeRoundedStar,
               onPressed: null,
               size: NasikoButtonSize.large,
             ),
@@ -867,12 +867,12 @@ class ExampleHomePage extends StatelessWidget {
           runSpacing: context.spacing.s12,
           children: [
             SecondaryIconButton(
-              icon: Icons.star,
+              icon: HugeIcons.strokeRoundedStar,
               onPressed: () {},
               size: NasikoButtonSize.small,
             ),
             SecondaryIconButton(
-              icon: Icons.star,
+              icon: HugeIcons.strokeRoundedStar,
               onPressed: null,
               size: NasikoButtonSize.small,
             ),
@@ -1124,7 +1124,7 @@ class ExampleHomePage extends StatelessWidget {
             onPressed: () {},
             label: 'Add Agent',
             size: NasikoButtonSize.small,
-            trailingIcon: Icons.info_outline,
+            trailingIcon: HugeIcons.strokeRoundedInformationCircle,
           ),
         ),
 
@@ -1143,8 +1143,8 @@ class ExampleHomePage extends StatelessWidget {
             onPressed: () {},
             label: 'Button',
             size: NasikoButtonSize.small,
-            leadingIcon: Icons.star_border,
-            trailingIcon: Icons.info_outline,
+            leadingIcon: HugeIcons.strokeRoundedInformationSquare,
+            trailingIcon: HugeIcons.strokeRoundedInformationCircle,
           ),
         ),
       ],

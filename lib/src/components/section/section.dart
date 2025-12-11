@@ -61,6 +61,7 @@ class Section extends StatefulWidget {
 
 class _SectionState extends State<Section> {
   bool _isExpanded = false;
+  bool _isHovered = false;
 
   void _toggleExpanded() {
     if (widget.isExpandable) {
@@ -79,64 +80,83 @@ class _SectionState extends State<Section> {
     final iconSizes = context.iconSize;
     final borderWidths = context.borderWidth;
 
-    final backgroundColor = widget.isSelected
-        ? colors.backgroundSecondaryBrand
-        : Colors.transparent;
-    final borderColor = widget.isSelected
-        ? colors.borderSecondary
-        : Colors.transparent;
+    Color backgroundColor;
+    Color borderColor;
+
+    if (widget.isSelected) {
+      backgroundColor = colors.backgroundSecondaryBrand;
+      borderColor = colors.borderSecondary;
+    } else if (!widget.isExpandable && _isHovered) {
+      // Hover state for non-expandable sections
+      backgroundColor = Colors.transparent;
+      borderColor = colors.borderSecondary;
+    } else {
+      backgroundColor = Colors.transparent;
+      borderColor = Colors.transparent;
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         // Main section button
-        GestureDetector(
-          onTap: _toggleExpanded,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 150),
-            padding: EdgeInsets.symmetric(
-              horizontal: spacing.s8,
-              vertical: spacing.s12,
-            ),
-            decoration: BoxDecoration(
-              color: backgroundColor,
-              borderRadius: BorderRadius.circular(radii.r8),
-              border: Border.all(color: borderColor, width: borderWidths.w1),
-            ),
-            child: Row(
-              children: [
-                // Leading icon
-                Icon(
-                  widget.icon,
-                  size: iconSizes.s,
-                  color: colors.foregroundIconPrimary,
-                ),
-                SizedBox(width: spacing.s12),
+        MouseRegion(
+          cursor: (widget.isExpandable || widget.onTap != null)
+              ? SystemMouseCursors.click
+              : SystemMouseCursors.basic,
+          onEnter: widget.isExpandable
+              ? null
+              : (_) => setState(() => _isHovered = true),
+          onExit: widget.isExpandable
+              ? null
+              : (_) => setState(() => _isHovered = false),
+          child: GestureDetector(
+            onTap: _toggleExpanded,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 150),
+              padding: EdgeInsets.symmetric(
+                horizontal: spacing.s8,
+                vertical: spacing.s12,
+              ),
+              decoration: BoxDecoration(
+                color: backgroundColor,
+                borderRadius: BorderRadius.circular(radii.r8),
+                border: Border.all(color: borderColor, width: borderWidths.w1),
+              ),
+              child: Row(
+                children: [
+                  // Leading icon
+                  Icon(
+                    widget.icon,
+                    size: iconSizes.s,
+                    color: colors.foregroundIconPrimary,
+                  ),
+                  SizedBox(width: spacing.s12),
 
-                // Label
-                Expanded(
-                  child: Text(
-                    widget.label,
-                    style: typography.bodyPrimaryBold.copyWith(
-                      color: colors.foregroundPrimary,
+                  // Label
+                  Expanded(
+                    child: Text(
+                      widget.label,
+                      style: typography.bodyPrimaryBold.copyWith(
+                        color: colors.foregroundPrimary,
+                      ),
                     ),
                   ),
-                ),
 
-                // Chevron icon (only for expandable sections)
-                if (widget.isExpandable) ...[
-                  SizedBox(width: spacing.s8),
-                  AnimatedRotation(
-                    turns: _isExpanded ? 0.5 : 0,
-                    duration: const Duration(milliseconds: 200),
-                    child: Icon(
-                      Icons.keyboard_arrow_down_rounded,
-                      size: iconSizes.s,
-                      color: colors.foregroundIconPrimary,
+                  // Chevron icon (only for expandable sections)
+                  if (widget.isExpandable) ...[
+                    SizedBox(width: spacing.s8),
+                    AnimatedRotation(
+                      turns: _isExpanded ? 0.5 : 0,
+                      duration: const Duration(milliseconds: 200),
+                      child: Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        size: iconSizes.s,
+                        color: colors.foregroundIconPrimary,
+                      ),
                     ),
-                  ),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
         ),
@@ -212,6 +232,7 @@ class _SectionChildItemState extends State<_SectionChildItem> {
     }
 
     return MouseRegion(
+      cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       child: GestureDetector(
