@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nasiko_ui/src/components/buttons/button_size.dart';
-import 'package:nasiko_ui/src/tokens/tokens.dart';
+import 'package:hugeicons/hugeicons.dart';
+import 'package:nasiko_ui/nasiko_ui.dart';
 
 /// The secondary call-to-action button for Nasiko UI.
 ///
@@ -24,10 +24,10 @@ class SecondaryButton extends StatelessWidget {
   final String label;
 
   /// An optional icon to display before the label.
-  final IconData? leadingIcon;
+  final HugeIconsType? leadingIcon;
 
   /// An optional icon to display after the label.
-  final IconData? trailingIcon;
+  final HugeIconsType? trailingIcon;
 
   /// The size of the button. Defaults to [NasikoButtonSize.medium].
   final NasikoButtonSize size;
@@ -151,7 +151,11 @@ class SecondaryButton extends StatelessWidget {
         children: [
           // Leading Icon
           if (leadingIcon != null) ...[
-            Icon(leadingIcon, size: iconSize, color: null),
+            HugeIcon(
+              icon: leadingIcon!,
+              size: iconSize,
+              color: colors.foregroundIconPrimary,
+            ),
             SizedBox(width: iconSpacing),
           ],
 
@@ -161,7 +165,11 @@ class SecondaryButton extends StatelessWidget {
           // Trailing Icon
           if (trailingIcon != null) ...[
             SizedBox(width: iconSpacing),
-            Icon(trailingIcon, size: iconSize, color: null),
+            HugeIcon(
+              icon: trailingIcon!,
+              size: iconSize,
+              color: colors.foregroundIconPrimary,
+            ),
           ],
         ],
       ),
