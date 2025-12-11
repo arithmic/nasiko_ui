@@ -1,7 +1,8 @@
 // lib/src/components/buttons/secondary_text_button.dart
 
 import 'package:flutter/material.dart';
-import 'package:nasiko_ui/src/tokens/tokens.dart';
+import 'package:hugeicons/hugeicons.dart';
+import 'package:nasiko_ui/nasiko_ui.dart';
 
 /// A secondary text button for Nasiko UI with optional icons.
 ///
@@ -24,10 +25,10 @@ class SecondaryTextButton extends StatelessWidget {
   final String label;
 
   /// An optional icon to display before the label.
-  final IconData? leadingIcon;
+  final HugeIconsType? leadingIcon;
 
   /// An optional icon to display after the label.
-  final IconData? trailingIcon;
+  final HugeIconsType? trailingIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +96,7 @@ class SecondaryTextButton extends StatelessWidget {
         children: [
           // Leading Icon
           if (leadingIcon != null) ...[
-            Icon(leadingIcon, size: iconSizes.m),
+            HugeIcon(icon: leadingIcon!, size: iconSizes.s),
             SizedBox(width: spacing.s8),
           ],
 
@@ -105,7 +106,7 @@ class SecondaryTextButton extends StatelessWidget {
           // Trailing Icon
           if (trailingIcon != null) ...[
             SizedBox(width: spacing.s8),
-            Icon(trailingIcon, size: iconSizes.m),
+            HugeIcon(icon: trailingIcon!, size: iconSizes.s),
           ],
         ],
       ),

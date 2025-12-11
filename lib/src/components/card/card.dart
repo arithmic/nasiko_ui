@@ -79,10 +79,10 @@ class NasikoCard extends StatefulWidget {
   final String? primaryButtonLabel;
 
   /// Optional leading icon for the primary button.
-  final IconData? primaryButtonIcon;
+  final List<List<dynamic>>? primaryButtonIcon;
 
   /// Optional trailing icon for the primary button.
-  final IconData? primaryButtonTrailingIcon;
+  final List<List<dynamic>>? primaryButtonTrailingIcon;
 
   /// Callback when the primary button is pressed.
   final VoidCallback? onPrimaryPressed;
@@ -91,10 +91,10 @@ class NasikoCard extends StatefulWidget {
   final String? secondaryButtonLabel;
 
   /// Optional leading icon for the secondary button.
-  final IconData? secondaryButtonIcon;
+  final List<List<dynamic>>? secondaryButtonIcon;
 
   /// Optional trailing icon for the secondary button.
-  final IconData? secondaryButtonTrailingIcon;
+  final List<List<dynamic>>? secondaryButtonTrailingIcon;
 
   /// Callback when the secondary button is pressed.
   final VoidCallback? onSecondaryPressed;

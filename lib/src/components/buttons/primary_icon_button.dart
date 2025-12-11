@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nasiko_ui/src/components/buttons/button_size.dart';
-import 'package:nasiko_ui/src/tokens/tokens.dart';
+import 'package:hugeicons/hugeicons.dart';
+import 'package:nasiko_ui/nasiko_ui.dart';
 
 /// A primary icon button for Nasiko UI.
 ///
@@ -11,7 +11,7 @@ class PrimaryIconButton extends StatelessWidget {
     super.key,
     required this.onPressed,
     required this.icon,
-    this.size = NasikoButtonSize.large,
+    this.size = NasikoButtonSize.medium,
   });
 
   /// The callback that is called when the button is tapped.
@@ -19,9 +19,9 @@ class PrimaryIconButton extends StatelessWidget {
   final VoidCallback? onPressed;
 
   /// The icon to display on the button.
-  final IconData icon;
+  final HugeIconsType icon;
 
-  /// The size of the button. Defaults to [NasikoButtonSize.large].
+  /// The size of the button. Defaults to [NasikoButtonSize.medium].
   final NasikoButtonSize size;
 
   @override
@@ -102,7 +102,7 @@ class PrimaryIconButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: style,
-      child: Icon(icon, size: iconSize, color: null),
+      child: HugeIcon(icon: icon, size: iconSize),
     );
   }
 }

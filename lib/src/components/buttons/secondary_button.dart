@@ -151,11 +151,7 @@ class SecondaryButton extends StatelessWidget {
         children: [
           // Leading Icon
           if (leadingIcon != null) ...[
-            HugeIcon(
-              icon: leadingIcon!,
-              size: iconSize,
-              color: colors.foregroundIconPrimary,
-            ),
+            HugeIcon(icon: leadingIcon!, size: iconSize),
             SizedBox(width: iconSpacing),
           ],
 
@@ -165,11 +161,7 @@ class SecondaryButton extends StatelessWidget {
           // Trailing Icon
           if (trailingIcon != null) ...[
             SizedBox(width: iconSpacing),
-            HugeIcon(
-              icon: trailingIcon!,
-              size: iconSize,
-              color: colors.foregroundIconPrimary,
-            ),
+            HugeIcon(icon: trailingIcon!, size: iconSize),
           ],
         ],
       ),

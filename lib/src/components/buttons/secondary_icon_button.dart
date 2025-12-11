@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nasiko_ui/src/components/buttons/button_size.dart';
-import 'package:nasiko_ui/src/tokens/tokens.dart';
+import 'package:hugeicons/hugeicons.dart';
+import 'package:nasiko_ui/nasiko_ui.dart';
 
 /// A secondary icon button for Nasiko UI.
 ///
@@ -19,7 +19,7 @@ class SecondaryIconButton extends StatelessWidget {
   final VoidCallback? onPressed;
 
   /// The icon to display on the button.
-  final IconData icon;
+  final HugeIconsType icon;
 
   /// The size of the button. Defaults to [NasikoButtonSize.large].
   final NasikoButtonSize size;
@@ -117,7 +117,7 @@ class SecondaryIconButton extends StatelessWidget {
     return OutlinedButton(
       onPressed: onPressed,
       style: style,
-      child: Icon(icon, size: iconSize, color: null),
+      child: HugeIcon(icon: icon, size: iconSize),
     );
   }
 }

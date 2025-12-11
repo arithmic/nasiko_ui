@@ -94,11 +94,7 @@ class PrimaryTextButton extends StatelessWidget {
           // Trailing Icon
           if (trailingIcon != null) ...[
             SizedBox(width: spacing.s8),
-            HugeIcon(
-              icon: trailingIcon!,
-              size: iconSizes.s,
-              color: colors.foregroundIconPrimary,
-            ),
+            HugeIcon(icon: trailingIcon!, size: iconSizes.s),
           ],
         ],
       ),
