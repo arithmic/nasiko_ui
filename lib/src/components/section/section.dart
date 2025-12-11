@@ -63,6 +63,26 @@ class _SectionState extends State<Section> {
   bool _isExpanded = false;
   bool _isHovered = false;
 
+  @override
+  void initState() {
+    super.initState();
+    _isExpanded = _hasSelectedChild();
+  }
+
+  @override
+  void didUpdateWidget(Section oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Auto-expand when a child becomes selected
+    if (_hasSelectedChild() && !_isExpanded) {
+      setState(() => _isExpanded = true);
+    }
+  }
+
+  bool _hasSelectedChild() {
+    if (!widget.isExpandable || widget.selectedChild == null) return false;
+    return widget.children!.any((child) => child.label == widget.selectedChild);
+  }
+
   void _toggleExpanded() {
     if (widget.isExpandable) {
       setState(() => _isExpanded = !_isExpanded);
@@ -80,10 +100,13 @@ class _SectionState extends State<Section> {
     final iconSizes = context.iconSize;
     final borderWidths = context.borderWidth;
 
+    // and this is NOT an expandable section
+    final bool showSelectedState = widget.isSelected && !widget.isExpandable;
+
     Color backgroundColor;
     Color borderColor;
 
-    if (widget.isSelected) {
+    if (showSelectedState) {
       backgroundColor = colors.backgroundSecondaryBrand;
       borderColor = colors.borderSecondary;
     } else if (!widget.isExpandable && _isHovered) {
