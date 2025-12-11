@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
+import 'package:nasiko_ui/src/components/input_fields/input_field.dart';
 import 'package:nasiko_ui/src/tokens/tokens.dart';
 
 /// A primary text button for Nasiko UI with optional icons.
@@ -22,10 +24,11 @@ class PrimaryTextButton extends StatelessWidget {
   final String label;
 
   /// An optional icon to display before the label.
-  final IconData? leadingIcon;
+  final HugeIconsType? leadingIcon;
 
-  /// An optional icon to display after the label.
-  final IconData? trailingIcon;
+  /// An optional icon to display after the label. Only to use HugeIcon library.
+  /// Ex: HugeIcons.strokeRoundedLoading01
+  final HugeIconsType? trailingIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +80,11 @@ class PrimaryTextButton extends StatelessWidget {
         children: [
           // Leading Icon
           if (leadingIcon != null) ...[
-            Icon(leadingIcon, size: iconSizes.m, color: null),
+            HugeIcon(
+              icon: leadingIcon!,
+              size: iconSizes.s,
+              color: colors.foregroundIconPrimary,
+            ),
             SizedBox(width: spacing.s8),
           ],
 
@@ -87,7 +94,11 @@ class PrimaryTextButton extends StatelessWidget {
           // Trailing Icon
           if (trailingIcon != null) ...[
             SizedBox(width: spacing.s8),
-            Icon(trailingIcon, size: iconSizes.m, color: null),
+            HugeIcon(
+              icon: trailingIcon!,
+              size: iconSizes.s,
+              color: colors.foregroundIconPrimary,
+            ),
           ],
         ],
       ),
