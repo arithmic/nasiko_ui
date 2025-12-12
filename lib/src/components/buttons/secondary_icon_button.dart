@@ -11,7 +11,7 @@ class SecondaryIconButton extends StatelessWidget {
     super.key,
     required this.onPressed,
     required this.icon,
-    this.size = NasikoButtonSize.large,
+    this.size = NasikoButtonSize.medium,
   });
 
   /// The callback that is called when the button is tapped.
@@ -21,7 +21,7 @@ class SecondaryIconButton extends StatelessWidget {
   /// The icon to display on the button.
   final HugeIconsType icon;
 
-  /// The size of the button. Defaults to [NasikoButtonSize.large].
+  /// The size of the button. Defaults to [NasikoButtonSize.medium].
   final NasikoButtonSize size;
 
   @override
@@ -38,19 +38,19 @@ class SecondaryIconButton extends StatelessWidget {
 
     switch (size) {
       case NasikoButtonSize.large:
-        padding = spacing.s16;
+        padding = spacing.s20;
         iconSize = iconSizes.l;
         borderRadius = radii.r10;
         break;
       case NasikoButtonSize.medium:
         padding = spacing.s12;
         iconSize = iconSizes.m;
-        borderRadius = radii.r8;
+        borderRadius = radii.r10;
         break;
       case NasikoButtonSize.small:
         padding = spacing.s8;
         iconSize = iconSizes.s;
-        borderRadius = radii.r8;
+        borderRadius = radii.r10;
         break;
     }
 
@@ -61,29 +61,18 @@ class SecondaryIconButton extends StatelessWidget {
       shadowColor: WidgetStateProperty.all(Colors.transparent),
 
       // --- Background Color ---
-      backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
-        if (states.contains(WidgetState.disabled)) {
-          return colors.backgroundDisabled;
-        }
-        if (states.contains(WidgetState.hovered)) {
-          return colors.backgroundBrand;
-        }
-        if (states.contains(WidgetState.pressed)) {
-          return colors.backgroundBrandActive;
-        }
-        // Default - transparent for outline style
-        return Colors.transparent;
-      }),
+      backgroundColor: WidgetStatePropertyAll(Colors.transparent),
 
       // --- Foreground Color (Icon) ---
       foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
         if (states.contains(WidgetState.disabled)) {
           return colors.foregroundDisabled;
         }
-        if (states.contains(WidgetState.hovered)) {
-          return colors.foregroundOnAction;
+        if (states.contains(WidgetState.hovered) ||
+            states.contains(WidgetState.pressed)) {
+          return colors.foregroundIconSecondary;
         }
-        return colors.foregroundSecondary;
+        return colors.foregroundIconPrimary;
       }),
 
       // --- Shape & Border ---
@@ -95,14 +84,16 @@ class SecondaryIconButton extends StatelessWidget {
             color: colors.borderDisabled,
             width: borderWidths.w1,
           );
-        } else if (states.contains(WidgetState.focused)) {
+        } else if (states.contains(WidgetState.focused) ||
+            states.contains(WidgetState.hovered) ||
+            states.contains(WidgetState.pressed)) {
           borderSide = BorderSide(
             color: colors.borderHover,
             width: borderWidths.w1,
           );
         } else {
           borderSide = BorderSide(
-            color: colors.borderPrimary,
+            color: Colors.transparent,
             width: borderWidths.w1,
           );
         }
@@ -114,10 +105,10 @@ class SecondaryIconButton extends StatelessWidget {
       }),
     );
 
-    return OutlinedButton(
+    return IconButton(
       onPressed: onPressed,
       style: style,
-      child: HugeIcon(icon: icon, size: iconSize),
+      icon: HugeIcon(icon: icon, size: iconSize),
     );
   }
 }

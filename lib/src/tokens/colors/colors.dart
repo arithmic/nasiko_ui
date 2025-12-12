@@ -480,7 +480,7 @@ const NasikoColorTheme lightColors = NasikoColorTheme(
   // Foreground Default
   foregroundPrimary: neutral700,
   foregroundSecondary: neutral500,
-  foregroundDisabled: neutral300,
+  foregroundDisabled: neutral400,
   foregroundOnAction: white,
   foregroundIconPrimary: neutral700,
   foregroundIconSecondary: yellow600,

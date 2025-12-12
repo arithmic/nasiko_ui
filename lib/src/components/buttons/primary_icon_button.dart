@@ -30,6 +30,7 @@ class PrimaryIconButton extends StatelessWidget {
     final spacing = context.spacing;
     final radii = context.radius;
     final iconSizes = context.iconSize;
+    final borderWidths = context.borderWidth;
 
     final double padding;
     final double iconSize;
@@ -37,19 +38,19 @@ class PrimaryIconButton extends StatelessWidget {
 
     switch (size) {
       case NasikoButtonSize.large:
-        padding = spacing.s16;
+        padding = spacing.s20;
         iconSize = iconSizes.l;
         borderRadius = radii.r10;
         break;
       case NasikoButtonSize.medium:
         padding = spacing.s12;
         iconSize = iconSizes.m;
-        borderRadius = radii.r8;
+        borderRadius = radii.r10;
         break;
       case NasikoButtonSize.small:
         padding = spacing.s8;
         iconSize = iconSizes.s;
-        borderRadius = radii.r8;
+        borderRadius = radii.r10;
         break;
     }
 
@@ -64,31 +65,42 @@ class PrimaryIconButton extends StatelessWidget {
         if (states.contains(WidgetState.disabled)) {
           return colors.backgroundDisabled;
         }
-        if (states.contains(WidgetState.hovered)) {
-          return colors.backgroundBrandHover;
-        }
         if (states.contains(WidgetState.pressed)) {
           return colors.backgroundBrand;
         }
-        return colors.backgroundBrand;
+        return colors.backgroundBase;
       }),
 
       // --- Foreground Color (Icon) ---
       foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
         if (states.contains(WidgetState.disabled)) {
           return colors.foregroundDisabled;
+        } else if (states.contains(WidgetState.pressed) ||
+            states.contains(WidgetState.hovered)) {
+          return colors.foregroundIconHover;
         }
-        return colors.foregroundOnAction;
+        return colors.foregroundIconSecondary;
       }),
 
       // --- Shape & Focus Ring ---
       shape: WidgetStateProperty.resolveWith<OutlinedBorder>((states) {
         BorderSide borderSide = BorderSide.none;
 
-        if (states.contains(WidgetState.focused)) {
+        if (states.contains(WidgetState.disabled)) {
+          borderSide = BorderSide(
+            color: colors.borderDisabled,
+            width: borderWidths.w1,
+          );
+        } else if (states.contains(WidgetState.focused) ||
+            states.contains(WidgetState.hovered)) {
           borderSide = BorderSide(
             color: colors.borderSecondary,
-            width: spacing.s2,
+            width: borderWidths.w1,
+          );
+        } else if (states.contains(WidgetState.pressed)) {
+          borderSide = BorderSide(
+            color: colors.borderPrimary,
+            width: borderWidths.w1,
           );
         }
 
@@ -99,10 +111,10 @@ class PrimaryIconButton extends StatelessWidget {
       }),
     );
 
-    return ElevatedButton(
+    return IconButton(
       onPressed: onPressed,
       style: style,
-      child: HugeIcon(icon: icon, size: iconSize),
+      icon: HugeIcon(icon: icon, size: iconSize),
     );
   }
 }
