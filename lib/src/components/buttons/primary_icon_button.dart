@@ -66,7 +66,7 @@ class PrimaryIconButton extends StatelessWidget {
           return colors.backgroundDisabled;
         }
         if (states.contains(WidgetState.pressed)) {
-          return colors.backgroundBrand;
+          return colors.backgroundSecondaryBrandActive;
         }
         return colors.backgroundBase;
       }),
@@ -102,6 +102,11 @@ class PrimaryIconButton extends StatelessWidget {
             color: colors.borderPrimary,
             width: borderWidths.w1,
           );
+        } else {
+          borderSide = BorderSide(
+            color: colors.borderPrimary,
+            width: borderWidths.w1,
+          );
         }
 
         return RoundedRectangleBorder(
@@ -109,6 +114,8 @@ class PrimaryIconButton extends StatelessWidget {
           side: borderSide,
         );
       }),
+
+      overlayColor: WidgetStatePropertyAll(Colors.transparent),
     );
 
     return IconButton(

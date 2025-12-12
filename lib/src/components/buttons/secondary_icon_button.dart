@@ -61,7 +61,12 @@ class SecondaryIconButton extends StatelessWidget {
       shadowColor: WidgetStateProperty.all(Colors.transparent),
 
       // --- Background Color ---
-      backgroundColor: WidgetStatePropertyAll(Colors.transparent),
+      backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+        if (states.contains(WidgetState.pressed)) {
+          return colors.backgroundSecondaryBrandActive;
+        }
+        return Colors.transparent;
+      }),
 
       // --- Foreground Color (Icon) ---
       foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
@@ -103,6 +108,8 @@ class SecondaryIconButton extends StatelessWidget {
           side: borderSide,
         );
       }),
+
+      overlayColor: WidgetStatePropertyAll(Colors.transparent),
     );
 
     return IconButton(

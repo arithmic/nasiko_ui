@@ -507,7 +507,7 @@ const NasikoColorTheme lightColors = NasikoColorTheme(
   // Border Default
   borderPrimary: neutral300,
   borderSecondary: yellow600,
-  borderHover: yellow800,
+  borderHover: yellow600,
   borderSuccess: green300,
   borderError: red300,
   borderWarning: orange300,
