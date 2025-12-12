@@ -174,12 +174,7 @@ class _NasikoCardState extends State<NasikoCard> {
                 // Subtitle
                 if (widget.subtitle != null) ...[
                   SizedBox(height: spacing.s8),
-                  Text(
-                    widget.subtitle!,
-                    style: typography.bodyTertiaryBold.copyWith(
-                      color: colors.foregroundSecondary,
-                    ),
-                  ),
+                  _buildSubtitleRow(context),
                 ],
 
                 // Description
@@ -320,6 +315,24 @@ class _NasikoCardState extends State<NasikoCard> {
                 ),
               )
               .toList(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSubtitleRow(BuildContext context) {
+    final typography = context.typography;
+    final colors = context.colors;
+
+    return ScrollConfiguration(
+      behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Text(
+          widget.subtitle!,
+          style: typography.bodyTertiaryBold.copyWith(
+            color: colors.foregroundSecondary,
+          ),
         ),
       ),
     );
