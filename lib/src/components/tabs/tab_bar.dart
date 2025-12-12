@@ -38,7 +38,7 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
 
   final TabAlignment? tabAlignment;
 
-  static const double _tabBarHeight = 48.0;
+  static const double _tabBarHeight = 36.0;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +71,7 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
             color: colors.borderSecondary,
             width: borderWidths.w2,
           ),
-          insets: EdgeInsets.symmetric(horizontal: spacing.s16),
+          // insets: EdgeInsets.symmetric(horizontal: spacing.s16),
         ),
         indicatorSize: TabBarIndicatorSize.tab,
 
