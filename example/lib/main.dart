@@ -206,6 +206,12 @@ class ExampleHomePage extends StatelessWidget {
               SizedBox(height: context.spacing.s28),
               _buildSection(
                 context,
+                title: 'Radio',
+                child: const _RadioExample(),
+              ),
+              SizedBox(height: context.spacing.s28),
+              _buildSection(
+                context,
                 title: 'Dividers',
                 child: _buildDividersExample(context),
               ),
@@ -1616,6 +1622,88 @@ class _CheckboxExampleState extends State<_CheckboxExample> {
               isChecked: false,
               onChanged: null, // Disabled (unchecked)
             ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _RadioExample extends StatefulWidget {
+  const _RadioExample();
+
+  @override
+  State<_RadioExample> createState() => _RadioExampleState();
+}
+
+class _RadioExampleState extends State<_RadioExample> {
+  String? _selectedOption = 'option1';
+  final String _disabledOption = 'disabled1';
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Default State',
+          style: context.typography.bodyPrimary.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        SizedBox(height: context.spacing.s8),
+        Row(
+          children: [
+            NasikoRadio<String>(
+              value: 'option1',
+              groupValue: _selectedOption,
+              onChanged: (value) => setState(() => _selectedOption = value),
+            ),
+            SizedBox(width: context.spacing.s8),
+            Text('Option 1', style: context.typography.bodyPrimary),
+            SizedBox(width: context.spacing.s24),
+            NasikoRadio<String>(
+              value: 'option2',
+              groupValue: _selectedOption,
+              onChanged: (value) => setState(() => _selectedOption = value),
+            ),
+            SizedBox(width: context.spacing.s8),
+            Text('Option 2', style: context.typography.bodyPrimary),
+            SizedBox(width: context.spacing.s24),
+            NasikoRadio<String>(
+              value: 'option3',
+              groupValue: _selectedOption,
+              onChanged: (value) => setState(() => _selectedOption = value),
+            ),
+            SizedBox(width: context.spacing.s8),
+            Text('Option 3', style: context.typography.bodyPrimary),
+          ],
+        ),
+        SizedBox(height: context.spacing.s20),
+        Text(
+          'Disabled State',
+          style: context.typography.bodyPrimary.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        SizedBox(height: context.spacing.s8),
+        Row(
+          children: [
+            NasikoRadio<String>(
+              value: 'disabled1',
+              groupValue: _disabledOption,
+              onChanged: null, // Disabled
+            ),
+            SizedBox(width: context.spacing.s8),
+            Text('Disabled Selected', style: context.typography.bodyPrimary),
+            SizedBox(width: context.spacing.s24),
+            NasikoRadio<String>(
+              value: 'disabled2',
+              groupValue: _disabledOption,
+              onChanged: null, // Disabled
+            ),
+            SizedBox(width: context.spacing.s8),
+            Text('Disabled Unselected', style: context.typography.bodyPrimary),
           ],
         ),
       ],

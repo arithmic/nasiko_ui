@@ -17,6 +17,7 @@ Nasiko UI provides a comprehensive set of pre-built components that follow the d
 - [List](#list)
 - [Menu](#menu)
 - [Modal](#modal)
+- [Radio Button](#radio-button)
 - [Section](#section)
 - [Switch](#switch)
 - [Table](#table)
@@ -481,47 +482,106 @@ NasikoCheckboxTile(
 
 ## Chip
 
-Chip components for representing small pieces of information.
+Compact elements that represent tags, attributes, or actions. Chips can be actionable (with delete) or non-actionable.
 
 ### NasikoChip
 
-A simple chip with text.
+An individual chip widget with optional leading icon and trailing delete action.
 
 \`\`\`dart
+// Non-actionable chip (neutral variant)
 NasikoChip(
-  label: 'New',
-  backgroundColor: Colors.green,
+  label: 'Tag',
+  leadingIcon: Icons.music_note,
+  variant: NasikoChipVariant.neutral,
+)
+
+// Actionable chip with delete (brand variant)
+NasikoChip(
+  label: 'Your Agents',
+  leadingIcon: Icons.music_note,
+  variant: NasikoChipVariant.brand,
+  onDelete: () => print('Deleted'),
+)
+
+// Clickable chip
+NasikoChip(
+  label: 'Filter',
+  leadingIcon: Icons.filter_list,
+  onTap: () => print('Tapped'),
+)
+
+// Disabled chip
+NasikoChip(
+  label: 'Disabled',
+  enabled: false,
 )
 \`\`\`
 
 #### Properties
 
-| Property | Type | Description |
+| Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `label` | `String` | Chip text |
-| `backgroundColor` | `Color` | Chip background color |
-| `onTap` | `VoidCallback?` | Tap callback |
+| `label` | `String` | **required** | Text label displayed on chip |
+| `leadingIcon` | `IconData?` | `null` | Optional icon before label |
+| `onTap` | `VoidCallback?` | `null` | Callback when chip is tapped |
+| `onDelete` | `VoidCallback?` | `null` | Callback for delete action (shows delete icon) |
+| `variant` | `NasikoChipVariant` | `neutral` | Visual style variant |
+| `enabled` | `bool` | `true` | Whether chip is interactive |
 
-### NasikoChipIcon
+#### NasikoChipVariant
 
-A chip with an icon.
+| Value | Description | Visual |
+|-------|-------------|--------|
+| `neutral` | Default gray style | Gray background, gray border |
+| `brand` | Selected/highlighted | Yellow/brand background |
+
+#### Chip Types
+
+**Non-actionable**: No `onTap` or `onDelete` callbacks - display only  
+**Actionable**: Has `onTap` (clickable) and/or `onDelete` (removable with icon)
+
+### NasikoChipGroup
+
+A horizontal scrollable container for multiple chips.
 
 \`\`\`dart
-NasikoChipIcon(
-  icon: Icons.notifications,
-  backgroundColor: Colors.green,
+NasikoChipGroup(
+  children: [
+    NasikoChip(label: 'Tag 1', leadingIcon: Icons.music_note),
+    NasikoChip(label: 'Tag 2', leadingIcon: Icons.music_note),
+    NasikoChip(label: 'Tag 3', leadingIcon: Icons.music_note),
+  ],
+  spacing: 8,
+  scrollable: true,
 )
 \`\`\`
 
 #### Properties
 
-| Property | Type | Description |
+| Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `icon` | `IconData` | Chip icon |
-| `backgroundColor` | `Color` | Chip background color |
-| `onTap` | `VoidCallback?` | Tap callback |
-| `enabled` | `bool` | `true` | Whether the chip is enabled |
-| `onDelete` | `VoidCallback?` | `null` | Callback for delete action. Shows remove icon when set |
+| `children` | `List<Widget>` | **required** | List of chip widgets |
+| `spacing` | `double?` | `s8` token | Spacing between chips |
+| `scrollable` | `bool` | `true` | Enable horizontal scrolling |
+
+### States
+
+| State | Description | Visual Effect |
+|-------|-------------|---------------|
+| Default | Normal state | Base colors per variant |
+| Hover | Mouse over actionable chip | Lighter background |
+| Pressed | Click/tap down | Darker background |
+| Disabled | `enabled: false` | Gray background, reduced opacity |
+
+### Design Guidelines
+
+- Use **neutral** variant for unselected/default tags
+- Use **brand** variant for selected/active tags
+- Keep chip labels concise (1-3 words)
+- Use `NasikoChipGroup` for horizontal lists
+- Provide `onDelete` only when user can remove chips
+- Leading icons help with quick visual recognition
 
 ---
 
@@ -741,6 +801,104 @@ NasikoModal(
   onPrimaryAction: () => saveProfile(),
 )
 \`\`\`
+
+---
+
+## Radio Button
+
+A radio button component for single selection within a group.
+
+### NasikoRadio
+
+A generic radio button widget that supports four visual states:
+
+- **Selected**: Light gray outer ring with brand inner circle when selected (20px)
+- **Hover**: Brand-colored outer ring (20px)
+- **Focused**: Double ring effect with brand outer ring at 24px and light inner ring at 20px
+- **Disabled**: Muted gray colors with filled background (background: backgroundDisabled, border: borderDisabled, inner: backgroundOverlay) (20px)
+
+\`\`\`dart
+String? selectedValue = 'option1';
+
+NasikoRadio<String>(
+  value: 'option1',
+  groupValue: selectedValue,
+  onChanged: (value) {
+    setState(() => selectedValue = value);
+  },
+)
+\`\`\`
+
+#### Properties
+
+| Property | Type | Description | Default |
+|----------|------|-------------|---------|
+| `value` | `T` | The value represented by this radio button | Required |
+| `groupValue` | `T?` | The currently selected value in the group | Required |
+| `onChanged` | `ValueChanged<T?>?` | Called when tapped (`null` = disabled) | Required |
+
+#### States
+
+1. **Selected (default)**: 20px with light gray outer ring (`borderPrimary`) and brand-colored inner circle when selected
+2. **Hover**: 20px with brand-colored outer ring (`backgroundBrand`) on mouse hover
+3. **Focused (active/pressed)**: 24px with double ring effect - brand outer ring at 24px and light inner ring at 20px
+4. **Disabled**: 20px with muted gray colors when `onChanged` is `null` (filled background: `backgroundDisabled`, border: `borderDisabled`, inner circle: `backgroundOverlay`)
+
+#### Example: Radio Group
+
+\`\`\`dart
+enum PaymentMethod { card, paypal, bank }
+
+class PaymentSelector extends StatefulWidget {
+  @override
+  State<PaymentSelector> createState() => _PaymentSelectorState();
+}
+
+class _PaymentSelectorState extends State<PaymentSelector> {
+  PaymentMethod?_selectedMethod = PaymentMethod.card;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ListTile(
+          leading: NasikoRadio<PaymentMethod>(
+            value: PaymentMethod.card,
+            groupValue: _selectedMethod,
+            onChanged: (value) => setState(() =>_selectedMethod = value),
+          ),
+          title: Text('Credit Card'),
+        ),
+        ListTile(
+          leading: NasikoRadio<PaymentMethod>(
+            value: PaymentMethod.paypal,
+            groupValue: _selectedMethod,
+            onChanged: (value) => setState(() =>_selectedMethod = value),
+          ),
+          title: Text('PayPal'),
+        ),
+        ListTile(
+          leading: NasikoRadio<PaymentMethod>(
+            value: PaymentMethod.bank,
+            groupValue: _selectedMethod,
+            onChanged: (value) => setState(() =>_selectedMethod = value),
+          ),
+          title: Text('Bank Transfer'),
+        ),
+      ],
+    );
+  }
+}
+\`\`\`
+
+#### Design Guidelines
+
+- Use radio buttons for mutually exclusive choices (only one can be selected)
+- For multiple selections, use Checkboxes instead
+- Group related radio buttons together with clear labels
+- Always provide a label next to each radio button for context
+- Size: 20px by default, expands to 24px when focused/pressed
+- Inner circle is 12px diameter (6px radius) - half of the focused outer circle size
 
 ---
 
@@ -1020,15 +1178,6 @@ NasikoToastService.show(
 | `showSuccess` | `context`, `message` | Show success toast |
 | `showError` | `context`, `message` | Show error toast |
 
-### NasikoToastType
-
-| Value | Icon | Color |
-|-------|------|-------|
-| `success` | check_circle | Green |
-| `error` | cancel | Red |
-| `warning` | warning | Orange |
-| `info` | info | Blue |
-
 ### NasikoToast Widget
 
 Can also be used directly as a widget.
@@ -1046,3 +1195,12 @@ NasikoToast(
 |----------|------|---------|-------------|
 | `type` | `NasikoToastType` | Toast type |
 | `message` | `String` | Toast message |
+
+### NasikoToastType
+
+| Value | Icon | Color |
+|-------|------|-------|
+| `success` | check_circle | Green |
+| `error` | cancel | Red |
+| `warning` | warning | Orange |
+| `info` | info | Blue |
