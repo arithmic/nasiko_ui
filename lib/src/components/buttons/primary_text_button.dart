@@ -46,6 +46,8 @@ class PrimaryTextButton extends StatelessWidget {
         padding: WidgetStateProperty.all(
           EdgeInsets.symmetric(vertical: spacing.s8, horizontal: spacing.s12),
         ),
+        minimumSize: WidgetStateProperty.all(Size(0, 36)),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         textStyle: WidgetStateProperty.all(typography.buttonSecondary),
         elevation: WidgetStateProperty.all(0),
         shadowColor: WidgetStateProperty.all(Colors.transparent),

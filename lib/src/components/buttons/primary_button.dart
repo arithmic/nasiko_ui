@@ -46,8 +46,8 @@ class PrimaryButton extends StatelessWidget {
     final TextStyle textStyle;
     final double iconSize;
     final double borderRadius;
-    // --- NEW: Added iconSpacing variable ---
     final double iconSpacing;
+    final double minHeight;
 
     switch (size) {
       case NasikoButtonSize.large:
@@ -59,6 +59,7 @@ class PrimaryButton extends StatelessWidget {
         iconSize = iconSizes.l; // 28px
         borderRadius = radii.r10; // 10px radius
         iconSpacing = spacing.s12; // 12px spacing
+        minHeight = 68;
         break;
       case NasikoButtonSize.medium:
         padding = EdgeInsets.symmetric(
@@ -69,6 +70,7 @@ class PrimaryButton extends StatelessWidget {
         iconSize = iconSizes.s; // 20px
         borderRadius = radii.r8; // 8px radius
         iconSpacing = spacing.s8; // 8px spacing
+        minHeight = 44;
         break;
       case NasikoButtonSize.small:
         padding = EdgeInsets.symmetric(
@@ -79,12 +81,15 @@ class PrimaryButton extends StatelessWidget {
         iconSize = iconSizes.s; // 20px
         borderRadius = radii.r8; // 8px radius
         iconSpacing = spacing.s8; // 8px spacing
+        minHeight = 36;
         break;
     }
 
     final style = ButtonStyle(
       // --- Base Properties ---
       padding: WidgetStateProperty.all(padding),
+      minimumSize: WidgetStateProperty.all(Size(0, minHeight)),
+      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       textStyle: WidgetStateProperty.all(textStyle),
       elevation: WidgetStateProperty.all(0),
       shadowColor: WidgetStateProperty.all(Colors.transparent),

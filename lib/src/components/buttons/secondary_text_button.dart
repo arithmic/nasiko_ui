@@ -45,8 +45,7 @@ class SecondaryTextButton extends StatelessWidget {
         padding: WidgetStateProperty.all(
           EdgeInsets.symmetric(vertical: spacing.s8, horizontal: spacing.s12),
         ),
-        // Set a minimum tap target for accessibility
-        minimumSize: WidgetStateProperty.all(Size(0, spacing.s36)),
+        minimumSize: WidgetStateProperty.all(Size.zero),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         elevation: WidgetStateProperty.all(0),
         shadowColor: WidgetStateProperty.all(Colors.transparent),
@@ -81,7 +80,6 @@ class SecondaryTextButton extends StatelessWidget {
               decoration: TextDecoration.underline,
               decorationColor: colors.foregroundBrandHover,
               decorationThickness: borderWidth.w1,
-              height: 1.3,
             );
           }
           // Default state

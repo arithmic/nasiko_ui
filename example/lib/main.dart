@@ -806,6 +806,25 @@ class ExampleHomePage extends StatelessWidget {
           ],
         ),
         SizedBox(height: context.spacing.s20),
+        Text('Medium', style: context.typography.bodyPrimary),
+        SizedBox(height: context.spacing.s12),
+        Wrap(
+          spacing: context.spacing.s12,
+          runSpacing: context.spacing.s12,
+          children: [
+            PrimaryIconButton(
+              icon: HugeIcons.strokeRoundedStar,
+              onPressed: () {},
+              size: NasikoButtonSize.medium,
+            ),
+            PrimaryIconButton(
+              icon: HugeIcons.strokeRoundedStar,
+              onPressed: null,
+              size: NasikoButtonSize.medium,
+            ),
+          ],
+        ),
+        SizedBox(height: context.spacing.s20),
         Text(
           'Small',
           style: context.typography.bodyPrimary.copyWith(
@@ -1243,15 +1262,16 @@ class ExampleHomePage extends StatelessWidget {
           onPressed: () {
             showNasikoModal(
               context: context,
-              title: 'Confirm Operation',
+              title: 'Add Agent',
+              titleIcon: HugeIcons.strokeRoundedAdd01,
               content: Text(
-                'Are you sure you want to proceed with this action? It cannot be undone.',
-                style: context.typography.bodyPrimary.copyWith(
+                'Register your own AI agent with metadata, schema, and policies.',
+                style: context.typography.bodySecondary.copyWith(
                   color: context.colors.foregroundSecondary,
                 ),
               ),
               primaryButtonLabel: 'Confirm',
-              secondaryButtonLabel: 'Cancel',
+              secondaryButtonLabel: 'Delete',
               onPrimaryAction: () {
                 Navigator.of(context).pop();
                 // Perform the confirmation action here
@@ -1266,15 +1286,18 @@ class ExampleHomePage extends StatelessWidget {
           onPressed: () {
             showNasikoModal(
               context: context,
+              buttonLayout: NasikoModalVariant.vertical,
               title: 'Action Failed',
-              leadingIcon: Icons.warning_rounded,
+              titleIcon: HugeIcons.strokeRoundedSpam,
               content: Text(
                 'The requested operation failed due to a server error. Please try again later.',
-                style: context.typography.bodyPrimary.copyWith(
+                style: context.typography.bodySecondary.copyWith(
                   color: context.colors.foregroundSecondary,
                 ),
               ),
               primaryButtonLabel: 'Dismiss',
+              secondaryButtonLabel: 'Delete',
+              secondaryButtonIsDanger: true,
               onPrimaryAction: () => Navigator.of(context).pop(),
               // Only one button for a simple alert
             );
