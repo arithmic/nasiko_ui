@@ -1557,9 +1557,7 @@ class _MenuExampleState extends State<_MenuExample> {
 
   @override
   Widget build(BuildContext context) {
-    return NasikoMenu(
-      title: 'Menu',
-      titleIcon: Icons.menu_open_outlined, // Example icon
+    return NasikoPopupMenu(
       items: _menuItems,
       selectedIndex: _selectedIndex,
       onItemSelected: (index) {

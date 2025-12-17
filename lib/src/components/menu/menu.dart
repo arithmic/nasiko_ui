@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:nasiko_ui/src/tokens/tokens.dart';
 
-/// A single item for use within the [NasikoMenu].
+/// A single item for use within the [NasikoPopupMenu].
 ///
 /// This is an internal-facing widget.
 class _NasikoMenuItem extends StatelessWidget {
@@ -30,10 +30,6 @@ class _NasikoMenuItem extends StatelessWidget {
         ? colors.backgroundSecondaryBrand
         : Colors.transparent;
 
-    final Color textColor = isSelected
-        ? colors.foregroundPrimary
-        : colors.foregroundSecondary;
-
     final Border border = isSelected
         ? Border.all(color: colors.borderSecondary, width: borderWidths.w1)
         : Border.all(color: Colors.transparent, width: borderWidths.w1);
@@ -50,16 +46,23 @@ class _NasikoMenuItem extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(radii.r8),
-        splashColor: colors.backgroundBrandSubtle.withOpacity(0.5),
-        highlightColor: colors.backgroundBrandSubtle.withOpacity(0.5),
+        splashColor: colors.backgroundBrandSubtle.withValues(alpha: 0.5),
+        highlightColor: colors.backgroundBrandSubtle.withValues(alpha: 0.5),
         child: Padding(
-          padding: EdgeInsets.all(spacing.s12),
+          padding: EdgeInsets.symmetric(
+            horizontal: spacing.s12,
+            vertical: spacing.s8,
+          ),
           child: Row(
             children: [
               Expanded(
                 child: Text(
                   label,
-                  style: typography.bodySecondary.copyWith(color: textColor),
+                  style: isSelected
+                      ? typography.bodySecondaryBold
+                      : typography.bodySecondary.copyWith(
+                          color: colors.foregroundSecondary,
+                        ),
                 ),
               ),
             ],
@@ -70,26 +73,19 @@ class _NasikoMenuItem extends StatelessWidget {
   }
 }
 
-/// A scrollable menu component for navigation or selection.
+/// A popup menu component that displays a list of selectable items.
 ///
-/// Displays a title and a list of items, highlighting the
-/// currently selected item.
-class NasikoMenu extends StatefulWidget {
-  const NasikoMenu({
+/// This widget creates a Material-style popup menu with a scrollable list
+/// of items, highlighting the currently selected item.
+class NasikoPopupMenu extends StatefulWidget {
+  const NasikoPopupMenu({
     super.key,
-    required this.title,
     required this.items,
     required this.selectedIndex,
     required this.onItemSelected,
-    this.titleIcon,
-    this.height = 300.0,
+    this.width = 200.0,
+    this.maxHeight = 220.0,
   });
-
-  /// The title displayed above the menu.
-  final String title;
-
-  /// The icon displayed next to the title.
-  final IconData? titleIcon;
 
   /// The list of string labels for the menu items.
   final List<String> items;
@@ -97,17 +93,20 @@ class NasikoMenu extends StatefulWidget {
   /// The index of the currently selected item.
   final int selectedIndex;
 
-  /// Callback for when a new item is tapped.
+  /// Callback for when a new item is selected.
   final ValueChanged<int> onItemSelected;
 
-  /// The fixed height of the scrollable menu area.
-  final double height;
+  /// The width of the popup menu.
+  final double width;
+
+  /// The maximum height of the scrollable menu area.
+  final double maxHeight;
 
   @override
-  State<NasikoMenu> createState() => _NasikoMenuState();
+  State<NasikoPopupMenu> createState() => _NasikoPopupMenuState();
 }
 
-class _NasikoMenuState extends State<NasikoMenu> {
+class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
   late final ScrollController _scrollController;
 
   @override
@@ -127,65 +126,88 @@ class _NasikoMenuState extends State<NasikoMenu> {
     final colors = context.colors;
     final spacing = context.spacing;
     final radii = context.radius;
-    final typography = context.typography;
-    final iconSizes = context.iconSize;
+    final borderWidths = context.borderWidth;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // 1. Menu Title
-        Padding(
-          padding: EdgeInsets.only(left: spacing.s4, bottom: spacing.s8),
-          child: Row(
-            children: [
-              if (widget.titleIcon != null) ...[
-                Icon(
-                  widget.titleIcon,
-                  color: colors.foregroundPrimary,
-                  size: iconSizes.s, // 20px
-                ),
-                SizedBox(width: spacing.s8),
-              ],
-              Text(
-                widget.title,
-                style: typography.bodyPrimaryBold.copyWith(
-                  color: colors.foregroundPrimary,
-                ),
-              ),
-            ],
+    return Material(
+      color: Colors.transparent,
+      child: Container(
+        width: widget.width,
+        constraints: BoxConstraints(maxHeight: widget.maxHeight),
+        decoration: BoxDecoration(
+          color: colors.backgroundGroup,
+          borderRadius: BorderRadius.circular(radii.r8),
+          border: Border.all(
+            color: colors.borderPrimary,
+            width: borderWidths.w1,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.08),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
-
-        // 2. Menu Container
-        Container(
-          height: widget.height,
-          decoration: BoxDecoration(
-            color: colors.backgroundGroup,
-            borderRadius: BorderRadius.circular(radii.r12),
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(spacing.s8),
-            child: Scrollbar(
+        child: Padding(
+          padding: EdgeInsets.all(spacing.s8),
+          child: Scrollbar(
+            controller: _scrollController,
+            thumbVisibility: true,
+            child: ListView.separated(
               controller: _scrollController,
-              thumbVisibility: true,
-              child: ListView.separated(
-                controller: _scrollController,
-                itemCount: widget.items.length,
-                separatorBuilder: (context, index) =>
-                    SizedBox(height: spacing.s4),
-                itemBuilder: (context, index) {
-                  return _NasikoMenuItem(
-                    label: widget.items[index],
-                    isSelected: widget.selectedIndex == index,
-                    onTap: () => widget.onItemSelected(index),
-                  );
-                },
-              ),
+              shrinkWrap: true,
+              itemCount: widget.items.length,
+              separatorBuilder: (context, index) =>
+                  SizedBox(height: spacing.s4),
+              itemBuilder: (context, index) {
+                return _NasikoMenuItem(
+                  label: widget.items[index],
+                  isSelected: widget.selectedIndex == index,
+                  onTap: () {
+                    widget.onItemSelected(index);
+                    Navigator.of(context).pop();
+                  },
+                );
+              },
             ),
           ),
         ),
-      ],
+      ),
     );
   }
+}
+
+/// Shows a popup menu at a specific position.
+///
+/// Returns the selected index when an item is tapped.
+Future<int?> showNasikoPopupMenu({
+  required BuildContext context,
+  required RelativeRect position,
+  required List<String> items,
+  required int selectedIndex,
+  double width = 200.0,
+  double maxHeight = 220.0,
+}) {
+  return showMenu<int>(
+    context: context,
+    position: position,
+    elevation: 0,
+    color: Colors.transparent,
+    shape: const RoundedRectangleBorder(),
+    items: [
+      PopupMenuItem<int>(
+        enabled: false,
+        padding: EdgeInsets.zero,
+        child: NasikoPopupMenu(
+          items: items,
+          selectedIndex: selectedIndex,
+          onItemSelected: (index) {
+            Navigator.of(context).pop(index);
+          },
+          width: width,
+          maxHeight: maxHeight,
+        ),
+      ),
+    ],
+  );
 }
