@@ -212,6 +212,12 @@ class ExampleHomePage extends StatelessWidget {
               SizedBox(height: context.spacing.s28),
               _buildSection(
                 context,
+                title: 'Chips',
+                child: const _ChipExample(),
+              ),
+              SizedBox(height: context.spacing.s28),
+              _buildSection(
+                context,
                 title: 'Dividers',
                 child: _buildDividersExample(context),
               ),
@@ -1933,6 +1939,160 @@ class _SectionExampleState extends State<_SectionExample> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _ChipExample extends StatefulWidget {
+  const _ChipExample();
+
+  @override
+  State<_ChipExample> createState() => _ChipExampleState();
+}
+
+class _ChipExampleState extends State<_ChipExample> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // --- Large Chips ---
+        Text(
+          'Large Chips',
+          style: context.typography.bodyPrimary.copyWith(
+            color: context.colors.foregroundPrimary,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        SizedBox(height: context.spacing.s12),
+        Wrap(
+          spacing: context.spacing.s8,
+          runSpacing: context.spacing.s8,
+          children: [
+            // Neutral variant
+            NasikoChip(
+              label: 'Neutral',
+              size: NasikoChipSize.large,
+              variant: NasikoChipVariant.neutral,
+            ),
+            NasikoChip(
+              label: 'With Icon',
+              leadingIcon: Icons.star,
+              size: NasikoChipSize.large,
+              variant: NasikoChipVariant.neutral,
+            ),
+            NasikoChip(
+              label: 'Actionable',
+              leadingIcon: Icons.favorite,
+              size: NasikoChipSize.large,
+              variant: NasikoChipVariant.neutral,
+              onTap: () {},
+            ),
+            NasikoChip(
+              label: 'Deletable',
+              leadingIcon: Icons.bookmark,
+              size: NasikoChipSize.large,
+              variant: NasikoChipVariant.neutral,
+              onDelete: () {},
+            ),
+            // Brand variant
+            NasikoChip(
+              label: 'Brand',
+              size: NasikoChipSize.large,
+              variant: NasikoChipVariant.brand,
+            ),
+            NasikoChip(
+              label: 'Brand Selected',
+              leadingIcon: Icons.check_circle,
+              size: NasikoChipSize.large,
+              variant: NasikoChipVariant.brand,
+            ),
+            NasikoChip(
+              label: 'Brand Deletable',
+              leadingIcon: Icons.local_offer,
+              size: NasikoChipSize.large,
+              variant: NasikoChipVariant.brand,
+              onDelete: () {},
+            ),
+            // Disabled
+            NasikoChip(
+              label: 'Disabled',
+              leadingIcon: Icons.block,
+              size: NasikoChipSize.large,
+              enabled: false,
+            ),
+          ],
+        ),
+        SizedBox(height: context.spacing.s24),
+
+        // --- Small Chips ---
+        Text(
+          'Small Chips',
+          style: context.typography.bodyPrimary.copyWith(
+            color: context.colors.foregroundPrimary,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        SizedBox(height: context.spacing.s12),
+        Wrap(
+          spacing: context.spacing.s8,
+          runSpacing: context.spacing.s8,
+          children: [
+            // Neutral variant
+            NasikoChip(
+              label: 'Neutral',
+              size: NasikoChipSize.small,
+              variant: NasikoChipVariant.neutral,
+            ),
+            NasikoChip(
+              label: 'With Icon',
+              leadingIcon: Icons.star,
+              size: NasikoChipSize.small,
+              variant: NasikoChipVariant.neutral,
+            ),
+            NasikoChip(
+              label: 'Actionable',
+              leadingIcon: Icons.favorite,
+              size: NasikoChipSize.small,
+              variant: NasikoChipVariant.neutral,
+              onTap: () {},
+            ),
+            NasikoChip(
+              label: 'Deletable',
+              leadingIcon: Icons.bookmark,
+              size: NasikoChipSize.small,
+              variant: NasikoChipVariant.neutral,
+              onDelete: () {},
+            ),
+            // Brand variant
+            NasikoChip(
+              label: 'Brand',
+              size: NasikoChipSize.small,
+              variant: NasikoChipVariant.brand,
+            ),
+            NasikoChip(
+              label: 'Brand Selected',
+              leadingIcon: Icons.check_circle,
+              size: NasikoChipSize.small,
+              variant: NasikoChipVariant.brand,
+            ),
+            NasikoChip(
+              label: 'Brand Deletable',
+              leadingIcon: Icons.local_offer,
+              size: NasikoChipSize.small,
+              variant: NasikoChipVariant.brand,
+              onDelete: () {},
+            ),
+            // Disabled
+            NasikoChip(
+              label: 'Disabled',
+              leadingIcon: Icons.block,
+              size: NasikoChipSize.small,
+              enabled: false,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

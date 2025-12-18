@@ -10,6 +10,7 @@ export 'src/components/checkbox/checkbox_tile.dart';
 export 'src/components/chip/chips.dart';
 export 'src/components/divider/divider.dart';
 export 'src/components/input_fields/input_field.dart';
+export 'src/components/input_fields/text_box.dart';
 export 'src/components/list/list.dart';
 export 'src/components/list/list_item.dart';
 export 'src/components/menu/menu.dart';

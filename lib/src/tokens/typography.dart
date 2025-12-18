@@ -160,7 +160,7 @@ const _baseTitleSecondary = TextStyle(
 );
 
 const _baseButtonPrimary = TextStyle(
-  fontFamily: _chivoMonoFontFamily,
+  fontFamily: _interFontFamily,
   fontWeight: FontWeight.w500, // Medium
   fontSize: 20,
   height: 24 / 20,
@@ -168,8 +168,8 @@ const _baseButtonPrimary = TextStyle(
 );
 
 const _baseButtonSecondary = TextStyle(
-  fontFamily: _chivoMonoFontFamily,
-  fontWeight: FontWeight.w400, // Regular
+  fontFamily: _interFontFamily,
+  fontWeight: FontWeight.w500, // Medium
   fontSize: 16,
   height: 20 / 16,
   letterSpacing: 0.0016 * 16, // 0.16%
@@ -185,7 +185,7 @@ const _baseBodyPrimary = TextStyle(
 
 const _baseBodyPrimaryBold = TextStyle(
   fontFamily: _interFontFamily,
-  fontWeight: FontWeight.w500, // Medium
+  fontWeight: FontWeight.w700, // bold
   fontSize: 20,
   height: 24 / 20,
   letterSpacing: 0,
@@ -201,7 +201,7 @@ const _baseBodySecondary = TextStyle(
 
 const _baseBodySecondaryBold = TextStyle(
   fontFamily: _interFontFamily,
-  fontWeight: FontWeight.w500, // Medium
+  fontWeight: FontWeight.w700, // Bold
   fontSize: 16,
   height: 20 / 16,
   letterSpacing: 0,
@@ -217,7 +217,7 @@ const _baseBodyTertiary = TextStyle(
 
 const _baseBodyTertiaryBold = TextStyle(
   fontFamily: _interFontFamily,
-  fontWeight: FontWeight.w600, // Semi Bold
+  fontWeight: FontWeight.w700, // Bold
   fontSize: 12,
   height: 16 / 12,
   letterSpacing: 0,
