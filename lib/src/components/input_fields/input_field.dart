@@ -167,7 +167,7 @@ class NasikoInputField extends StatelessWidget {
                 ? Container(
                     width: iconSize,
                     height: iconSize,
-                    padding: EdgeInsets.only(right: spacing.s8),
+                    padding: EdgeInsets.only(left: spacing.s16),
                     child: HugeIcon(
                       icon: leadingIcon!,
                       size: iconSize,
@@ -179,7 +179,7 @@ class NasikoInputField extends StatelessWidget {
                 ? Container(
                     width: iconSize,
                     height: iconSize,
-                    padding: EdgeInsets.only(left: spacing.s8),
+                    padding: EdgeInsets.only(right: spacing.s16),
                     child: HugeIcon(
                       icon: trailingIcon!,
                       size: iconSize,
