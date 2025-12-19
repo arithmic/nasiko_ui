@@ -354,7 +354,7 @@ class _NasikoCardState extends State<NasikoCard> {
             widget.title,
             style: typography.bodyPrimaryBold.copyWith(
               color: isHovered
-                  ? colors.foregroundSecondary
+                  ? colors.foregroundBrand
                   : colors.foregroundPrimary,
             ),
           ),
