@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
-/// The secondary call-to-action button for Nasiko UI.
+/// The tertiary call-to-action button for Nasiko UI.
 ///
 /// This is a medium-emphasis button that uses an outlined style with the 'brand' color.
-/// It should be used for secondary actions on a screen.
-class SecondaryButton extends StatelessWidget {
-  const SecondaryButton({
+/// It should be used for tertiary actions on a screen.
+class TertiaryButton extends StatelessWidget {
+  const TertiaryButton({
     super.key,
     required this.onPressed,
     required this.label,
@@ -92,20 +92,21 @@ class SecondaryButton extends StatelessWidget {
       textStyle: WidgetStateProperty.all(textStyle),
       elevation: WidgetStateProperty.all(0),
       shadowColor: WidgetStateProperty.all(Colors.transparent),
+      overlayColor: WidgetStateProperty.all(Colors.transparent),
 
       // --- Background Color (Default outline, Hover filled, Disabled filled light) ---
       backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
         if (states.contains(WidgetState.disabled)) {
-          return colors.backgroundDisabled;
+          return Colors.transparent;
         }
         if (states.contains(WidgetState.hovered)) {
-          return colors.backgroundSecondaryBrandHover;
+          return Colors.transparent;
         }
         if (states.contains(WidgetState.pressed)) {
-          return colors.backgroundSecondaryBrand;
+          return Colors.transparent;
         }
         // Default state - transparent
-        return colors.backgroundSecondaryBrand;
+        return Colors.transparent;
       }),
 
       // --- Foreground Color (Text & Icons) ---
@@ -114,7 +115,7 @@ class SecondaryButton extends StatelessWidget {
           return colors.foregroundDisabled;
         }
         if (states.contains(WidgetState.hovered)) {
-          return colors.foregroundPrimary;
+          return colors.foregroundIconHover;
         }
         // Default, Focus, Pressed
         return colors.foregroundPrimary;
@@ -131,7 +132,7 @@ class SecondaryButton extends StatelessWidget {
           );
         } else if (states.contains(WidgetState.hovered)) {
           borderSide = BorderSide(
-            color: colors.backgroundBrandHover,
+            color: Colors.transparent,
             width: borderWidths.w1,
           );
         } else {

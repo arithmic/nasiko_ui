@@ -57,12 +57,11 @@ class SecondaryTextButton extends StatelessWidget {
           if (states.contains(WidgetState.disabled)) {
             return colors.foregroundDisabled;
           }
-          if (states.contains(WidgetState.hovered) ||
-              states.contains(WidgetState.focused)) {
+          if (states.contains(WidgetState.hovered)) {
             return colors
                 .foregroundBrandHover; // Darker brand color (yellow/800)
           }
-          return colors.foregroundBrand; // Default brand color (yellow/600)
+          return colors.foregroundPrimary; // Default brand color (yellow/600)
         }),
 
         // --- TextStyle (For Text & Underline) ---

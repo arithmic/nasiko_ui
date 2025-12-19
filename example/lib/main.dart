@@ -128,6 +128,12 @@ class ExampleHomePage extends StatelessWidget {
               SizedBox(height: context.spacing.s28),
               _buildSection(
                 context,
+                title: 'Tertiary Buttons',
+                child: _buildTertiaryButtonsExample(context),
+              ),
+              SizedBox(height: context.spacing.s28),
+              _buildSection(
+                context,
                 title: 'Primary Text Buttons',
                 child: _buildPrimaryTextButtonsExample(context),
               ),
@@ -730,6 +736,109 @@ class ExampleHomePage extends StatelessWidget {
     );
   }
 
+  Widget _buildTertiaryButtonsExample(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Large buttons
+        Text('Large', style: context.typography.bodyPrimaryBold),
+        SizedBox(height: context.spacing.s12),
+        Wrap(
+          spacing: context.spacing.s12,
+          runSpacing: context.spacing.s12,
+          children: [
+            TertiaryButton(
+              size: NasikoButtonSize.large,
+              onPressed: () {},
+              label: 'Button',
+            ),
+            TertiaryButton(
+              size: NasikoButtonSize.large,
+              onPressed: () {},
+              label: 'Button',
+              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
+            ),
+            TertiaryButton(
+              size: NasikoButtonSize.large,
+              onPressed: () {},
+              label: 'Button',
+              trailingIcon: HugeIcons.strokeRoundedArrowRight01,
+            ),
+            TertiaryButton(
+              size: NasikoButtonSize.large,
+              onPressed: null,
+              label: 'Disabled',
+            ),
+          ],
+        ),
+        SizedBox(height: context.spacing.s20),
+        // Medium buttons
+        Text('Medium', style: context.typography.bodyPrimaryBold),
+        SizedBox(height: context.spacing.s12),
+        Wrap(
+          spacing: context.spacing.s12,
+          runSpacing: context.spacing.s12,
+          children: [
+            TertiaryButton(
+              size: NasikoButtonSize.medium,
+              onPressed: () {},
+              label: 'Button',
+            ),
+            TertiaryButton(
+              size: NasikoButtonSize.medium,
+              onPressed: () {},
+              label: 'Button',
+              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
+            ),
+            TertiaryButton(
+              size: NasikoButtonSize.medium,
+              onPressed: () {},
+              label: 'Button',
+              trailingIcon: HugeIcons.strokeRoundedArrowRight01,
+            ),
+            TertiaryButton(
+              size: NasikoButtonSize.medium,
+              onPressed: null,
+              label: 'Disabled',
+            ),
+          ],
+        ),
+        SizedBox(height: context.spacing.s20),
+        // Small buttons
+        Text('Small', style: context.typography.bodyPrimaryBold),
+        SizedBox(height: context.spacing.s12),
+        Wrap(
+          spacing: context.spacing.s12,
+          runSpacing: context.spacing.s12,
+          children: [
+            TertiaryButton(
+              size: NasikoButtonSize.small,
+              onPressed: () {},
+              label: 'Button',
+            ),
+            TertiaryButton(
+              size: NasikoButtonSize.small,
+              onPressed: () {},
+              label: 'Button',
+              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
+            ),
+            TertiaryButton(
+              size: NasikoButtonSize.small,
+              onPressed: () {},
+              label: 'Button',
+              trailingIcon: HugeIcons.strokeRoundedArrowRight01,
+            ),
+            TertiaryButton(
+              size: NasikoButtonSize.small,
+              onPressed: null,
+              label: 'Disabled',
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
   Widget _buildPrimaryTextButtonsExample(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -914,15 +1023,31 @@ class ExampleHomePage extends StatelessWidget {
   }
 
   Widget _buildCardsExample(BuildContext context) {
-    return NasikoCard(
-      width: 400,
-      title: 'Document Expert',
-      titleIcon: HugeIcon(icon: HugeIcons.strokeRoundedDocumentCode),
-      tags: ['document analysis', 'chat', 'history'],
-      description:
-          'A helpful assistant that answers user questions based on the provided document. It supports file uploads for document processing and maintains a chat history for each session.',
-      primaryButtonLabel: 'Start Session',
-      secondaryButtonLabel: 'Learn More',
+    return Row(
+      children: [
+        NasikoCard(
+          width: 400,
+          title: 'Document Expert',
+          titleIcon: HugeIcon(icon: HugeIcons.strokeRoundedDocumentCode),
+          tags: ['document analysis', 'chat', 'history'],
+          description:
+              'A helpful assistant that answers user questions based on the provided document. It supports file uploads for document processing and maintains a chat history for each session.',
+          primaryButtonLabel: 'Start Session',
+          secondaryButtonLabel: 'Learn More',
+        ),
+        SizedBox(width: context.spacing.s16),
+        NasikoCard(
+          width: 400,
+          title: 'Code Expert',
+          titleIcon: HugeIcon(icon: HugeIcons.strokeRoundedCode),
+          tags: ['code analysis', 'chat', 'history'],
+          description:
+              'An AI-powered coding assistant that helps users understand and debug code snippets. It supports multiple programming languages and maintains a chat history for each session.',
+          primaryButtonLabel: 'Start Session',
+          secondaryButtonLabel: 'Learn More',
+          enabled: false,
+        ),
+      ],
     );
   }
 

@@ -64,8 +64,8 @@ class SecondaryIconButton extends StatelessWidget {
 
       // --- Background Color ---
       backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
-        if (states.contains(WidgetState.pressed)) {
-          return colors.backgroundSecondaryBrandActive;
+        if (states.contains(WidgetState.disabled)) {
+          return colors.backgroundDisabled;
         }
         return Colors.transparent;
       }),

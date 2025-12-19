@@ -67,10 +67,10 @@ class PrimaryIconButton extends StatelessWidget {
         if (states.contains(WidgetState.disabled)) {
           return colors.backgroundDisabled;
         }
-        if (states.contains(WidgetState.pressed)) {
-          return colors.backgroundSecondaryBrandActive;
+        if (states.contains(WidgetState.hovered)) {
+          return colors.backgroundSecondaryBrandHover;
         }
-        return colors.backgroundBase;
+        return colors.backgroundSecondaryBrand;
       }),
 
       // --- Foreground Color (Icon) ---
@@ -93,10 +93,9 @@ class PrimaryIconButton extends StatelessWidget {
             color: colors.borderDisabled,
             width: borderWidths.w1,
           );
-        } else if (states.contains(WidgetState.focused) ||
-            states.contains(WidgetState.hovered)) {
+        } else if (states.contains(WidgetState.hovered)) {
           borderSide = BorderSide(
-            color: colors.borderSecondary,
+            color: colors.backgroundBrandHover,
             width: borderWidths.w1,
           );
         } else if (states.contains(WidgetState.pressed)) {
