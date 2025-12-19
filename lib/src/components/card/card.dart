@@ -184,7 +184,8 @@ class _NasikoCardState extends State<NasikoCard> {
                 ],
 
                 // Description
-                if (widget.description != null) ...[
+                if (widget.description != null ||
+                    widget.description!.isEmpty) ...[
                   SizedBox(height: spacing.s8),
                   Text(
                     widget.description!,
