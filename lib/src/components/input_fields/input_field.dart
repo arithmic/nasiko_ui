@@ -4,6 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/src/tokens/tokens.dart';
 
+/// Size variants for the Nasiko Input Field.
+enum NasikoInputFieldSize {
+  /// Default size with standard padding and icons.
+  medium,
+
+  /// Smaller size with reduced padding and icons.
+  small,
+}
+
 /// A standardized input field for the Nasiko Design System.
 ///
 /// This component wraps a [TextFormField] and applies Nasiko styling
@@ -22,6 +31,7 @@ class NasikoInputField extends StatelessWidget {
     this.keyboardType,
     this.validator,
     this.onChanged,
+    this.size = NasikoInputFieldSize.medium,
   });
 
   /// Controls the text being edited.
@@ -60,6 +70,9 @@ class NasikoInputField extends StatelessWidget {
   /// Called when the user initiates a change to the field's value.
   final ValueChanged<String>? onChanged;
 
+  /// The size variant of the input field.
+  final NasikoInputFieldSize size;
+
   @override
   Widget build(BuildContext context) {
     // Get all design tokens from the theme
@@ -69,6 +82,17 @@ class NasikoInputField extends StatelessWidget {
     final radii = context.radius;
     final borderWidths = context.borderWidth;
     final iconSizes = context.iconSize;
+
+    // Define size-specific values
+    final iconSize = size == NasikoInputFieldSize.small
+        ? iconSizes.xs
+        : iconSizes.s;
+    final textStyle = size == NasikoInputFieldSize.small
+        ? typography.bodyTertiary
+        : typography.bodySecondary;
+    final contentPadding = size == NasikoInputFieldSize.small
+        ? const EdgeInsets.symmetric(vertical: 10, horizontal: 16)
+        : EdgeInsets.all(spacing.s12);
 
     // Define the border styles
     final defaultBorder = OutlineInputBorder(
@@ -119,47 +143,46 @@ class NasikoInputField extends StatelessWidget {
           obscureText: obscureText,
           keyboardType: keyboardType,
           cursorColor: colors.borderSecondary,
-          style: typography.bodySecondary.copyWith(
+          style: textStyle.copyWith(
             color: colors.foregroundPrimary, // Input text style
           ),
           decoration: InputDecoration(
             // --- Content ---
             hintText: hintText,
-            hintStyle: typography.bodySecondary.copyWith(
+            hintStyle: textStyle.copyWith(
               color: colors.foregroundSecondary, // Hint text style
             ),
 
             prefixIconConstraints: BoxConstraints.tightFor(
-              width: spacing.s16 + iconSizes.s, // Total width: 36px
-              height: iconSizes.s, // 20px
+              width: spacing.s16 + iconSize,
+              height: iconSize,
             ),
             suffixIconConstraints: BoxConstraints.tightFor(
-              width: spacing.s16 + iconSizes.s, // Total width: 36px
-              height: iconSizes.s, // 20px
+              width: spacing.s16 + iconSize,
+              height: iconSize,
             ),
 
             // --- Icons ---
             prefixIcon: leadingIcon != null
                 ? Container(
-                    // Constrain the size to 20x20
-                    width: iconSizes.s,
-                    height: iconSizes.s,
+                    width: iconSize,
+                    height: iconSize,
                     padding: EdgeInsets.only(left: spacing.s16),
                     child: HugeIcon(
                       icon: leadingIcon!,
-                      size: iconSizes.s,
+                      size: iconSize,
                       color: colors.foregroundIconPrimary,
                     ),
                   )
                 : null,
             suffixIcon: trailingIcon != null
                 ? Container(
-                    width: iconSizes.s,
-                    height: iconSizes.s,
+                    width: iconSize,
+                    height: iconSize,
                     padding: EdgeInsets.only(right: spacing.s16),
                     child: HugeIcon(
                       icon: trailingIcon!,
-                      size: iconSizes.s,
+                      size: iconSize,
                       color: colors.foregroundIconPrimary,
                     ),
                   )
@@ -169,7 +192,7 @@ class NasikoInputField extends StatelessWidget {
             filled: true,
             fillColor: colors.backgroundGroup, // neutral50
             hoverColor: colors.backgroundSurface,
-            contentPadding: EdgeInsets.all(spacing.s12),
+            contentPadding: contentPadding,
 
             // --- Borders ---
             border: defaultBorder,
