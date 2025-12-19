@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/src/components/buttons/button_size.dart';
 import 'package:nasiko_ui/src/components/buttons/primary_button.dart';
 import 'package:nasiko_ui/src/components/buttons/secondary_button.dart';
 import 'package:nasiko_ui/src/components/chip/chip.dart';
+import 'package:nasiko_ui/src/components/chip/chip_size.dart';
 import 'package:nasiko_ui/src/tokens/tokens.dart';
 
 /// A content card component that displays rich content with optional image,
@@ -61,7 +63,7 @@ class NasikoCard extends StatefulWidget {
 
   /// Optional icon or image widget displayed before the title.
   /// Can be an Icon, Image.network, Image.asset, or any other widget.
-  final Widget? titleIcon;
+  final List<List<dynamic>>? titleIcon;
 
   /// The main title text of the card.
   final String title;
@@ -147,9 +149,9 @@ class _NasikoCardState extends State<NasikoCard> {
         boxShadow: _isHovered && widget.enabled
             ? [
                 BoxShadow(
-                  color: colors.backgroundOverlay.withValues(alpha: 0.08),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
+                  color: colors.foregroundConstantBlack.withValues(alpha: 0.1),
+                  blurRadius: 16,
+                  offset: const Offset(0, 2),
                 ),
               ]
             : null,
@@ -167,7 +169,7 @@ class _NasikoCardState extends State<NasikoCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Title Row
-                _buildTitleRow(context),
+                _buildTitleRow(context, _isHovered),
 
                 // Tags
                 if (widget.tags.isNotEmpty) ...[
@@ -275,7 +277,7 @@ class _NasikoCardState extends State<NasikoCard> {
     );
   }
 
-  Widget _buildTitleRow(BuildContext context) {
+  Widget _buildTitleRow(BuildContext context, bool isHovered) {
     final colors = context.colors;
     final typography = context.typography;
     final iconSizes = context.iconSize;
@@ -287,7 +289,12 @@ class _NasikoCardState extends State<NasikoCard> {
           SizedBox(
             width: iconSizes.m,
             height: iconSizes.m,
-            child: widget.titleIcon,
+            child: HugeIcon(
+              icon: widget.titleIcon!,
+              color: isHovered
+                  ? colors.foregroundIconSecondary
+                  : colors.foregroundIconPrimary,
+            ),
           ),
           SizedBox(width: spacing.s8),
         ],
@@ -295,7 +302,9 @@ class _NasikoCardState extends State<NasikoCard> {
           child: Text(
             widget.title,
             style: typography.bodyPrimaryBold.copyWith(
-              color: colors.foregroundPrimary,
+              color: isHovered
+                  ? colors.foregroundSecondary
+                  : colors.foregroundPrimary,
             ),
           ),
         ),
@@ -315,7 +324,11 @@ class _NasikoCardState extends State<NasikoCard> {
               .map(
                 (tag) => Padding(
                   padding: EdgeInsets.only(right: spacing.s8),
-                  child: NasikoChip(label: tag, enabled: widget.enabled),
+                  child: NasikoChip(
+                    label: tag,
+                    enabled: widget.enabled,
+                    size: NasikoChipSize.small,
+                  ),
                 ),
               )
               .toList(),

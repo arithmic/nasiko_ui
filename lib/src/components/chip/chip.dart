@@ -79,7 +79,9 @@ class NasikoChip extends StatelessWidget {
     } else {
       switch (variant) {
         case NasikoChipVariant.neutral:
-          backgroundColor = colors.backgroundSurfaceHover.withOpacity(0.7);
+          backgroundColor = colors.backgroundSurfaceHover.withValues(
+            alpha: 0.7,
+          );
           hoverColor = colors.backgroundSurface;
           pressedColor = colors.backgroundSurfaceActive;
           foregroundColor = colors.foregroundPrimary;
