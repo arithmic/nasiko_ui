@@ -132,12 +132,16 @@ class _NasikoCardState extends State<NasikoCard> {
       width: widget.width,
       padding: EdgeInsets.all(spacing.s20),
       decoration: BoxDecoration(
-        color: colors.backgroundSurface,
+        color: widget.enabled
+            ? colors.backgroundGroup
+            : colors.foregroundConstantWhite,
         borderRadius: BorderRadius.circular(radii.r12),
         border: Border.all(
-          color: _isHovered && widget.enabled
-              ? colors.borderSecondary
-              : colors.borderPrimary,
+          color: widget.enabled
+              ? _isHovered
+                    ? colors.borderSecondary
+                    : colors.borderPrimary
+              : colors.borderDisabled,
           width: 1,
         ),
         boxShadow: _isHovered && widget.enabled

@@ -6,7 +6,7 @@ import 'package:nasiko_ui/src/tokens/tokens.dart';
 /// A single item for use within the [NasikoPopupMenu].
 ///
 /// This is an internal-facing widget.
-class _NasikoMenuItem extends StatelessWidget {
+class _NasikoMenuItem extends StatefulWidget {
   const _NasikoMenuItem({
     required this.label,
     required this.isSelected,
@@ -18,6 +18,13 @@ class _NasikoMenuItem extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
+  State<_NasikoMenuItem> createState() => _NasikoMenuItemState();
+}
+
+class _NasikoMenuItemState extends State<_NasikoMenuItem> {
+  bool _isHovered = false;
+
+  @override
   Widget build(BuildContext context) {
     final colors = context.colors;
     final radii = context.radius;
@@ -25,47 +32,58 @@ class _NasikoMenuItem extends StatelessWidget {
     final spacing = context.spacing;
     final borderWidths = context.borderWidth;
 
-    // Determine the styles based on the selection state
-    final Color backgroundColor = isSelected
-        ? colors.backgroundSecondaryBrand
-        : Colors.transparent;
+    // Determine the styles based on the selection and hover state
+    Color backgroundColor;
+    Color borderColor;
 
-    final Border border = isSelected
-        ? Border.all(color: colors.borderSecondary, width: borderWidths.w1)
-        : Border.all(color: Colors.transparent, width: borderWidths.w1);
+    if (widget.isSelected) {
+      backgroundColor = colors.backgroundSecondaryBrand;
+      borderColor = colors.borderSecondary;
+    } else if (_isHovered) {
+      backgroundColor = colors.backgroundSecondaryBrandHover;
+      borderColor = Colors.transparent;
+    } else {
+      backgroundColor = Colors.transparent;
+      borderColor = Colors.transparent;
+    }
 
     // Use AnimatedContainer to smoothly transition between states
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 150),
-      curve: Curves.easeInOut,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        border: border,
-        borderRadius: BorderRadius.circular(radii.r8),
-      ),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(radii.r8),
-        splashColor: colors.backgroundBrandSubtle.withValues(alpha: 0.5),
-        highlightColor: colors.backgroundBrandSubtle.withValues(alpha: 0.5),
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: spacing.s12,
-            vertical: spacing.s8,
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  label,
-                  style: isSelected
-                      ? typography.bodySecondaryBold
-                      : typography.bodySecondary.copyWith(
-                          color: colors.foregroundSecondary,
-                        ),
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeInOut,
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          border: Border.all(color: borderColor, width: borderWidths.w1),
+          borderRadius: BorderRadius.circular(radii.r8),
+        ),
+        child: InkWell(
+          onTap: widget.onTap,
+          borderRadius: BorderRadius.circular(radii.r8),
+          splashColor: colors.backgroundBrandSubtle.withValues(alpha: 0.5),
+          highlightColor: colors.backgroundBrandSubtle.withValues(alpha: 0.5),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: spacing.s12,
+              vertical: spacing.s8,
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    widget.label,
+                    style: widget.isSelected
+                        ? typography.bodySecondaryBold
+                        : typography.bodySecondary.copyWith(
+                            color: colors.foregroundSecondary,
+                          ),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

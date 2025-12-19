@@ -138,7 +138,7 @@ class _SectionState extends State<Section> {
               duration: const Duration(milliseconds: 150),
               padding: EdgeInsets.symmetric(
                 horizontal: spacing.s8,
-                vertical: spacing.s12,
+                vertical: spacing.s8,
               ),
               decoration: BoxDecoration(
                 color: backgroundColor,
@@ -159,7 +159,7 @@ class _SectionState extends State<Section> {
                   Expanded(
                     child: Text(
                       widget.label,
-                      style: typography.bodyPrimaryBold.copyWith(
+                      style: typography.bodySecondaryBold.copyWith(
                         color: colors.foregroundPrimary,
                       ),
                     ),
@@ -188,7 +188,7 @@ class _SectionState extends State<Section> {
         if (widget.isExpandable && _isExpanded) ...[
           SizedBox(height: spacing.s4),
           Padding(
-            padding: EdgeInsets.only(left: spacing.s12),
+            padding: EdgeInsets.all(spacing.s8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: widget.children!.map((child) {
