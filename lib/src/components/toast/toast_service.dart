@@ -25,15 +25,19 @@ class NasikoToastService {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         // Use the custom Toast widget as content
-        content: NasikoToast(
-          type: type,
-          message: message,
-          onCancel:
-              onCancel ??
-              () {
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              },
-          showCancel: showCancel,
+        content: Align(
+           alignment: Alignment.centerRight, // can be made configurable, rihgt now it will be shown at the bottom right of the screen
+            widthFactor: 1,
+          child: NasikoToast(
+            type: type,
+            message: message,
+            onCancel:
+                onCancel ??
+                () {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                },
+            showCancel: showCancel,
+          ),
         ),
         duration: duration,
         backgroundColor: Colors.transparent,
