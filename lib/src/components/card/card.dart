@@ -1,37 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:nasiko_ui/src/components/buttons/button_size.dart';
-import 'package:nasiko_ui/src/components/buttons/primary_button.dart';
-import 'package:nasiko_ui/src/components/buttons/secondary_button.dart';
-import 'package:nasiko_ui/src/components/chip/chip.dart';
-import 'package:nasiko_ui/src/components/chip/chip_size.dart';
-import 'package:nasiko_ui/src/tokens/tokens.dart';
+import 'package:nasiko_ui/nasiko_ui.dart';
 
 /// A content card component that displays rich content with optional image,
 /// title, tags, description, and action buttons.
 ///
-/// The card supports three states:
-/// - Default: Full color, interactive
-/// - Hover: Slightly elevated appearance
+/// The card supports two states:
+/// - Enabled: Full color, interactive with action buttons (default)
 /// - Disabled: Greyed out with a "Coming Soon" style button
 ///
-/// Example usage:
-/// \`\`\`dart
+/// Example usage for enabled card:
+/// ```dart
 /// NasikoCard(
-///   image: Image.network('https://example.com/image.jpg'),
-///   badgeLabel: 'New',
-///   titleIcon: Icon(Icons.settings), // or Image.network() or Image.asset()
 ///   title: 'Card Title',
-///   tags: ['Tag 1', 'Tag 2', 'Tag 3'],
-///   subtitle: 'This is a good card.',
-///   description: 'Accepted Input: URL of a public GitHub repository',
-///   primaryButtonLabel: 'Button',
+///   iconButtonIcon: HugeIcons.strokeRoundedSettings01,
+///   onIconButtonPressed: () {},
 ///   secondaryButtonLabel: 'Button',
-///   onPrimaryPressed: () {},
 ///   onSecondaryPressed: () {},
 /// )
-/// \`\`\`
+/// ```
+///
+/// Example usage for disabled card:
+/// ```dart
+/// NasikoCard.disabled(
+///   title: 'Card Title',
+///   disabledButtonLabel: 'Coming Soon',
+/// )
+/// ```
 class NasikoCard extends StatefulWidget {
+  /// Creates an enabled card with action buttons.
+  ///
+  /// Either [iconButtonIcon] or [secondaryButtonLabel] should be provided for buttons to appear.
   const NasikoCard({
     super.key,
     this.image,
@@ -41,19 +40,67 @@ class NasikoCard extends StatefulWidget {
     this.tags = const [],
     this.subtitle,
     this.description,
-    this.primaryButtonLabel,
-    this.primaryButtonIcon,
-    this.primaryButtonTrailingIcon,
-    this.onPrimaryPressed,
+    this.iconButtonIcon,
+    this.onIconButtonPressed,
     this.secondaryButtonLabel,
     this.secondaryButtonIcon,
     this.secondaryButtonTrailingIcon,
     this.onSecondaryPressed,
-    this.disabledButtonLabel,
-    this.enabled = true,
     this.onTap,
     this.width,
-  });
+  }) : enabled = true,
+       disabledButtonLabel = null;
+
+  /// Private internal constructor for disabled state
+  const NasikoCard._internal({
+    super.key,
+    this.image,
+    this.badgeLabel,
+    this.titleIcon,
+    required this.title,
+    this.tags = const [],
+    this.subtitle,
+    this.description,
+    required this.disabledButtonLabel,
+    required this.enabled,
+    this.width,
+  }) : iconButtonIcon = null,
+       onIconButtonPressed = null,
+       secondaryButtonLabel = null,
+       secondaryButtonIcon = null,
+       secondaryButtonTrailingIcon = null,
+       onSecondaryPressed = null,
+       onTap = null;
+
+  /// Creates a disabled card with a disabled button label.
+  ///
+  /// [disabledButtonLabel] is required for disabled cards.
+  factory NasikoCard.disabled({
+    Key? key,
+    Widget? image,
+    String? badgeLabel,
+    List<List<dynamic>>? titleIcon,
+    required String title,
+    List<String> tags = const [],
+    String? subtitle,
+    String? description,
+    required String disabledButtonLabel,
+    double? width,
+  }) {
+    return NasikoCard._internal(
+      key: key,
+      image: image,
+      badgeLabel: badgeLabel,
+      titleIcon: titleIcon,
+      title: title,
+      tags: tags,
+      subtitle: subtitle,
+      description: description,
+      disabledButtonLabel: disabledButtonLabel,
+      enabled: false,
+      width: width,
+    );
+  }
 
   /// Optional image widget to display at the top of the card.
   final Widget? image;
@@ -77,37 +124,39 @@ class NasikoCard extends StatefulWidget {
   /// Optional description text displayed below the subtitle.
   final String? description;
 
-  /// Label for the primary action button.
-  final String? primaryButtonLabel;
+  /// Optional leading icon for the icon button.
+  /// Only available in enabled state.
+  final List<List<dynamic>>? iconButtonIcon;
 
-  /// Optional leading icon for the primary button.
-  final List<List<dynamic>>? primaryButtonIcon;
-
-  /// Optional trailing icon for the primary button.
-  final List<List<dynamic>>? primaryButtonTrailingIcon;
-
-  /// Callback when the primary button is pressed.
-  final VoidCallback? onPrimaryPressed;
+  /// Callback when the icon button is pressed.
+  /// Only available in enabled state.
+  final VoidCallback? onIconButtonPressed;
 
   /// Label for the secondary action button.
+  /// Only available in enabled state.
   final String? secondaryButtonLabel;
 
   /// Optional leading icon for the secondary button.
+  /// Only available in enabled state.
   final List<List<dynamic>>? secondaryButtonIcon;
 
   /// Optional trailing icon for the secondary button.
+  /// Only available in enabled state.
   final List<List<dynamic>>? secondaryButtonTrailingIcon;
 
   /// Callback when the secondary button is pressed.
+  /// Only available in enabled state.
   final VoidCallback? onSecondaryPressed;
 
   /// Label for the disabled state button (e.g., "Coming Soon").
+  /// Only available in disabled state.
   final String? disabledButtonLabel;
 
   /// Whether the card is enabled. When false, the card appears greyed out.
   final bool enabled;
 
   /// Optional callback when the card itself is tapped.
+  /// Only available in enabled state.
   final VoidCallback? onTap;
 
   /// Optional fixed width for the card. If null, the card expands to fit its parent.
@@ -184,8 +233,8 @@ class _NasikoCardState extends State<NasikoCard> {
                 ],
 
                 // Description
-                if (widget.description != null ||
-                    widget.description!.isEmpty) ...[
+                if (widget.description != null &&
+                    widget.description! != "") ...[
                   SizedBox(height: spacing.s8),
                   Text(
                     widget.description!,
@@ -230,9 +279,7 @@ class _NasikoCardState extends State<NasikoCard> {
   }
 
   bool get _hasActionButtons =>
-      widget.primaryButtonLabel != null ||
-      widget.secondaryButtonLabel != null ||
-      widget.disabledButtonLabel != null;
+      widget.secondaryButtonLabel != null || widget.disabledButtonLabel != null;
 
   Widget _buildImageSection(BuildContext context) {
     final colors = context.colors;
@@ -374,22 +421,17 @@ class _NasikoCardState extends State<NasikoCard> {
       );
     }
 
-    // Show primary and/or secondary buttons
+    // Show icon button and/or secondary button
     return Row(
       children: [
-        if (widget.primaryButtonLabel != null)
-          Expanded(
-            child: PrimaryButton(
-              onPressed: widget.enabled ? widget.onPrimaryPressed : null,
-              label: widget.primaryButtonLabel!,
-              leadingIcon: widget.primaryButtonIcon,
-              trailingIcon: widget.primaryButtonTrailingIcon,
-              size: NasikoButtonSize.small,
-            ),
+        if (widget.iconButtonIcon != null) ...[
+          SecondaryIconButton(
+            onPressed: widget.enabled ? widget.onIconButtonPressed : null,
+            icon: widget.iconButtonIcon!,
+            size: NasikoButtonSize.small,
           ),
-        if (widget.primaryButtonLabel != null &&
-            widget.secondaryButtonLabel != null)
-          SizedBox(width: spacing.s8),
+          if (widget.secondaryButtonLabel != null) SizedBox(width: spacing.s8),
+        ],
         if (widget.secondaryButtonLabel != null)
           Expanded(
             child: SecondaryButton(
