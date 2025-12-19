@@ -92,11 +92,11 @@ class NasikoInputField extends StatelessWidget {
         : typography.bodySecondary;
     final contentPadding = size == NasikoInputFieldSize.small
         ? const EdgeInsets.symmetric(vertical: 10, horizontal: 16)
-        : EdgeInsets.all(spacing.s12);
+        : EdgeInsets.symmetric(vertical: spacing.s12, horizontal: spacing.s16);
 
     // Define the border styles
     final defaultBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(radii.r8),
+      borderRadius: BorderRadius.circular(radii.r4),
       borderSide: BorderSide(
         color: colors.borderPrimary,
         width: borderWidths.w1,
@@ -104,7 +104,7 @@ class NasikoInputField extends StatelessWidget {
     );
 
     final focusedBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(radii.r8),
+      borderRadius: BorderRadius.circular(radii.r4),
       borderSide: BorderSide(
         color: colors.borderSecondary, // Your brand border color
         width: borderWidths.w1, // Thicker border on focus
@@ -167,7 +167,7 @@ class NasikoInputField extends StatelessWidget {
                 ? Container(
                     width: iconSize,
                     height: iconSize,
-                    padding: EdgeInsets.only(left: spacing.s16),
+                    padding: EdgeInsets.only(right: spacing.s8),
                     child: HugeIcon(
                       icon: leadingIcon!,
                       size: iconSize,
@@ -179,7 +179,7 @@ class NasikoInputField extends StatelessWidget {
                 ? Container(
                     width: iconSize,
                     height: iconSize,
-                    padding: EdgeInsets.only(right: spacing.s16),
+                    padding: EdgeInsets.only(left: spacing.s8),
                     child: HugeIcon(
                       icon: trailingIcon!,
                       size: iconSize,
