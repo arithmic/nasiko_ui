@@ -194,6 +194,9 @@ class _NasikoCardState extends State<NasikoCard> {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
+                ] else ...[
+                  SizedBox(height: spacing.s4),
+                  SizedBox(height: spacing.s36),
                 ],
 
                 // Action Buttons
