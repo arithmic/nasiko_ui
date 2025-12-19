@@ -56,13 +56,13 @@ class TertiaryButton extends StatelessWidget {
         );
         textStyle = typography.buttonPrimary;
         iconSize = iconSizes.l; // 28px
-        borderRadius = radii.r10; // 10px radius
+        borderRadius = radii.r8; // 10px radius
         iconSpacing = spacing.s12; // 12px spacing
         minHeight = 68;
         break;
       case NasikoButtonSize.medium:
         padding = EdgeInsets.symmetric(
-          vertical: spacing.s12,
+          vertical: spacing.s16,
           horizontal: spacing.s16,
         );
         textStyle = typography.buttonSecondary;
@@ -73,7 +73,7 @@ class TertiaryButton extends StatelessWidget {
         break;
       case NasikoButtonSize.small:
         padding = EdgeInsets.symmetric(
-          vertical: spacing.s8,
+          vertical: spacing.s12,
           horizontal: spacing.s12,
         );
         textStyle = typography.buttonSecondary;
@@ -87,7 +87,7 @@ class TertiaryButton extends StatelessWidget {
     final style = ButtonStyle(
       // --- Base Properties ---
       padding: WidgetStateProperty.all(padding),
-      minimumSize: WidgetStateProperty.all(Size(0, minHeight)),
+      fixedSize: WidgetStateProperty.all(Size.fromHeight(minHeight)),
       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       textStyle: WidgetStateProperty.all(textStyle),
       elevation: WidgetStateProperty.all(0),
@@ -96,17 +96,7 @@ class TertiaryButton extends StatelessWidget {
 
       // --- Background Color (Default outline, Hover filled, Disabled filled light) ---
       backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
-        if (states.contains(WidgetState.disabled)) {
-          return Colors.transparent;
-        }
-        if (states.contains(WidgetState.hovered)) {
-          return Colors.transparent;
-        }
-        if (states.contains(WidgetState.pressed)) {
-          return Colors.transparent;
-        }
-        // Default state - transparent
-        return Colors.transparent;
+        return colors.backgroundBase;
       }),
 
       // --- Foreground Color (Text & Icons) ---
@@ -121,33 +111,38 @@ class TertiaryButton extends StatelessWidget {
         return colors.foregroundPrimary;
       }),
 
-      // --- Shape & Border ---
-      shape: WidgetStateProperty.resolveWith<OutlinedBorder>((states) {
-        BorderSide borderSide;
-
+      // --- Border ---
+      side: WidgetStateProperty.resolveWith<BorderSide>((states) {
         if (states.contains(WidgetState.disabled)) {
-          borderSide = BorderSide(
+          return BorderSide(
             color: colors.borderDisabled,
             width: borderWidths.w1,
           );
         } else if (states.contains(WidgetState.hovered)) {
-          borderSide = BorderSide(
-            color: Colors.transparent,
-            width: borderWidths.w1,
-          );
-        } else {
-          // Default, Focus states
-          borderSide = BorderSide(
+          return BorderSide(
             color: colors.borderSecondary,
             width: borderWidths.w1,
           );
+        } else if (states.contains(WidgetState.focused)) {
+          return BorderSide(
+            color: colors.borderSecondary,
+            width: borderWidths.w2,
+          );
+        } else {
+          // Default, Focus states
+          return BorderSide(
+            color: colors.borderPrimary,
+            width: borderWidths.w1,
+          );
         }
-
-        return RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-          side: borderSide,
-        );
       }),
+
+      // --- Shape ---
+      shape: WidgetStateProperty.all(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(borderRadius),
+        ),
+      ),
     );
 
     return OutlinedButton(

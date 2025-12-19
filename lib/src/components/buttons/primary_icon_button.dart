@@ -40,17 +40,17 @@ class PrimaryIconButton extends StatelessWidget {
       case NasikoButtonSize.large:
         padding = spacing.s20;
         iconSize = iconSizes.l;
-        borderRadius = radii.r10;
+        borderRadius = radii.r8;
         break;
       case NasikoButtonSize.medium:
         padding = spacing.s12;
         iconSize = iconSizes.m;
-        borderRadius = radii.r10;
+        borderRadius = radii.r8;
         break;
       case NasikoButtonSize.small:
         padding = spacing.s8;
         iconSize = iconSizes.s;
-        borderRadius = radii.r10;
+        borderRadius = radii.r8;
         break;
     }
 
@@ -77,11 +77,8 @@ class PrimaryIconButton extends StatelessWidget {
       foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
         if (states.contains(WidgetState.disabled)) {
           return colors.foregroundDisabled;
-        } else if (states.contains(WidgetState.pressed) ||
-            states.contains(WidgetState.hovered)) {
-          return colors.foregroundIconHover;
         }
-        return colors.foregroundIconSecondary;
+        return colors.foregroundIconPrimary;
       }),
 
       // --- Shape & Focus Ring ---
@@ -95,17 +92,17 @@ class PrimaryIconButton extends StatelessWidget {
           );
         } else if (states.contains(WidgetState.hovered)) {
           borderSide = BorderSide(
-            color: colors.backgroundBrandHover,
+            color: colors.borderHover,
             width: borderWidths.w1,
           );
-        } else if (states.contains(WidgetState.pressed)) {
+        } else if (states.contains(WidgetState.focused)) {
           borderSide = BorderSide(
-            color: colors.borderPrimary,
-            width: borderWidths.w1,
+            color: colors.borderSecondary,
+            width: borderWidths.w2,
           );
         } else {
           borderSide = BorderSide(
-            color: colors.borderPrimary,
+            color: colors.borderSecondary,
             width: borderWidths.w1,
           );
         }

@@ -1,7 +1,7 @@
 // lib/src/components/toast/toast.dart
 
 import 'package:flutter/material.dart';
-import 'package:nasiko_ui/src/components/buttons/primary_text_button.dart';
+import 'package:nasiko_ui/src/components/buttons/secondary_text_button.dart';
 import 'package:nasiko_ui/src/components/toast/toast_type.dart';
 import 'package:nasiko_ui/src/tokens/tokens.dart';
 
@@ -91,7 +91,7 @@ class NasikoToast extends StatelessWidget {
             ),
             if (showCancel) ...[
               SizedBox(width: spacing.s36),
-              PrimaryTextButton(onPressed: onCancel, label: 'Cancel'),
+              SecondaryTextButton(onPressed: onCancel, label: 'Cancel'),
             ],
           ],
         ),

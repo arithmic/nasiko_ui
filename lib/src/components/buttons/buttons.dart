@@ -1,4 +1,7 @@
 export 'button_size.dart';
+export 'destructive_button.dart';
+export 'destructive_secondary_button.dart';
+export 'destructive_text_button.dart';
 export 'primary_button.dart';
 export 'primary_icon_button.dart';
 export 'primary_text_button.dart';

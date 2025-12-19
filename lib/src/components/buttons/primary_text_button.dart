@@ -46,8 +46,8 @@ class PrimaryTextButton extends StatelessWidget {
         padding: WidgetStateProperty.all(
           EdgeInsets.symmetric(vertical: spacing.s8, horizontal: spacing.s12),
         ),
-        minimumSize: WidgetStateProperty.all(Size(0, 36)),
-        tapTargetSize: MaterialTapTargetSize.padded,
+        fixedSize: WidgetStateProperty.all(Size.fromHeight(36)),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         textStyle: WidgetStateProperty.all(typography.buttonSecondary),
         elevation: WidgetStateProperty.all(0),
         shadowColor: WidgetStateProperty.all(Colors.transparent),
@@ -65,7 +65,7 @@ class PrimaryTextButton extends StatelessWidget {
           if (states.contains(WidgetState.hovered) ||
               states.contains(WidgetState.focused)) {
             return RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(borderRadius.r10)),
+              borderRadius: BorderRadius.all(Radius.circular(borderRadius.r8)),
               side: BorderSide(
                 color: colors.foregroundBrand,
                 width: borderWidth.w1,
@@ -73,7 +73,7 @@ class PrimaryTextButton extends StatelessWidget {
             );
           }
           return RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(borderRadius.r10)),
+            borderRadius: BorderRadius.all(Radius.circular(borderRadius.r8)),
           );
         }),
       ),

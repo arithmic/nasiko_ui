@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
-/// The secondary call-to-action button for Nasiko UI.
+/// A destructive call-to-action button for Nasiko UI.
 ///
-/// This is a medium-emphasis button that uses an outlined style with the 'brand' color.
-/// It should be used for secondary actions on a screen.
-class SecondaryButton extends StatelessWidget {
-  const SecondaryButton({
+/// This is a high-emphasis button that uses the 'error' color to indicate
+/// destructive or dangerous actions like delete, remove, or cancel operations.
+/// It should be used sparingly for critical destructive actions.
+class DestructiveButton extends StatelessWidget {
+  const DestructiveButton({
     super.key,
     required this.onPressed,
     required this.label,
@@ -39,7 +40,6 @@ class SecondaryButton extends StatelessWidget {
     final typography = context.typography;
     final radii = context.radius;
     final iconSizes = context.iconSize;
-    final borderWidths = context.borderWidth;
 
     final EdgeInsets padding;
     final TextStyle textStyle;
@@ -93,61 +93,50 @@ class SecondaryButton extends StatelessWidget {
       elevation: WidgetStateProperty.all(0),
       shadowColor: WidgetStateProperty.all(Colors.transparent),
 
-      // --- Background Color (Default, Hover, Focused, Disabled) ---
+      // --- Background Color (Handles Default, Hover, Disabled) ---
       backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
         if (states.contains(WidgetState.disabled)) {
           return colors.backgroundDisabled;
         }
         if (states.contains(WidgetState.hovered)) {
-          return colors.backgroundSecondaryBrandHover;
+          return const Color(0xFFB91C1C); // red700 for hover
         }
-        // Default, Focused, Pressed states
-        return colors.backgroundSecondaryBrand;
+        if (states.contains(WidgetState.pressed)) {
+          return const Color(0xFFDC2626); // red600
+        }
+        // Default state
+        return const Color(0xFFDC2626); // red600
       }),
 
-      // --- Foreground Color (Text & Icons) ---
+      // --- Foreground Color (Handles Default, Disabled) ---
       foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
         if (states.contains(WidgetState.disabled)) {
           return colors.foregroundDisabled;
         }
         // Default, Hover, Focus, Pressed
-        return colors.foregroundPrimary;
+        return colors.foregroundOnAction;
       }),
 
-      // --- Border ---
-      side: WidgetStateProperty.resolveWith<BorderSide>((states) {
-        if (states.contains(WidgetState.disabled)) {
-          return BorderSide(
-            color: colors.borderDisabled,
-            width: borderWidths.w1,
-          );
-        } else if (states.contains(WidgetState.focused)) {
-          // Focused state with border outside and 2px gap
-          return BorderSide(
-            color: colors.borderSecondary,
-            width: borderWidths.w2,
+      // --- Shape & Focus Ring ---
+      shape: WidgetStateProperty.resolveWith<OutlinedBorder>((states) {
+        BorderSide borderSide = BorderSide.none;
+
+        if (states.contains(WidgetState.focused)) {
+          borderSide = BorderSide(
+            color: colors.borderError,
+            width: spacing.s2,
             strokeAlign: BorderSide.strokeAlignOutside,
           );
-        } else if (states.contains(WidgetState.hovered)) {
-          return BorderSide(color: colors.borderHover, width: borderWidths.w1);
-        } else {
-          // Default state
-          return BorderSide(
-            color: colors.borderSecondary,
-            width: borderWidths.w1,
-          );
         }
-      }),
 
-      // --- Shape ---
-      shape: WidgetStateProperty.all(
-        RoundedRectangleBorder(
+        return RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(borderRadius),
-        ),
-      ),
+          side: borderSide,
+        );
+      }),
     );
 
-    return OutlinedButton(
+    return ElevatedButton(
       onPressed: onPressed,
       style: style,
       child: Row(

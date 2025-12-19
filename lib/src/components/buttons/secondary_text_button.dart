@@ -45,7 +45,7 @@ class SecondaryTextButton extends StatelessWidget {
         padding: WidgetStateProperty.all(
           EdgeInsets.symmetric(vertical: spacing.s8, horizontal: spacing.s12),
         ),
-        minimumSize: WidgetStateProperty.all(Size.zero),
+        fixedSize: WidgetStateProperty.all(Size.fromHeight(36)),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         elevation: WidgetStateProperty.all(0),
         shadowColor: WidgetStateProperty.all(Colors.transparent),
@@ -58,8 +58,10 @@ class SecondaryTextButton extends StatelessWidget {
             return colors.foregroundDisabled;
           }
           if (states.contains(WidgetState.hovered)) {
-            return colors
-                .foregroundBrandHover; // Darker brand color (yellow/800)
+            return colors.foregroundBrand; // Darker brand color (yellow/800)
+          }
+          if (states.contains(WidgetState.focused)) {
+            return colors.foregroundIconHover;
           }
           return colors.foregroundPrimary; // Default brand color (yellow/600)
         }),

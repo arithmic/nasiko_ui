@@ -77,7 +77,7 @@ class SecondaryIconButton extends StatelessWidget {
         }
         if (states.contains(WidgetState.hovered) ||
             states.contains(WidgetState.pressed)) {
-          return colors.foregroundIconSecondary;
+          return colors.foregroundIconHover;
         }
         return colors.foregroundIconPrimary;
       }),
@@ -91,16 +91,19 @@ class SecondaryIconButton extends StatelessWidget {
             color: colors.borderDisabled,
             width: borderWidths.w1,
           );
-        } else if (states.contains(WidgetState.focused) ||
-            states.contains(WidgetState.hovered) ||
-            states.contains(WidgetState.pressed)) {
+        } else if (states.contains(WidgetState.hovered)) {
           borderSide = BorderSide(
             color: colors.borderHover,
             width: borderWidths.w1,
           );
+        } else if (states.contains(WidgetState.focused)) {
+          borderSide = BorderSide(
+            color: colors.borderSecondary,
+            width: borderWidths.w2,
+          );
         } else {
           borderSide = BorderSide(
-            color: Colors.transparent,
+            color: colors.borderPrimary,
             width: borderWidths.w1,
           );
         }

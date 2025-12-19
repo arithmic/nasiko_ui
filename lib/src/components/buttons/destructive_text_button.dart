@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
-/// The secondary call-to-action button for Nasiko UI.
+/// A destructive outlined button for Nasiko UI.
 ///
-/// This is a medium-emphasis button that uses an outlined style with the 'brand' color.
-/// It should be used for secondary actions on a screen.
-class SecondaryButton extends StatelessWidget {
-  const SecondaryButton({
+/// This is a medium-emphasis button that uses an outlined style with the 'error' color.
+/// It should be used for destructive tertiary actions on a screen.
+class DestructiveTextButton extends StatelessWidget {
+  const DestructiveTextButton({
     super.key,
     required this.onPressed,
     required this.label,
@@ -56,13 +56,13 @@ class SecondaryButton extends StatelessWidget {
         );
         textStyle = typography.buttonPrimary;
         iconSize = iconSizes.l; // 28px
-        borderRadius = radii.r10; // 10px radius
+        borderRadius = radii.r8; // 10px radius
         iconSpacing = spacing.s12; // 12px spacing
         minHeight = 68;
         break;
       case NasikoButtonSize.medium:
         padding = EdgeInsets.symmetric(
-          vertical: spacing.s12,
+          vertical: spacing.s16,
           horizontal: spacing.s16,
         );
         textStyle = typography.buttonSecondary;
@@ -73,7 +73,7 @@ class SecondaryButton extends StatelessWidget {
         break;
       case NasikoButtonSize.small:
         padding = EdgeInsets.symmetric(
-          vertical: spacing.s8,
+          vertical: spacing.s12,
           horizontal: spacing.s12,
         );
         textStyle = typography.buttonSecondary;
@@ -92,17 +92,11 @@ class SecondaryButton extends StatelessWidget {
       textStyle: WidgetStateProperty.all(textStyle),
       elevation: WidgetStateProperty.all(0),
       shadowColor: WidgetStateProperty.all(Colors.transparent),
+      overlayColor: WidgetStateProperty.all(Colors.transparent),
 
-      // --- Background Color (Default, Hover, Focused, Disabled) ---
+      // --- Background Color (Default outline, Hover filled, Disabled filled light) ---
       backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
-        if (states.contains(WidgetState.disabled)) {
-          return colors.backgroundDisabled;
-        }
-        if (states.contains(WidgetState.hovered)) {
-          return colors.backgroundSecondaryBrandHover;
-        }
-        // Default, Focused, Pressed states
-        return colors.backgroundSecondaryBrand;
+        return colors.backgroundBase;
       }),
 
       // --- Foreground Color (Text & Icons) ---
@@ -110,8 +104,11 @@ class SecondaryButton extends StatelessWidget {
         if (states.contains(WidgetState.disabled)) {
           return colors.foregroundDisabled;
         }
-        // Default, Hover, Focus, Pressed
-        return colors.foregroundPrimary;
+        if (states.contains(WidgetState.hovered)) {
+          return const Color(0xFFB91C1C); // red700 for hover
+        }
+        // Default, Focus, Pressed
+        return colors.foregroundError;
       }),
 
       // --- Border ---
@@ -121,19 +118,20 @@ class SecondaryButton extends StatelessWidget {
             color: colors.borderDisabled,
             width: borderWidths.w1,
           );
-        } else if (states.contains(WidgetState.focused)) {
-          // Focused state with border outside and 2px gap
-          return BorderSide(
-            color: colors.borderSecondary,
-            width: borderWidths.w2,
-            strokeAlign: BorderSide.strokeAlignOutside,
-          );
         } else if (states.contains(WidgetState.hovered)) {
-          return BorderSide(color: colors.borderHover, width: borderWidths.w1);
-        } else {
-          // Default state
           return BorderSide(
-            color: colors.borderSecondary,
+            color: const Color(0xFFB91C1C), // red700
+            width: borderWidths.w1,
+          );
+        } else if (states.contains(WidgetState.focused)) {
+          return BorderSide(
+            color: colors.borderError,
+            width: borderWidths.w2,
+          );
+        } else {
+          // Default, Focus states
+          return BorderSide(
+            color: colors.borderError,
             width: borderWidths.w1,
           );
         }

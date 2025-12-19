@@ -88,7 +88,7 @@ class PrimaryButton extends StatelessWidget {
     final style = ButtonStyle(
       // --- Base Properties ---
       padding: WidgetStateProperty.all(padding),
-      minimumSize: WidgetStateProperty.all(Size(0, minHeight)),
+      fixedSize: WidgetStateProperty.all(Size.fromHeight(minHeight)),
       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       textStyle: WidgetStateProperty.all(textStyle),
       elevation: WidgetStateProperty.all(0),
