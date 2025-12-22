@@ -1028,24 +1028,21 @@ class ExampleHomePage extends StatelessWidget {
         NasikoCard(
           width: 400,
           title: 'Document Expert',
-          titleIcon: HugeIcon(icon: HugeIcons.strokeRoundedDocumentCode),
+          titleIcon: HugeIcons.strokeRoundedDocumentCode,
           tags: ['document analysis', 'chat', 'history'],
           description:
               'A helpful assistant that answers user questions based on the provided document. It supports file uploads for document processing and maintains a chat history for each session.',
-          primaryButtonLabel: 'Start Session',
           secondaryButtonLabel: 'Learn More',
         ),
         SizedBox(width: context.spacing.s16),
         NasikoCard(
           width: 400,
           title: 'Code Expert',
-          titleIcon: HugeIcon(icon: HugeIcons.strokeRoundedCode),
+          titleIcon: HugeIcons.strokeRoundedCode,
           tags: ['code analysis', 'chat', 'history'],
           description:
               'An AI-powered coding assistant that helps users understand and debug code snippets. It supports multiple programming languages and maintains a chat history for each session.',
-          primaryButtonLabel: 'Start Session',
           secondaryButtonLabel: 'Learn More',
-          enabled: false,
         ),
       ],
     );
