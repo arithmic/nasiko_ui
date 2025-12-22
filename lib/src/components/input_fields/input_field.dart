@@ -8,9 +8,6 @@ import 'package:nasiko_ui/src/tokens/tokens.dart';
 enum NasikoInputFieldSize {
   /// Default size with standard padding and icons.
   medium,
-
-  /// Smaller size with reduced padding and icons.
-  small,
 }
 
 /// A standardized input field for the Nasiko Design System.
@@ -84,16 +81,10 @@ class NasikoInputField extends StatelessWidget {
     final iconSizes = context.iconSize;
 
     // Define size-specific values
-    final iconSize = size == NasikoInputFieldSize.small
-        ? iconSizes.xs
-        : iconSizes.s;
-    final textStyle = size == NasikoInputFieldSize.small
-        ? typography.bodyTertiary
-        : typography.bodySecondary;
-    final contentPadding = size == NasikoInputFieldSize.small
-        ? const EdgeInsets.symmetric(vertical: 8, horizontal: 16)
-        : EdgeInsets.symmetric(vertical: spacing.s12, horizontal: spacing.s16);
-    final isDense = size == NasikoInputFieldSize.small;
+    final iconSize = iconSizes.s;
+    final textStyle = typography.bodySecondary;
+    final contentPadding = EdgeInsets.symmetric(vertical: 14);
+    final isDense = false;
 
     // Define the border styles
     final defaultBorder = OutlineInputBorder(
@@ -168,7 +159,10 @@ class NasikoInputField extends StatelessWidget {
                 ? Container(
                     width: iconSize,
                     height: iconSize,
-                    padding: EdgeInsets.only(left: spacing.s16),
+                    padding: EdgeInsets.only(
+                      left: spacing.s16,
+                      right: spacing.s8,
+                    ),
                     child: HugeIcon(
                       icon: leadingIcon!,
                       size: iconSize,
@@ -180,7 +174,10 @@ class NasikoInputField extends StatelessWidget {
                 ? Container(
                     width: iconSize,
                     height: iconSize,
-                    padding: EdgeInsets.only(right: spacing.s16),
+                    padding: EdgeInsets.only(
+                      left: spacing.s8,
+                      right: spacing.s16,
+                    ),
                     child: HugeIcon(
                       icon: trailingIcon!,
                       size: iconSize,
