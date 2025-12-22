@@ -91,8 +91,9 @@ class NasikoInputField extends StatelessWidget {
         ? typography.bodyTertiary
         : typography.bodySecondary;
     final contentPadding = size == NasikoInputFieldSize.small
-        ? const EdgeInsets.symmetric(vertical: 10, horizontal: 16)
+        ? const EdgeInsets.symmetric(vertical: 8, horizontal: 16)
         : EdgeInsets.symmetric(vertical: spacing.s12, horizontal: spacing.s16);
+    final isDense = size == NasikoInputFieldSize.small;
 
     // Define the border styles
     final defaultBorder = OutlineInputBorder(
@@ -193,6 +194,7 @@ class NasikoInputField extends StatelessWidget {
             fillColor: colors.backgroundGroup, // neutral50
             hoverColor: colors.backgroundSurface,
             contentPadding: contentPadding,
+            isDense: isDense,
 
             // --- Borders ---
             border: defaultBorder,
