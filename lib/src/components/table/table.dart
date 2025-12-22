@@ -108,11 +108,12 @@ class _NasikoTableState extends State<NasikoTable> {
             // Body with vertical scroll
             Container(
               height: widget.bodyHeight ?? 400,
-              padding: EdgeInsets.symmetric(horizontal: spacing.s16),
+              padding: EdgeInsets.only(left: spacing.s16, bottom: spacing.s12),
               child: Scrollbar(
                 controller: _verticalController,
                 thumbVisibility: true,
                 child: SingleChildScrollView(
+                  padding:  EdgeInsets.only(right: spacing.s16),
                   controller: _verticalController,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
