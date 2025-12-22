@@ -108,7 +108,7 @@ class _SectionState extends State<Section> {
 
     if (showSelectedState) {
       backgroundColor = colors.backgroundSecondaryBrand;
-      borderColor = colors.borderSecondary;
+      borderColor = Colors.transparent;
     } else if (!widget.isExpandable && _isHovered) {
       // Hover state for non-expandable sections
       backgroundColor = Colors.transparent;
@@ -196,11 +196,15 @@ class _SectionState extends State<Section> {
                   item: child,
                   isSelected: child.label == widget.selectedChild,
                   onTap: () {
-                    if (widget.onChildTap != null) {
-                      widget.onChildTap!(child.label);
-                    }
+                    // Call child.onTap first if provided
                     if (child.onTap != null) {
                       child.onTap!();
+                    }
+                    // Then update parent selection state
+                    // This ensures selection state is updated even if child.onTap
+                    // doesn't navigate or if there's no route
+                    if (widget.onChildTap != null) {
+                      widget.onChildTap!(child.label);
                     }
                   },
                 );
@@ -245,7 +249,7 @@ class _SectionChildItemState extends State<_SectionChildItem> {
 
     if (widget.isSelected) {
       backgroundColor = colors.backgroundSecondaryBrand;
-      borderColor = colors.borderSecondary;
+      borderColor = Colors.transparent;
     } else if (_isHovered) {
       backgroundColor = Colors.transparent;
       borderColor = colors.borderSecondary;
