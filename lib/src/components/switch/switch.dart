@@ -63,7 +63,7 @@ class NasikoSwitch extends StatelessWidget {
     });
 
     return SizedBox(
-      height: size == NasikoSwitchSize.small ? spacing.s28 : spacing.s36,
+      height: size == NasikoSwitchSize.small ? spacing.s20 : spacing.s24,
       child: FittedBox(
         fit: BoxFit.fill,
         child: Switch.adaptive(
