@@ -18,7 +18,7 @@ export 'src/components/modal/modal.dart';
 export 'src/components/radio/radio.dart';
 export 'src/components/radio/radio_tile.dart';
 export 'src/components/section/section.dart';
-export 'src/components/switch/switch.dart';
+export 'src/components/switch/switches.dart';
 export 'src/components/table/table.dart';
 export 'src/components/table/table_column.dart';
 export 'src/components/tabs/tab_bar.dart';
