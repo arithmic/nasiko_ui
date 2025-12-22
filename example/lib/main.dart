@@ -15,9 +15,10 @@ class ExampleApp extends StatefulWidget {
 
 class _ExampleAppState extends State<ExampleApp> {
   ThemeMode _themeMode = ThemeMode.light;
-
-  bool _isSwitchActive = true;
-
+  final Map<NasikoSwitchSize, bool> _switches = {
+    NasikoSwitchSize.large: true,
+    NasikoSwitchSize.small: true,
+  };
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -33,10 +34,10 @@ class _ExampleAppState extends State<ExampleApp> {
                 : ThemeMode.light;
           });
         },
-        isSwitchActive: _isSwitchActive,
-        onSwitchToggled: (value) {
+        switches: _switches,
+        onSwitchToggled: (size, value) {
           setState(() {
-            _isSwitchActive = value;
+            _switches[size] = value;
           });
         },
       ),
@@ -46,13 +47,12 @@ class _ExampleAppState extends State<ExampleApp> {
 
 class ExampleHomePage extends StatelessWidget {
   final VoidCallback onThemeToggle;
-
-  final bool isSwitchActive;
-  final ValueChanged<bool> onSwitchToggled;
+  final Map<NasikoSwitchSize, bool> switches;
+  final void Function(NasikoSwitchSize size, bool value) onSwitchToggled;
 
   const ExampleHomePage({
     required this.onThemeToggle,
-    required this.isSwitchActive,
+    required this.switches,
     required this.onSwitchToggled,
     super.key,
   });
@@ -134,18 +134,6 @@ class ExampleHomePage extends StatelessWidget {
               SizedBox(height: context.spacing.s28),
               _buildSection(
                 context,
-                title: 'Primary Text Buttons',
-                child: _buildPrimaryTextButtonsExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Secondary Text Buttons',
-                child: _buildSecondaryTextButtonsExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
                 title: 'Primary Icon Buttons',
                 child: _buildPrimaryIconButtonsExample(context),
               ),
@@ -155,6 +143,19 @@ class ExampleHomePage extends StatelessWidget {
                 title: 'Secondary Icon Buttons',
                 child: _buildSecondaryIconButtonsExample(context),
               ),
+              SizedBox(height: context.spacing.s28),
+              _buildSection(
+                context,
+                title: 'Destructive Buttons',
+                child: _buildDestructiveButtonsExample(context),
+              ),
+              SizedBox(height: context.spacing.s28),
+              _buildSection(
+                context,
+                title: 'Link',
+                child: _buildLinkExample(context),
+              ),
+
               SizedBox(height: context.spacing.s28),
               _buildSection(
                 context,
@@ -996,6 +997,30 @@ class ExampleHomePage extends StatelessWidget {
         ),
         SizedBox(height: context.spacing.s20),
         Text(
+          'Medium',
+          style: context.typography.bodyPrimary.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        SizedBox(height: context.spacing.s12),
+        Wrap(
+          spacing: context.spacing.s12,
+          runSpacing: context.spacing.s12,
+          children: [
+            SecondaryIconButton(
+              icon: HugeIcons.strokeRoundedStar,
+              onPressed: () {},
+              size: NasikoButtonSize.medium,
+            ),
+            SecondaryIconButton(
+              icon: HugeIcons.strokeRoundedStar,
+              onPressed: null,
+              size: NasikoButtonSize.medium,
+            ),
+          ],
+        ),
+        SizedBox(height: context.spacing.s20),
+        Text(
           'Small',
           style: context.typography.bodyPrimary.copyWith(
             fontWeight: FontWeight.w600,
@@ -1016,6 +1041,65 @@ class ExampleHomePage extends StatelessWidget {
               onPressed: null,
               size: NasikoButtonSize.small,
             ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDestructiveButtonsExample(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Wrap(
+          spacing: context.spacing.s12,
+          runSpacing: context.spacing.s12,
+          children: [
+            DestructiveButton(
+              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
+              size: NasikoButtonSize.small,
+              onPressed: () {},
+              label: 'Button',
+            ),
+            DestructiveTextButton(
+              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
+              size: NasikoButtonSize.small,
+              onPressed: () {},
+              label: 'Button',
+            ),
+            DestructiveSecondaryButton(
+              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
+              size: NasikoButtonSize.small,
+              onPressed: () {},
+              label: 'Button',
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLinkExample(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Default state
+        Wrap(
+          spacing: context.spacing.s12,
+          runSpacing: context.spacing.s12,
+          children: [
+            LinkButton(onPressed: () {}, label: 'Button'),
+            LinkButton(
+              onPressed: () {},
+              label: 'Button',
+              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
+            ),
+            LinkButton(
+              onPressed: () {},
+              label: 'Button',
+              trailingIcon: HugeIcons.strokeRoundedInformationCircle,
+            ),
+            LinkButton(onPressed: null, label: 'Disabled'),
           ],
         ),
       ],
@@ -1616,6 +1700,8 @@ class ExampleHomePage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Text('Large', style: context.typography.bodyPrimaryBold),
+        SizedBox(height: context.spacing.s12),
         // Row 1: Active/Inactive Switch
         Text('Interactive Switch', style: typography.bodyPrimaryBold),
         SizedBox(height: spacing.s12),
@@ -1623,15 +1709,19 @@ class ExampleHomePage extends StatelessWidget {
           children: [
             // This uses the 'isSwitchActive' state passed from the parent StatefulWidget
             NasikoSwitch(
-              value: isSwitchActive,
+              value: switches[NasikoSwitchSize.large]!,
+              size: NasikoSwitchSize.large,
               // This calls the 'onSwitchToggled' function, which executes setState in the parent
-              onChanged: onSwitchToggled,
+              onChanged: (value) =>
+                  onSwitchToggled(NasikoSwitchSize.large, value),
             ),
             SizedBox(width: spacing.s16),
             Text(
-              isSwitchActive ? 'ON (Active)' : 'OFF (Inactive)',
+              switches[NasikoSwitchSize.large]!
+                  ? 'ON (Active)'
+                  : 'OFF (Inactive)',
               style: typography.bodyPrimary.copyWith(
-                color: isSwitchActive
+                color: switches[NasikoSwitchSize.large]!
                     ? colors.foregroundBrand
                     : colors.foregroundSecondary,
               ),
@@ -1646,7 +1736,11 @@ class ExampleHomePage extends StatelessWidget {
         Text('Disabled Switch (Value OFF)', style: typography.bodyPrimaryBold),
         SizedBox(height: spacing.s12),
         // Disabled Switch (The 'onChanged' property is null)
-        NasikoSwitch(value: false, onChanged: null),
+        NasikoSwitch(
+          value: false,
+          size: NasikoSwitchSize.large,
+          onChanged: null,
+        ),
 
         // --- Separator ---
         SizedBox(height: spacing.s24),
@@ -1655,7 +1749,68 @@ class ExampleHomePage extends StatelessWidget {
         Text('Disabled Switch (Value ON)', style: typography.bodyPrimaryBold),
         SizedBox(height: spacing.s12),
         // Disabled Switch (Value is ON, onChanged is null)
-        NasikoSwitch(value: true, onChanged: null),
+        NasikoSwitch(
+          value: true,
+          size: NasikoSwitchSize.large,
+          onChanged: null,
+        ),
+
+        SizedBox(height: context.spacing.s24),
+
+        Text('Small', style: context.typography.bodyPrimaryBold),
+        SizedBox(height: context.spacing.s12),
+        // Row 1: Active/Inactive Switch
+        Text('Interactive Switch', style: typography.bodyPrimaryBold),
+        SizedBox(height: spacing.s12),
+        Row(
+          children: [
+            // This uses the 'isSwitchActive' state passed from the parent StatefulWidget
+            NasikoSwitch(
+              value: switches[NasikoSwitchSize.small]!,
+              size: NasikoSwitchSize.small,
+              // This calls the 'onSwitchToggled' function, which executes setState in the parent
+              onChanged: (value) =>
+                  onSwitchToggled(NasikoSwitchSize.small, value),
+            ),
+            SizedBox(width: spacing.s16),
+            Text(
+              switches[NasikoSwitchSize.small]!
+                  ? 'ON (Active)'
+                  : 'OFF (Inactive)',
+              style: typography.bodyPrimary.copyWith(
+                color: switches[NasikoSwitchSize.small]!
+                    ? colors.foregroundBrand
+                    : colors.foregroundSecondary,
+              ),
+            ),
+          ],
+        ),
+
+        // --- Separator ---
+        SizedBox(height: spacing.s24),
+
+        // Row 2: Disabled Switch
+        Text('Disabled Switch (Value OFF)', style: typography.bodyPrimaryBold),
+        SizedBox(height: spacing.s12),
+        // Disabled Switch (The 'onChanged' property is null)
+        NasikoSwitch(
+          value: false,
+          size: NasikoSwitchSize.small,
+          onChanged: null,
+        ),
+
+        // --- Separator ---
+        SizedBox(height: spacing.s24),
+
+        // Row 3: Disabled Switch
+        Text('Disabled Switch (Value ON)', style: typography.bodyPrimaryBold),
+        SizedBox(height: spacing.s12),
+        // Disabled Switch (Value is ON, onChanged is null)
+        NasikoSwitch(
+          value: true,
+          size: NasikoSwitchSize.small,
+          onChanged: null,
+        ),
       ],
     );
   }
