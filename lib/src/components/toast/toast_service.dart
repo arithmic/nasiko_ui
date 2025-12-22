@@ -26,8 +26,8 @@ class NasikoToastService {
       SnackBar(
         // Use the custom Toast widget as content
         content: Align(
-           alignment: Alignment.centerRight, // can be made configurable, rihgt now it will be shown at the bottom right of the screen
-            widthFactor: 1,
+          alignment: Alignment.center, // can be made configurable, rihgt now it will be shown at the bottom center of the screen
+          widthFactor: 1,
           child: NasikoToast(
             type: type,
             message: message,
