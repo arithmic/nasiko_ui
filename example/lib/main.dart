@@ -134,20 +134,14 @@ class ExampleHomePage extends StatelessWidget {
               SizedBox(height: context.spacing.s28),
               _buildSection(
                 context,
-                title: 'Primary Text Buttons',
-                child: _buildPrimaryTextButtonsExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Secondary Text Buttons',
-                child: _buildSecondaryTextButtonsExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
                 title: 'Primary Icon Buttons',
                 child: _buildPrimaryIconButtonsExample(context),
+              ),
+              SizedBox(height: context.spacing.s28),
+              _buildSection(
+                context,
+                title: 'Secondary Icon Buttons',
+                child: _buildSecondaryIconButtonsExample(context),
               ),
               SizedBox(height: context.spacing.s28),
               _buildSection(
@@ -161,12 +155,7 @@ class ExampleHomePage extends StatelessWidget {
                 title: 'Link',
                 child: _buildLinkExample(context),
               ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Secondary Icon Buttons',
-                child: _buildSecondaryIconButtonsExample(context),
-              ),
+
               SizedBox(height: context.spacing.s28),
               _buildSection(
                 context,
@@ -1003,6 +992,30 @@ class ExampleHomePage extends StatelessWidget {
               icon: HugeIcons.strokeRoundedStar,
               onPressed: null,
               size: NasikoButtonSize.large,
+            ),
+          ],
+        ),
+        SizedBox(height: context.spacing.s20),
+        Text(
+          'Medium',
+          style: context.typography.bodyPrimary.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        SizedBox(height: context.spacing.s12),
+        Wrap(
+          spacing: context.spacing.s12,
+          runSpacing: context.spacing.s12,
+          children: [
+            SecondaryIconButton(
+              icon: HugeIcons.strokeRoundedStar,
+              onPressed: () {},
+              size: NasikoButtonSize.medium,
+            ),
+            SecondaryIconButton(
+              icon: HugeIcons.strokeRoundedStar,
+              onPressed: null,
+              size: NasikoButtonSize.medium,
             ),
           ],
         ),
