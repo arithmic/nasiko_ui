@@ -16,6 +16,7 @@ export 'src/components/list/list_item.dart';
 export 'src/components/menu/menu.dart';
 export 'src/components/modal/modal.dart';
 export 'src/components/radio/radio.dart';
+export 'src/components/radio/radio_tile.dart';
 export 'src/components/section/section.dart';
 export 'src/components/switch/switch.dart';
 export 'src/components/table/table.dart';
