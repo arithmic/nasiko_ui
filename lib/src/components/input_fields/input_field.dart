@@ -4,12 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/src/tokens/tokens.dart';
 
-/// Size variants for the Nasiko Input Field.
-enum NasikoInputFieldSize {
-  /// Default size with standard padding and icons.
-  medium,
-}
-
 /// A standardized input field for the Nasiko Design System.
 ///
 /// This component wraps a [TextFormField] and applies Nasiko styling
@@ -28,7 +22,6 @@ class NasikoInputField extends StatelessWidget {
     this.keyboardType,
     this.validator,
     this.onChanged,
-    this.size = NasikoInputFieldSize.medium,
   });
 
   /// Controls the text being edited.
@@ -66,9 +59,6 @@ class NasikoInputField extends StatelessWidget {
 
   /// Called when the user initiates a change to the field's value.
   final ValueChanged<String>? onChanged;
-
-  /// The size variant of the input field.
-  final NasikoInputFieldSize size;
 
   @override
   Widget build(BuildContext context) {
