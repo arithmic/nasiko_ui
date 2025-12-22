@@ -1803,29 +1803,30 @@ class _RadioExampleState extends State<_RadioExample> {
         SizedBox(height: context.spacing.s8),
         Row(
           children: [
-            NasikoRadio<String>(
+            NasikoRadioTile<String>(
+              label: 'Option 1',
               value: 'option1',
               groupValue: _selectedOption,
               onChanged: (value) => setState(() => _selectedOption = value),
             ),
             SizedBox(width: context.spacing.s8),
-            Text('Option 1', style: context.typography.bodyPrimary),
             SizedBox(width: context.spacing.s24),
-            NasikoRadio<String>(
+            NasikoRadioTile<String>(
+              label: 'Option 2',
               value: 'option2',
+              icon: Icons.airplanemode_active,
               groupValue: _selectedOption,
               onChanged: (value) => setState(() => _selectedOption = value),
             ),
             SizedBox(width: context.spacing.s8),
-            Text('Option 2', style: context.typography.bodyPrimary),
             SizedBox(width: context.spacing.s24),
-            NasikoRadio<String>(
+            NasikoRadioTile<String>(
+              label: 'Option 3',
               value: 'option3',
               groupValue: _selectedOption,
               onChanged: (value) => setState(() => _selectedOption = value),
             ),
             SizedBox(width: context.spacing.s8),
-            Text('Option 3', style: context.typography.bodyPrimary),
           ],
         ),
         SizedBox(height: context.spacing.s20),
@@ -1838,21 +1839,21 @@ class _RadioExampleState extends State<_RadioExample> {
         SizedBox(height: context.spacing.s8),
         Row(
           children: [
-            NasikoRadio<String>(
+            NasikoRadioTile<String>(
+              label: 'Disabled Selected',
               value: 'disabled1',
               groupValue: _disabledOption,
               onChanged: null, // Disabled
             ),
             SizedBox(width: context.spacing.s8),
-            Text('Disabled Selected', style: context.typography.bodyPrimary),
             SizedBox(width: context.spacing.s24),
-            NasikoRadio<String>(
+            NasikoRadioTile<String>(
+              label: 'Disabled Unselected',
               value: 'disabled2',
               groupValue: _disabledOption,
               onChanged: null, // Disabled
             ),
             SizedBox(width: context.spacing.s8),
-            Text('Disabled Unselected', style: context.typography.bodyPrimary),
           ],
         ),
       ],

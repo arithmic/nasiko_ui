@@ -82,11 +82,7 @@ class PrimaryTextButton extends StatelessWidget {
         children: [
           // Leading Icon
           if (leadingIcon != null) ...[
-            HugeIcon(
-              icon: leadingIcon!,
-              size: iconSizes.s,
-              color: colors.foregroundIconPrimary,
-            ),
+            HugeIcon(icon: leadingIcon!, size: iconSizes.s),
             SizedBox(width: spacing.s8),
           ],
 

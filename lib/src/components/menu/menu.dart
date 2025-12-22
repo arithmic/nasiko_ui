@@ -145,7 +145,7 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
     final spacing = context.spacing;
     final radii = context.radius;
     final borderWidths = context.borderWidth;
-
+    final double scrollbarThickness = 6.0;
     return Material(
       color: Colors.transparent,
       child: Container(
@@ -167,11 +167,18 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
           ],
         ),
         child: Padding(
-          padding: EdgeInsets.all(spacing.s8),
+          padding: EdgeInsets.only(
+            left: spacing.s8,
+            top: spacing.s8,
+            bottom: spacing.s8,
+          ),
           child: Scrollbar(
             controller: _scrollController,
             thumbVisibility: true,
             child: ListView.separated(
+              padding: EdgeInsets.only(
+                right: spacing.s8 + scrollbarThickness,
+              ), // for scrollbar to not overlap the content
               controller: _scrollController,
               shrinkWrap: true,
               itemCount: widget.items.length,
