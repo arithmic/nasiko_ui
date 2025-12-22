@@ -111,28 +111,36 @@ class NasikoChip extends StatelessWidget {
         children: [
           // Leading Icon
           if (leadingIcon != null) ...[
-            Icon(leadingIcon, size: iconSizes.s, color: foregroundColor),
-            SizedBox(width: spacing.s8),
+            Icon(
+              leadingIcon,
+              size: size == NasikoChipSize.small ? iconSizes.xs : iconSizes.s,
+              color: foregroundColor,
+            ),
+            SizedBox(width: spacing.s4),
           ],
-
-          // Label
-          Text(
-            label,
-            style:
-                (size == NasikoChipSize.large
-                        ? typography.bodySecondary
-                        : typography.bodyTertiary)
-                    .copyWith(color: foregroundColor),
-          ),
+          if (size == NasikoChipSize.small)
+            Padding(
+              padding: EdgeInsets.only(top: spacing.s4, bottom: spacing.s4),
+              child: Text(
+                label,
+                style: typography.bodyTertiary.copyWith(color: foregroundColor),
+              ),
+            )
+          else
+            // Label
+            Text(
+              label,
+              style: typography.bodySecondary.copyWith(color: foregroundColor),
+            ),
 
           // Delete Icon (only for actionable chips)
           if (onDelete != null) ...[
-            SizedBox(width: spacing.s8),
+            SizedBox(width: spacing.s4),
             GestureDetector(
               onTap: enabled ? onDelete : null,
               child: HugeIcon(
                 icon: HugeIcons.strokeRoundedMinusSign,
-                size: iconSizes.s,
+                size: size == NasikoChipSize.small ? iconSizes.xs : iconSizes.s,
                 color: foregroundColor,
               ),
             ),
