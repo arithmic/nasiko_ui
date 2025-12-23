@@ -3,18 +3,18 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
 /// A content card component that displays rich content with optional image,
-/// title, tags, description, and action buttons.
+/// title, tags, description, and action button.
 ///
 /// The card supports two states:
-/// - Enabled: Full color, interactive with action buttons (default)
+/// - Enabled: Full color, interactive and clickable (default)
 /// - Disabled: Greyed out with a "Coming Soon" style button
+///
+/// The entire card is clickable when [onSecondaryPressed] is provided.
 ///
 /// Example usage for enabled card:
 /// ```dart
 /// NasikoCard(
 ///   title: 'Card Title',
-///   iconButtonIcon: HugeIcons.strokeRoundedSettings01,
-///   onIconButtonPressed: () {},
 ///   secondaryButtonLabel: 'Button',
 ///   onSecondaryPressed: () {},
 /// )
@@ -28,9 +28,9 @@ import 'package:nasiko_ui/nasiko_ui.dart';
 /// )
 /// ```
 class NasikoCard extends StatefulWidget {
-  /// Creates an enabled card with action buttons.
+  /// Creates an enabled card with an optional action button.
   ///
-  /// Either [iconButtonIcon] or [secondaryButtonLabel] should be provided for buttons to appear.
+  /// The entire card becomes clickable when [onSecondaryPressed] is provided.
   const NasikoCard({
     super.key,
     this.image,
@@ -40,13 +40,10 @@ class NasikoCard extends StatefulWidget {
     this.tags = const [],
     this.subtitle,
     this.description,
-    this.iconButtonIcon,
-    this.onIconButtonPressed,
     this.secondaryButtonLabel,
     this.secondaryButtonIcon,
     this.secondaryButtonTrailingIcon,
     this.onSecondaryPressed,
-    this.onTap,
     this.width,
   }) : enabled = true,
        disabledButtonLabel = null;
@@ -64,13 +61,10 @@ class NasikoCard extends StatefulWidget {
     required this.disabledButtonLabel,
     required this.enabled,
     this.width,
-  }) : iconButtonIcon = null,
-       onIconButtonPressed = null,
-       secondaryButtonLabel = null,
+  }) : secondaryButtonLabel = null,
        secondaryButtonIcon = null,
        secondaryButtonTrailingIcon = null,
-       onSecondaryPressed = null,
-       onTap = null;
+       onSecondaryPressed = null;
 
   /// Creates a disabled card with a disabled button label.
   ///
@@ -124,14 +118,6 @@ class NasikoCard extends StatefulWidget {
   /// Optional description text displayed below the subtitle.
   final String? description;
 
-  /// Optional leading icon for the icon button.
-  /// Only available in enabled state.
-  final List<List<dynamic>>? iconButtonIcon;
-
-  /// Callback when the icon button is pressed.
-  /// Only available in enabled state.
-  final VoidCallback? onIconButtonPressed;
-
   /// Label for the secondary action button.
   /// Only available in enabled state.
   final String? secondaryButtonLabel;
@@ -154,10 +140,6 @@ class NasikoCard extends StatefulWidget {
 
   /// Whether the card is enabled. When false, the card appears greyed out.
   final bool enabled;
-
-  /// Optional callback when the card itself is tapped.
-  /// Only available in enabled state.
-  final VoidCallback? onTap;
 
   /// Optional fixed width for the card. If null, the card expands to fit its parent.
   final double? width;
@@ -262,12 +244,15 @@ class _NasikoCardState extends State<NasikoCard> {
     );
 
     // Wrap with interaction handlers
-    if (widget.onTap != null && widget.enabled) {
+    if (widget.onSecondaryPressed != null && widget.enabled) {
       return MouseRegion(
         onEnter: (_) => setState(() => _isHovered = true),
         onExit: (_) => setState(() => _isHovered = false),
         cursor: SystemMouseCursors.click,
-        child: GestureDetector(onTap: widget.onTap, child: cardContent),
+        child: GestureDetector(
+          onTap: widget.onSecondaryPressed,
+          child: cardContent,
+        ),
       );
     }
 
@@ -407,8 +392,6 @@ class _NasikoCardState extends State<NasikoCard> {
   }
 
   Widget _buildActionButtons(BuildContext context) {
-    final spacing = context.spacing;
-
     // If disabled with a disabled button label, show single disabled button
     if (!widget.enabled && widget.disabledButtonLabel != null) {
       return SizedBox(
@@ -421,28 +404,20 @@ class _NasikoCardState extends State<NasikoCard> {
       );
     }
 
-    // Show icon button and/or secondary button
-    return Row(
-      children: [
-        if (widget.iconButtonIcon != null) ...[
-          SecondaryIconButton(
-            onPressed: widget.enabled ? widget.onIconButtonPressed : null,
-            icon: widget.iconButtonIcon!,
-            size: NasikoButtonSize.small,
-          ),
-          if (widget.secondaryButtonLabel != null) SizedBox(width: spacing.s8),
-        ],
-        if (widget.secondaryButtonLabel != null)
-          Expanded(
-            child: SecondaryButton(
-              onPressed: widget.enabled ? widget.onSecondaryPressed : null,
-              label: widget.secondaryButtonLabel!,
-              leadingIcon: widget.secondaryButtonIcon,
-              trailingIcon: widget.secondaryButtonTrailingIcon,
-              size: NasikoButtonSize.small,
-            ),
-          ),
-      ],
-    );
+    // Show secondary button
+    if (widget.secondaryButtonLabel != null) {
+      return SizedBox(
+        width: double.infinity,
+        child: SecondaryButton(
+          onPressed: widget.enabled ? widget.onSecondaryPressed : null,
+          label: widget.secondaryButtonLabel!,
+          leadingIcon: widget.secondaryButtonIcon,
+          trailingIcon: widget.secondaryButtonTrailingIcon,
+          size: NasikoButtonSize.small,
+        ),
+      );
+    }
+
+    return const SizedBox.shrink();
   }
 }
