@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:nasiko_ui/src/tokens/tokens.dart';
+import "package:nasiko_ui/nasiko_ui.dart";
 
 /// A multi-line text input component for the Nasiko Design System.
 ///
@@ -156,54 +156,20 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
                 children: [
                   // Attachment button
                   if (widget.showAttachmentButton)
-                    InkWell(
-                      onTap: widget.enabled ? widget.onAttachmentTap : null,
-                      borderRadius: BorderRadius.circular(radii.r8),
-                      child: Container(
-                        padding: EdgeInsets.all(spacing.s8),
-                        decoration: BoxDecoration(
-                          color: widget.enabled
-                              ? colors.backgroundBase
-                              : colors.backgroundDisabled,
-                          border: Border.all(color: colors.borderPrimary),
-                        ),
-                        child: HugeIcon(
-                          icon: HugeIcons.strokeRoundedAttachment01,
-                          size: iconSizes.s,
-                          color: widget.enabled
-                              ? colors.foregroundIconPrimary
-                              : colors.foregroundIconPrimary.withValues(
-                                  alpha: 0.5,
-                                ),
-                        ),
-                      ),
+                    SecondaryIconButton(
+                      icon: HugeIcons.strokeRoundedAttachment01,
+                      onPressed: widget.enabled ? widget.onAttachmentTap : null,
+                      size: NasikoButtonSize.small,
                     ),
 
                   const Spacer(),
 
                   // Send button
                   if (widget.showSendButton)
-                    InkWell(
-                      onTap: widget.enabled ? widget.onSend : null,
-                      borderRadius: BorderRadius.circular(radii.r8),
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        decoration: BoxDecoration(
-                          color: widget.enabled
-                              ? colors.backgroundBrand
-                              : colors.backgroundDisabled,
-                          borderRadius: BorderRadius.circular(radii.r8),
-                          border: Border.all(color: colors.borderSecondary),
-                        ),
-                        padding: EdgeInsets.all(spacing.s12),
-                        child: HugeIcon(
-                          icon: HugeIcons.strokeRoundedSent,
-                          size: iconSizes.s,
-                          color: widget.enabled
-                              ? colors.backgroundBrand
-                              : colors.foregroundDisabled,
-                        ),
-                      ),
+                    PrimaryIconButton(
+                      icon: HugeIcons.strokeRoundedSent,
+                      onPressed: widget.enabled ? widget.onSend : null,
+                      size: NasikoButtonSize.small,
                     ),
                 ],
               ),

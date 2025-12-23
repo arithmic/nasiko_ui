@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
+import 'package:nasiko_ui_example/text_box_example.dart';
 
 void main() {
   runApp(const ExampleApp());
@@ -263,6 +264,12 @@ class ExampleHomePage extends StatelessWidget {
                 context,
                 title: 'Navigation Sections',
                 child: const _SectionExample(),
+              ),
+              SizedBox(height: context.spacing.s28),
+              _buildSection(
+                context,
+                title: 'Query Box',
+                child: _buildQueryBoxExample(context),
               ),
             ],
           ),
@@ -834,60 +841,6 @@ class ExampleHomePage extends StatelessWidget {
               onPressed: null,
               label: 'Disabled',
             ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPrimaryTextButtonsExample(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Default state
-        Wrap(
-          spacing: context.spacing.s12,
-          runSpacing: context.spacing.s12,
-          children: [
-            PrimaryTextButton(onPressed: () {}, label: 'Button'),
-            PrimaryTextButton(
-              onPressed: () {},
-              label: 'Button',
-              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
-            ),
-            PrimaryTextButton(
-              onPressed: () {},
-              label: 'Button',
-              trailingIcon: HugeIcons.strokeRoundedInformationCircle,
-            ),
-            PrimaryTextButton(onPressed: null, label: 'Disabled'),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSecondaryTextButtonsExample(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Default state
-        Wrap(
-          spacing: context.spacing.s12,
-          runSpacing: context.spacing.s12,
-          children: [
-            SecondaryTextButton(onPressed: () {}, label: 'Button'),
-            SecondaryTextButton(
-              onPressed: () {},
-              label: 'Button',
-              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
-            ),
-            SecondaryTextButton(
-              onPressed: () {},
-              label: 'Button',
-              trailingIcon: HugeIcons.strokeRoundedInformationCircle,
-            ),
-            SecondaryTextButton(onPressed: null, label: 'Disabled'),
           ],
         ),
       ],
@@ -1813,6 +1766,10 @@ class ExampleHomePage extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Widget _buildQueryBoxExample(BuildContext context) {
+    return const TextBoxExample();
   }
 }
 
