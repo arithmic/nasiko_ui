@@ -9,14 +9,15 @@ import 'package:nasiko_ui/nasiko_ui.dart';
 /// - Enabled: Full color, interactive and clickable (default)
 /// - Disabled: Greyed out with a "Coming Soon" style button
 ///
-/// The entire card is clickable when [onSecondaryPressed] is provided.
+/// The entire card is clickable when [onPressed] is provided.
 ///
-/// Example usage for enabled card:
+/// Example usage for enabled card with clickable card:
 /// ```dart
 /// NasikoCard(
 ///   title: 'Card Title',
-///   secondaryButtonLabel: 'Button',
+///   secondaryButtonLabel: 'View Details',
 ///   onSecondaryPressed: () {},
+///   onPressed: () {}, // Makes the entire card clickable
 /// )
 /// ```
 ///
@@ -30,7 +31,7 @@ import 'package:nasiko_ui/nasiko_ui.dart';
 class NasikoCard extends StatefulWidget {
   /// Creates an enabled card with an optional action button.
   ///
-  /// The entire card becomes clickable when [onSecondaryPressed] is provided.
+  /// The entire card becomes clickable when [onPressed] is provided.
   const NasikoCard({
     super.key,
     this.image,
@@ -44,6 +45,7 @@ class NasikoCard extends StatefulWidget {
     this.secondaryButtonIcon,
     this.secondaryButtonTrailingIcon,
     this.onSecondaryPressed,
+    this.onPressed,
     this.width,
   }) : enabled = true,
        disabledButtonLabel = null;
@@ -64,7 +66,8 @@ class NasikoCard extends StatefulWidget {
   }) : secondaryButtonLabel = null,
        secondaryButtonIcon = null,
        secondaryButtonTrailingIcon = null,
-       onSecondaryPressed = null;
+       onSecondaryPressed = null,
+       onPressed = null;
 
   /// Creates a disabled card with a disabled button label.
   ///
@@ -133,6 +136,10 @@ class NasikoCard extends StatefulWidget {
   /// Callback when the secondary button is pressed.
   /// Only available in enabled state.
   final VoidCallback? onSecondaryPressed;
+
+  /// Callback when the card is tapped.
+  /// Only available in enabled state.
+  final VoidCallback? onPressed;
 
   /// Label for the disabled state button (e.g., "Coming Soon").
   /// Only available in disabled state.
@@ -244,15 +251,12 @@ class _NasikoCardState extends State<NasikoCard> {
     );
 
     // Wrap with interaction handlers
-    if (widget.onSecondaryPressed != null && widget.enabled) {
+    if (widget.onPressed != null && widget.enabled) {
       return MouseRegion(
         onEnter: (_) => setState(() => _isHovered = true),
         onExit: (_) => setState(() => _isHovered = false),
         cursor: SystemMouseCursors.click,
-        child: GestureDetector(
-          onTap: widget.onSecondaryPressed,
-          child: cardContent,
-        ),
+        child: GestureDetector(onTap: widget.onPressed, child: cardContent),
       );
     }
 
