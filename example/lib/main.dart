@@ -74,205 +74,195 @@ class ExampleHomePage extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(context.spacing.s16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildSection(
-                context,
-                title: 'Colors',
-                child: _buildColorGrid(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Typography',
-                child: _buildTypographyExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Spacing',
-                child: _buildSpacingExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Border Radius',
-                child: _buildBorderRadiusExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Icon Sizes',
-                child: _buildIconSizesExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Border Widths',
-                child: _buildBorderWidthExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Primary Buttons',
-                child: _buildPrimaryButtonsExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Secondary Buttons',
-                child: _buildSecondaryButtonsExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Tertiary Buttons',
-                child: _buildTertiaryButtonsExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Primary Icon Buttons',
-                child: _buildPrimaryIconButtonsExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Secondary Icon Buttons',
-                child: _buildSecondaryIconButtonsExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Destructive Buttons',
-                child: _buildDestructiveButtonsExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Link',
-                child: _buildLinkExample(context),
-              ),
+        padding: EdgeInsets.all(context.spacing.s16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildSection(
+              context,
+              title: 'Colors',
+              child: _buildColorGrid(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Typography',
+              child: _buildTypographyExample(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Spacing',
+              child: _buildSpacingExample(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Border Radius',
+              child: _buildBorderRadiusExample(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Icon Sizes',
+              child: _buildIconSizesExample(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Border Widths',
+              child: _buildBorderWidthExample(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Primary Buttons',
+              child: _buildPrimaryButtonsExample(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Secondary Buttons',
+              child: _buildSecondaryButtonsExample(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Tertiary Buttons',
+              child: _buildTertiaryButtonsExample(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Primary Icon Buttons',
+              child: _buildPrimaryIconButtonsExample(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Secondary Icon Buttons',
+              child: _buildSecondaryIconButtonsExample(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Destructive Buttons',
+              child: _buildDestructiveButtonsExample(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Link',
+              child: _buildLinkExample(context),
+            ),
 
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Cards',
-                child: _buildCardsExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Input Fields',
-                child: _buildInputFieldsExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Menu',
-                child: const _MenuExample(),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Tab Bar',
-                child: _buildTabBarExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Accordion',
-                child: _buildAccordionExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Avatars',
-                child: _buildAvatarsExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Banners',
-                child: _buildBannersExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Breadcrumbs',
-                child: _buildBreadcrumbsExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Checkboxes',
-                child: const _CheckboxExample(),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Radio',
-                child: const _RadioExample(),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Chips',
-                child: const _ChipExample(),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Dividers',
-                child: _buildDividersExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Lists & Hierarchy',
-                child: const _ListExample(),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Modals',
-                child: _buildModalsExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Table',
-                child: _buildTableExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Toast Notifications',
-                child: _buildToastExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Switch',
-                child: _buildSwitchExample(context),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Navigation Sections',
-                child: const _SectionExample(),
-              ),
-              SizedBox(height: context.spacing.s28),
-              _buildSection(
-                context,
-                title: 'Query Box',
-                child: _buildQueryBoxExample(context),
-              ),
-            ],
-          ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Cards',
+              child: _buildCardsExample(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Input Fields',
+              child: _buildInputFieldsExample(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(context, title: 'Menu', child: const _MenuExample()),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Tab Bar',
+              child: _buildTabBarExample(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Accordion',
+              child: _buildAccordionExample(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Avatars',
+              child: _buildAvatarsExample(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Banners',
+              child: _buildBannersExample(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Breadcrumbs',
+              child: _buildBreadcrumbsExample(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Checkboxes',
+              child: const _CheckboxExample(),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Radio',
+              child: const _RadioExample(),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(context, title: 'Chips', child: const _ChipExample()),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Dividers',
+              child: _buildDividersExample(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Lists & Hierarchy',
+              child: const _ListExample(),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Modals',
+              child: _buildModalsExample(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Table',
+              child: _buildTableExample(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Toast Notifications',
+              child: _buildToastExample(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Switch',
+              child: _buildSwitchExample(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Navigation Sections',
+              child: const _SectionExample(),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Query Box',
+              child: _buildQueryBoxExample(context),
+            ),
+          ],
         ),
       ),
     );
@@ -2097,7 +2087,7 @@ class _SectionExampleState extends State<_SectionExample> {
           // Non-expandable section - Orchestrator
           Section(
             label: 'Orchestrator',
-            icon: Icons.settings,
+            icon: HugeIcons.strokeRoundedSettings01,
             isSelected: _selectedSection == 'Orchestrator',
             onTap: () {
               setState(() {
@@ -2111,7 +2101,7 @@ class _SectionExampleState extends State<_SectionExample> {
           // Expandable section - Agent Registry
           Section(
             label: 'Agent Registry',
-            icon: Icons.book,
+            icon: HugeIcons.strokeRoundedBook01,
             selectedChild: _selectedChild,
             onChildTap: (childLabel) {
               setState(() {
@@ -2130,7 +2120,7 @@ class _SectionExampleState extends State<_SectionExample> {
           // Non-expandable section - Observability
           Section(
             label: 'Observability',
-            icon: Icons.visibility,
+            icon: HugeIcons.strokeRoundedVision,
             isSelected: _selectedSection == 'Observability',
             onTap: () {
               setState(() {
@@ -2144,7 +2134,7 @@ class _SectionExampleState extends State<_SectionExample> {
           // Non-expandable section - Operations
           Section(
             label: 'Operations',
-            icon: Icons.build,
+            icon: HugeIcons.strokeRoundedBuilding01,
             isSelected: _selectedSection == 'Operations',
             onTap: () {
               setState(() {
@@ -2158,7 +2148,7 @@ class _SectionExampleState extends State<_SectionExample> {
           // Expandable section - Recent Sessions
           Section(
             label: 'Recent Sessions',
-            icon: Icons.history,
+            icon: HugeIcons.strokeRoundedWorkHistory,
             selectedChild: _selectedChild,
             onChildTap: (childLabel) {
               setState(() {

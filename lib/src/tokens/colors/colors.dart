@@ -42,6 +42,7 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
     required this.foregroundOnAction,
     required this.foregroundIconPrimary,
     required this.foregroundIconSecondary,
+    required this.foregroundIconTertiary,
     required this.foregroundIconHover,
 
     // Foreground Constant
@@ -109,6 +110,7 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
   final Color foregroundOnAction;
   final Color foregroundIconPrimary;
   final Color foregroundIconSecondary;
+  final Color foregroundIconTertiary;
   final Color foregroundIconHover;
 
   // Foreground Constant
@@ -166,6 +168,7 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
     Color? foregroundOnAction,
     Color? foregroundIconPrimary,
     Color? foregroundIconSecondary,
+    Color? foregroundIconTertiary,
     Color? foregroundIconHover,
     Color? foregroundConstantWhite,
     Color? foregroundConstantBlack,
@@ -225,6 +228,8 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
           foregroundIconPrimary ?? this.foregroundIconPrimary,
       foregroundIconSecondary:
           foregroundIconSecondary ?? this.foregroundIconSecondary,
+      foregroundIconTertiary:
+          foregroundIconTertiary ?? this.foregroundIconTertiary,
       foregroundIconHover: foregroundIconHover ?? this.foregroundIconHover,
       foregroundConstantWhite:
           foregroundConstantWhite ?? this.foregroundConstantWhite,
@@ -374,6 +379,11 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
         other.foregroundIconSecondary,
         t,
       )!,
+      foregroundIconTertiary: Color.lerp(
+        foregroundIconTertiary,
+        other.foregroundIconTertiary,
+        t,
+      )!,
       foregroundIconHover: Color.lerp(
         foregroundIconHover,
         other.foregroundIconHover,
@@ -484,6 +494,7 @@ const NasikoColorTheme lightColors = NasikoColorTheme(
   foregroundOnAction: white,
   foregroundIconPrimary: neutral700,
   foregroundIconSecondary: yellow600,
+  foregroundIconTertiary: neutral500,
   foregroundIconHover: yellow800,
 
   // Foreground Constant
@@ -556,6 +567,7 @@ const NasikoColorTheme darkColors = NasikoColorTheme(
   foregroundOnAction: neutral900, // Dark text on light brand button
   foregroundIconPrimary: neutral100,
   foregroundIconSecondary: yellow600,
+  foregroundIconTertiary: neutral400,
   foregroundIconHover: yellow400,
 
   // Foreground Constant

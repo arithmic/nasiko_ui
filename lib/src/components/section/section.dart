@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nasiko_ui/src/tokens/tokens.dart';
+import 'package:hugeicons/hugeicons.dart';
+import 'package:nasiko_ui/nasiko_ui.dart';
 
 /// A model representing a single section item.
 class SectionItem {
@@ -36,7 +37,7 @@ class Section extends StatefulWidget {
   final String label;
 
   /// Leading icon for this section.
-  final IconData icon;
+  final HugeIconsType? icon;
 
   /// Optional list of child items (makes this section expandable).
   final List<SectionItem>? children;
@@ -100,73 +101,54 @@ class _SectionState extends State<Section> {
     final iconSizes = context.iconSize;
     final borderWidths = context.borderWidth;
 
-    // and this is NOT an expandable section
-    final bool showSelectedState = widget.isSelected && !widget.isExpandable;
+    // Expandable sections get wrapped in a white container
+    if (widget.isExpandable) {
+      // Determine if this expandable section has a selected child
+      final bool hasSelectedChild = _hasSelectedChild();
 
-    Color backgroundColor;
-    Color borderColor;
-
-    if (showSelectedState) {
-      backgroundColor = colors.backgroundSecondaryBrand;
-      borderColor = Colors.transparent;
-    } else if (!widget.isExpandable && _isHovered) {
-      // Hover state for non-expandable sections
-      backgroundColor = Colors.transparent;
-      borderColor = colors.borderSecondary;
-    } else {
-      backgroundColor = Colors.transparent;
-      borderColor = Colors.transparent;
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        // Main section button
-        MouseRegion(
-          cursor: (widget.isExpandable || widget.onTap != null)
-              ? SystemMouseCursors.click
-              : SystemMouseCursors.basic,
-          onEnter: widget.isExpandable
+      return Container(
+        decoration: BoxDecoration(
+          color: colors.backgroundBase,
+          borderRadius: BorderRadius.circular(radii.r12),
+          border: !_isExpanded
               ? null
-              : (_) => setState(() => _isHovered = true),
-          onExit: widget.isExpandable
-              ? null
-              : (_) => setState(() => _isHovered = false),
-          child: GestureDetector(
-            onTap: _toggleExpanded,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 150),
-              padding: EdgeInsets.symmetric(
-                horizontal: spacing.s8,
-                vertical: spacing.s8,
-              ),
-              decoration: BoxDecoration(
-                color: backgroundColor,
-                borderRadius: BorderRadius.circular(radii.r8),
-                border: Border.all(color: borderColor, width: borderWidths.w1),
-              ),
-              child: Row(
-                children: [
-                  // Leading icon
-                  Icon(
-                    widget.icon,
-                    size: iconSizes.s,
-                    color: colors.foregroundIconPrimary,
-                  ),
-                  SizedBox(width: spacing.s12),
+              : Border.all(color: colors.borderPrimary, width: borderWidths.w1),
+        ),
+        padding: EdgeInsets.all(spacing.s8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Main section button (header)
+            GestureDetector(
+              onTap: _toggleExpanded,
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Row(
+                  children: [
+                    // Leading icon
+                    HugeIcon(
+                      icon: widget.icon!,
+                      size: iconSizes.s,
+                      color: hasSelectedChild
+                          ? colors.foregroundPrimary
+                          : colors.foregroundIconTertiary,
+                    ),
+                    SizedBox(width: spacing.s8),
 
-                  // Label
-                  Expanded(
-                    child: Text(
-                      widget.label,
-                      style: typography.bodySecondaryBold.copyWith(
-                        color: colors.foregroundPrimary,
+                    // Label
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        child: Text(
+                          widget.label,
+                          style: typography.bodySecondaryBold.copyWith(
+                            color: colors.foregroundPrimary,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
 
-                  // Chevron icon (only for expandable sections)
-                  if (widget.isExpandable) ...[
+                    // Chevron icon
                     SizedBox(width: spacing.s8),
                     AnimatedRotation(
                       turns: _isExpanded ? 0.5 : 0,
@@ -178,41 +160,102 @@ class _SectionState extends State<Section> {
                       ),
                     ),
                   ],
-                ],
+                ),
               ),
             ),
+
+            // Expanded children
+            if (_isExpanded) ...[
+              SizedBox(height: spacing.s8),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: widget.children!.map((child) {
+                  return _SectionChildItem(
+                    item: child,
+                    isSelected: child.label == widget.selectedChild,
+                    onTap: () {
+                      // Call child.onTap first if provided
+                      if (child.onTap != null) {
+                        child.onTap!();
+                      }
+                      // Then update parent selection state
+                      // This ensures selection state is updated even if child.onTap
+                      // doesn't navigate or if there's no route
+                      if (widget.onChildTap != null) {
+                        widget.onChildTap!(child.label);
+                      }
+                    },
+                  );
+                }).toList(),
+              ),
+            ],
+          ],
+        ),
+      );
+    }
+
+    // Non-expandable sections
+    final bool showSelectedState = widget.isSelected;
+
+    Color backgroundColor;
+    Color borderColor;
+
+    if (showSelectedState) {
+      backgroundColor = colors.backgroundSecondaryBrand;
+      borderColor = colors.foregroundBrand;
+    } else if (_isHovered) {
+      // Hover state for non-expandable sections
+      backgroundColor = Colors.transparent;
+      borderColor = colors.borderSecondary;
+    } else {
+      backgroundColor = Colors.transparent;
+      borderColor = Colors.transparent;
+    }
+
+    return MouseRegion(
+      cursor: widget.onTap != null
+          ? SystemMouseCursors.click
+          : SystemMouseCursors.basic,
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTap: _toggleExpanded,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          padding: EdgeInsets.symmetric(
+            horizontal: spacing.s8,
+            vertical: spacing.s12,
+          ),
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(radii.r8),
+            border: Border.all(color: borderColor, width: borderWidths.w1),
+          ),
+          child: Row(
+            children: [
+              // Leading icon
+              HugeIcon(
+                icon: widget.icon!,
+                size: iconSizes.s,
+                color: showSelectedState
+                    ? colors.foregroundPrimary
+                    : colors.foregroundIconTertiary,
+              ),
+              SizedBox(width: spacing.s12),
+
+              // Label
+              Expanded(
+                child: Text(
+                  widget.label,
+                  style: typography.bodySecondaryBold.copyWith(
+                    color: colors.foregroundPrimary,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
-
-        // Expanded children
-        if (widget.isExpandable && _isExpanded) ...[
-          SizedBox(height: spacing.s4),
-          Padding(
-            padding: EdgeInsets.all(spacing.s8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: widget.children!.map((child) {
-                return _SectionChildItem(
-                  item: child,
-                  isSelected: child.label == widget.selectedChild,
-                  onTap: () {
-                    // Call child.onTap first if provided
-                    if (child.onTap != null) {
-                      child.onTap!();
-                    }
-                    // Then update parent selection state
-                    // This ensures selection state is updated even if child.onTap
-                    // doesn't navigate or if there's no route
-                    if (widget.onChildTap != null) {
-                      widget.onChildTap!(child.label);
-                    }
-                  },
-                );
-              }).toList(),
-            ),
-          ),
-        ],
-      ],
+      ),
     );
   }
 }
