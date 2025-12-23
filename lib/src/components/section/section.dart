@@ -110,9 +110,12 @@ class _SectionState extends State<Section> {
         decoration: BoxDecoration(
           color: colors.backgroundBase,
           borderRadius: BorderRadius.circular(radii.r12),
-          border: !_isExpanded
-              ? null
-              : Border.all(color: colors.borderPrimary, width: borderWidths.w1),
+          border: Border.all(
+            color: !_isExpanded
+                ? colors.backgroundSurface
+                : colors.borderPrimary,
+            width: borderWidths.w1,
+          ),
         ),
         padding: EdgeInsets.all(spacing.s8),
         child: Column(
@@ -241,7 +244,7 @@ class _SectionState extends State<Section> {
                     ? colors.foregroundPrimary
                     : colors.foregroundIconTertiary,
               ),
-              SizedBox(width: spacing.s12),
+              SizedBox(width: spacing.s8),
 
               // Label
               Expanded(
