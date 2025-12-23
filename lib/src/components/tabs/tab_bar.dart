@@ -62,7 +62,7 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
         labelStyle: typography.bodySecondaryBold,
 
         // --- Inactive Tab Styling ---
-        unselectedLabelColor: colors.foregroundSecondary,
+        unselectedLabelColor: colors.foregroundPrimary,
         unselectedLabelStyle: typography.bodySecondaryBold,
 
         // --- Active Underline (Yellow) ---
