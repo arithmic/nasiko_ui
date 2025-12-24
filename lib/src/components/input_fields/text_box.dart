@@ -22,6 +22,8 @@ class NasikoTextBox extends StatefulWidget {
     this.minLines = 1,
     this.maxLines = 10,
     this.enabled = true,
+    this.attachments = const [],
+    this.onRemoveAttachment,
   });
 
   /// Controls the text being edited.
@@ -57,6 +59,12 @@ class NasikoTextBox extends StatefulWidget {
 
   /// Whether the text box is enabled.
   final bool enabled;
+
+  /// Attachments shown inside the text box
+  final List<String> attachments;
+
+  /// Callback when an attachment is removed
+  final void Function(int index)? onRemoveAttachment;
 
   @override
   State<NasikoTextBox> createState() => _NasikoTextBoxState();
@@ -128,6 +136,28 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
           mainAxisSize: MainAxisSize.min,
           children: [
             // Text input field
+            if (widget.attachments.isNotEmpty) ...[
+              Container(
+                width: double.infinity,
+                margin: const EdgeInsets.only(bottom: 16),
+                child: Wrap(
+                  spacing: spacing.s8,
+                  runSpacing: spacing.s8,
+                  children: widget.attachments.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final file = entry.value;
+                    return NasikoChip(
+                      label: file,
+                      onDelete:
+                          widget.enabled && widget.onRemoveAttachment != null
+                          ? () => widget.onRemoveAttachment!(index)
+                          : null,
+                    );
+                  }).toList(),
+                ),
+              ),
+              SizedBox(height: spacing.s12),
+            ],
             TextField(
               controller: _controller,
               focusNode: _focusNode,

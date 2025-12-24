@@ -23,71 +23,95 @@ class _TextBoxExampleState extends State<TextBoxExample> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Normal',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Normal',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 16),
 
-          // Normal text box
-          NasikoTextBox(
-            controller: _normalController,
-            hintText: 'Let orchestrator find the best agents for your work...',
-            isOrchestrator: false,
-            onSend: () {
-              print('Normal Send: ${_normalController.text}');
-            },
-            onAttachmentTap: () {
-              print('Normal Attachment tapped');
-            },
-            onChanged: (value) {
-              print('Normal Text changed: $value');
-            },
-          ),
+        // Normal text box
+        NasikoTextBox(
+          controller: _normalController,
+          hintText: 'Let orchestrator find the best agents for your work...',
+          isOrchestrator: false,
+          onSend: () {
+            print('Normal Send: ${_normalController.text}');
+          },
+          onAttachmentTap: () {
+            print('Normal Attachment tapped');
+          },
+          onChanged: (value) {
+            print('Normal Text changed: $value');
+          },
+        ),
 
-          const SizedBox(height: 48),
+        const SizedBox(height: 24),
 
-          const Text(
-            'Orchestrator',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16),
+        const Text(
+          'Orchestrator',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 16),
 
-          // Orchestrator text box (focused state)
-          NasikoTextBox(
-            controller: _orchestratorController,
-            hintText: 'Let orchestrator find the best agents for your work...',
-            isOrchestrator: true,
-            onSend: () {
-              print('Orchestrator Send: ${_orchestratorController.text}');
-            },
-            onAttachmentTap: () {
-              print('Orchestrator Attachment tapped');
-            },
-            onChanged: (value) {
-              print('Orchestrator Text changed: $value');
-            },
-          ),
+        // Orchestrator text box (focused state)
+        NasikoTextBox(
+          controller: _orchestratorController,
+          hintText: 'Let orchestrator find the best agents for your work...',
+          isOrchestrator: true,
+          onSend: () {
+            print('Orchestrator Send: ${_orchestratorController.text}');
+          },
+          onAttachmentTap: () {
+            print('Orchestrator Attachment tapped');
+          },
+          onChanged: (value) {
+            print('Orchestrator Text changed: $value');
+          },
+        ),
 
-          const SizedBox(height: 24),
+        const SizedBox(height: 24),
 
-          // Example without buttons
-          const Text(
-            'Without Buttons',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(height: 12),
-          NasikoTextBox(
-            hintText: 'Text box without buttons...',
-            showAttachmentButton: false,
-            showSendButton: false,
-          ),
-        ],
-      ),
+        // Example without buttons
+        const Text(
+          'Without Buttons',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(height: 12),
+        NasikoTextBox(
+          hintText: 'Text box without buttons...',
+          showAttachmentButton: false,
+          showSendButton: false,
+        ),
+        const SizedBox(height: 24),
+        const Text(
+          'With Attachments',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(height: 12),
+        // With Attachments
+        // Normal text box
+        NasikoTextBox(
+          controller: _normalController,
+          hintText: 'Let orchestrator find the best agents for your work...',
+          isOrchestrator: false,
+          onSend: () {
+            print('Normal Send: ${_normalController.text}');
+          },
+          onAttachmentTap: () {
+            print('Normal Attachment tapped');
+          },
+          onChanged: (value) {
+            print('Normal Text changed: $value');
+          },
+          attachments: ["Attachment1", "Attachment2"],
+          onRemoveAttachment: (index) {
+            print('Deleted $index');
+          },
+        ),
+      ],
     );
   }
 }
