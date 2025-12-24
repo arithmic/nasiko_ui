@@ -199,7 +199,7 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
                     PrimaryIconButton(
                       icon: HugeIcons.strokeRoundedSent,
                       onPressed: widget.enabled ? widget.onSend : null,
-                      size: NasikoButtonSize.small,
+                      size: NasikoButtonSize.medium,
                     ),
                 ],
               ),

@@ -1785,16 +1785,40 @@ class _MenuExampleState extends State<_MenuExample> {
 
   int _selectedIndex = 0;
 
-  @override
-  Widget build(BuildContext context) {
-    return NasikoPopupMenu(
+  void _showMenu(BuildContext context) async {
+    final RenderBox button = context.findRenderObject() as RenderBox;
+    final RenderBox overlay =
+        Overlay.of(context).context.findRenderObject() as RenderBox;
+    final RelativeRect position = RelativeRect.fromRect(
+      Rect.fromPoints(
+        button.localToGlobal(Offset.zero, ancestor: overlay),
+        button.localToGlobal(button.size.bottomRight(Offset.zero),
+            ancestor: overlay),
+      ),
+      Offset.zero & overlay.size,
+    );
+
+    final int? selected = await showNasikoPopupMenu(
+      context: context,
+      position: position,
       items: _menuItems,
       selectedIndex: _selectedIndex,
-      onItemSelected: (index) {
-        setState(() {
-          _selectedIndex = index;
-        });
-      },
+    );
+
+    if (selected != null) {
+      setState(() {
+        _selectedIndex = selected;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SecondaryButton(
+      label: _menuItems[_selectedIndex],
+      size: NasikoButtonSize.medium,
+      trailingIcon: HugeIcons.strokeRoundedArrowDown01,
+      onPressed: () => _showMenu(context),
     );
   }
 }
