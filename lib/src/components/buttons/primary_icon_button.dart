@@ -12,6 +12,7 @@ class PrimaryIconButton extends StatelessWidget {
     required this.onPressed,
     required this.icon,
     this.size = NasikoButtonSize.medium,
+    this.isLoading,
   });
 
   /// The callback that is called when the button is tapped.
@@ -24,6 +25,7 @@ class PrimaryIconButton extends StatelessWidget {
   /// The size of the button. Defaults to [NasikoButtonSize.medium].
   final NasikoButtonSize size;
 
+  final bool? isLoading;
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
@@ -119,7 +121,13 @@ class PrimaryIconButton extends StatelessWidget {
     return IconButton(
       onPressed: onPressed,
       style: style,
-      icon: HugeIcon(icon: icon, size: iconSize),
+      icon: (isLoading ?? false)
+          ? SizedBox(
+              width: iconSize,
+              height: iconSize,
+              child: CircularProgressIndicator(strokeWidth: 1.5),
+            )
+          : HugeIcon(icon: icon, size: iconSize),
     );
   }
 }
