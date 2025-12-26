@@ -47,6 +47,7 @@ class NasikoCard extends StatefulWidget {
     this.onSecondaryPressed,
     this.onPressed,
     this.width,
+    this.maxWidth = 420,
   }) : enabled = true,
        disabledButtonLabel = null;
 
@@ -63,6 +64,7 @@ class NasikoCard extends StatefulWidget {
     required this.disabledButtonLabel,
     required this.enabled,
     this.width,
+    this.maxWidth = 420,
   }) : secondaryButtonLabel = null,
        secondaryButtonIcon = null,
        secondaryButtonTrailingIcon = null,
@@ -83,6 +85,7 @@ class NasikoCard extends StatefulWidget {
     String? description,
     required String disabledButtonLabel,
     double? width,
+    double maxWidth = 420,
   }) {
     return NasikoCard._internal(
       key: key,
@@ -96,6 +99,7 @@ class NasikoCard extends StatefulWidget {
       disabledButtonLabel: disabledButtonLabel,
       enabled: false,
       width: width,
+      maxWidth: maxWidth,
     );
   }
 
@@ -151,6 +155,8 @@ class NasikoCard extends StatefulWidget {
   /// Optional fixed width for the card. If null, the card expands to fit its parent.
   final double? width;
 
+  final double maxWidth;
+
   @override
   State<NasikoCard> createState() => _NasikoCardState();
 }
@@ -168,7 +174,7 @@ class _NasikoCardState extends State<NasikoCard> {
     // Determine opacity based on enabled and hover state
     final double contentOpacity = widget.enabled ? 1.0 : 0.5;
 
-    Widget cardContent = Container(
+    Widget cardBody = Container(
       width: widget.width,
       padding: EdgeInsets.all(spacing.s20),
       decoration: BoxDecoration(
@@ -194,59 +200,14 @@ class _NasikoCardState extends State<NasikoCard> {
               ]
             : null,
       ),
-      child: Opacity(
-        opacity: contentOpacity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Image Section with Badge
-            if (widget.image != null) _buildImageSection(context),
+      child: Opacity(opacity: contentOpacity, child: _buildContent(context)),
+    );
 
-            // Content Section
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Title Row
-                _buildTitleRow(context, _isHovered),
-
-                // Tags
-                if (widget.tags.isNotEmpty) ...[
-                  SizedBox(height: spacing.s16),
-                  _buildTagsRow(context),
-                ],
-
-                // Subtitle
-                if (widget.subtitle != null) ...[
-                  SizedBox(height: spacing.s8),
-                  _buildSubtitleRow(context),
-                ],
-
-                // Description
-                if (widget.description != null &&
-                    widget.description! != "") ...[
-                  SizedBox(height: spacing.s8),
-                  Text(
-                    widget.description!,
-                    style: typography.bodyTertiary.copyWith(
-                      color: colors.foregroundPrimary,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ] else ...[
-                  SizedBox(height: spacing.s4),
-                  SizedBox(height: spacing.s36),
-                ],
-
-                // Action Buttons
-                if (_hasActionButtons) ...[
-                  SizedBox(height: spacing.s16),
-                  _buildActionButtons(context),
-                ],
-              ],
-            ),
-          ],
-        ),
+    Widget constrainedCard = Align(
+      alignment: Alignment.topCenter,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: widget.width ?? widget.maxWidth),
+        child: cardBody,
       ),
     );
 
@@ -256,14 +217,57 @@ class _NasikoCardState extends State<NasikoCard> {
         onEnter: (_) => setState(() => _isHovered = true),
         onExit: (_) => setState(() => _isHovered = false),
         cursor: SystemMouseCursors.click,
-        child: GestureDetector(onTap: widget.onPressed, child: cardContent),
+        child: GestureDetector(onTap: widget.onPressed, child: constrainedCard),
       );
     }
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
-      child: cardContent,
+      child: constrainedCard,
+    );
+  }
+
+  Widget _buildContent(BuildContext context) {
+    final spacing = context.spacing;
+    final typography = context.typography;
+    final colors = context.colors;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (widget.image != null) _buildImageSection(context),
+        _buildTitleRow(context, _isHovered),
+
+        if (widget.tags.isNotEmpty) ...[
+          SizedBox(height: spacing.s16),
+          _buildTagsRow(context),
+        ],
+
+        if (widget.subtitle != null) ...[
+          SizedBox(height: spacing.s8),
+          _buildSubtitleRow(context),
+        ],
+
+        if (widget.description?.isNotEmpty == true) ...[
+          SizedBox(height: spacing.s8),
+          Text(
+            widget.description!,
+            style: typography.bodyTertiary.copyWith(
+              color: colors.foregroundPrimary,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ] else ...[
+          SizedBox(height: spacing.s36),
+        ],
+
+        if (_hasActionButtons) ...[
+          SizedBox(height: spacing.s16),
+          _buildActionButtons(context),
+        ],
+      ],
     );
   }
 
