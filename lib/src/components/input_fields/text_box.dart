@@ -24,6 +24,7 @@ class NasikoTextBox extends StatefulWidget {
     this.enabled = true,
     this.attachments = const [],
     this.onRemoveAttachment,
+    this.isLoading = false,
   });
 
   /// Controls the text being edited.
@@ -66,6 +67,7 @@ class NasikoTextBox extends StatefulWidget {
   /// Callback when an attachment is removed
   final void Function(int index)? onRemoveAttachment;
 
+  final bool isLoading;
   @override
   State<NasikoTextBox> createState() => _NasikoTextBoxState();
 }
@@ -200,6 +202,7 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
                       icon: HugeIcons.strokeRoundedSent,
                       onPressed: widget.enabled ? widget.onSend : null,
                       size: NasikoButtonSize.medium,
+                      isLoading: widget.isLoading
                     ),
                 ],
               ),
