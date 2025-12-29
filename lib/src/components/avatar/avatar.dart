@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/src/components/avatar/avatar_size.dart';
+import 'package:nasiko_ui/src/components/input_fields/input_field.dart';
 import 'package:nasiko_ui/src/tokens/tokens.dart';
 
 /// A circular avatar component for the Nasiko Design System.
@@ -29,7 +31,7 @@ class NasikoAvatar extends StatelessWidget {
 
   /// An icon to display. This is shown if both `imageUrl`
   /// and `text` are null.
-  final IconData? icon;
+  final HugeIconsType? icon;
 
   /// Optional custom background color. If not provided,
   /// defaults to [NasikoColorTheme.backgroundGroup].
@@ -72,7 +74,7 @@ class NasikoAvatar extends StatelessWidget {
     ImageProvider? backgroundImage;
     Widget? child;
     Color? bgColor = backgroundColor ?? colors.backgroundGroup;
-    Color? fgColor = foregroundColor ?? colors.foregroundPrimary;
+    Color? fgColor = foregroundColor ?? colors.foregroundIconPrimary;
 
     if (imageUrl != null) {
       // Image avatar
@@ -82,9 +84,9 @@ class NasikoAvatar extends StatelessWidget {
       // Text avatar
       child = Text(text!, style: textStyle.copyWith(color: fgColor));
     } else {
-      // Icon avatar (or default)
-      child = Icon(
-        icon ?? Icons.sentiment_satisfied_alt_outlined,
+      // HugeIcon avatar (or default)
+      child = HugeIcon(
+        icon: icon ?? HugeIcons.strokeRoundedRelieved01,
         size: iconSize,
         color: fgColor,
       );

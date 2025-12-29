@@ -1,6 +1,7 @@
 // lib/src/components/table/nasiko_table.dart
 
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
 /// Defines the structure and behavior of a single column in [NasikoTable].
@@ -431,7 +432,7 @@ class NasikoTableCellItem extends StatelessWidget {
             children: [
               const NasikoAvatar(
                 size: NasikoAvatarSize.small,
-                icon: Icons.sentiment_satisfied_alt_outlined,
+                icon: HugeIcons.strokeRoundedRelieved01,
               ),
               SizedBox(width: spacing.s8),
               Column(
