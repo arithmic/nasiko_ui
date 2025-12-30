@@ -22,6 +22,7 @@ class NasikoInputField extends StatelessWidget {
     this.keyboardType,
     this.validator,
     this.onChanged,
+    this.isRequired = false,
   });
 
   /// Controls the text being edited.
@@ -60,6 +61,7 @@ class NasikoInputField extends StatelessWidget {
   /// Called when the user initiates a change to the field's value.
   final ValueChanged<String>? onChanged;
 
+  final bool? isRequired;
   @override
   Widget build(BuildContext context) {
     // Get all design tokens from the theme
@@ -73,11 +75,11 @@ class NasikoInputField extends StatelessWidget {
     // Define size-specific values
     final iconSize = iconSizes.s;
     final textStyle = typography.bodySecondary;
-    final contentPadding = EdgeInsets.all(12);
+    final contentPadding = EdgeInsets.all(16);
 
     // Define the border styles
     final defaultBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(radii.r4),
+      borderRadius: BorderRadius.circular(radii.r8),
       borderSide: BorderSide(
         color: colors.borderPrimary,
         width: borderWidths.w1,
@@ -85,7 +87,7 @@ class NasikoInputField extends StatelessWidget {
     );
 
     final focusedBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(radii.r4),
+      borderRadius: BorderRadius.circular(radii.r8),
       borderSide: BorderSide(
         color: colors.borderSecondary, // Your brand border color
         width: borderWidths.w1, // Thicker border on focus
@@ -128,6 +130,7 @@ class NasikoInputField extends StatelessWidget {
             color: colors.foregroundPrimary, // Input text style
           ),
           decoration: InputDecoration(
+            isDense: true,
             // --- Content ---
             hintText: hintText,
             hintStyle: textStyle.copyWith(
@@ -172,16 +175,24 @@ class NasikoInputField extends StatelessWidget {
             focusedBorder: focusedBorder,
             errorBorder: errorBorder,
             disabledBorder: disabledBorder,
+
+            // Error state style
+            errorStyle: typography.bodyTertiary.copyWith(
+              color: colors.foregroundError,
+            ),
           ),
         ),
 
         // 3. Optional Helper Text (below the field)
         if (helperText != null) ...[
           SizedBox(height: spacing.s8),
-          Text(
-            helperText!,
-            style: typography.bodyTertiary.copyWith(
-              color: colors.foregroundSecondary,
+          Padding(
+            padding: EdgeInsets.only(left: spacing.s2),
+            child: Text(
+              helperText!,
+              style: typography.bodyTertiary.copyWith(
+                color: colors.foregroundSecondary,
+              ),
             ),
           ),
         ],
@@ -198,12 +209,32 @@ class NasikoInputField extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          label!,
-          style: typography.bodySecondaryBold.copyWith(
-            color: colors.foregroundPrimary,
+        if (isRequired!)
+          RichText(
+            text: TextSpan(
+              text: '* ', // The asterisk part
+              style: TextStyle(
+                color: colors.foregroundError, // Style for the asterisk
+                fontWeight: FontWeight.bold,
+              ),
+
+              children: [
+                TextSpan(
+                  text: label!,
+                  style: typography.bodySecondaryBold.copyWith(
+                    color: colors.foregroundPrimary,
+                  ),
+                ),
+              ],
+            ),
+          )
+        else
+          Text(
+            label!,
+            style: typography.bodySecondaryBold.copyWith(
+              color: colors.foregroundPrimary,
+            ),
           ),
-        ),
         if (labelInfoIcon != null) ...[
           SizedBox(width: spacing.s8),
           HugeIcon(
