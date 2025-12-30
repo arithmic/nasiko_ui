@@ -856,6 +856,7 @@ class ExampleHomePage extends StatelessWidget {
               icon: HugeIcons.strokeRoundedStar,
               onPressed: () {},
               size: NasikoButtonSize.large,
+              isLoading: true,
             ),
             PrimaryIconButton(
               icon: HugeIcons.strokeRoundedStar,
@@ -1089,6 +1090,7 @@ class ExampleHomePage extends StatelessWidget {
           onChanged: (value) {
             // Handle change
           },
+          isRequired: true,
         ),
         SizedBox(height: context.spacing.s16),
         NasikoInputField(
@@ -1100,6 +1102,7 @@ class ExampleHomePage extends StatelessWidget {
           onChanged: (value) {
             // Handle change
           },
+          isRequired: true,
         ),
       ],
     );
@@ -1242,7 +1245,7 @@ class ExampleHomePage extends StatelessWidget {
           children: const [
             NasikoAvatar(
               size: NasikoAvatarSize.large,
-              icon: Icons.sentiment_satisfied_alt_outlined,
+              icon: HugeIcons.strokeRoundedRelieved01,
             ),
             NasikoAvatar(size: NasikoAvatarSize.large, imageUrl: imageUrl),
             NasikoAvatar(size: NasikoAvatarSize.large, text: 'AJ'),
@@ -1256,7 +1259,7 @@ class ExampleHomePage extends StatelessWidget {
           children: const [
             NasikoAvatar(
               size: NasikoAvatarSize.medium,
-              icon: Icons.sentiment_satisfied_alt_outlined,
+              icon: HugeIcons.strokeRoundedRelieved01,
             ),
             NasikoAvatar(size: NasikoAvatarSize.medium, imageUrl: imageUrl),
             NasikoAvatar(size: NasikoAvatarSize.medium, text: 'AJ'),
@@ -1270,7 +1273,7 @@ class ExampleHomePage extends StatelessWidget {
           children: const [
             NasikoAvatar(
               size: NasikoAvatarSize.small,
-              icon: Icons.sentiment_satisfied_alt_outlined,
+              icon: HugeIcons.strokeRoundedRelieved01,
             ),
             NasikoAvatar(size: NasikoAvatarSize.small, imageUrl: imageUrl),
             NasikoAvatar(size: NasikoAvatarSize.small, text: 'AJ'),
