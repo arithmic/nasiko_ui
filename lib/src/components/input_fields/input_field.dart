@@ -75,7 +75,7 @@ class NasikoInputField extends StatelessWidget {
     // Define size-specific values
     final iconSize = iconSizes.s;
     final textStyle = typography.bodySecondary;
-    final contentPadding = EdgeInsets.all(16);
+    final contentPadding = EdgeInsets.symmetric(vertical: 16);
 
     // Define the border styles
     final defaultBorder = OutlineInputBorder(
@@ -167,6 +167,9 @@ class NasikoInputField extends StatelessWidget {
             filled: true,
             fillColor: colors.backgroundGroup, // neutral50
             hoverColor: colors.backgroundSurface,
+            prefix: leadingIcon != null
+                ? SizedBox(width: 0)
+                : SizedBox(width: 12),
             contentPadding: contentPadding,
 
             // --- Borders ---
@@ -187,7 +190,7 @@ class NasikoInputField extends StatelessWidget {
         if (helperText != null) ...[
           SizedBox(height: spacing.s8),
           Padding(
-            padding: EdgeInsets.only(left: spacing.s2),
+            padding: EdgeInsets.only(left: spacing.s4),
             child: Text(
               helperText!,
               style: typography.bodyTertiary.copyWith(
