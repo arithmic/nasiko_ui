@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @immutable
 class NasikoBorderWidthTheme extends ThemeExtension<NasikoBorderWidthTheme> {
@@ -59,12 +60,12 @@ class NasikoBorderWidthTheme extends ThemeExtension<NasikoBorderWidthTheme> {
 }
 
 // --- Default Border Width Instance ---
-const NasikoBorderWidthTheme defaultNasikoBorderWidth = NasikoBorderWidthTheme(
-  w0: 0.0,
-  w1: 1.0,
-  w2: 2.0,
-  w4: 4.0,
-  w8: 8.0,
+NasikoBorderWidthTheme get defaultNasikoBorderWidth => NasikoBorderWidthTheme(
+  w0: 0.w,
+  w1: 1.w,
+  w2: 2.w,
+  w4: 4.w,
+  w8: 8.w,
 );
 
 // --- BuildContext Extension ---

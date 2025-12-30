@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 import 'package:nasiko_ui_example/text_box_example.dart';
@@ -22,26 +23,33 @@ class _ExampleAppState extends State<ExampleApp> {
   };
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Nasiko UI Design System',
-      theme: NasikoTheme.lightTheme,
-      darkTheme: NasikoTheme.darkTheme,
-      themeMode: _themeMode,
-      home: ExampleHomePage(
-        onThemeToggle: () {
-          setState(() {
-            _themeMode = _themeMode == ThemeMode.light
-                ? ThemeMode.dark
-                : ThemeMode.light;
-          });
-        },
-        switches: _switches,
-        onSwitchToggled: (size, value) {
-          setState(() {
-            _switches[size] = value;
-          });
-        },
-      ),
+    return ScreenUtilInit(
+      designSize: const Size(1728, 1117),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return MaterialApp(
+          title: 'Nasiko UI Design System',
+          theme: NasikoTheme.lightTheme,
+          darkTheme: NasikoTheme.darkTheme,
+          themeMode: _themeMode,
+          home: ExampleHomePage(
+            onThemeToggle: () {
+              setState(() {
+                _themeMode = _themeMode == ThemeMode.light
+                    ? ThemeMode.dark
+                    : ThemeMode.light;
+              });
+            },
+            switches: _switches,
+            onSwitchToggled: (size, value) {
+              setState(() {
+                _switches[size] = value;
+              });
+            },
+          ),
+        );
+      },
     );
   }
 }

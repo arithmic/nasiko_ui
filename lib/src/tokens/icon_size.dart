@@ -1,6 +1,5 @@
-// lib/src/tokens/nasiko_icon_size.dart
-
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @immutable
 class NasikoIconSizeTheme extends ThemeExtension<NasikoIconSizeTheme> {
@@ -51,12 +50,8 @@ class NasikoIconSizeTheme extends ThemeExtension<NasikoIconSizeTheme> {
 }
 
 // --- Default Icon Size Instance ---
-const NasikoIconSizeTheme defaultNasikoIconSize = NasikoIconSizeTheme(
-  l: 28.0,
-  m: 24.0,
-  s: 20.0,
-  xs: 16.0,
-);
+NasikoIconSizeTheme get defaultNasikoIconSize =>
+    NasikoIconSizeTheme(l: 28.r, m: 24.r, s: 20.r, xs: 16.r);
 
 // --- BuildContext Extension ---
 // Provides easy access like: `context.iconSize.l`

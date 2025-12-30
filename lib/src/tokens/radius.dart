@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @immutable
 class NasikoBorderRadiusTheme extends ThemeExtension<NasikoBorderRadiusTheme> {
@@ -74,16 +75,16 @@ class NasikoBorderRadiusTheme extends ThemeExtension<NasikoBorderRadiusTheme> {
 }
 
 // --- Default Border Radius Instance ---
-const NasikoBorderRadiusTheme defaultNasikoBorderRadius =
+NasikoBorderRadiusTheme get defaultNasikoBorderRadius =>
     NasikoBorderRadiusTheme(
-      r0: 0.0,
-      r4: 4.0,
-      r6: 6.0,
-      r8: 8.0,
-      r10: 10.0,
-      r12: 12.0,
-      r16: 16.0,
-      r40: 40.0,
+      r0: 0.r,
+      r4: 4.r,
+      r6: 6.r,
+      r8: 8.r,
+      r10: 10.r,
+      r12: 12.r,
+      r16: 16.r,
+      r40: 40.r,
     );
 
 // --- BuildContext Extension ---

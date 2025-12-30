@@ -20,7 +20,7 @@ class NasikoTheme {
       ),
 
       // 3. Register all your custom theme extensions
-      extensions: const <ThemeExtension<dynamic>>[
+      extensions: <ThemeExtension<dynamic>>[
         lightColors,
         defaultNasikoSpacing,
         defaultNasikoTypography,
@@ -46,7 +46,7 @@ class NasikoTheme {
       ),
 
       // 3. Register all your custom theme extensions
-      extensions: const <ThemeExtension<dynamic>>[
+      extensions: <ThemeExtension<dynamic>>[
         darkColors,
         defaultNasikoSpacing,
         defaultNasikoTypography,

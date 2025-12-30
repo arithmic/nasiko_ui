@@ -1,3 +1,7 @@
+// Re-export flutter_screenutil for convenience
+export 'package:flutter_screenutil/flutter_screenutil.dart';
+
+// Components
 export 'src/components/accordion/accordion.dart';
 export 'src/components/avatar/avatar.dart';
 export 'src/components/avatar/avatar_size.dart';
@@ -25,8 +29,10 @@ export 'src/components/tabs/tab_bar.dart';
 export 'src/components/toast/toast.dart';
 export 'src/components/toast/toast_service.dart';
 export 'src/components/toast/toast_type.dart';
+// Theme
 export 'src/theme/color_schemes.dart';
 export 'src/theme/theme.dart';
+// Tokens
 export 'src/tokens/border_width.dart';
 export 'src/tokens/colors/colors.dart';
 export 'src/tokens/icon_size.dart';

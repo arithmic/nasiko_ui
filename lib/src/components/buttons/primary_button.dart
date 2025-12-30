@@ -59,7 +59,7 @@ class PrimaryButton extends StatelessWidget {
         iconSize = iconSizes.l; // 28px
         borderRadius = radii.r10; // 10px radius
         iconSpacing = spacing.s12; // 12px spacing
-        minHeight = 68;
+        minHeight = 68.h;
         break;
       case NasikoButtonSize.medium:
         padding = EdgeInsets.symmetric(
@@ -70,7 +70,7 @@ class PrimaryButton extends StatelessWidget {
         iconSize = iconSizes.s; // 20px
         borderRadius = radii.r8; // 8px radius
         iconSpacing = spacing.s8; // 8px spacing
-        minHeight = 44;
+        minHeight = 44.h;
         break;
       case NasikoButtonSize.small:
         padding = EdgeInsets.symmetric(
@@ -81,7 +81,7 @@ class PrimaryButton extends StatelessWidget {
         iconSize = iconSizes.s; // 20px
         borderRadius = radii.r8; // 8px radius
         iconSpacing = spacing.s8; // 8px spacing
-        minHeight = 36;
+        minHeight = 36.h;
         break;
     }
 

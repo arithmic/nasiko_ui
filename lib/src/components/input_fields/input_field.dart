@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:nasiko_ui/src/tokens/tokens.dart';
+import 'package:nasiko_ui/nasiko_ui.dart';
 
 /// A standardized input field for the Nasiko Design System.
 ///
@@ -75,7 +75,7 @@ class NasikoInputField extends StatelessWidget {
     // Define size-specific values
     final iconSize = iconSizes.s;
     final textStyle = typography.bodySecondary;
-    final contentPadding = EdgeInsets.symmetric(vertical: 16);
+    final contentPadding = EdgeInsets.all(spacing.s16.r);
 
     // Define the border styles
     final defaultBorder = OutlineInputBorder(
@@ -115,7 +115,7 @@ class NasikoInputField extends StatelessWidget {
         // 1. Optional Label (outside the field)
         if (label != null) ...[
           _buildLabel(context),
-          SizedBox(height: spacing.s12),
+          SizedBox(height: spacing.s12.h),
         ],
 
         // 2. The Text Field
@@ -142,7 +142,10 @@ class NasikoInputField extends StatelessWidget {
                 ? Container(
                     width: iconSize,
                     height: iconSize,
-                    padding: const EdgeInsets.only(left: 12.0, right: 4.0),
+                    padding: EdgeInsets.only(
+                      left: spacing.s12.w,
+                      right: spacing.s4.w,
+                    ),
                     child: HugeIcon(
                       icon: leadingIcon!,
                       size: iconSize,
@@ -154,7 +157,10 @@ class NasikoInputField extends StatelessWidget {
                 ? Container(
                     width: iconSize,
                     height: iconSize,
-                    padding: const EdgeInsets.only(left: 4.0, right: 12.0),
+                    padding: EdgeInsets.only(
+                      left: spacing.s4.w,
+                      right: spacing.s12.w,
+                    ),
                     child: HugeIcon(
                       icon: trailingIcon!,
                       size: iconSize,
@@ -188,9 +194,9 @@ class NasikoInputField extends StatelessWidget {
 
         // 3. Optional Helper Text (below the field)
         if (helperText != null) ...[
-          SizedBox(height: spacing.s8),
+          SizedBox(height: spacing.s8.h),
           Padding(
-            padding: EdgeInsets.only(left: spacing.s4),
+            padding: EdgeInsets.only(left: spacing.s4.w),
             child: Text(
               helperText!,
               style: typography.bodyTertiary.copyWith(
@@ -239,7 +245,7 @@ class NasikoInputField extends StatelessWidget {
             ),
           ),
         if (labelInfoIcon != null) ...[
-          SizedBox(width: spacing.s8),
+          SizedBox(width: spacing.s8.w),
           HugeIcon(
             icon: labelInfoIcon!,
             size: iconSizes.s, // 20px
