@@ -137,33 +137,45 @@ class NasikoInputField extends StatelessWidget {
             ),
 
             // --- Icons ---
+            prefixIconConstraints: BoxConstraints(
+              minWidth: iconSize,
+              minHeight: iconSize,
+            ),
             prefixIcon: leadingIcon != null
-                ? Container(
-                    width: iconSize,
-                    height: iconSize,
+                ? Padding(
                     padding: EdgeInsets.only(
                       left: spacing.s12.w,
                       right: spacing.s4.w,
                     ),
-                    child: HugeIcon(
-                      icon: leadingIcon!,
-                      size: iconSize,
-                      color: colors.foregroundIconTertiary,
+                    child: IconTheme(
+                      data: IconThemeData(size: iconSize),
+                      child: HugeIcon(
+                        icon: leadingIcon!,
+                        size: iconSize,
+                        color: colors.foregroundIconTertiary,
+                      ),
                     ),
                   )
                 : null,
+
+            suffixIconConstraints: BoxConstraints(
+              minWidth: iconSize,
+              minHeight: iconSize,
+            ),
+
             suffixIcon: trailingIcon != null
-                ? Container(
-                    width: iconSize,
-                    height: iconSize,
+                ? Padding(
                     padding: EdgeInsets.only(
                       left: spacing.s4.w,
                       right: spacing.s12.w,
                     ),
-                    child: HugeIcon(
-                      icon: trailingIcon!,
-                      size: iconSize,
-                      color: colors.foregroundIconTertiary,
+                    child: IconTheme(
+                      data: IconThemeData(size: iconSize),
+                      child: HugeIcon(
+                        icon: trailingIcon!,
+                        size: iconSize,
+                        color: colors.foregroundIconTertiary,
+                      ),
                     ),
                   )
                 : null,
@@ -173,8 +185,8 @@ class NasikoInputField extends StatelessWidget {
             fillColor: colors.backgroundGroup, // neutral50
             hoverColor: colors.backgroundSurface,
             prefix: leadingIcon != null
-                ? SizedBox(width: 0)
-                : SizedBox(width: 12),
+                ? SizedBox(width: spacing.s0.w)
+                : SizedBox(width: spacing.s8.w),
             contentPadding: contentPadding,
 
             // --- Borders ---

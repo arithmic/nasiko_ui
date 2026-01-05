@@ -67,33 +67,35 @@ class NasikoToast extends StatelessWidget {
           color: backgroundColor,
           borderRadius: BorderRadius.circular(radii.r8),
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              width: iconSizes.m,
-              height: iconSizes.m,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(iconColor),
-              ),
-            ),
-            SizedBox(width: spacing.s12),
-            Flexible(
-              child: Text(
-                message,
-                style: typography.bodySecondaryBold.copyWith(
-                  color: foregroundColor,
+        child: IntrinsicWidth(
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              SizedBox(
+                width: iconSizes.s,
+                height: iconSizes.s,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(iconColor),
                 ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
               ),
-            ),
-            if (showCancel) ...[
-              SizedBox(width: spacing.s36),
-              SecondaryTextButton(onPressed: onCancel, label: 'Cancel'),
+              SizedBox(width: spacing.s12),
+
+              Expanded(
+                child: Text(
+                  message,
+                  style: typography.bodySecondaryBold.copyWith(
+                    color: foregroundColor,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+
+              if (showCancel)
+                SecondaryTextButton(onPressed: onCancel, label: 'Cancel'),
             ],
-          ],
+          ),
         ),
       ),
     );

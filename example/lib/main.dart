@@ -1065,7 +1065,36 @@ class ExampleHomePage extends StatelessWidget {
           width: 400,
           title: 'Document Expert',
           titleIcon: HugeIcons.strokeRoundedDocumentCode,
-          tags: ['document analysis', 'chat', 'history'],
+          tags: [
+            'document analysis',
+            'chat',
+            'history',
+            'document analysis',
+            'chat',
+            'history',
+            'document analysis',
+            'chat',
+            'history',
+          ],
+          description: 'A helpful assistant that answers user questions.',
+          secondaryButtonLabel: 'Learn More',
+        ),
+        SizedBox(width: context.spacing.s16),
+        NasikoCard(
+          width: 400,
+          title: 'Document Expert',
+          titleIcon: HugeIcons.strokeRoundedDocumentCode,
+          tags: [
+            'document analysis',
+            'chat',
+            'history',
+            'document analysis',
+            'chat',
+            'history',
+            'document analysis',
+            'chat',
+            'history',
+          ],
           description:
               'A helpful assistant that answers user questions based on the provided document. It supports file uploads for document processing and maintains a chat history for each session.',
           secondaryButtonLabel: 'Learn More',
@@ -2121,6 +2150,7 @@ class _SectionExampleState extends State<_SectionExample> {
         children: [
           // Non-expandable section - Orchestrator
           Section(
+            isDisabled: true,
             label: 'Orchestrator',
             icon: HugeIcons.strokeRoundedSettings01,
             isSelected: _selectedSection == 'Orchestrator',
@@ -2135,6 +2165,7 @@ class _SectionExampleState extends State<_SectionExample> {
 
           // Expandable section - Agent Registry
           Section(
+            isDisabled: true,
             label: 'Agent Registry',
             icon: HugeIcons.strokeRoundedBook01,
             selectedChild: _selectedChild,

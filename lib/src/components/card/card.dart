@@ -168,7 +168,6 @@ class _NasikoCardState extends State<NasikoCard> {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final spacing = context.spacing;
-    final typography = context.typography;
     final radii = context.radius;
 
     // Determine opacity based on enabled and hover state
@@ -176,7 +175,7 @@ class _NasikoCardState extends State<NasikoCard> {
 
     Widget cardBody = Container(
       width: widget.width,
-      padding: EdgeInsets.all(spacing.s20),
+      padding: EdgeInsets.symmetric(vertical: spacing.s20),
       decoration: BoxDecoration(
         color: widget.enabled
             ? colors.backgroundGroup
@@ -251,13 +250,16 @@ class _NasikoCardState extends State<NasikoCard> {
 
         if (widget.description?.isNotEmpty == true) ...[
           SizedBox(height: spacing.s8),
-          Text(
-            widget.description!,
-            style: typography.bodyTertiary.copyWith(
-              color: colors.foregroundPrimary,
+          Padding(
+             padding: EdgeInsets.symmetric(horizontal: spacing.s20),
+            child: Text(
+              widget.description!,
+              style: typography.bodySecondary.copyWith(
+                color: colors.foregroundPrimary,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
           ),
         ] else ...[
           SizedBox(height: spacing.s36),
@@ -327,32 +329,35 @@ class _NasikoCardState extends State<NasikoCard> {
     final iconSizes = context.iconSize;
     final spacing = context.spacing;
 
-    return Row(
-      children: [
-        if (widget.titleIcon != null) ...[
-          SizedBox(
-            width: iconSizes.m,
-            height: iconSizes.m,
-            child: HugeIcon(
-              icon: widget.titleIcon!,
-              color: isHovered
-                  ? colors.foregroundIconSecondary
-                  : colors.foregroundIconPrimary,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: spacing.s20),
+      child: Row(
+        children: [
+          if (widget.titleIcon != null) ...[
+            SizedBox(
+              width: iconSizes.m,
+              height: iconSizes.m,
+              child: HugeIcon(
+                icon: widget.titleIcon!,
+                color: isHovered
+                    ? colors.foregroundIconSecondary
+                    : colors.foregroundIconPrimary,
+              ),
+            ),
+            SizedBox(width: spacing.s8),
+          ],
+          Expanded(
+            child: Text(
+              widget.title,
+              style: typography.bodyPrimaryBold.copyWith(
+                color: isHovered
+                    ? colors.foregroundBrand
+                    : colors.foregroundPrimary,
+              ),
             ),
           ),
-          SizedBox(width: spacing.s8),
         ],
-        Expanded(
-          child: Text(
-            widget.title,
-            style: typography.bodyPrimaryBold.copyWith(
-              color: isHovered
-                  ? colors.foregroundBrand
-                  : colors.foregroundPrimary,
-            ),
-          ),
-        ),
-      ],
+      ),
     );
   }
 
@@ -363,19 +368,22 @@ class _NasikoCardState extends State<NasikoCard> {
       behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        child: Row(
-          children: widget.tags
-              .map(
-                (tag) => Padding(
-                  padding: EdgeInsets.only(right: spacing.s8),
-                  child: NasikoChip(
-                    label: tag,
-                    enabled: widget.enabled,
-                    size: NasikoChipSize.small,
+        child: Padding(
+          padding: EdgeInsets.only(left: spacing.s20),
+          child: Row(
+            children: widget.tags
+                .map(
+                  (tag) => Padding(
+                    padding: EdgeInsets.only(right: spacing.s8),
+                    child: NasikoChip(
+                      label: tag,
+                      enabled: widget.enabled,
+                      size: NasikoChipSize.small,
+                    ),
                   ),
-                ),
-              )
-              .toList(),
+                )
+                .toList(),
+          ),
         ),
       ),
     );
@@ -384,15 +392,18 @@ class _NasikoCardState extends State<NasikoCard> {
   Widget _buildSubtitleRow(BuildContext context) {
     final typography = context.typography;
     final colors = context.colors;
-
+    final spacing = context.spacing;
     return ScrollConfiguration(
       behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        child: Text(
-          widget.subtitle!,
-          style: typography.bodyTertiaryBold.copyWith(
-            color: colors.foregroundSecondary,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: spacing.s20),
+          child: Text(
+            widget.subtitle!,
+            style: typography.bodyTertiaryBold.copyWith(
+              color: colors.foregroundSecondary,
+            ),
           ),
         ),
       ),
@@ -402,26 +413,32 @@ class _NasikoCardState extends State<NasikoCard> {
   Widget _buildActionButtons(BuildContext context) {
     // If disabled with a disabled button label, show single disabled button
     if (!widget.enabled && widget.disabledButtonLabel != null) {
-      return SizedBox(
-        width: double.infinity,
-        child: PrimaryButton(
-          onPressed: null,
-          label: widget.disabledButtonLabel!,
-          size: NasikoButtonSize.small,
+      return Padding(
+        padding: EdgeInsets.symmetric(horizontal: context.spacing.s20),
+        child: SizedBox(
+          width: double.infinity,
+          child: PrimaryButton(
+            onPressed: null,
+            label: widget.disabledButtonLabel!,
+            size: NasikoButtonSize.small,
+          ),
         ),
       );
     }
 
     // Show secondary button
     if (widget.secondaryButtonLabel != null) {
-      return SizedBox(
-        width: double.infinity,
-        child: SecondaryButton(
-          onPressed: widget.enabled ? widget.onSecondaryPressed : null,
-          label: widget.secondaryButtonLabel!,
-          leadingIcon: widget.secondaryButtonIcon,
-          trailingIcon: widget.secondaryButtonTrailingIcon,
-          size: NasikoButtonSize.small,
+      return Padding(
+        padding: EdgeInsets.symmetric(horizontal: context.spacing.s20),
+        child: SizedBox(
+          width: double.infinity,
+          child: SecondaryButton(
+            onPressed: widget.enabled ? widget.onSecondaryPressed : null,
+            label: widget.secondaryButtonLabel!,
+            leadingIcon: widget.secondaryButtonIcon,
+            trailingIcon: widget.secondaryButtonTrailingIcon,
+            size: NasikoButtonSize.small,
+          ),
         ),
       );
     }
