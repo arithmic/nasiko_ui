@@ -265,7 +265,7 @@ class _NasikoCardState extends State<NasikoCard> {
         ] else ...[
           SizedBox(height: spacing.s36),
         ],
-        Spacer(),
+        if (_hasActionButtons) const Spacer(),
         if (_hasActionButtons) ...[
           SizedBox(height: spacing.s16),
           _buildActionButtons(context),
