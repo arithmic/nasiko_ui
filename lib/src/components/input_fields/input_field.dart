@@ -75,7 +75,7 @@ class NasikoInputField extends StatelessWidget {
     // Define size-specific values
     final iconSize = iconSizes.s;
     final textStyle = typography.bodySecondary;
-    final contentPadding = EdgeInsets.symmetric(vertical: spacing.s20.r);
+    final contentPadding = EdgeInsets.symmetric(vertical: spacing.s16.h);
     // Define the border styles
     final defaultBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(radii.r8),
