@@ -31,6 +31,8 @@ class Section extends StatefulWidget {
     this.isSelected = false,
     this.onTap,
     this.onChildTap,
+    this.backgroundColor,
+    this.isDisabled = false,
   });
 
   /// The display label for this section.
@@ -54,6 +56,11 @@ class Section extends StatefulWidget {
   /// Callback when a child item is tapped.
   final ValueChanged<String>? onChildTap;
 
+  /// custom background color for the sidebar section.
+  final Color? backgroundColor;
+
+  /// Whether this section is currently disabled.
+  final bool isDisabled;
   bool get isExpandable => children != null && children!.isNotEmpty;
 
   @override
@@ -63,7 +70,7 @@ class Section extends StatefulWidget {
 class _SectionState extends State<Section> {
   bool _isExpanded = false;
   bool _isHovered = false;
-
+  bool get _canInteract => !widget.isDisabled;
   @override
   void initState() {
     super.initState();
@@ -85,6 +92,7 @@ class _SectionState extends State<Section> {
   }
 
   void _toggleExpanded() {
+    if (!_canInteract) return;
     if (widget.isExpandable) {
       setState(() => _isExpanded = !_isExpanded);
     } else if (widget.onTap != null) {
@@ -108,12 +116,18 @@ class _SectionState extends State<Section> {
 
       return Container(
         decoration: BoxDecoration(
-          color: colors.backgroundBase,
+          color: hasSelectedChild && !_isExpanded
+              ? colors.backgroundSecondaryBrand
+              : _isExpanded
+              ? colors.backgroundBase
+              : (widget.backgroundColor ?? colors.backgroundBase),
           borderRadius: BorderRadius.circular(radii.r12),
           border: Border.all(
-            color: !_isExpanded
-                ? colors.backgroundSurface
-                : colors.borderPrimary,
+            color: hasSelectedChild && !_isExpanded
+                ? colors.foregroundBrand
+                : (_isExpanded
+                      ? colors.borderPrimary
+                      : colors.backgroundSurface),
             width: borderWidths.w1,
           ),
         ),
@@ -123,7 +137,7 @@ class _SectionState extends State<Section> {
           children: [
             // Main section button (header)
             GestureDetector(
-              onTap: _toggleExpanded,
+              onTap: _canInteract ? _toggleExpanded : null,
               child: MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: Row(
@@ -132,7 +146,9 @@ class _SectionState extends State<Section> {
                     HugeIcon(
                       icon: widget.icon!,
                       size: iconSizes.s,
-                      color: hasSelectedChild
+                        color: widget.isDisabled
+                                ? colors.foregroundDisabled
+                                : hasSelectedChild
                           ? colors.foregroundPrimary
                           : colors.foregroundIconTertiary,
                     ),
@@ -145,7 +161,9 @@ class _SectionState extends State<Section> {
                         child: Text(
                           widget.label,
                           style: typography.bodySecondaryBold.copyWith(
-                            color: colors.foregroundPrimary,
+                            color: widget.isDisabled
+                                ? colors.foregroundDisabled
+                                : colors.foregroundPrimary,
                           ),
                         ),
                       ),
@@ -159,7 +177,8 @@ class _SectionState extends State<Section> {
                       child: Icon(
                         Icons.keyboard_arrow_down_rounded,
                         size: iconSizes.s,
-                        color: colors.foregroundIconPrimary,
+                        color: widget.isDisabled
+                                ? colors.foregroundDisabled: colors.foregroundIconPrimary,
                       ),
                     ),
                   ],
@@ -175,6 +194,7 @@ class _SectionState extends State<Section> {
                 children: widget.children!.map((child) {
                   return _SectionChildItem(
                     item: child,
+
                     isSelected: child.label == widget.selectedChild,
                     onTap: () {
                       // Call child.onTap first if provided
@@ -188,6 +208,7 @@ class _SectionState extends State<Section> {
                         widget.onChildTap!(child.label);
                       }
                     },
+                    isDisabled: widget.isDisabled,
                   );
                 }).toList(),
               ),
@@ -202,7 +223,10 @@ class _SectionState extends State<Section> {
 
     Color backgroundColor;
     Color borderColor;
-
+    if (widget.isDisabled) {
+      backgroundColor = colors.backgroundSurface;
+      borderColor = colors.borderDisabled;
+    }
     if (showSelectedState) {
       backgroundColor = colors.backgroundSecondaryBrand;
       borderColor = colors.foregroundBrand;
@@ -216,13 +240,14 @@ class _SectionState extends State<Section> {
     }
 
     return MouseRegion(
-      cursor: widget.onTap != null
+      cursor: _canInteract
           ? SystemMouseCursors.click
           : SystemMouseCursors.basic,
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
+      onEnter: _canInteract ? (_) => setState(() => _isHovered = true) : null,
+      onExit: _canInteract ? (_) => setState(() => _isHovered = false) : null,
       child: GestureDetector(
-        onTap: _toggleExpanded,
+        onTap: _canInteract ? _toggleExpanded : null,
+
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           padding: EdgeInsets.symmetric(
@@ -240,18 +265,21 @@ class _SectionState extends State<Section> {
               HugeIcon(
                 icon: widget.icon!,
                 size: iconSizes.s,
-                color: showSelectedState
+                color: widget.isDisabled
+                    ? colors.foregroundDisabled
+                    : showSelectedState
                     ? colors.foregroundPrimary
                     : colors.foregroundIconTertiary,
               ),
               SizedBox(width: spacing.s8),
-
               // Label
               Expanded(
                 child: Text(
                   widget.label,
                   style: typography.bodySecondaryBold.copyWith(
-                    color: colors.foregroundPrimary,
+                    color: widget.isDisabled
+                        ? colors.foregroundDisabled
+                        : colors.foregroundPrimary,
                   ),
                 ),
               ),
@@ -269,11 +297,13 @@ class _SectionChildItem extends StatefulWidget {
     required this.item,
     required this.isSelected,
     required this.onTap,
+    required this.isDisabled,
   });
 
   final SectionItem item;
   final bool isSelected;
   final VoidCallback onTap;
+  final bool isDisabled;
 
   @override
   State<_SectionChildItem> createState() => _SectionChildItemState();
@@ -281,7 +311,7 @@ class _SectionChildItem extends StatefulWidget {
 
 class _SectionChildItemState extends State<_SectionChildItem> {
   bool _isHovered = false;
-
+  bool get _canInteract => !widget.isDisabled;
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
@@ -292,7 +322,10 @@ class _SectionChildItemState extends State<_SectionChildItem> {
 
     Color backgroundColor;
     Color borderColor;
-
+    if (widget.isDisabled) {
+      backgroundColor = colors.backgroundSurface;
+      borderColor = colors.borderDisabled;
+    }
     if (widget.isSelected) {
       backgroundColor = colors.backgroundSecondaryBrand;
       borderColor = Colors.transparent;
@@ -305,9 +338,11 @@ class _SectionChildItemState extends State<_SectionChildItem> {
     }
 
     return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
+      cursor: _canInteract
+          ? SystemMouseCursors.click
+          : SystemMouseCursors.basic,
+      onEnter: _canInteract ? (_) => setState(() => _isHovered = true) : null,
+      onExit: _canInteract ? (_) => setState(() => _isHovered = false) : null,
       child: GestureDetector(
         onTap: widget.onTap,
         child: AnimatedContainer(
@@ -326,10 +361,14 @@ class _SectionChildItemState extends State<_SectionChildItem> {
             widget.item.label,
             style: widget.isSelected
                 ? typography.bodySecondaryBold.copyWith(
-                    color: colors.foregroundPrimary,
+                    color: widget.isDisabled
+                        ? colors.foregroundDisabled
+                        : colors.foregroundPrimary,
                   )
                 : typography.bodySecondary.copyWith(
-                    color: colors.foregroundSecondary,
+                    color: widget.isDisabled
+                        ? colors.foregroundDisabled
+                        : colors.foregroundSecondary,
                   ),
           ),
         ),
