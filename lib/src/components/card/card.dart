@@ -233,6 +233,7 @@ class _NasikoCardState extends State<NasikoCard> {
     final colors = context.colors;
 
     return Column(
+      mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (widget.image != null) _buildImageSection(context),
@@ -251,7 +252,7 @@ class _NasikoCardState extends State<NasikoCard> {
         if (widget.description?.isNotEmpty == true) ...[
           SizedBox(height: spacing.s8),
           Padding(
-             padding: EdgeInsets.symmetric(horizontal: spacing.s20),
+            padding: EdgeInsets.symmetric(horizontal: spacing.s20),
             child: Text(
               widget.description!,
               style: typography.bodySecondary.copyWith(
@@ -264,7 +265,7 @@ class _NasikoCardState extends State<NasikoCard> {
         ] else ...[
           SizedBox(height: spacing.s36),
         ],
-
+        Spacer(),
         if (_hasActionButtons) ...[
           SizedBox(height: spacing.s16),
           _buildActionButtons(context),
