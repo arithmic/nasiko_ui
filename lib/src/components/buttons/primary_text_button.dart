@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:nasiko_ui/src/components/input_fields/input_field.dart';
-import 'package:nasiko_ui/src/tokens/tokens.dart';
+import 'package:nasiko_ui/nasiko_ui.dart';
 
 /// A primary text button for Nasiko UI with optional icons.
 ///
@@ -44,9 +43,12 @@ class PrimaryTextButton extends StatelessWidget {
       style: ButtonStyle(
         // --- Base Properties ---
         padding: WidgetStateProperty.all(
-          EdgeInsets.symmetric(vertical: spacing.s8, horizontal: spacing.s12),
+          EdgeInsets.symmetric(
+            vertical: spacing.s8.h,
+            horizontal: spacing.s12.w,
+          ),
         ),
-        fixedSize: WidgetStateProperty.all(Size.fromHeight(36)),
+        fixedSize: WidgetStateProperty.all(Size.fromHeight(36.h)),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         textStyle: WidgetStateProperty.all(typography.buttonSecondary),
         elevation: WidgetStateProperty.all(0),
@@ -65,15 +67,17 @@ class PrimaryTextButton extends StatelessWidget {
           if (states.contains(WidgetState.hovered) ||
               states.contains(WidgetState.focused)) {
             return RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(borderRadius.r8)),
+              borderRadius: BorderRadius.all(
+                Radius.circular(borderRadius.r8.r),
+              ),
               side: BorderSide(
                 color: colors.foregroundBrand,
-                width: borderWidth.w1,
+                width: borderWidth.w1.w,
               ),
             );
           }
           return RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(borderRadius.r8)),
+            borderRadius: BorderRadius.all(Radius.circular(borderRadius.r8.r)),
           );
         }),
       ),
@@ -82,8 +86,8 @@ class PrimaryTextButton extends StatelessWidget {
         children: [
           // Leading Icon
           if (leadingIcon != null) ...[
-            HugeIcon(icon: leadingIcon!, size: iconSizes.s),
-            SizedBox(width: spacing.s8),
+            HugeIcon(icon: leadingIcon!, size: iconSizes.s.r),
+            SizedBox(width: spacing.s8.w),
           ],
 
           // Label
@@ -91,8 +95,8 @@ class PrimaryTextButton extends StatelessWidget {
 
           // Trailing Icon
           if (trailingIcon != null) ...[
-            SizedBox(width: spacing.s8),
-            HugeIcon(icon: trailingIcon!, size: iconSizes.s),
+            SizedBox(width: spacing.s8.w),
+            HugeIcon(icon: trailingIcon!, size: iconSizes.s.r),
           ],
         ],
       ),

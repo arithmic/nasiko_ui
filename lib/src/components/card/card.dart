@@ -258,7 +258,7 @@ class _NasikoCardState extends State<NasikoCard> {
     final typography = context.typography;
     final colors = context.colors;
     final spacing = context.spacing;
-    final iconSize = defaultNasikoIconSize.m;
+    final iconSize = context.iconSize;
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: spacing.s20.w),
@@ -266,7 +266,7 @@ class _NasikoCardState extends State<NasikoCard> {
         children: [
           if (widget.titleIcon != null) ...[
             SizedBox(
-              height: iconSize,
+              height: iconSize.m.r,
               child: HugeIcon(
                 icon: widget.titleIcon!,
                 color: _hovered

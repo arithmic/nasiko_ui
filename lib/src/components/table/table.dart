@@ -165,7 +165,7 @@ class _NasikoTableState extends State<NasikoTable> {
                             padding: EdgeInsets.only(left: spacing.s4),
                             child: Icon(
                               Icons.arrow_downward_rounded,
-                              size: iconSizes.s,
+                              size: iconSizes.s.r,
                               color: colors.foregroundSecondary,
                             ),
                           ),
@@ -277,7 +277,7 @@ class NasikoTableCopyCell extends StatelessWidget {
       children: [
         Icon(
           Icons.info_outline,
-          size: context.iconSize.s,
+          size: context.iconSize.s.r,
           color: context.colors.foregroundSecondary,
         ),
         SizedBox(width: context.spacing.s8),
@@ -417,7 +417,7 @@ class NasikoTableCellItem extends StatelessWidget {
               SizedBox(width: spacing.s12),
               Icon(
                 Icons.airplanemode_active,
-                size: context.iconSize.s,
+                size: context.iconSize.s.r,
                 color: colors.foregroundPrimary,
               ),
               SizedBox(width: spacing.s8),
@@ -459,7 +459,7 @@ class NasikoTableCellItem extends StatelessWidget {
             children: [
               Icon(
                 Icons.info_outline,
-                size: context.iconSize.s,
+                size: context.iconSize.s.r,
                 color: colors.foregroundSecondary,
               ),
               SizedBox(width: spacing.s12),
@@ -469,7 +469,7 @@ class NasikoTableCellItem extends StatelessWidget {
               SizedBox(width: spacing.s12),
               Icon(
                 Icons.info_outline,
-                size: context.iconSize.s,
+                size: context.iconSize.s.r,
                 color: colors.foregroundSecondary,
               ),
             ],
@@ -511,7 +511,7 @@ class NasikoTableCellItem extends StatelessWidget {
       ),
       child: Icon(
         icon,
-        size: context.iconSize.xs,
+        size: context.iconSize.xs.r,
         color: context.colors.foregroundSecondary,
       ),
     );
@@ -536,7 +536,7 @@ class NasikoTableCellItem extends StatelessWidget {
         children: [
           Icon(
             Icons.label_outline,
-            size: context.iconSize.xs,
+            size: context.iconSize.xs.r,
             color: context.colors.foregroundSecondary,
           ),
           SizedBox(width: context.spacing.s4),
@@ -550,7 +550,7 @@ class NasikoTableCellItem extends StatelessWidget {
           SizedBox(width: context.spacing.s4),
           Icon(
             Icons.close,
-            size: context.iconSize.xs,
+            size: context.iconSize.xs.r,
             color: context.colors.foregroundSecondary,
           ),
         ],

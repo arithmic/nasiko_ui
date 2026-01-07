@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:nasiko_ui/nasiko_ui.dart';
 import 'package:nasiko_ui/src/tokens/tokens.dart';
 
 import 'chip_size.dart';
@@ -113,7 +114,7 @@ class NasikoChip extends StatelessWidget {
           if (leadingIcon != null) ...[
             Icon(
               leadingIcon,
-              size: size == NasikoChipSize.small ? iconSizes.xs : iconSizes.s,
+              size: size == NasikoChipSize.small ? iconSizes.xs.r : iconSizes.s.r,
               color: foregroundColor,
             ),
             SizedBox(width: spacing.s4),
@@ -140,7 +141,7 @@ class NasikoChip extends StatelessWidget {
               onTap: enabled ? onDelete : null,
               child: HugeIcon(
                 icon: HugeIcons.strokeRoundedMinusSign,
-                size: size == NasikoChipSize.small ? iconSizes.xs : iconSizes.s,
+                size: size == NasikoChipSize.small ? iconSizes.xs.r : iconSizes.s.r,
                 color: foregroundColor,
               ),
             ),

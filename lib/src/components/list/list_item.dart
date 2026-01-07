@@ -1,6 +1,7 @@
 // lib/src/components/list/nasiko_list_item.dart
 
 import 'package:flutter/material.dart';
+import 'package:nasiko_ui/nasiko_ui.dart';
 import 'package:nasiko_ui/src/components/avatar/avatar.dart';
 import 'package:nasiko_ui/src/components/avatar/avatar_size.dart';
 import 'package:nasiko_ui/src/tokens/tokens.dart';
@@ -124,12 +125,12 @@ class _NasikoListItemState extends State<NasikoListItem> {
                       widget.isExpanded
                           ? Icons.keyboard_arrow_down_rounded
                           : Icons.keyboard_arrow_right_rounded,
-                      size: iconSizes.s,
+                      size: iconSizes.s.r,
                       color: colors.foregroundSecondary,
                     ),
                   )
                 else
-                  SizedBox(width: iconSizes.s), // Placeholder for alignment
+                  SizedBox(width: spacing.s20), // Placeholder for alignment
 
                 SizedBox(width: spacing.s8),
 
@@ -146,7 +147,7 @@ class _NasikoListItemState extends State<NasikoListItem> {
                 if (widget.leadingIcon != null) ...[
                   Icon(
                     widget.leadingIcon,
-                    size: iconSizes.m,
+                    size: iconSizes.m.r,
                     color: colors.foregroundPrimary,
                   ),
                   SizedBox(width: spacing.s8),
@@ -220,7 +221,7 @@ class _NasikoListItemState extends State<NasikoListItem> {
                 // 8. Trailing Dropdown Arrow (Static in design)
                 Icon(
                   Icons.keyboard_arrow_down_rounded,
-                  size: iconSizes.s,
+                  size: iconSizes.s.r,
                   color: colors.foregroundSecondary,
                 ),
               ],

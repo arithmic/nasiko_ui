@@ -190,7 +190,7 @@ class NasikoBanner extends StatelessWidget {
             onTap: onClose,
             child: Icon(
               Icons.close,
-              size: context.iconSize.s, // 20px
+              size: context.iconSize.s.r, // 20px
               color: context.colors.foregroundSecondary,
             ),
           ),

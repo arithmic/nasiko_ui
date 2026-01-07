@@ -73,7 +73,7 @@ class NasikoInputField extends StatelessWidget {
     final iconSizes = context.iconSize;
 
     // Define size-specific values
-    final iconSize = iconSizes.s;
+    final iconSize = iconSizes.s.r;
     final textStyle = typography.bodySecondary;
     final contentPadding = EdgeInsets.symmetric(vertical: spacing.s16.h);
     // Define the border styles
@@ -259,7 +259,7 @@ class NasikoInputField extends StatelessWidget {
           SizedBox(width: spacing.s8.w),
           HugeIcon(
             icon: labelInfoIcon!,
-            size: iconSizes.s, // 20px
+            size: iconSizes.s.r, // 20px
             color: colors.foregroundIconPrimary,
           ),
         ],

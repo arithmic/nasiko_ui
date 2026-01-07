@@ -108,7 +108,6 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
     final typography = context.typography;
     final radii = context.radius;
     final borderWidths = context.borderWidth;
-    final iconSizes = context.iconSize;
 
     // Determine border color based on mode and focus state
     final Color borderColor = widget.isOrchestrator

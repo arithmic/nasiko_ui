@@ -60,7 +60,7 @@ class NasikoCheckboxTile extends StatelessWidget {
             if (icon != null) ...[
               Icon(
                 icon,
-                size: iconSizes.m, // 24px
+                size: iconSizes.m.r, // 24px
                 color: contentColor,
               ),
               SizedBox(width: spacing.s8),

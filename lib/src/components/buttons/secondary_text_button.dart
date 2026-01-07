@@ -43,9 +43,12 @@ class SecondaryTextButton extends StatelessWidget {
       style: ButtonStyle(
         // --- Base Properties ---
         padding: WidgetStateProperty.all(
-          EdgeInsets.symmetric(vertical: spacing.s8, horizontal: spacing.s12),
+          EdgeInsets.symmetric(
+            vertical: spacing.s8.h,
+            horizontal: spacing.s12.w,
+          ),
         ),
-        fixedSize: WidgetStateProperty.all(Size.fromHeight(36)),
+        fixedSize: WidgetStateProperty.all(Size.fromHeight(36.h)),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         elevation: WidgetStateProperty.all(0),
         shadowColor: WidgetStateProperty.all(Colors.transparent),
@@ -80,7 +83,7 @@ class SecondaryTextButton extends StatelessWidget {
               color: colors.foregroundBrandHover,
               decoration: TextDecoration.underline,
               decorationColor: colors.foregroundBrandHover,
-              decorationThickness: borderWidth.w1,
+              decorationThickness: borderWidth.w1.w,
             );
           }
           // Default state
@@ -95,8 +98,8 @@ class SecondaryTextButton extends StatelessWidget {
         children: [
           // Leading Icon
           if (leadingIcon != null) ...[
-            HugeIcon(icon: leadingIcon!, size: iconSizes.s),
-            SizedBox(width: spacing.s8),
+            HugeIcon(icon: leadingIcon!, size: iconSizes.s.r),
+            SizedBox(width: spacing.s8.w),
           ],
 
           // Label
@@ -104,8 +107,8 @@ class SecondaryTextButton extends StatelessWidget {
 
           // Trailing Icon
           if (trailingIcon != null) ...[
-            SizedBox(width: spacing.s8),
-            HugeIcon(icon: trailingIcon!, size: iconSizes.s),
+            SizedBox(width: spacing.s8.w),
+            HugeIcon(icon: trailingIcon!, size: iconSizes.s.r),
           ],
         ],
       ),

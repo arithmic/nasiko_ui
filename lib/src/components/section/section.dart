@@ -145,10 +145,10 @@ class _SectionState extends State<Section> {
                     // Leading icon
                     HugeIcon(
                       icon: widget.icon!,
-                      size: iconSizes.s,
-                        color: widget.isDisabled
-                                ? colors.foregroundDisabled
-                                : hasSelectedChild
+                      size: iconSizes.s.r,
+                      color: widget.isDisabled
+                          ? colors.foregroundDisabled
+                          : hasSelectedChild
                           ? colors.foregroundPrimary
                           : colors.foregroundIconTertiary,
                     ),
@@ -176,9 +176,10 @@ class _SectionState extends State<Section> {
                       duration: const Duration(milliseconds: 200),
                       child: Icon(
                         Icons.keyboard_arrow_down_rounded,
-                        size: iconSizes.s,
+                        size: iconSizes.s.r,
                         color: widget.isDisabled
-                                ? colors.foregroundDisabled: colors.foregroundIconPrimary,
+                            ? colors.foregroundDisabled
+                            : colors.foregroundIconPrimary,
                       ),
                     ),
                   ],
@@ -264,7 +265,7 @@ class _SectionState extends State<Section> {
               // Leading icon
               HugeIcon(
                 icon: widget.icon!,
-                size: iconSizes.s,
+                size: iconSizes.s.r,
                 color: widget.isDisabled
                     ? colors.foregroundDisabled
                     : showSelectedState

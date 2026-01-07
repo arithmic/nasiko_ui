@@ -1,6 +1,7 @@
 // lib/src/components/toast/toast.dart
 
 import 'package:flutter/material.dart';
+import 'package:nasiko_ui/nasiko_ui.dart';
 import 'package:nasiko_ui/src/components/buttons/secondary_text_button.dart';
 import 'package:nasiko_ui/src/components/toast/toast_type.dart';
 import 'package:nasiko_ui/src/tokens/tokens.dart';
@@ -72,8 +73,8 @@ class NasikoToast extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: [
               SizedBox(
-                width: iconSizes.s,
-                height: iconSizes.s,
+                width: iconSizes.s.r,
+                height: iconSizes.s.r,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
                   valueColor: AlwaysStoppedAnimation<Color>(iconColor),

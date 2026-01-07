@@ -129,19 +129,19 @@ class NasikoModal extends StatelessWidget {
             Row(
               children: [
                 if (titleIcon != null) ...[
-                  HugeIcon(icon: titleIcon!, size: iconSizes.m),
+                  HugeIcon(icon: titleIcon!, size: iconSizes.m.r),
                   SizedBox(width: spacing.s12),
                 ],
                 Expanded(child: Text(title, style: typography.bodyPrimaryBold)),
                 IconButton(
                   icon: HugeIcon(
                     icon: HugeIcons.strokeRoundedCancel01,
-                    size: iconSizes.s,
+                    size: iconSizes.s.r,
                   ),
-                  iconSize: iconSizes.s,
+                  iconSize: iconSizes.s.r,
                   color: colors.foregroundSecondary,
                   onPressed: onClose,
-                  splashRadius: iconSizes.s,
+                  splashRadius: iconSizes.s.r,
                 ),
               ],
             ),
@@ -282,7 +282,7 @@ class NasikoModal extends StatelessWidget {
             if (leadingIcon != null) ...[
               HugeIcon(
                 icon: leadingIcon,
-                size: iconSizes.s,
+                size: iconSizes.s.r,
                 color: colors.foregroundError,
               ),
               SizedBox(width: spacing.s8),
@@ -297,7 +297,7 @@ class NasikoModal extends StatelessWidget {
               SizedBox(width: spacing.s8),
               HugeIcon(
                 icon: trailingIcon,
-                size: iconSizes.s,
+                size: iconSizes.s.r,
                 color: colors.foregroundError,
               ),
             ],

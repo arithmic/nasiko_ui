@@ -51,35 +51,35 @@ class DestructiveButton extends StatelessWidget {
     switch (size) {
       case NasikoButtonSize.large:
         padding = EdgeInsets.symmetric(
-          vertical: spacing.s20,
-          horizontal: spacing.s24,
+          vertical: spacing.s20.h,
+          horizontal: spacing.s24.w,
         );
         textStyle = typography.buttonPrimary;
-        iconSize = iconSizes.l; // 28px
-        borderRadius = radii.r10; // 10px radius
-        iconSpacing = spacing.s12; // 12px spacing
+        iconSize = iconSizes.l.r; // 28px
+        borderRadius = radii.r10.r; // 10px radius
+        iconSpacing = spacing.s12.h; // 12px spacing
         minHeight = 68.h;
         break;
       case NasikoButtonSize.medium:
         padding = EdgeInsets.symmetric(
-          vertical: spacing.s12,
-          horizontal: spacing.s16,
+          vertical: spacing.s12.h,
+          horizontal: spacing.s16.w,
         );
         textStyle = typography.buttonSecondary;
-        iconSize = iconSizes.s; // 20px
-        borderRadius = radii.r8; // 8px radius
-        iconSpacing = spacing.s8; // 8px spacing
+        iconSize = iconSizes.s.r; // 20px
+        borderRadius = radii.r8.r; // 8px radius
+        iconSpacing = spacing.s8.w; // 8px spacing
         minHeight = 44.h;
         break;
       case NasikoButtonSize.small:
         padding = EdgeInsets.symmetric(
-          vertical: spacing.s8,
-          horizontal: spacing.s12,
+          vertical: spacing.s8.h,
+          horizontal: spacing.s12.w,
         );
         textStyle = typography.buttonSecondary;
-        iconSize = iconSizes.s; // 20px
-        borderRadius = radii.r8; // 8px radius
-        iconSpacing = spacing.s8; // 8px spacing
+        iconSize = iconSizes.s.r; // 20px
+        borderRadius = radii.r8.r; // 8px radius
+        iconSpacing = spacing.s8.w; // 8px spacing
         minHeight = 36.h;
         break;
     }
@@ -124,7 +124,7 @@ class DestructiveButton extends StatelessWidget {
         if (states.contains(WidgetState.focused)) {
           borderSide = BorderSide(
             color: colors.borderError,
-            width: spacing.s2,
+            width: spacing.s2.w,
             strokeAlign: BorderSide.strokeAlignOutside,
           );
         }

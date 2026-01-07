@@ -1,7 +1,7 @@
 // lib/src/components/accordion/nasiko_accordion.dart
 
 import 'package:flutter/material.dart';
-import 'package:nasiko_ui/src/tokens/tokens.dart';
+import 'package:nasiko_ui/nasiko_ui.dart';
 
 /// A data class for a single item in a [NasikoAccordion].
 class NasikoAccordionItem {
@@ -137,8 +137,8 @@ class _NasikoAccordionItemWidget extends StatelessWidget {
         // 1. The clickable header
         InkWell(
           onTap: onTap,
-          splashColor: colors.backgroundBrandSubtle.withOpacity(0.5),
-          highlightColor: colors.backgroundBrandSubtle.withOpacity(0.5),
+          splashColor: colors.backgroundBrandSubtle.withValues(alpha: 0.5),
+          highlightColor: colors.backgroundBrandSubtle.withValues(alpha: 0.5),
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: spacing.s16),
             child: Row(
@@ -158,7 +158,7 @@ class _NasikoAccordionItemWidget extends StatelessWidget {
                       ? Icons.keyboard_arrow_up
                       : Icons.keyboard_arrow_down,
                   color: colors.foregroundSecondary,
-                  size: iconSizes.m, // 24px
+                  size: iconSizes.m.r, // 24px
                 ),
               ],
             ),
@@ -176,8 +176,8 @@ class _NasikoAccordionItemWidget extends StatelessWidget {
                 ? Padding(
                     // Add padding to content
                     padding: EdgeInsets.only(
-                      bottom: spacing.s16,
-                      right: spacing.s24, // Keep content from hitting icon
+                      bottom: spacing.s16.h,
+                      right: spacing.s24.w, // Keep content from hitting icon
                     ),
                     child: DefaultTextStyle(
                       style: typography.bodySecondary.copyWith(
@@ -191,11 +191,7 @@ class _NasikoAccordionItemWidget extends StatelessWidget {
         ),
 
         // 3. The divider
-        Divider(
-          color: colors.borderPrimary,
-          height: borderWidths.w1,
-          thickness: borderWidths.w1,
-        ),
+        NasikoDivider(),
       ],
     );
   }

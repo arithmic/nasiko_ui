@@ -1,6 +1,7 @@
 // lib/src/components/breadcrumb/nasiko_breadcrumb.dart
 
 import 'package:flutter/material.dart';
+import 'package:nasiko_ui/nasiko_ui.dart';
 import 'package:nasiko_ui/src/tokens/tokens.dart';
 
 /// A data class for a single item in a [NasikoBreadcrumb].
@@ -41,7 +42,7 @@ class NasikoBreadcrumb extends StatelessWidget {
       children.add(
         Icon(
           leadingIcon,
-          size: iconSizes.s, // 20px
+          size: iconSizes.s.r, // 20px
           color: colors.foregroundPrimary, // neutral/700
         ),
       );
@@ -60,7 +61,7 @@ class NasikoBreadcrumb extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: spacing.s4),
             child: Icon(
               Icons.chevron_right,
-              size: iconSizes.xs, // 16px
+              size: iconSizes.xs.r, // 16px
               color: colors.foregroundSecondary, // neutral/500
             ),
           ),
