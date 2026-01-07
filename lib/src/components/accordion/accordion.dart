@@ -129,7 +129,6 @@ class _NasikoAccordionItemWidget extends StatelessWidget {
     final spacing = context.spacing;
     final typography = context.typography;
     final iconSizes = context.iconSize;
-    final borderWidths = context.borderWidth;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -140,7 +139,7 @@ class _NasikoAccordionItemWidget extends StatelessWidget {
           splashColor: colors.backgroundBrandSubtle.withValues(alpha: 0.5),
           highlightColor: colors.backgroundBrandSubtle.withValues(alpha: 0.5),
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: spacing.s16),
+            padding: EdgeInsets.symmetric(vertical: spacing.s16.h),
             child: Row(
               children: [
                 // Title

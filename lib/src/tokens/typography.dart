@@ -1,7 +1,6 @@
 // lib/src/tokens/app_typography.dart
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // Mark the class as immutable for performance and consistency
 @immutable
@@ -149,7 +148,7 @@ TextStyle get _baseTitlePrimary => TextStyle(
   fontWeight: FontWeight.w500, // Medium
   fontSize: 40,
   height: 48 / 40, // Line height calculation
-  letterSpacing: -0.04 * 40.sp, // -4%
+  letterSpacing: -0.04 * 40, // -4%
 );
 
 TextStyle get _baseTitleSecondary => TextStyle(
@@ -157,7 +156,7 @@ TextStyle get _baseTitleSecondary => TextStyle(
   fontWeight: FontWeight.w500, // Medium
   fontSize: 32,
   height: 38 / 32, // Line height calculation
-  letterSpacing: -0.04 * 32.sp, // -4%
+  letterSpacing: -0.04 * 32, // -4%
 );
 
 TextStyle get _baseButtonPrimary => TextStyle(
@@ -165,7 +164,7 @@ TextStyle get _baseButtonPrimary => TextStyle(
   fontWeight: FontWeight.w500, // Medium
   fontSize: 20,
   height: 24 / 20,
-  letterSpacing: 0.0016 * 20.sp, // 0.16%
+  letterSpacing: 0.0016 * 20, // 0.16%
 );
 
 TextStyle get _baseButtonSecondary => TextStyle(
@@ -173,7 +172,7 @@ TextStyle get _baseButtonSecondary => TextStyle(
   fontWeight: FontWeight.w500, // Medium
   fontSize: 16,
   height: 20 / 16,
-  letterSpacing: 0.0016 * 16.sp, // 0.16%
+  letterSpacing: 0.0016 * 16, // 0.16%
 );
 
 TextStyle get _baseBodyPrimary => TextStyle(
@@ -238,7 +237,7 @@ TextStyle get _baseCaption => TextStyle(
   fontWeight: FontWeight.w400,
   fontSize: 12,
   height: 16 / 12,
-  letterSpacing: 0.0004 * 12.sp, // 0.04%
+  letterSpacing: 0.0004 * 12, // 0.04%
 );
 
 TextStyle get _baseCode => TextStyle(

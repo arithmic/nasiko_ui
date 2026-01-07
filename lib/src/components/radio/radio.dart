@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nasiko_ui/src/tokens/tokens.dart';
+import 'package:nasiko_ui/nasiko_ui.dart';
 
 /// A radio button component for single selection within a group.
 ///
@@ -88,8 +88,8 @@ class _NasikoRadioState<T> extends State<NasikoRadio<T>> {
             : () => setState(() => _isFocused = false),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
-          width: size,
-          height: size,
+          width: size.r,
+          height: size.r,
           child: CustomPaint(
             painter: _RadioPainter(
               isSelected: _isSelected,
@@ -177,7 +177,7 @@ class _RadioPainter extends CustomPainter {
       final bgPaint = Paint()
         ..color = colors.backgroundDisabled
         ..style = PaintingStyle.fill;
-      canvas.drawCircle(center, baseRadius, bgPaint);
+      canvas.drawCircle(center, baseRadius.r, bgPaint);
     }
 
     // Step 2: Draw outer ring for focused state (24px diameter, brand color)
@@ -185,8 +185,8 @@ class _RadioPainter extends CustomPainter {
       final outerPaint = Paint()
         ..color = colors.backgroundBrand
         ..style = PaintingStyle.stroke
-        ..strokeWidth = borderWidths.w1;
-      canvas.drawCircle(center, 12.0 - borderWidths.w1 / 2, outerPaint);
+        ..strokeWidth = borderWidths.w1.w;
+      canvas.drawCircle(center, (12.0 - borderWidths.w1 / 2).w, outerPaint);
     }
 
     // Step 3: Draw main ring (20px diameter, color varies by state)
@@ -194,14 +194,14 @@ class _RadioPainter extends CustomPainter {
       ..color = outerRingColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = borderWidths.w1;
-    canvas.drawCircle(center, baseRadius - borderWidths.w1 / 2, mainPaint);
+    canvas.drawCircle(center, (baseRadius - borderWidths.w1 / 2).w, mainPaint);
 
     // Step 4: Draw inner filled circle when selected (12px diameter)
     if (innerCircleColor != null) {
       final innerPaint = Paint()
         ..color = innerCircleColor
         ..style = PaintingStyle.fill;
-      canvas.drawCircle(center, innerRadius, innerPaint);
+      canvas.drawCircle(center, innerRadius.r, innerPaint);
     }
   }
 

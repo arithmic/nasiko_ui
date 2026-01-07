@@ -43,8 +43,7 @@ class NasikoCard extends StatefulWidget {
     this.secondaryButtonTrailingIcon,
     this.onSecondaryPressed,
     this.onPressed,
-    this.width,
-    this.maxWidth = 420,
+    this.maxWidth = 400,
   }) : enabled = true,
        disabledButtonLabel = null;
 
@@ -59,8 +58,7 @@ class NasikoCard extends StatefulWidget {
     this.description,
     required this.disabledButtonLabel,
     required this.enabled,
-    this.width,
-    this.maxWidth = 420,
+    this.maxWidth = 400,
   }) : secondaryButtonLabel = null,
        secondaryButtonIcon = null,
        secondaryButtonTrailingIcon = null,
@@ -77,8 +75,7 @@ class NasikoCard extends StatefulWidget {
     String? subtitle,
     String? description,
     required String disabledButtonLabel,
-    double? width,
-    double maxWidth = 420,
+    double maxWidth = 400,
   }) {
     return NasikoCard._internal(
       key: key,
@@ -91,7 +88,6 @@ class NasikoCard extends StatefulWidget {
       description: description,
       disabledButtonLabel: disabledButtonLabel,
       enabled: false,
-      width: width,
       maxWidth: maxWidth,
     );
   }
@@ -113,7 +109,6 @@ class NasikoCard extends StatefulWidget {
   final String? disabledButtonLabel;
   final bool enabled;
 
-  final double? width;
   final double maxWidth;
 
   @override
@@ -130,7 +125,7 @@ class _NasikoCardState extends State<NasikoCard> {
     final radii = context.radius;
 
     Widget card = ConstrainedBox(
-      constraints: BoxConstraints(maxWidth: widget.width ?? widget.maxWidth),
+      constraints: BoxConstraints(maxWidth: widget.maxWidth.w),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         padding: EdgeInsets.symmetric(vertical: spacing.s20.h),
@@ -235,8 +230,8 @@ class _NasikoCardState extends State<NasikoCard> {
                       ? colors.backgroundBrand
                       : colors.backgroundDisabled,
                   borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(radii.r8),
-                    bottomLeft: Radius.circular(radii.r8),
+                    topRight: Radius.circular(radii.r8.r),
+                    bottomLeft: Radius.circular(radii.r8.r),
                   ),
                 ),
                 child: Text(

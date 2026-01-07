@@ -1,6 +1,7 @@
 // lib/src/components/toast/toast_service.dart
 
 import 'package:flutter/material.dart';
+import 'package:nasiko_ui/nasiko_ui.dart';
 import 'package:nasiko_ui/src/components/toast/toast.dart';
 import 'package:nasiko_ui/src/components/toast/toast_type.dart';
 import 'package:nasiko_ui/src/tokens/spacing.dart';
@@ -26,7 +27,7 @@ class NasikoToastService {
       SnackBar(
         // Use the custom Toast widget as content
         content: Align(
-          alignment: Alignment.center, // can be made configurable, rihgt now it will be shown at the bottom center of the screen
+          alignment: Alignment.center,
           widthFactor: 1,
           child: NasikoToast(
             type: type,
@@ -44,11 +45,11 @@ class NasikoToastService {
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         // Add padding around the toast to match the design spacing
-        padding: EdgeInsets.all(context.spacing.s16),
+        padding: EdgeInsets.all(context.spacing.s16.r),
 
         margin: EdgeInsets.only(
-          left: context.spacing.s24,
-          bottom: context.spacing.s48,
+          left: context.spacing.s24.w,
+          bottom: context.spacing.s48.h,
         ),
       ),
     );

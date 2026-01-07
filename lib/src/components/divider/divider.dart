@@ -1,21 +1,15 @@
 // lib/src/components/divider/nasiko_divider.dart
 
 import 'package:flutter/material.dart';
-import 'package:nasiko_ui/src/tokens/tokens.dart';
+import 'package:nasiko_ui/nasiko_ui.dart';
 
 /// Defines the orientation of the divider.
-enum NasikoDividerAxis {
-  horizontal,
-  vertical,
-}
+enum NasikoDividerAxis { horizontal, vertical }
 
 /// A horizontal or vertical line to separate content,
 /// styled by the Nasiko Design System.
 class NasikoDivider extends StatelessWidget {
-  const NasikoDivider({
-    super.key,
-    this.axis = NasikoDividerAxis.horizontal,
-  });
+  const NasikoDivider({super.key, this.axis = NasikoDividerAxis.horizontal});
 
   /// The orientation of the divider.
   /// Defaults to [NasikoDividerAxis.horizontal].
@@ -27,7 +21,7 @@ class NasikoDivider extends StatelessWidget {
     final borderWidths = context.borderWidth;
 
     final Color dividerColor = colors.borderPrimary; // neutral/300
-    final double dividerThickness = borderWidths.w1; // 1px
+    final double dividerThickness = borderWidths.w1.w; // 1px
 
     if (axis == NasikoDividerAxis.horizontal) {
       return Divider(

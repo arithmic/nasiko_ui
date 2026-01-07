@@ -1,8 +1,7 @@
 // lib/src/components/forms/nasiko_switch.dart
 
 import 'package:flutter/material.dart';
-import 'package:nasiko_ui/src/tokens/tokens.dart';
-import 'switch_size.dart';
+import 'package:nasiko_ui/nasiko_ui.dart';
 
 /// A custom-styled switch component based on the Nasiko design.
 class NasikoSwitch extends StatelessWidget {
@@ -63,7 +62,7 @@ class NasikoSwitch extends StatelessWidget {
     });
 
     return SizedBox(
-      height: size == NasikoSwitchSize.small ? spacing.s20 : spacing.s24,
+      height: size == NasikoSwitchSize.small ? spacing.s20.h : spacing.s24.h,
       child: FittedBox(
         fit: BoxFit.fill,
         child: Switch.adaptive(
@@ -86,7 +85,7 @@ class NasikoSwitch extends StatelessWidget {
             // No border when checked, let the brand color handle the track
             return Colors.transparent;
           }),
-          trackOutlineWidth: WidgetStateProperty.all(borderWidths.w1),
+          trackOutlineWidth: WidgetStateProperty.all(borderWidths.w1.w),
 
           // The default Flutter thumb radius and track size look appropriate
           // for the design, which has a 2:1 ratio (track width:height)

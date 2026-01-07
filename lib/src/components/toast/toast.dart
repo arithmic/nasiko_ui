@@ -2,9 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
-import 'package:nasiko_ui/src/components/buttons/secondary_text_button.dart';
-import 'package:nasiko_ui/src/components/toast/toast_type.dart';
-import 'package:nasiko_ui/src/tokens/tokens.dart';
 
 /// The visual component for a Nasiko Toast notification.
 class NasikoToast extends StatelessWidget {
@@ -61,12 +58,12 @@ class NasikoToast extends StatelessWidget {
       child: Container(
         constraints: const BoxConstraints(minWidth: 400),
         padding: EdgeInsets.symmetric(
-          horizontal: spacing.s16,
-          vertical: spacing.s12,
+          horizontal: spacing.s16.w,
+          vertical: spacing.s12.h,
         ),
         decoration: BoxDecoration(
           color: backgroundColor,
-          borderRadius: BorderRadius.circular(radii.r8),
+          borderRadius: BorderRadius.circular(radii.r8.r),
         ),
         child: IntrinsicWidth(
           child: Row(
@@ -76,11 +73,11 @@ class NasikoToast extends StatelessWidget {
                 width: iconSizes.s.r,
                 height: iconSizes.s.r,
                 child: CircularProgressIndicator(
-                  strokeWidth: 2,
+                  strokeWidth: 2.w,
                   valueColor: AlwaysStoppedAnimation<Color>(iconColor),
                 ),
               ),
-              SizedBox(width: spacing.s12),
+              SizedBox(width: spacing.s12.w),
 
               Expanded(
                 child: Text(

@@ -116,11 +116,11 @@ class NasikoModal extends StatelessWidget {
     return Dialog(
       backgroundColor: colors.backgroundSurface,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(radii.r8),
+        borderRadius: BorderRadius.circular(radii.r8.r),
       ),
       child: Container(
         constraints: BoxConstraints(maxWidth: effectiveMaxWidth),
-        padding: EdgeInsets.all(spacing.s24),
+        padding: EdgeInsets.all(spacing.s24.r),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -130,7 +130,7 @@ class NasikoModal extends StatelessWidget {
               children: [
                 if (titleIcon != null) ...[
                   HugeIcon(icon: titleIcon!, size: iconSizes.m.r),
-                  SizedBox(width: spacing.s12),
+                  SizedBox(width: spacing.s12.w),
                 ],
                 Expanded(child: Text(title, style: typography.bodyPrimaryBold)),
                 IconButton(
@@ -145,16 +145,16 @@ class NasikoModal extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: spacing.s16),
+            SizedBox(height: spacing.s16.h),
 
             // --- Body Content ---
             Flexible(child: content),
-            SizedBox(height: spacing.s16),
+            SizedBox(height: spacing.s16.h),
 
             // --- Divider (Above Footer) ---
             if (primaryButtonLabel != null || secondaryButtonLabel != null) ...[
               NasikoDivider(axis: NasikoDividerAxis.horizontal),
-              SizedBox(height: spacing.s16),
+              SizedBox(height: spacing.s16.h),
             ],
 
             // --- Footer Actions ---
@@ -186,7 +186,7 @@ class NasikoModal extends StatelessWidget {
             trailingIcon: secondaryButtonTrailingIcon,
             isFullWidth: false,
           ),
-          SizedBox(width: spacing.s16),
+          SizedBox(width: spacing.s16.w),
         ],
 
         // Primary Button
@@ -222,7 +222,7 @@ class NasikoModal extends StatelessWidget {
             trailingIcon: secondaryButtonTrailingIcon,
             isFullWidth: true,
           ),
-          SizedBox(height: spacing.s16),
+          SizedBox(height: spacing.s16.h),
         ],
 
         // Primary Button (bottom)
@@ -266,13 +266,13 @@ class NasikoModal extends StatelessWidget {
         style: OutlinedButton.styleFrom(
           foregroundColor: colors.foregroundError,
           backgroundColor: Colors.transparent,
-          side: BorderSide(color: colors.borderError, width: borderWidths.w1),
+          side: BorderSide(color: colors.borderError, width: borderWidths.w1.w),
           padding: EdgeInsets.symmetric(
-            horizontal: spacing.s16,
-            vertical: spacing.s12,
+            horizontal: spacing.s16.w,
+            vertical: spacing.s12.h,
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(radii.r8),
+            borderRadius: BorderRadius.circular(radii.r8.r),
           ),
         ),
         child: Row(
@@ -285,7 +285,7 @@ class NasikoModal extends StatelessWidget {
                 size: iconSizes.s.r,
                 color: colors.foregroundError,
               ),
-              SizedBox(width: spacing.s8),
+              SizedBox(width: spacing.s8.w),
             ],
             Text(
               label,
@@ -294,7 +294,7 @@ class NasikoModal extends StatelessWidget {
               ),
             ),
             if (trailingIcon != null) ...[
-              SizedBox(width: spacing.s8),
+              SizedBox(width: spacing.s8.w),
               HugeIcon(
                 icon: trailingIcon,
                 size: iconSizes.s.r,

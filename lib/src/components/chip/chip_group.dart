@@ -1,7 +1,7 @@
 // lib/src/components/chip/chip_group.dart
 
 import 'package:flutter/material.dart';
-import 'package:nasiko_ui/src/tokens/tokens.dart';
+import 'package:nasiko_ui/nasiko_ui.dart';
 
 /// A horizontal scrollable group of chips.
 ///
@@ -43,7 +43,7 @@ class NasikoChipGroup extends StatelessWidget {
           children: [
             for (int i = 0; i < children.length; i++) ...[
               children[i],
-              if (i < children.length - 1) SizedBox(width: spacingValue),
+              if (i < children.length - 1) SizedBox(width: spacingValue.w),
             ],
           ],
         ),

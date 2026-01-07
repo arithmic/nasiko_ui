@@ -123,15 +123,15 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
       },
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: spacing.s16,
-          vertical: spacing.s12,
+          horizontal: spacing.s16.w,
+          vertical: spacing.s12.h,
         ),
         decoration: BoxDecoration(
           color: widget.enabled
               ? colors.backgroundGroup
               : colors.backgroundGroup.withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(radii.r12),
-          border: Border.all(color: borderColor, width: borderWidths.w1),
+          borderRadius: BorderRadius.circular(radii.r12.r),
+          border: Border.all(color: borderColor, width: borderWidths.w1.w),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -140,7 +140,7 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
             if (widget.attachments.isNotEmpty) ...[
               Container(
                 width: double.infinity,
-                margin: const EdgeInsets.only(bottom: 16),
+                margin: EdgeInsets.only(bottom: 16.h),
                 child: Wrap(
                   spacing: spacing.s8,
                   runSpacing: spacing.s8,
@@ -157,7 +157,7 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
                   }).toList(),
                 ),
               ),
-              SizedBox(height: spacing.s12),
+              SizedBox(height: spacing.s12.h),
             ],
             TextField(
               controller: _controller,
@@ -182,7 +182,7 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
 
             // Action buttons row
             if (widget.showAttachmentButton || widget.showSendButton) ...[
-              SizedBox(height: spacing.s12),
+              SizedBox(height: spacing.s12.h),
               Row(
                 children: [
                   // Attachment button
@@ -201,7 +201,7 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
                       icon: HugeIcons.strokeRoundedSent,
                       onPressed: widget.enabled ? widget.onSend : null,
                       size: NasikoButtonSize.medium,
-                      isLoading: widget.isLoading
+                      isLoading: widget.isLoading,
                     ),
                 ],
               ),

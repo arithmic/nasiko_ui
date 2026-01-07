@@ -1,7 +1,7 @@
 // lib/src/components/menu/nasiko_menu.dart
 
 import 'package:flutter/material.dart';
-import 'package:nasiko_ui/src/tokens/tokens.dart';
+import 'package:nasiko_ui/nasiko_ui.dart';
 
 /// A single item for use within the [NasikoPopupMenu].
 ///
@@ -57,18 +57,18 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
         curve: Curves.easeInOut,
         decoration: BoxDecoration(
           color: backgroundColor,
-          border: Border.all(color: borderColor, width: borderWidths.w1),
-          borderRadius: BorderRadius.circular(radii.r8),
+          border: Border.all(color: borderColor, width: borderWidths.w1.w),
+          borderRadius: BorderRadius.circular(radii.r8.r),
         ),
         child: InkWell(
           onTap: widget.onTap,
-          borderRadius: BorderRadius.circular(radii.r8),
+          borderRadius: BorderRadius.circular(radii.r8.r),
           splashColor: colors.backgroundBrandSubtle.withValues(alpha: 0.5),
           highlightColor: colors.backgroundBrandSubtle.withValues(alpha: 0.5),
           child: Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: spacing.s12,
-              vertical: spacing.s8,
+              horizontal: spacing.s12.w,
+              vertical: spacing.s8.h,
             ),
             child: Row(
               children: [
@@ -149,41 +149,41 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
     return Material(
       color: Colors.transparent,
       child: Container(
-        width: widget.width,
-        constraints: BoxConstraints(maxHeight: widget.maxHeight),
+        width: widget.width.w,
+        constraints: BoxConstraints(maxHeight: widget.maxHeight.h),
         decoration: BoxDecoration(
           color: colors.backgroundGroup,
-          borderRadius: BorderRadius.circular(radii.r8),
+          borderRadius: BorderRadius.circular(radii.r8.r),
           border: Border.all(
             color: colors.borderPrimary,
-            width: borderWidths.w1,
+            width: borderWidths.w1.w,
           ),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 16,
+              blurRadius: 16.r,
               offset: const Offset(0, 4),
             ),
           ],
         ),
         child: Padding(
           padding: EdgeInsets.only(
-            left: spacing.s8,
-            top: spacing.s8,
-            bottom: spacing.s8,
+            left: spacing.s8.w,
+            top: spacing.s8.h,
+            bottom: spacing.s8.h,
           ),
           child: Scrollbar(
             controller: _scrollController,
             thumbVisibility: true,
             child: ListView.separated(
               padding: EdgeInsets.only(
-                right: spacing.s8 + scrollbarThickness,
+                right: spacing.s8.w + scrollbarThickness.w,
               ), // for scrollbar to not overlap the content
               controller: _scrollController,
               shrinkWrap: true,
               itemCount: widget.items.length,
               separatorBuilder: (context, index) =>
-                  SizedBox(height: spacing.s4),
+                  SizedBox(height: spacing.s4.h),
               itemBuilder: (context, index) {
                 return _NasikoMenuItem(
                   label: widget.items[index],
@@ -229,8 +229,8 @@ Future<int?> showNasikoPopupMenu({
           onItemSelected: (index) {
             Navigator.of(context).pop(index);
           },
-          width: width,
-          maxHeight: maxHeight,
+          width: width.w,
+          maxHeight: maxHeight.h,
         ),
       ),
     ],

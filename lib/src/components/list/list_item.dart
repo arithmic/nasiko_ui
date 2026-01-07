@@ -2,9 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
-import 'package:nasiko_ui/src/components/avatar/avatar.dart';
-import 'package:nasiko_ui/src/components/avatar/avatar_size.dart';
-import 'package:nasiko_ui/src/tokens/tokens.dart';
 
 /// A comprehensive list item component that supports hierarchy,
 /// selection states, badges, and status indicators.
@@ -78,8 +75,8 @@ class _NasikoListItemState extends State<NasikoListItem> {
     Color borderColor = Colors.transparent;
 
     if (widget.isDisabled) {
-      backgroundColor = colors.backgroundDisabled.withOpacity(
-        0.1,
+      backgroundColor = colors.backgroundDisabled.withValues(
+        alpha: 0.1,
       ); // Subtle disabled bg
     } else if (widget.isSelected) {
       // Matches the yellow style in your screenshot
@@ -94,33 +91,31 @@ class _NasikoListItemState extends State<NasikoListItem> {
     return Opacity(
       opacity: opacity,
       child: Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: spacing.s2,
-        ), // Small gap between items
+        padding: EdgeInsets.symmetric(vertical: spacing.s2.h),
         child: InkWell(
           onTap: widget.isDisabled ? null : widget.onTap,
           onHover: (val) => setState(() => _isHovering = val),
-          borderRadius: BorderRadius.circular(radii.r8),
+          borderRadius: BorderRadius.circular(radii.r8.r),
           child: Container(
             decoration: BoxDecoration(
               color: backgroundColor,
-              borderRadius: BorderRadius.circular(radii.r8),
-              border: Border.all(color: borderColor, width: borderWidths.w1),
+              borderRadius: BorderRadius.circular(radii.r8.r),
+              border: Border.all(color: borderColor, width: borderWidths.w1.w),
             ),
             padding: EdgeInsets.symmetric(
-              vertical: spacing.s8,
-              horizontal: spacing.s8,
+              vertical: spacing.s8.h,
+              horizontal: spacing.s8.w,
             ),
             child: Row(
               children: [
                 // 1. Indentation (Hierarchy)
-                SizedBox(width: widget.indentLevel * spacing.s24),
+                SizedBox(width: widget.indentLevel * spacing.s24.w),
 
                 // 2. Expand/Collapse Chevron
                 if (widget.hasChildren)
                   InkWell(
                     onTap: widget.isDisabled ? null : widget.onToggleExpand,
-                    borderRadius: BorderRadius.circular(radii.r4),
+                    borderRadius: BorderRadius.circular(radii.r4.r),
                     child: Icon(
                       widget.isExpanded
                           ? Icons.keyboard_arrow_down_rounded
@@ -130,9 +125,9 @@ class _NasikoListItemState extends State<NasikoListItem> {
                     ),
                   )
                 else
-                  SizedBox(width: spacing.s20), // Placeholder for alignment
+                  SizedBox(width: spacing.s20.w), // Placeholder for alignment
 
-                SizedBox(width: spacing.s8),
+                SizedBox(width: spacing.s8.w),
 
                 // 3. Avatar (Image)
                 if (widget.imageUrl != null) ...[
@@ -140,7 +135,7 @@ class _NasikoListItemState extends State<NasikoListItem> {
                     size: NasikoAvatarSize.small, // Matches design (~32px)
                     imageUrl: widget.imageUrl,
                   ),
-                  SizedBox(width: spacing.s8),
+                  SizedBox(width: spacing.s8.w),
                 ],
 
                 // 4. Leading Icon (The Hexagon)
@@ -150,7 +145,7 @@ class _NasikoListItemState extends State<NasikoListItem> {
                     size: iconSizes.m.r,
                     color: colors.foregroundPrimary,
                   ),
-                  SizedBox(width: spacing.s8),
+                  SizedBox(width: spacing.s8.w),
                 ],
 
                 // 5. Title
@@ -166,10 +161,10 @@ class _NasikoListItemState extends State<NasikoListItem> {
 
                 // 6. Status Dot
                 if (widget.showStatusDot) ...[
-                  SizedBox(width: spacing.s8),
+                  SizedBox(width: spacing.s8.w),
                   Container(
-                    width: 8,
-                    height: 8,
+                    width: 8.r,
+                    height: 8.r,
                     decoration: BoxDecoration(
                       color: colors.backgroundSuccess, // Green
                       shape: BoxShape.circle,
@@ -177,21 +172,21 @@ class _NasikoListItemState extends State<NasikoListItem> {
                   ),
                 ],
 
-                SizedBox(width: spacing.s12),
+                SizedBox(width: spacing.s12.w),
 
                 // 7. Badge (e.g., 1.85s)
                 if (widget.badgeLabel != null) ...[
                   Container(
                     padding: EdgeInsets.symmetric(
-                      horizontal: spacing.s8,
-                      vertical: spacing.s2,
+                      horizontal: spacing.s8.w,
+                      vertical: spacing.s2.h,
                     ),
                     decoration: BoxDecoration(
                       color: colors.backgroundSurface, // neutral/100
-                      borderRadius: BorderRadius.circular(radii.r4),
+                      borderRadius: BorderRadius.circular(radii.r4.r),
                       border: Border.all(
                         color: colors.borderPrimary,
-                        width: borderWidths.w1,
+                        width: borderWidths.w1.w,
                       ),
                     ),
                     child: Row(
@@ -200,10 +195,10 @@ class _NasikoListItemState extends State<NasikoListItem> {
                         if (widget.badgeIcon != null) ...[
                           Icon(
                             widget.badgeIcon,
-                            size: 12, // Tiny icon
+                            size: 12.r, // Tiny icon
                             color: colors.foregroundSecondary,
                           ),
-                          SizedBox(width: spacing.s4),
+                          SizedBox(width: spacing.s4.w),
                         ],
                         Text(
                           widget.badgeLabel!,
@@ -215,7 +210,7 @@ class _NasikoListItemState extends State<NasikoListItem> {
                       ],
                     ),
                   ),
-                  SizedBox(width: spacing.s8),
+                  SizedBox(width: spacing.s8.w),
                 ],
 
                 // 8. Trailing Dropdown Arrow (Static in design)

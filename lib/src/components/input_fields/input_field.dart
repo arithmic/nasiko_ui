@@ -78,32 +78,35 @@ class NasikoInputField extends StatelessWidget {
     final contentPadding = EdgeInsets.symmetric(vertical: spacing.s16.h);
     // Define the border styles
     final defaultBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(radii.r8),
+      borderRadius: BorderRadius.circular(radii.r8.r),
       borderSide: BorderSide(
         color: colors.borderPrimary,
-        width: borderWidths.w1,
+        width: borderWidths.w1.w,
       ),
     );
 
     final focusedBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(radii.r8),
+      borderRadius: BorderRadius.circular(radii.r8.r),
       borderSide: BorderSide(
         color: colors.borderSecondary, // Your brand border color
-        width: borderWidths.w1, // Thicker border on focus
+        width: borderWidths.w1.w, // Thicker border on focus
       ),
     );
 
     // Add error/disabled borders for a complete component
     final errorBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(radii.r8),
-      borderSide: BorderSide(color: colors.borderError, width: borderWidths.w1),
+      borderRadius: BorderRadius.circular(radii.r8.r),
+      borderSide: BorderSide(
+        color: colors.borderError,
+        width: borderWidths.w1.w,
+      ),
     );
 
     final disabledBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(radii.r8),
+      borderRadius: BorderRadius.circular(radii.r8.r),
       borderSide: BorderSide(
         color: colors.borderDisabled,
-        width: borderWidths.w1,
+        width: borderWidths.w1.w,
       ),
     );
 
@@ -185,7 +188,7 @@ class NasikoInputField extends StatelessWidget {
             fillColor: colors.backgroundGroup, // neutral50
             hoverColor: colors.backgroundSurface,
             prefix: leadingIcon != null
-                ? SizedBox(width: spacing.s0.w)
+                ? SizedBox(width: spacing.s0)
                 : SizedBox(width: spacing.s8.w),
             contentPadding: contentPadding,
 

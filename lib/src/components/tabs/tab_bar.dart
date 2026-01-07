@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:nasiko_ui/src/tokens/tokens.dart';
+import 'package:nasiko_ui/nasiko_ui.dart';
 
 /// A data class to hold the content for a single [NasikoTabBar] tab.
 class NasikoTabItem {
@@ -48,14 +48,14 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
     final borderWidths = context.borderWidth;
 
     return SizedBox(
-      height: _tabBarHeight,
+      height: _tabBarHeight.h,
       child: TabBar(
         controller: controller,
         onTap: onTap,
         isScrollable: true,
         padding: EdgeInsets.zero,
         tabAlignment: tabAlignment,
-        labelPadding: EdgeInsets.symmetric(horizontal: spacing.s16),
+        labelPadding: EdgeInsets.symmetric(horizontal: spacing.s16.w),
 
         // --- Active Tab Styling ---
         labelColor: colors.foregroundBrand,
@@ -69,7 +69,7 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
         indicator: UnderlineTabIndicator(
           borderSide: BorderSide(
             color: colors.borderSecondary,
-            width: borderWidths.w2,
+            width: borderWidths.w2.w,
           ),
           // insets: EdgeInsets.symmetric(horizontal: spacing.s16),
         ),
@@ -77,17 +77,17 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
 
         // --- Full-Width Underline (Gray) ---
         dividerColor: colors.borderPrimary,
-        dividerHeight: borderWidths.w1,
+        dividerHeight: borderWidths.w1.w,
 
         tabs: tabs.map((item) {
           return Tab(
-            height: _tabBarHeight - borderWidths.w1, // Account for divider
+            height: (_tabBarHeight - borderWidths.w1).h, // Account for divider
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
                 item.icon,
-                SizedBox(width: spacing.s8),
+                SizedBox(width: spacing.s8.w),
                 Text(item.label),
               ],
             ),

@@ -56,7 +56,7 @@ class _NasikoCheckboxState extends State<NasikoCheckbox> {
       if (_isFocused) {
         border = Border.all(
           color: colors.borderHover,
-          width: borderWidths.w2,
+          width: borderWidths.w2.w,
           strokeAlign: BorderSide.strokeAlignOutside,
         );
       }
@@ -75,7 +75,7 @@ class _NasikoCheckboxState extends State<NasikoCheckbox> {
             ? colors
                   .borderSecondary // Yellow on focus/hover
             : colors.borderPrimary, // Neutral default
-        width: isInteracting ? borderWidths.w2 : borderWidths.w1,
+        width: isInteracting ? borderWidths.w2.w : borderWidths.w1.w,
       );
     }
 
@@ -85,7 +85,7 @@ class _NasikoCheckboxState extends State<NasikoCheckbox> {
           setState(() => _isHovering = isHovering),
       child: InkWell(
         onTap: isDisabled ? null : () => widget.onChanged!(!widget.isChecked),
-        borderRadius: BorderRadius.circular(radii.r6),
+        borderRadius: BorderRadius.circular(radii.r6.r),
         splashColor: colors.backgroundBrandSubtle,
         highlightColor: colors.backgroundBrandSubtle,
         child: AnimatedContainer(
@@ -95,7 +95,7 @@ class _NasikoCheckboxState extends State<NasikoCheckbox> {
           decoration: BoxDecoration(
             color: fillColor,
             border: border,
-            borderRadius: BorderRadius.circular(radii.r6), // 6px radius
+            borderRadius: BorderRadius.circular(radii.r6.r), // 6px radius
           ),
           child: checkIcon,
         ),

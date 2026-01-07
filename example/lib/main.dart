@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 import 'package:nasiko_ui_example/text_box_example.dart';
@@ -1062,7 +1061,6 @@ class ExampleHomePage extends StatelessWidget {
     return Row(
       children: [
         NasikoCard(
-          width: 400,
           title: 'Document Expert',
           titleIcon: HugeIcons.strokeRoundedDocumentCode,
           tags: [
@@ -1081,7 +1079,6 @@ class ExampleHomePage extends StatelessWidget {
         ),
         SizedBox(width: context.spacing.s16),
         NasikoCard(
-          width: 400,
           title: 'Document Expert',
           titleIcon: HugeIcons.strokeRoundedDocumentCode,
           tags: [
@@ -1101,7 +1098,6 @@ class ExampleHomePage extends StatelessWidget {
         ),
         SizedBox(width: context.spacing.s16),
         NasikoCard(
-          width: 400,
           title: 'Code Expert',
           titleIcon: HugeIcons.strokeRoundedCode,
           tags: ['code analysis', 'chat', 'history'],
@@ -1832,8 +1828,10 @@ class _MenuExampleState extends State<_MenuExample> {
     final RelativeRect position = RelativeRect.fromRect(
       Rect.fromPoints(
         button.localToGlobal(Offset.zero, ancestor: overlay),
-        button.localToGlobal(button.size.bottomRight(Offset.zero),
-            ancestor: overlay),
+        button.localToGlobal(
+          button.size.bottomRight(Offset.zero),
+          ancestor: overlay,
+        ),
       ),
       Offset.zero & overlay.size,
     );

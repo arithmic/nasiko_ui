@@ -121,17 +121,17 @@ class _SectionState extends State<Section> {
               : _isExpanded
               ? colors.backgroundBase
               : (widget.backgroundColor ?? colors.backgroundBase),
-          borderRadius: BorderRadius.circular(radii.r12),
+          borderRadius: BorderRadius.circular(radii.r12.r),
           border: Border.all(
             color: hasSelectedChild && !_isExpanded
                 ? colors.foregroundBrand
                 : (_isExpanded
                       ? colors.borderPrimary
                       : colors.backgroundSurface),
-            width: borderWidths.w1,
+            width: borderWidths.w1.w,
           ),
         ),
-        padding: EdgeInsets.all(spacing.s8),
+        padding: EdgeInsets.all(spacing.s8.r),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -152,12 +152,12 @@ class _SectionState extends State<Section> {
                           ? colors.foregroundPrimary
                           : colors.foregroundIconTertiary,
                     ),
-                    SizedBox(width: spacing.s8),
+                    SizedBox(width: spacing.s8.w),
 
                     // Label
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        padding: EdgeInsets.symmetric(vertical: 4.0.h),
                         child: Text(
                           widget.label,
                           style: typography.bodySecondaryBold.copyWith(
@@ -170,7 +170,7 @@ class _SectionState extends State<Section> {
                     ),
 
                     // Chevron icon
-                    SizedBox(width: spacing.s8),
+                    SizedBox(width: spacing.s8.w),
                     AnimatedRotation(
                       turns: _isExpanded ? 0.5 : 0,
                       duration: const Duration(milliseconds: 200),
@@ -189,7 +189,7 @@ class _SectionState extends State<Section> {
 
             // Expanded children
             if (_isExpanded) ...[
-              SizedBox(height: spacing.s8),
+              SizedBox(height: spacing.s8.h),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: widget.children!.map((child) {
@@ -252,13 +252,13 @@ class _SectionState extends State<Section> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           padding: EdgeInsets.symmetric(
-            horizontal: spacing.s8,
-            vertical: spacing.s12,
+            horizontal: spacing.s8.w,
+            vertical: spacing.s12.h,
           ),
           decoration: BoxDecoration(
             color: backgroundColor,
-            borderRadius: BorderRadius.circular(radii.r8),
-            border: Border.all(color: borderColor, width: borderWidths.w1),
+            borderRadius: BorderRadius.circular(radii.r8.r),
+            border: Border.all(color: borderColor, width: borderWidths.w1.w),
           ),
           child: Row(
             children: [
@@ -272,7 +272,7 @@ class _SectionState extends State<Section> {
                     ? colors.foregroundPrimary
                     : colors.foregroundIconTertiary,
               ),
-              SizedBox(width: spacing.s8),
+              SizedBox(width: spacing.s8.w),
               // Label
               Expanded(
                 child: Text(
@@ -348,15 +348,15 @@ class _SectionChildItemState extends State<_SectionChildItem> {
         onTap: widget.onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
-          margin: EdgeInsets.only(bottom: spacing.s4),
+          margin: EdgeInsets.only(bottom: spacing.s4.h),
           padding: EdgeInsets.symmetric(
-            horizontal: spacing.s12,
-            vertical: spacing.s8,
+            horizontal: spacing.s12.w,
+            vertical: spacing.s8.h,
           ),
           decoration: BoxDecoration(
             color: backgroundColor,
-            borderRadius: BorderRadius.circular(radii.r8),
-            border: Border.all(color: borderColor, width: borderWidths.w1),
+            borderRadius: BorderRadius.circular(radii.r8.r),
+            border: Border.all(color: borderColor, width: borderWidths.w1.w),
           ),
           child: Text(
             widget.item.label,

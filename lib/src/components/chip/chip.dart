@@ -3,10 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
-import 'package:nasiko_ui/src/tokens/tokens.dart';
-
-import 'chip_size.dart';
-import 'chip_variant.dart';
 
 /// A chip component that can be actionable (with delete) or non-actionable.
 ///
@@ -65,6 +61,7 @@ class NasikoChip extends StatelessWidget {
     final spacing = context.spacing;
     final typography = context.typography;
     final iconSizes = context.iconSize;
+    final radii = context.radius;
 
     // Determine colors based on variant and enabled state
     final Color backgroundColor;
@@ -100,12 +97,12 @@ class NasikoChip extends StatelessWidget {
 
     Widget chipContent = Container(
       padding: EdgeInsets.symmetric(
-        horizontal: size == NasikoChipSize.large ? spacing.s12 : spacing.s8,
-        vertical: size == NasikoChipSize.large ? spacing.s8 : spacing.s4,
+        horizontal: size == NasikoChipSize.large ? spacing.s12.w : spacing.s8.w,
+        vertical: size == NasikoChipSize.large ? spacing.s8.h : spacing.s4.h,
       ),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(radii.r8.r),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -114,14 +111,16 @@ class NasikoChip extends StatelessWidget {
           if (leadingIcon != null) ...[
             Icon(
               leadingIcon,
-              size: size == NasikoChipSize.small ? iconSizes.xs.r : iconSizes.s.r,
+              size: size == NasikoChipSize.small
+                  ? iconSizes.xs.r
+                  : iconSizes.s.r,
               color: foregroundColor,
             ),
-            SizedBox(width: spacing.s4),
+            SizedBox(width: spacing.s4.w),
           ],
           if (size == NasikoChipSize.small)
             Padding(
-              padding: EdgeInsets.only(top: spacing.s4, bottom: spacing.s4),
+              padding: EdgeInsets.only(top: spacing.s4.h, bottom: spacing.s4.h),
               child: Text(
                 label,
                 style: typography.bodyTertiary.copyWith(color: foregroundColor),
@@ -136,12 +135,14 @@ class NasikoChip extends StatelessWidget {
 
           // Delete Icon (only for actionable chips)
           if (onDelete != null) ...[
-            SizedBox(width: spacing.s4),
+            SizedBox(width: spacing.s4.w),
             GestureDetector(
               onTap: enabled ? onDelete : null,
               child: HugeIcon(
                 icon: HugeIcons.strokeRoundedMinusSign,
-                size: size == NasikoChipSize.small ? iconSizes.xs.r : iconSizes.s.r,
+                size: size == NasikoChipSize.small
+                    ? iconSizes.xs.r
+                    : iconSizes.s.r,
                 color: foregroundColor,
               ),
             ),
@@ -201,6 +202,7 @@ class _InteractiveChipState extends State<_InteractiveChip> {
   @override
   Widget build(BuildContext context) {
     final spacing = context.spacing;
+    final radii = context.radius;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
@@ -217,15 +219,15 @@ class _InteractiveChipState extends State<_InteractiveChip> {
           duration: const Duration(milliseconds: 150),
           padding: EdgeInsets.symmetric(
             horizontal: widget.size == NasikoChipSize.large
-                ? spacing.s12
-                : spacing.s8,
+                ? spacing.s12.w
+                : spacing.s8.w,
             vertical: widget.size == NasikoChipSize.large
-                ? spacing.s8
-                : spacing.s4,
+                ? spacing.s8.h
+                : spacing.s4.h,
           ),
           decoration: BoxDecoration(
             color: _currentColor,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(radii.r8.r),
           ),
           child: (widget.child as Container).child,
         ),

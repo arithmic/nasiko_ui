@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
-import 'package:nasiko_ui/src/tokens/tokens.dart';
 
 /// A data class for a single item in a [NasikoBreadcrumb].
 class NasikoBreadcrumbItem {
@@ -58,7 +57,7 @@ class NasikoBreadcrumb extends StatelessWidget {
       if (i > 0 || leadingIcon != null) {
         children.add(
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: spacing.s4),
+            padding: EdgeInsets.symmetric(horizontal: spacing.s4.h),
             child: Icon(
               Icons.chevron_right,
               size: iconSizes.xs.r, // 16px
@@ -120,12 +119,14 @@ class _BreadcrumbItem extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(context.radius.r4),
-      splashColor: context.colors.backgroundBrandSubtle.withOpacity(0.5),
-      highlightColor: context.colors.backgroundBrandSubtle.withOpacity(0.5),
+      splashColor: context.colors.backgroundBrandSubtle.withValues(alpha: 0.5),
+      highlightColor: context.colors.backgroundBrandSubtle.withValues(
+        alpha: 0.5,
+      ),
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: context.spacing.s4,
-          vertical: context.spacing.s2,
+          horizontal: context.spacing.s4.w,
+          vertical: context.spacing.s2.h,
         ),
         child: text,
       ),
