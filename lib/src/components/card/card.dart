@@ -179,11 +179,11 @@ class _NasikoCardState extends State<NasikoCard> {
             : colors.foregroundConstantWhite,
         borderRadius: BorderRadius.circular(radii.r12),
         border: Border.all(
-          color: widget.enabled
-              ? _isHovered
-                    ? colors.borderSecondary
-                    : colors.borderPrimary
-              : colors.borderDisabled,
+          color: !widget.enabled
+              ? colors.borderDisabled
+              : _isHovered
+              ? colors.borderSecondary
+              : colors.borderPrimary,
           width: 1,
         ),
         boxShadow: _isHovered && widget.enabled
@@ -218,7 +218,7 @@ class _NasikoCardState extends State<NasikoCard> {
     }
 
     return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = false),
+      onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       child: constrainedCard,
     );
