@@ -344,8 +344,7 @@ class _NasikoCardState extends State<NasikoCard> {
     final colors = context.colors;
     final spacing = context.spacing;
 
-    return Container(
-      height: 40.h,
+    return Padding(
       padding: EdgeInsets.symmetric(horizontal: spacing.s20),
       child: Text(
         widget.description!,
