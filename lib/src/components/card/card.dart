@@ -170,9 +170,6 @@ class _NasikoCardState extends State<NasikoCard> {
     final spacing = context.spacing;
     final radii = context.radius;
 
-    // Determine opacity based on enabled and hover state
-    final double contentOpacity = widget.enabled ? 1.0 : 0.5;
-
     Widget cardBody = Container(
       width: widget.width,
       padding: EdgeInsets.symmetric(vertical: spacing.s20),
@@ -199,7 +196,7 @@ class _NasikoCardState extends State<NasikoCard> {
               ]
             : null,
       ),
-      child: Opacity(opacity: contentOpacity, child: _buildContent(context)),
+      child: _buildContent(context),
     );
 
     Widget constrainedCard = Align(
@@ -221,7 +218,7 @@ class _NasikoCardState extends State<NasikoCard> {
     }
 
     return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
+      onEnter: (_) => setState(() => _isHovered = false),
       onExit: (_) => setState(() => _isHovered = false),
       child: constrainedCard,
     );
@@ -256,14 +253,14 @@ class _NasikoCardState extends State<NasikoCard> {
             child: Text(
               widget.description!,
               style: typography.bodySecondary.copyWith(
-                color: colors.foregroundPrimary,
+                color: !widget.enabled
+                    ? colors.foregroundDisabled
+                    : colors.foregroundPrimary,
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
           ),
-        ] else ...[
-          SizedBox(height: spacing.s36),
         ],
         if (_hasActionButtons) const Spacer(),
         if (_hasActionButtons) ...[
@@ -296,18 +293,18 @@ class _NasikoCardState extends State<NasikoCard> {
           // Badge overlay
           if (widget.badgeLabel != null)
             Positioned(
-              top: spacing.s8,
-              right: spacing.s8,
+              top: spacing.s0,
+              right: spacing.s0,
               child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: spacing.s12,
-                  vertical: spacing.s8,
-                ),
+                padding: EdgeInsets.all(spacing.s8),
                 decoration: BoxDecoration(
                   color: widget.enabled
                       ? colors.backgroundBrand
                       : colors.backgroundDisabled,
-                  borderRadius: BorderRadius.circular(radii.r4),
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(radii.r8),
+                    bottomLeft: Radius.circular(radii.r8),
+                  ),
                 ),
                 child: Text(
                   widget.badgeLabel!,
@@ -345,13 +342,15 @@ class _NasikoCardState extends State<NasikoCard> {
                     : colors.foregroundIconPrimary,
               ),
             ),
-            SizedBox(width: spacing.s8),
+            SizedBox(width: spacing.s16),
           ],
           Expanded(
             child: Text(
               widget.title,
               style: typography.bodyPrimaryBold.copyWith(
-                color: isHovered
+                color: !widget.enabled
+                    ? colors.foregroundDisabled
+                    : isHovered
                     ? colors.foregroundBrand
                     : colors.foregroundPrimary,
               ),
@@ -394,6 +393,7 @@ class _NasikoCardState extends State<NasikoCard> {
     final typography = context.typography;
     final colors = context.colors;
     final spacing = context.spacing;
+
     return ScrollConfiguration(
       behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
       child: SingleChildScrollView(
@@ -403,7 +403,9 @@ class _NasikoCardState extends State<NasikoCard> {
           child: Text(
             widget.subtitle!,
             style: typography.bodyTertiaryBold.copyWith(
-              color: colors.foregroundSecondary,
+              color: !widget.enabled
+                  ? colors.foregroundDisabled
+                  : colors.foregroundSecondary,
             ),
           ),
         ),
