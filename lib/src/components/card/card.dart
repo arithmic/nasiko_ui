@@ -200,7 +200,7 @@ class _NasikoCardState extends State<NasikoCard> {
         ],
 
         if (_hasButtons) ...[
-          SizedBox(height: spacing.s20),
+          SizedBox(height: spacing.s16),
           _buildButtons(context),
         ],
       ],
@@ -365,22 +365,28 @@ class _NasikoCardState extends State<NasikoCard> {
     if (!widget.enabled && widget.disabledButtonLabel != null) {
       return Padding(
         padding: EdgeInsets.symmetric(horizontal: spacing.s20),
-        child: PrimaryButton(
-          onPressed: null,
-          label: widget.disabledButtonLabel!,
-          size: NasikoButtonSize.small,
+        child: SizedBox(
+          width: double.infinity, // 🔑 forces full width
+          child: PrimaryButton(
+            onPressed: null,
+            label: widget.disabledButtonLabel!,
+            size: NasikoButtonSize.small,
+          ),
         ),
       );
     }
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: spacing.s20),
-      child: SecondaryButton(
-        onPressed: widget.onSecondaryPressed,
-        label: widget.secondaryButtonLabel!,
-        leadingIcon: widget.secondaryButtonIcon,
-        trailingIcon: widget.secondaryButtonTrailingIcon,
-        size: NasikoButtonSize.small,
+      child: SizedBox(
+        width: double.infinity, // 🔑 forces full width
+        child: SecondaryButton(
+          onPressed: widget.onSecondaryPressed,
+          label: widget.secondaryButtonLabel!,
+          leadingIcon: widget.secondaryButtonIcon,
+          trailingIcon: widget.secondaryButtonTrailingIcon,
+          size: NasikoButtonSize.small,
+        ),
       ),
     );
   }
