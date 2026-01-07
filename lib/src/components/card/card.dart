@@ -29,9 +29,6 @@ import 'package:nasiko_ui/nasiko_ui.dart';
 /// )
 /// ```
 class NasikoCard extends StatefulWidget {
-  /// Creates an enabled card with an optional action button.
-  ///
-  /// The entire card becomes clickable when [onPressed] is provided.
   const NasikoCard({
     super.key,
     this.image,
@@ -51,7 +48,6 @@ class NasikoCard extends StatefulWidget {
   }) : enabled = true,
        disabledButtonLabel = null;
 
-  /// Private internal constructor for disabled state
   const NasikoCard._internal({
     super.key,
     this.image,
@@ -71,9 +67,6 @@ class NasikoCard extends StatefulWidget {
        onSecondaryPressed = null,
        onPressed = null;
 
-  /// Creates a disabled card with a disabled button label.
-  ///
-  /// [disabledButtonLabel] is required for disabled cards.
   factory NasikoCard.disabled({
     Key? key,
     Widget? image,
@@ -103,58 +96,24 @@ class NasikoCard extends StatefulWidget {
     );
   }
 
-  /// Optional image widget to display at the top of the card.
   final Widget? image;
-
-  /// Optional badge label (e.g., "New") displayed in top-right corner of the image.
   final String? badgeLabel;
-
-  /// Optional icon or image widget displayed before the title.
-  /// Can be an Icon, Image.network, Image.asset, or any other widget.
   final List<List<dynamic>>? titleIcon;
-
-  /// The main title text of the card.
   final String title;
-
-  /// List of tag labels to display as chips.
   final List<String> tags;
-
-  /// Optional subtitle text displayed below the tags.
   final String? subtitle;
-
-  /// Optional description text displayed below the subtitle.
   final String? description;
 
-  /// Label for the secondary action button.
-  /// Only available in enabled state.
   final String? secondaryButtonLabel;
-
-  /// Optional leading icon for the secondary button.
-  /// Only available in enabled state.
   final List<List<dynamic>>? secondaryButtonIcon;
-
-  /// Optional trailing icon for the secondary button.
-  /// Only available in enabled state.
   final List<List<dynamic>>? secondaryButtonTrailingIcon;
-
-  /// Callback when the secondary button is pressed.
-  /// Only available in enabled state.
   final VoidCallback? onSecondaryPressed;
-
-  /// Callback when the card is tapped.
-  /// Only available in enabled state.
   final VoidCallback? onPressed;
 
-  /// Label for the disabled state button (e.g., "Coming Soon").
-  /// Only available in disabled state.
   final String? disabledButtonLabel;
-
-  /// Whether the card is enabled. When false, the card appears greyed out.
   final bool enabled;
 
-  /// Optional fixed width for the card. If null, the card expands to fit its parent.
   final double? width;
-
   final double maxWidth;
 
   @override
@@ -162,7 +121,7 @@ class NasikoCard extends StatefulWidget {
 }
 
 class _NasikoCardState extends State<NasikoCard> {
-  bool _isHovered = false;
+  bool _hovered = false;
 
   @override
   Widget build(BuildContext context) {
@@ -170,131 +129,105 @@ class _NasikoCardState extends State<NasikoCard> {
     final spacing = context.spacing;
     final radii = context.radius;
 
-    Widget cardBody = Container(
-      width: widget.width,
-      padding: EdgeInsets.symmetric(vertical: spacing.s20),
-      decoration: BoxDecoration(
-        color: widget.enabled
-            ? colors.backgroundGroup
-            : colors.foregroundConstantWhite,
-        borderRadius: BorderRadius.circular(radii.r12),
-        border: Border.all(
-          color: !widget.enabled
-              ? colors.borderDisabled
-              : _isHovered
-              ? colors.borderSecondary
-              : colors.borderPrimary,
-          width: 1,
+    Widget card = ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: widget.width ?? widget.maxWidth),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        padding: EdgeInsets.symmetric(vertical: spacing.s20),
+        decoration: BoxDecoration(
+          color: widget.enabled
+              ? colors.backgroundGroup
+              : colors.foregroundConstantWhite,
+          borderRadius: BorderRadius.circular(radii.r12),
+          border: Border.all(
+            color: !widget.enabled
+                ? colors.borderDisabled
+                : _hovered
+                ? colors.borderSecondary
+                : colors.borderPrimary,
+          ),
+          boxShadow: _hovered && widget.enabled
+              ? [
+                  BoxShadow(
+                    color: colors.foregroundConstantBlack.withValues(
+                      alpha: 0.1,
+                    ),
+                    blurRadius: 16,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
+              : null,
         ),
-        boxShadow: _isHovered && widget.enabled
-            ? [
-                BoxShadow(
-                  color: colors.foregroundConstantBlack.withValues(alpha: 0.1),
-                  blurRadius: 16,
-                  offset: const Offset(0, 2),
-                ),
-              ]
-            : null,
-      ),
-      child: _buildContent(context),
-    );
-
-    Widget constrainedCard = Align(
-      alignment: Alignment.topCenter,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: widget.width ?? widget.maxWidth),
-        child: cardBody,
+        child: _buildContent(context),
       ),
     );
-
-    // Wrap with interaction handlers
-    if (widget.onPressed != null && widget.enabled) {
-      return MouseRegion(
-        onEnter: (_) => setState(() => _isHovered = true),
-        onExit: (_) => setState(() => _isHovered = false),
-        cursor: SystemMouseCursors.click,
-        child: GestureDetector(onTap: widget.onPressed, child: constrainedCard),
-      );
-    }
 
     return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: constrainedCard,
+      cursor: widget.onPressed != null && widget.enabled
+          ? SystemMouseCursors.click
+          : MouseCursor.defer,
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: widget.onPressed != null && widget.enabled
+          ? GestureDetector(onTap: widget.onPressed, child: card)
+          : card,
     );
   }
 
   Widget _buildContent(BuildContext context) {
     final spacing = context.spacing;
-    final typography = context.typography;
-    final colors = context.colors;
 
     return Column(
-      mainAxisSize: MainAxisSize.max,
+      mainAxisSize: MainAxisSize.min, // CRITICAL for grid safety
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (widget.image != null) _buildImageSection(context),
-        _buildTitleRow(context, _isHovered),
+        if (widget.image != null) _buildImage(context),
+        _buildTitle(context),
 
         if (widget.tags.isNotEmpty) ...[
           SizedBox(height: spacing.s16),
-          _buildTagsRow(context),
+          _buildTags(context),
         ],
 
         if (widget.subtitle != null) ...[
           SizedBox(height: spacing.s8),
-          _buildSubtitleRow(context),
+          _buildSubtitle(context),
         ],
 
         if (widget.description?.isNotEmpty == true) ...[
           SizedBox(height: spacing.s8),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: spacing.s20),
-            child: Text(
-              widget.description!,
-              style: typography.bodySecondary.copyWith(
-                color: !widget.enabled
-                    ? colors.foregroundDisabled
-                    : colors.foregroundPrimary,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
+          _buildDescription(context),
         ],
-        if (_hasActionButtons) const Spacer(),
-        if (_hasActionButtons) ...[
-          SizedBox(height: spacing.s16),
-          _buildActionButtons(context),
+
+        if (_hasButtons) ...[
+          SizedBox(height: spacing.s20),
+          _buildButtons(context),
         ],
       ],
     );
   }
 
-  bool get _hasActionButtons =>
+  bool get _hasButtons =>
       widget.secondaryButtonLabel != null || widget.disabledButtonLabel != null;
 
-  Widget _buildImageSection(BuildContext context) {
-    final colors = context.colors;
+  Widget _buildImage(BuildContext context) {
     final spacing = context.spacing;
-    final typography = context.typography;
     final radii = context.radius;
+    final colors = context.colors;
+    final typography = context.typography;
 
     return Padding(
       padding: EdgeInsets.all(spacing.s12),
       child: Stack(
         children: [
-          // Image with rounded corners
           ClipRRect(
             borderRadius: BorderRadius.circular(radii.r8),
             child: AspectRatio(aspectRatio: 16 / 9, child: widget.image),
           ),
-
-          // Badge overlay
           if (widget.badgeLabel != null)
             Positioned(
-              top: spacing.s0,
-              right: spacing.s0,
+              top: 0,
+              right: 0,
               child: Container(
                 padding: EdgeInsets.all(spacing.s8),
                 decoration: BoxDecoration(
@@ -321,11 +254,11 @@ class _NasikoCardState extends State<NasikoCard> {
     );
   }
 
-  Widget _buildTitleRow(BuildContext context, bool isHovered) {
-    final colors = context.colors;
+  Widget _buildTitle(BuildContext context) {
     final typography = context.typography;
-    final iconSizes = context.iconSize;
+    final colors = context.colors;
     final spacing = context.spacing;
+    final iconSizes = context.iconSize;
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: spacing.s20),
@@ -337,7 +270,7 @@ class _NasikoCardState extends State<NasikoCard> {
               height: iconSizes.m,
               child: HugeIcon(
                 icon: widget.titleIcon!,
-                color: isHovered
+                color: _hovered
                     ? colors.foregroundIconSecondary
                     : colors.foregroundIconPrimary,
               ),
@@ -347,10 +280,12 @@ class _NasikoCardState extends State<NasikoCard> {
           Expanded(
             child: Text(
               widget.title,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: typography.bodyPrimaryBold.copyWith(
                 color: !widget.enabled
                     ? colors.foregroundDisabled
-                    : isHovered
+                    : _hovered
                     ? colors.foregroundBrand
                     : colors.foregroundPrimary,
               ),
@@ -361,91 +296,92 @@ class _NasikoCardState extends State<NasikoCard> {
     );
   }
 
-  Widget _buildTagsRow(BuildContext context) {
+  Widget _buildTags(BuildContext context) {
     final spacing = context.spacing;
 
-    return ScrollConfiguration(
-      behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Padding(
-          padding: EdgeInsets.only(left: spacing.s20),
-          child: Row(
-            children: widget.tags
-                .map(
-                  (tag) => Padding(
-                    padding: EdgeInsets.only(right: spacing.s8),
-                    child: NasikoChip(
-                      label: tag,
-                      enabled: widget.enabled,
-                      size: NasikoChipSize.small,
-                    ),
-                  ),
-                )
-                .toList(),
-          ),
-        ),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: EdgeInsets.only(left: spacing.s20),
+      child: Row(
+        children: widget.tags
+            .map(
+              (tag) => Padding(
+                padding: EdgeInsets.only(right: spacing.s8),
+                child: NasikoChip(
+                  label: tag,
+                  enabled: widget.enabled,
+                  size: NasikoChipSize.small,
+                ),
+              ),
+            )
+            .toList(),
       ),
     );
   }
 
-  Widget _buildSubtitleRow(BuildContext context) {
+  Widget _buildSubtitle(BuildContext context) {
     final typography = context.typography;
     final colors = context.colors;
     final spacing = context.spacing;
 
-    return ScrollConfiguration(
-      behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: spacing.s20),
-          child: Text(
-            widget.subtitle!,
-            style: typography.bodyTertiaryBold.copyWith(
-              color: !widget.enabled
-                  ? colors.foregroundDisabled
-                  : colors.foregroundSecondary,
-            ),
-          ),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: spacing.s20),
+      child: Text(
+        widget.subtitle!,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: typography.bodyTertiaryBold.copyWith(
+          color: widget.enabled
+              ? colors.foregroundSecondary
+              : colors.foregroundDisabled,
         ),
       ),
     );
   }
 
-  Widget _buildActionButtons(BuildContext context) {
-    // If disabled with a disabled button label, show single disabled button
+  Widget _buildDescription(BuildContext context) {
+    final typography = context.typography;
+    final colors = context.colors;
+    final spacing = context.spacing;
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: spacing.s20),
+      child: Text(
+        widget.description!,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+        style: typography.bodySecondary.copyWith(
+          color: widget.enabled
+              ? colors.foregroundPrimary
+              : colors.foregroundDisabled,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildButtons(BuildContext context) {
+    final spacing = context.spacing;
+
     if (!widget.enabled && widget.disabledButtonLabel != null) {
       return Padding(
-        padding: EdgeInsets.symmetric(horizontal: context.spacing.s20),
-        child: SizedBox(
-          width: double.infinity,
-          child: PrimaryButton(
-            onPressed: null,
-            label: widget.disabledButtonLabel!,
-            size: NasikoButtonSize.small,
-          ),
+        padding: EdgeInsets.symmetric(horizontal: spacing.s20),
+        child: PrimaryButton(
+          onPressed: null,
+          label: widget.disabledButtonLabel!,
+          size: NasikoButtonSize.small,
         ),
       );
     }
 
-    // Show secondary button
-    if (widget.secondaryButtonLabel != null) {
-      return Padding(
-        padding: EdgeInsets.symmetric(horizontal: context.spacing.s20),
-        child: SizedBox(
-          width: double.infinity,
-          child: SecondaryButton(
-            onPressed: widget.enabled ? widget.onSecondaryPressed : null,
-            label: widget.secondaryButtonLabel!,
-            leadingIcon: widget.secondaryButtonIcon,
-            trailingIcon: widget.secondaryButtonTrailingIcon,
-            size: NasikoButtonSize.small,
-          ),
-        ),
-      );
-    }
-
-    return const SizedBox.shrink();
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: spacing.s20),
+      child: SecondaryButton(
+        onPressed: widget.onSecondaryPressed,
+        label: widget.secondaryButtonLabel!,
+        leadingIcon: widget.secondaryButtonIcon,
+        trailingIcon: widget.secondaryButtonTrailingIcon,
+        size: NasikoButtonSize.small,
+      ),
+    );
   }
 }
