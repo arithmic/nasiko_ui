@@ -148,7 +148,7 @@ TextStyle get _baseTitlePrimary => TextStyle(
   fontFamily: _chivoMonoFontFamily,
   fontWeight: FontWeight.w500, // Medium
   fontSize: 40.sp,
-  height: 48.h / 40.sp, // Line height calculation
+  height: 48 / 40, // Line height calculation
   letterSpacing: -0.04 * 40.sp, // -4%
 );
 
@@ -156,7 +156,7 @@ TextStyle get _baseTitleSecondary => TextStyle(
   fontFamily: _chivoMonoFontFamily,
   fontWeight: FontWeight.w500, // Medium
   fontSize: 32.sp,
-  height: 38.h / 32.sp, // Line height calculation
+  height: 38 / 32, // Line height calculation
   letterSpacing: -0.04 * 32.sp, // -4%
 );
 
@@ -164,7 +164,7 @@ TextStyle get _baseButtonPrimary => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w500, // Medium
   fontSize: 20.sp,
-  height: 24.h / 20.sp,
+  height: 24 / 20,
   letterSpacing: 0.0016 * 20.sp, // 0.16%
 );
 
@@ -172,7 +172,7 @@ TextStyle get _baseButtonSecondary => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w500, // Medium
   fontSize: 16.sp,
-  height: 20.h / 16.sp,
+  height: 20 / 16,
   letterSpacing: 0.0016 * 16.sp, // 0.16%
 );
 
@@ -180,7 +180,7 @@ TextStyle get _baseBodyPrimary => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w400, // Regular
   fontSize: 20.sp,
-  height: 24.h / 20.sp,
+  height: 24 / 20,
   letterSpacing: 0,
 );
 
@@ -188,7 +188,7 @@ TextStyle get _baseBodyPrimaryBold => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w700, // bold
   fontSize: 20.sp,
-  height: 24.h / 20.sp,
+  height: 24 / 20,
   letterSpacing: 0,
 );
 
@@ -196,7 +196,7 @@ TextStyle get _baseBodySecondary => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w400, // Regular
   fontSize: 16.sp,
-  height: 20.h / 16.sp,
+  height: 20 / 16,
   letterSpacing: 0,
 );
 
@@ -204,7 +204,7 @@ TextStyle get _baseBodySecondaryBold => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w700, // Bold
   fontSize: 16.sp,
-  height: 20.h / 16.sp,
+  height: 20 / 16,
   letterSpacing: 0,
 );
 
@@ -212,7 +212,7 @@ TextStyle get _baseBodyTertiary => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w400, // Regular
   fontSize: 12.sp,
-  height: 16.h / 12.sp,
+  height: 16 / 12,
   letterSpacing: 0,
 );
 
@@ -220,7 +220,7 @@ TextStyle get _baseBodyTertiaryBold => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w700, // Bold
   fontSize: 12.sp,
-  height: 16.h / 12.sp,
+  height: 16 / 12,
   letterSpacing: 0,
 );
 
@@ -228,7 +228,7 @@ TextStyle get _baseLinkPrimary => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w400, // Regular
   fontSize: 16.sp,
-  height: 20.h / 16.sp,
+  height: 20 / 16,
   letterSpacing: 0,
 );
 
@@ -237,7 +237,7 @@ TextStyle get _baseCaption => TextStyle(
   fontStyle: FontStyle.italic, // Regular Italics
   fontWeight: FontWeight.w400,
   fontSize: 12.sp,
-  height: 16.h / 12.sp,
+  height: 16 / 12,
   letterSpacing: 0.0004 * 12.sp, // 0.04%
 );
 
@@ -246,7 +246,7 @@ TextStyle get _baseCode => TextStyle(
       _interFontFamily, // Typically a monospace font, but Inter is specified
   fontWeight: FontWeight.w400, // Regular
   fontSize: 16.sp,
-  height: 20.h / 16.sp,
+  height: 20 / 16,
   letterSpacing: 0,
 );
 
