@@ -162,7 +162,7 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.08),
               blurRadius: 16.r,
-              offset: const Offset(0, 4),
+              offset: Offset(0, 4.h),
             ),
           ],
         ),

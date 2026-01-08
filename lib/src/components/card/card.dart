@@ -147,8 +147,8 @@ class _NasikoCardState extends State<NasikoCard> {
                     color: colors.foregroundConstantBlack.withValues(
                       alpha: 0.1,
                     ),
-                    blurRadius: 16,
-                    offset: const Offset(0, 2),
+                    blurRadius: 16.r,
+                    offset: Offset(0, 2.h),
                   ),
                 ]
               : null,
