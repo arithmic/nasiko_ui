@@ -18,7 +18,7 @@ Future<T?> showNasikoModal<T>({
   HugeIconsType? primaryButtonTrailingIcon,
   String? secondaryButtonLabel,
   VoidCallback? onSecondaryAction,
-  bool secondaryButtonIsDanger = true,
+  bool secondaryButtonIsDanger = false,
   HugeIconsType? secondaryButtonLeadingIcon,
   HugeIconsType? secondaryButtonTrailingIcon,
   bool isDismissible = true,
