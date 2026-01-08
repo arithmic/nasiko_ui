@@ -67,7 +67,7 @@ class NasikoModal extends StatelessWidget {
     this.primaryButtonTrailingIcon,
     this.secondaryButtonLabel,
     this.onSecondaryAction,
-    this.secondaryButtonIsDanger = true,
+    this.secondaryButtonIsDanger = false,
     this.secondaryButtonLeadingIcon,
     this.secondaryButtonTrailingIcon,
     this.buttonLayout = NasikoModalVariant.horizontal,
