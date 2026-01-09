@@ -1978,7 +1978,7 @@ class _RadioExampleState extends State<_RadioExample> {
             NasikoRadioTile<String>(
               label: 'Option 2',
               value: 'option2',
-              icon: Icons.airplanemode_active,
+              icon: HugeIcons.strokeRoundedAirplaneMode,
               groupValue: _selectedOption,
               onChanged: (value) => setState(() => _selectedOption = value),
             ),
