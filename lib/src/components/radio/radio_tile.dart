@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
 class NasikoRadioTile<T> extends StatelessWidget {
@@ -15,7 +16,7 @@ class NasikoRadioTile<T> extends StatelessWidget {
   final T? groupValue;
   final String label;
   final ValueChanged<T?>? onChanged;
-  final IconData? icon;
+  final HugeIconsType? icon;
   bool get _enabled => onChanged != null;
 
   @override
@@ -45,8 +46,8 @@ class NasikoRadioTile<T> extends StatelessWidget {
             ),
             SizedBox(width: spacing.s8.w),
             if (icon != null) ...[
-              Icon(
-                icon,
+              HugeIcon(
+                icon: icon!,
                 size: iconSizes.m.r, // 24px
                 color: contentColor,
               ),
