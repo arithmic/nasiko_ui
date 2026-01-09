@@ -18,6 +18,7 @@ class NasikoToastService {
     Duration duration = const Duration(seconds: 3),
     VoidCallback? onCancel,
     bool showCancel = true,
+    bool inProgress = false,
   }) {
     // 1. Ensure any previous toast is dismissed immediately
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -38,6 +39,7 @@ class NasikoToastService {
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 },
             showCancel: showCancel,
+            inProgress: inProgress,
           ),
         ),
         duration: duration,

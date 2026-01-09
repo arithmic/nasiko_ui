@@ -1728,6 +1728,15 @@ class ExampleHomePage extends StatelessWidget {
             type: NasikoToastType.info,
           ),
         ),
+        PrimaryButton(
+          label: 'Show In progress Info Toast',
+          onPressed: () => NasikoToastService.show(
+            context,
+            message: 'The new feature roadmap is now available for review.',
+            type: NasikoToastType.info,
+            inProgress: true,
+          ),
+        ),
       ],
     );
   }

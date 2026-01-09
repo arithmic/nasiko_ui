@@ -11,12 +11,14 @@ class NasikoToast extends StatelessWidget {
     required this.message,
     this.onCancel,
     this.showCancel = true,
+    this.inProgress,
   });
 
   final NasikoToastType type;
   final String message;
   final VoidCallback? onCancel;
   final bool showCancel;
+  final bool? inProgress;
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +55,23 @@ class NasikoToast extends StatelessWidget {
         break;
     }
 
+    final IconData icon;
+
+    switch (type) {
+      case NasikoToastType.success:
+        icon = Icons.check_box;
+        break;
+      case NasikoToastType.error:
+        icon = Icons.cancel;
+        break;
+      case NasikoToastType.warning:
+        icon = Icons.warning;
+        break;
+      case NasikoToastType.info:
+        icon = Icons.info;
+        break;
+    }
+
     return Material(
       color: Colors.transparent,
       child: Container(
@@ -70,14 +89,18 @@ class NasikoToast extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: [
               SizedBox(
-                width: iconSizes.s.r,
-                height: iconSizes.s.r,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2.w,
-                  valueColor: AlwaysStoppedAnimation<Color>(iconColor),
-                ),
+                width: iconSizes.m.r,
+                height: iconSizes.m.r,
+                child: inProgress == true
+                    ? CircularProgressIndicator(
+                        strokeWidth: 2.w,
+                        valueColor: AlwaysStoppedAnimation<Color>(iconColor),
+                      )
+                    : Icon(icon, size: iconSizes.m.r, color: iconColor),
               ),
-              SizedBox(width: spacing.s12.w),
+              inProgress == true
+                  ? SizedBox(width: spacing.s8.w)
+                  : SizedBox(width: spacing.s4.w),
 
               Expanded(
                 child: Text(
