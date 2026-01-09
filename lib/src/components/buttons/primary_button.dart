@@ -53,36 +53,36 @@ class PrimaryButton extends StatelessWidget {
     switch (size) {
       case NasikoButtonSize.large:
         padding = EdgeInsets.symmetric(
-          vertical: spacing.s20.h,
-          horizontal: spacing.s24.w,
+          vertical: spacing.s20h,
+          horizontal: spacing.s24w,
         );
         textStyle = typography.buttonPrimary;
-        iconSize = iconSizes.l.r; // 28px
-        borderRadius = radii.r10.r; // 10px radius
-        iconSpacing = spacing.s12.w; // 12px spacing
-        minHeight = 68.h;
+        iconSize = iconSizes.l; // 28px
+        borderRadius = radii.r10; // 10px radius
+        iconSpacing = spacing.s12w; // 12px spacing
+        minHeight = spacing.s64h;
         break;
       case NasikoButtonSize.medium:
         padding = EdgeInsets.symmetric(
-          vertical: spacing.s12.h,
-          horizontal: spacing.s16.w,
+          vertical: spacing.s12h,
+          horizontal: spacing.s16w,
         );
         textStyle = typography.buttonSecondary;
-        iconSize = iconSizes.s.r; // 20px
-        borderRadius = radii.r8.r; // 8px radius
-        iconSpacing = spacing.s8.w; // 8px spacing
-        minHeight = 44.h;
+        iconSize = iconSizes.s; // 20px
+        borderRadius = radii.r8; // 8px radius
+        iconSpacing = spacing.s8w; // 8px spacing
+        minHeight = spacing.s48h;
         break;
       case NasikoButtonSize.small:
         padding = EdgeInsets.symmetric(
-          vertical: spacing.s8.h,
-          horizontal: spacing.s12.w,
+          vertical: spacing.s8h,
+          horizontal: spacing.s12w,
         );
         textStyle = typography.buttonSecondary;
-        iconSize = iconSizes.s.r; // 20px
-        borderRadius = radii.r8.r; // 8px radius
-        iconSpacing = spacing.s8.w; // 8px spacing
-        minHeight = 36.h;
+        iconSize = iconSizes.s; // 20px
+        borderRadius = radii.r8; // 8px radius
+        iconSpacing = spacing.s8w; // 8px spacing
+        minHeight = spacing.s36h;
         break;
     }
 
@@ -126,7 +126,7 @@ class PrimaryButton extends StatelessWidget {
         if (states.contains(WidgetState.focused)) {
           borderSide = BorderSide(
             color: colors.borderSecondary,
-            width: borderWidth.w2.w,
+            width: borderWidth.w2,
             strokeAlign: BorderSide.strokeAlignOutside,
           );
         }

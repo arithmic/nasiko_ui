@@ -48,14 +48,14 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
     final borderWidths = context.borderWidth;
 
     return SizedBox(
-      height: _tabBarHeight.h,
+      height: spacing.s36h,
       child: TabBar(
         controller: controller,
         onTap: onTap,
         isScrollable: true,
         padding: EdgeInsets.zero,
         tabAlignment: tabAlignment,
-        labelPadding: EdgeInsets.symmetric(horizontal: spacing.s16.w),
+        labelPadding: EdgeInsets.symmetric(horizontal: spacing.s16w),
 
         // --- Active Tab Styling ---
         labelColor: colors.foregroundBrand,
@@ -69,7 +69,7 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
         indicator: UnderlineTabIndicator(
           borderSide: BorderSide(
             color: colors.borderSecondary,
-            width: borderWidths.w2.w,
+            width: borderWidths.w2,
           ),
           // insets: EdgeInsets.symmetric(horizontal: spacing.s16),
         ),
@@ -77,17 +77,17 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
 
         // --- Full-Width Underline (Gray) ---
         dividerColor: colors.borderPrimary,
-        dividerHeight: borderWidths.w1.w,
+        dividerHeight: borderWidths.w1,
 
         tabs: tabs.map((item) {
           return Tab(
-            height: (_tabBarHeight - borderWidths.w1).h, // Account for divider
+            height: spacing.s36h - borderWidths.w1, // Account for divider
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
                 item.icon,
-                SizedBox(width: spacing.s8.w),
+                SizedBox(width: spacing.s8w),
                 Text(item.label),
               ],
             ),

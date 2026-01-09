@@ -2,9 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
-import 'package:nasiko_ui/src/components/toast/toast.dart';
-import 'package:nasiko_ui/src/components/toast/toast_type.dart';
-import 'package:nasiko_ui/src/tokens/spacing.dart';
 
 /// A service class to easily display Nasiko Toasts (SnackBars).
 class NasikoToastService {
@@ -47,11 +44,11 @@ class NasikoToastService {
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         // Add padding around the toast to match the design spacing
-        padding: EdgeInsets.all(context.spacing.s16.r),
+        padding: EdgeInsets.all(context.spacing.s16r),
 
         margin: EdgeInsets.only(
-          left: context.spacing.s24.w,
-          bottom: context.spacing.s48.h,
+          left: context.spacing.s24w,
+          bottom: context.spacing.s48h,
         ),
       ),
     );

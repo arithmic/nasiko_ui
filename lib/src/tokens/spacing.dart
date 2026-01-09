@@ -1,4 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:nasiko_ui/nasiko_ui.dart';
+
+extension NasikoSpacingResolved on NasikoSpacingTheme {
+  // Vertical
+  double get s2h => s2.h;
+  double get s4h => s4.h;
+  double get s8h => s8.h;
+  double get s12h => s12.h;
+  double get s16h => s16.h;
+  double get s20h => s20.h;
+  double get s24h => s24.h;
+  double get s28h => s28.h;
+  double get s36h => s36.h;
+  double get s48h => s48.h;
+  double get s64h => s64.h;
+  double get s80h => s80.h;
+
+  // Horizontal
+  double get s2w => s2.w;
+  double get s4w => s4.w;
+  double get s8w => s8.w;
+  double get s12w => s12.w;
+  double get s16w => s16.w;
+  double get s20w => s20.w;
+  double get s24w => s24.w;
+  double get s28w => s28.w;
+  double get s36w => s36.w;
+  double get s48w => s48.w;
+  double get s64w => s64.w;
+  double get s80w => s80.w;
+
+  // Uniform
+  double get s2r => s2.r;
+  double get s4r => s4.r;
+  double get s8r => s8.r;
+  double get s12r => s12.r;
+  double get s16r => s16.r;
+  double get s20r => s20.r;
+  double get s24r => s24.r;
+  double get s28r => s28.r;
+  double get s36r => s36.r;
+  double get s48r => s48.r;
+  double get s64r => s64.r;
+  double get s80r => s80.r;
+}
 
 @immutable
 class NasikoSpacingTheme extends ThemeExtension<NasikoSpacingTheme> {

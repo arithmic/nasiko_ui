@@ -123,15 +123,15 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
       },
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: spacing.s16.w,
-          vertical: spacing.s12.h,
+          horizontal: spacing.s16w,
+          vertical: spacing.s12h,
         ),
         decoration: BoxDecoration(
           color: widget.enabled
               ? colors.backgroundGroup
               : colors.backgroundGroup.withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(radii.r12.r),
-          border: Border.all(color: borderColor, width: borderWidths.w1.w),
+          borderRadius: BorderRadius.circular(radii.r12),
+          border: Border.all(color: borderColor, width: borderWidths.w1),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -140,10 +140,10 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
             if (widget.attachments.isNotEmpty) ...[
               Container(
                 width: double.infinity,
-                margin: EdgeInsets.only(bottom: 16.h),
+                margin: EdgeInsets.only(bottom: spacing.s16h),
                 child: Wrap(
-                  spacing: spacing.s8,
-                  runSpacing: spacing.s8,
+                  spacing: spacing.s8w,
+                  runSpacing: spacing.s8h,
                   children: widget.attachments.asMap().entries.map((entry) {
                     final index = entry.key;
                     final file = entry.value;
@@ -157,7 +157,7 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
                   }).toList(),
                 ),
               ),
-              SizedBox(height: spacing.s12.h),
+              SizedBox(height: spacing.s12h),
             ],
             TextField(
               controller: _controller,
@@ -182,7 +182,7 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
 
             // Action buttons row
             if (widget.showAttachmentButton || widget.showSendButton) ...[
-              SizedBox(height: spacing.s12.h),
+              SizedBox(height: spacing.s12h),
               Row(
                 children: [
                   // Attachment button

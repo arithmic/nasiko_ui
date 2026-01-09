@@ -44,11 +44,11 @@ class LinkButton extends StatelessWidget {
         // --- Base Properties ---
         padding: WidgetStateProperty.all(
           EdgeInsets.symmetric(
-            vertical: spacing.s8.h,
-            horizontal: spacing.s12.w,
+            vertical: spacing.s8h,
+            horizontal: spacing.s12w,
           ),
         ),
-        fixedSize: WidgetStateProperty.all(Size.fromHeight(36.h)),
+        fixedSize: WidgetStateProperty.all(Size.fromHeight(spacing.s36h)),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         elevation: WidgetStateProperty.all(0),
         shadowColor: WidgetStateProperty.all(Colors.transparent),
@@ -83,7 +83,7 @@ class LinkButton extends StatelessWidget {
               color: colors.foregroundBrandHover,
               decoration: TextDecoration.underline,
               decorationColor: colors.foregroundBrandHover,
-              decorationThickness: borderWidth.w1.w,
+              decorationThickness: borderWidth.w1,
             );
           }
           // Default state
@@ -98,8 +98,8 @@ class LinkButton extends StatelessWidget {
         children: [
           // Leading Icon
           if (leadingIcon != null) ...[
-            HugeIcon(icon: leadingIcon!, size: iconSizes.s.r),
-            SizedBox(width: spacing.s8.w),
+            HugeIcon(icon: leadingIcon!, size: iconSizes.s),
+            SizedBox(width: spacing.s8w),
           ],
 
           // Label
@@ -107,8 +107,8 @@ class LinkButton extends StatelessWidget {
 
           // Trailing Icon
           if (trailingIcon != null) ...[
-            SizedBox(width: spacing.s8.w),
-            HugeIcon(icon: trailingIcon!, size: iconSizes.s.r),
+            SizedBox(width: spacing.s8w),
+            HugeIcon(icon: trailingIcon!, size: iconSizes.s),
           ],
         ],
       ),

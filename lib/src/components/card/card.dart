@@ -125,15 +125,15 @@ class _NasikoCardState extends State<NasikoCard> {
     final radii = context.radius;
 
     Widget card = ConstrainedBox(
-      constraints: BoxConstraints(maxWidth: widget.maxWidth.w),
+      constraints: BoxConstraints(maxWidth: widget.maxWidth),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
-        padding: EdgeInsets.symmetric(vertical: spacing.s20.h),
+        padding: EdgeInsets.symmetric(vertical: spacing.s20h),
         decoration: BoxDecoration(
           color: widget.enabled
               ? colors.backgroundGroup
               : colors.foregroundConstantWhite,
-          borderRadius: BorderRadius.circular(radii.r12.r),
+          borderRadius: BorderRadius.circular(radii.r12),
           border: Border.all(
             color: !widget.enabled
                 ? colors.borderDisabled
@@ -147,8 +147,8 @@ class _NasikoCardState extends State<NasikoCard> {
                     color: colors.foregroundConstantBlack.withValues(
                       alpha: 0.1,
                     ),
-                    blurRadius: 16.r,
-                    offset: Offset(0, 2.h),
+                    blurRadius: 16,
+                    offset: Offset(0, spacing.s2h),
                   ),
                 ]
               : null,
@@ -180,22 +180,22 @@ class _NasikoCardState extends State<NasikoCard> {
         _buildTitle(context),
 
         if (widget.tags.isNotEmpty) ...[
-          SizedBox(height: spacing.s16.h),
+          SizedBox(height: spacing.s16h),
           _buildTags(context),
         ],
 
         if (widget.subtitle != null) ...[
-          SizedBox(height: spacing.s8.h),
+          SizedBox(height: spacing.s8h),
           _buildSubtitle(context),
         ],
 
         if (widget.description?.isNotEmpty == true) ...[
-          SizedBox(height: spacing.s8.h),
+          SizedBox(height: spacing.s8h),
           _buildDescription(context),
         ],
 
         if (_hasButtons) ...[
-          SizedBox(height: spacing.s16.h),
+          SizedBox(height: spacing.s16h),
           _buildButtons(context),
         ],
       ],
@@ -212,11 +212,11 @@ class _NasikoCardState extends State<NasikoCard> {
     final typography = context.typography;
 
     return Padding(
-      padding: EdgeInsets.all(spacing.s12.r),
+      padding: EdgeInsets.all(spacing.s12r),
       child: Stack(
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(radii.r8.r),
+            borderRadius: BorderRadius.circular(radii.r8),
             child: AspectRatio(aspectRatio: 16 / 9, child: widget.image),
           ),
           if (widget.badgeLabel != null)
@@ -224,14 +224,14 @@ class _NasikoCardState extends State<NasikoCard> {
               top: 0,
               right: 0,
               child: Container(
-                padding: EdgeInsets.all(spacing.s8.r),
+                padding: EdgeInsets.all(spacing.s8r),
                 decoration: BoxDecoration(
                   color: widget.enabled
                       ? colors.backgroundBrand
                       : colors.backgroundDisabled,
                   borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(radii.r8.r),
-                    bottomLeft: Radius.circular(radii.r8.r),
+                    topRight: Radius.circular(radii.r8),
+                    bottomLeft: Radius.circular(radii.r8),
                   ),
                 ),
                 child: Text(
@@ -256,12 +256,12 @@ class _NasikoCardState extends State<NasikoCard> {
     final iconSize = context.iconSize;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: spacing.s20.w),
+      padding: EdgeInsets.symmetric(horizontal: spacing.s20w),
       child: Row(
         children: [
           if (widget.titleIcon != null) ...[
             SizedBox(
-              height: iconSize.m.r,
+              height: iconSize.m,
               child: HugeIcon(
                 icon: widget.titleIcon!,
                 color: _hovered
@@ -269,7 +269,7 @@ class _NasikoCardState extends State<NasikoCard> {
                     : colors.foregroundIconPrimary,
               ),
             ),
-            SizedBox(width: spacing.s8.w),
+            SizedBox(width: spacing.s8w),
           ],
           Expanded(
             child: Text(
@@ -295,12 +295,12 @@ class _NasikoCardState extends State<NasikoCard> {
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      padding: EdgeInsets.only(left: spacing.s20.w),
+      padding: EdgeInsets.only(left: spacing.s20w),
       child: Row(
         children: widget.tags
             .map(
               (tag) => Padding(
-                padding: EdgeInsets.only(right: spacing.s8.w),
+                padding: EdgeInsets.only(right: spacing.s8w),
                 child: NasikoChip(
                   label: tag,
                   enabled: widget.enabled,
@@ -319,7 +319,7 @@ class _NasikoCardState extends State<NasikoCard> {
     final spacing = context.spacing;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: spacing.s20.w),
+      padding: EdgeInsets.symmetric(horizontal: spacing.s20w),
       child: Text(
         widget.subtitle!,
         maxLines: 1,
@@ -339,7 +339,7 @@ class _NasikoCardState extends State<NasikoCard> {
     final spacing = context.spacing;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: spacing.s20.w),
+      padding: EdgeInsets.symmetric(horizontal: spacing.s20w),
       child: Text(
         widget.description!,
         maxLines: 2,
@@ -358,7 +358,7 @@ class _NasikoCardState extends State<NasikoCard> {
 
     if (!widget.enabled && widget.disabledButtonLabel != null) {
       return Padding(
-        padding: EdgeInsets.symmetric(horizontal: spacing.s20.w),
+        padding: EdgeInsets.symmetric(horizontal: spacing.s20w),
         child: SizedBox(
           width: double.infinity, // 🔑 forces full width
           child: PrimaryButton(
@@ -371,7 +371,7 @@ class _NasikoCardState extends State<NasikoCard> {
     }
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: spacing.s20.w),
+      padding: EdgeInsets.symmetric(horizontal: spacing.s20w),
       child: SizedBox(
         width: double.infinity, // 🔑 forces full width
         child: SecondaryButton(

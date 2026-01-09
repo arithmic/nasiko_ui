@@ -62,7 +62,7 @@ class NasikoSwitch extends StatelessWidget {
     });
 
     return SizedBox(
-      height: size == NasikoSwitchSize.small ? spacing.s20.h : spacing.s24.h,
+      height: size == NasikoSwitchSize.small ? spacing.s20h : spacing.s24h,
       child: FittedBox(
         fit: BoxFit.fill,
         child: Switch.adaptive(
@@ -85,7 +85,7 @@ class NasikoSwitch extends StatelessWidget {
             // No border when checked, let the brand color handle the track
             return Colors.transparent;
           }),
-          trackOutlineWidth: WidgetStateProperty.all(borderWidths.w1.w),
+          trackOutlineWidth: WidgetStateProperty.all(borderWidths.w1),
 
           // The default Flutter thumb radius and track size look appropriate
           // for the design, which has a 2:1 ratio (track width:height)

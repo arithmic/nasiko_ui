@@ -224,10 +224,9 @@ TextStyle get _baseCaption => TextStyle(
 );
 
 TextStyle get _baseCode => TextStyle(
-  fontFamily:
-      _interFontFamily, // Typically a monospace font, but Inter is specified
+  fontFamily: _chivoMonoFontFamily,
   fontWeight: FontWeight.w400, // Regular
-  fontSize: 16.sp,
+  fontSize: 16.sp.clamp(14, 18),
   height: 1.25,
   letterSpacing: 0,
 );

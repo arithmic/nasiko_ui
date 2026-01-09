@@ -43,12 +43,9 @@ class PrimaryTextButton extends StatelessWidget {
       style: ButtonStyle(
         // --- Base Properties ---
         padding: WidgetStateProperty.all(
-          EdgeInsets.symmetric(
-            vertical: spacing.s8.h,
-            horizontal: spacing.s12.w,
-          ),
+          EdgeInsets.symmetric(vertical: spacing.s8h, horizontal: spacing.s12w),
         ),
-        fixedSize: WidgetStateProperty.all(Size.fromHeight(36.h)),
+        fixedSize: WidgetStateProperty.all(Size.fromHeight(spacing.s36h)),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         textStyle: WidgetStateProperty.all(typography.buttonSecondary),
         elevation: WidgetStateProperty.all(0),
@@ -67,17 +64,15 @@ class PrimaryTextButton extends StatelessWidget {
           if (states.contains(WidgetState.hovered) ||
               states.contains(WidgetState.focused)) {
             return RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(borderRadius.r8.r),
-              ),
+              borderRadius: BorderRadius.all(Radius.circular(borderRadius.r8)),
               side: BorderSide(
                 color: colors.foregroundBrand,
-                width: borderWidth.w1.w,
+                width: borderWidth.w1,
               ),
             );
           }
           return RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(borderRadius.r8.r)),
+            borderRadius: BorderRadius.all(Radius.circular(borderRadius.r8)),
           );
         }),
       ),
@@ -86,8 +81,8 @@ class PrimaryTextButton extends StatelessWidget {
         children: [
           // Leading Icon
           if (leadingIcon != null) ...[
-            HugeIcon(icon: leadingIcon!, size: iconSizes.s.r),
-            SizedBox(width: spacing.s8.w),
+            HugeIcon(icon: leadingIcon!, size: iconSizes.s),
+            SizedBox(width: spacing.s8w),
           ],
 
           // Label
@@ -95,8 +90,8 @@ class PrimaryTextButton extends StatelessWidget {
 
           // Trailing Icon
           if (trailingIcon != null) ...[
-            SizedBox(width: spacing.s8.w),
-            HugeIcon(icon: trailingIcon!, size: iconSizes.s.r),
+            SizedBox(width: spacing.s8w),
+            HugeIcon(icon: trailingIcon!, size: iconSizes.s),
           ],
         ],
       ),

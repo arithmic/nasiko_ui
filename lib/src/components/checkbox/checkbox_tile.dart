@@ -44,26 +44,26 @@ class NasikoCheckboxTile extends StatelessWidget {
 
     return InkWell(
       onTap: isDisabled ? null : () => onChanged!(!isChecked),
-      borderRadius: BorderRadius.circular(context.radius.r4.r),
+      borderRadius: BorderRadius.circular(context.radius.r4),
       splashColor: colors.backgroundBrandSubtle,
       highlightColor: colors.backgroundBrandSubtle,
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: spacing.s4.w,
-          vertical: spacing.s8.h,
+          horizontal: spacing.s4w,
+          vertical: spacing.s8h,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             NasikoCheckbox(isChecked: isChecked, onChanged: onChanged),
-            SizedBox(width: spacing.s12.w),
+            SizedBox(width: spacing.s12w),
             if (icon != null) ...[
               Icon(
                 icon,
-                size: iconSizes.m.r, // 24px
+                size: iconSizes.m, // 24px
                 color: contentColor,
               ),
-              SizedBox(width: spacing.s8.w),
+              SizedBox(width: spacing.s8w),
             ],
             Text(
               label,

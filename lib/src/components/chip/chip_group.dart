@@ -43,7 +43,7 @@ class NasikoChipGroup extends StatelessWidget {
           children: [
             for (int i = 0; i < children.length; i++) ...[
               children[i],
-              if (i < children.length - 1) SizedBox(width: spacingValue.w),
+              if (i < children.length - 1) SizedBox(width: spacingValue),
             ],
           ],
         ),

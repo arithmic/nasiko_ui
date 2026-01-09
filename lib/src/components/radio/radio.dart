@@ -65,9 +65,10 @@ class _NasikoRadioState<T> extends State<NasikoRadio<T>> {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final borderWidths = context.borderWidth;
+    final iconSizes = context.iconSize;
 
     // Size expands to 24px when focused, otherwise stays at 20px
-    final size = _isFocused ? 24.0 : 20.0;
+    final size = _isFocused ? iconSizes.m : iconSizes.s;
 
     return MouseRegion(
       cursor: _isDisabled ? SystemMouseCursors.basic : SystemMouseCursors.click,
@@ -88,8 +89,8 @@ class _NasikoRadioState<T> extends State<NasikoRadio<T>> {
             : () => setState(() => _isFocused = false),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
-          width: size.r,
-          height: size.r,
+          width: size,
+          height: size,
           child: CustomPaint(
             painter: _RadioPainter(
               isSelected: _isSelected,
@@ -177,7 +178,7 @@ class _RadioPainter extends CustomPainter {
       final bgPaint = Paint()
         ..color = colors.backgroundDisabled
         ..style = PaintingStyle.fill;
-      canvas.drawCircle(center, baseRadius.r, bgPaint);
+      canvas.drawCircle(center, baseRadius, bgPaint);
     }
 
     // Step 2: Draw outer ring for focused state (24px diameter, brand color)
@@ -185,8 +186,8 @@ class _RadioPainter extends CustomPainter {
       final outerPaint = Paint()
         ..color = colors.backgroundBrand
         ..style = PaintingStyle.stroke
-        ..strokeWidth = borderWidths.w1.w;
-      canvas.drawCircle(center, (12.0 - borderWidths.w1 / 2).w, outerPaint);
+        ..strokeWidth = borderWidths.w1;
+      canvas.drawCircle(center, 12.0 - borderWidths.w1 / 2, outerPaint);
     }
 
     // Step 3: Draw main ring (20px diameter, color varies by state)
@@ -194,14 +195,14 @@ class _RadioPainter extends CustomPainter {
       ..color = outerRingColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = borderWidths.w1;
-    canvas.drawCircle(center, (baseRadius - borderWidths.w1 / 2).w, mainPaint);
+    canvas.drawCircle(center, baseRadius - borderWidths.w1 / 2, mainPaint);
 
     // Step 4: Draw inner filled circle when selected (12px diameter)
     if (innerCircleColor != null) {
       final innerPaint = Paint()
         ..color = innerCircleColor
         ..style = PaintingStyle.fill;
-      canvas.drawCircle(center, innerRadius.r, innerPaint);
+      canvas.drawCircle(center, innerRadius, innerPaint);
     }
   }
 

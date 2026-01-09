@@ -121,17 +121,15 @@ class _SectionState extends State<Section> {
               : _isExpanded
               ? colors.backgroundBase
               : (widget.backgroundColor ?? colors.backgroundBase),
-          borderRadius: BorderRadius.circular(radii.r12.r),
+          borderRadius: BorderRadius.circular(radii.r12),
           border: Border.all(
             color: hasSelectedChild && !_isExpanded
-                ? colors.foregroundBrand
-                : (_isExpanded
-                      ? colors.borderPrimary
-                      : colors.backgroundSurface),
-            width: borderWidths.w1.w,
+                ? colors.borderSecondary
+                : (_isExpanded ? colors.borderPrimary : Colors.transparent),
+            width: borderWidths.w1,
           ),
         ),
-        padding: EdgeInsets.all(spacing.s8.r),
+        padding: EdgeInsets.all(spacing.s8r),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -145,19 +143,19 @@ class _SectionState extends State<Section> {
                     // Leading icon
                     HugeIcon(
                       icon: widget.icon!,
-                      size: iconSizes.s.r,
+                      size: iconSizes.s,
                       color: widget.isDisabled
                           ? colors.foregroundDisabled
                           : hasSelectedChild
                           ? colors.foregroundPrimary
                           : colors.foregroundIconTertiary,
                     ),
-                    SizedBox(width: spacing.s8.w),
+                    SizedBox(width: spacing.s8w),
 
                     // Label
                     Expanded(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 4.0.h),
+                        padding: EdgeInsets.symmetric(vertical: spacing.s4h),
                         child: Text(
                           widget.label,
                           style: typography.bodySecondaryBold.copyWith(
@@ -170,13 +168,13 @@ class _SectionState extends State<Section> {
                     ),
 
                     // Chevron icon
-                    SizedBox(width: spacing.s8.w),
+                    SizedBox(width: spacing.s8w),
                     AnimatedRotation(
                       turns: _isExpanded ? 0.5 : 0,
                       duration: const Duration(milliseconds: 200),
                       child: Icon(
                         Icons.keyboard_arrow_down_rounded,
-                        size: iconSizes.s.r,
+                        size: iconSizes.s,
                         color: widget.isDisabled
                             ? colors.foregroundDisabled
                             : colors.foregroundIconPrimary,
@@ -189,7 +187,7 @@ class _SectionState extends State<Section> {
 
             // Expanded children
             if (_isExpanded) ...[
-              SizedBox(height: spacing.s8.h),
+              SizedBox(height: spacing.s8h),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: widget.children!.map((child) {
@@ -252,27 +250,27 @@ class _SectionState extends State<Section> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           padding: EdgeInsets.symmetric(
-            horizontal: spacing.s8.w,
-            vertical: spacing.s12.h,
+            horizontal: spacing.s8w,
+            vertical: spacing.s12h,
           ),
           decoration: BoxDecoration(
             color: backgroundColor,
-            borderRadius: BorderRadius.circular(radii.r8.r),
-            border: Border.all(color: borderColor, width: borderWidths.w1.w),
+            borderRadius: BorderRadius.circular(radii.r8),
+            border: Border.all(color: borderColor, width: borderWidths.w1),
           ),
           child: Row(
             children: [
               // Leading icon
               HugeIcon(
                 icon: widget.icon!,
-                size: iconSizes.s.r,
+                size: iconSizes.s,
                 color: widget.isDisabled
                     ? colors.foregroundDisabled
                     : showSelectedState
                     ? colors.foregroundPrimary
                     : colors.foregroundIconTertiary,
               ),
-              SizedBox(width: spacing.s8.w),
+              SizedBox(width: spacing.s8w),
               // Label
               Expanded(
                 child: Text(
@@ -345,18 +343,18 @@ class _SectionChildItemState extends State<_SectionChildItem> {
       onEnter: _canInteract ? (_) => setState(() => _isHovered = true) : null,
       onExit: _canInteract ? (_) => setState(() => _isHovered = false) : null,
       child: GestureDetector(
-        onTap: widget.onTap,
+        onTap: _canInteract ? widget.onTap : null,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
-          margin: EdgeInsets.only(bottom: spacing.s4.h),
+          margin: EdgeInsets.only(bottom: spacing.s4h),
           padding: EdgeInsets.symmetric(
-            horizontal: spacing.s12.w,
-            vertical: spacing.s8.h,
+            horizontal: spacing.s12w,
+            vertical: spacing.s8h,
           ),
           decoration: BoxDecoration(
             color: backgroundColor,
-            borderRadius: BorderRadius.circular(radii.r8.r),
-            border: Border.all(color: borderColor, width: borderWidths.w1.w),
+            borderRadius: BorderRadius.circular(radii.r8),
+            border: Border.all(color: borderColor, width: borderWidths.w1),
           ),
           child: Text(
             widget.item.label,

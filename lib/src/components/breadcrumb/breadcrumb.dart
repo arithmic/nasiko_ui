@@ -41,7 +41,7 @@ class NasikoBreadcrumb extends StatelessWidget {
       children.add(
         Icon(
           leadingIcon,
-          size: iconSizes.s.r, // 20px
+          size: iconSizes.s, // 20px
           color: colors.foregroundPrimary, // neutral/700
         ),
       );
@@ -57,10 +57,10 @@ class NasikoBreadcrumb extends StatelessWidget {
       if (i > 0 || leadingIcon != null) {
         children.add(
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: spacing.s4.h),
+            padding: EdgeInsets.symmetric(horizontal: spacing.s4w),
             child: Icon(
               Icons.chevron_right,
-              size: iconSizes.xs.r, // 16px
+              size: iconSizes.xs, // 16px
               color: colors.foregroundSecondary, // neutral/500
             ),
           ),
@@ -125,8 +125,8 @@ class _BreadcrumbItem extends StatelessWidget {
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: context.spacing.s4.w,
-          vertical: context.spacing.s2.h,
+          horizontal: context.spacing.s4w,
+          vertical: context.spacing.s2h,
         ),
         child: text,
       ),

@@ -59,13 +59,13 @@ class NasikoBanner extends StatelessWidget {
     final borderWidths = context.borderWidth;
 
     return Container(
-      padding: EdgeInsets.all(spacing.s16.r),
+      padding: EdgeInsets.all(spacing.s16),
       decoration: BoxDecoration(
         color: colors.backgroundBase, // White
-        borderRadius: BorderRadius.circular(radii.r12.r),
+        borderRadius: BorderRadius.circular(radii.r12),
         border: Border.all(
           color: colors.borderPrimary, // neutral/300
-          width: borderWidths.w1.w,
+          width: borderWidths.w1,
         ),
       ),
       child: Row(
@@ -124,13 +124,13 @@ class NasikoBanner extends StatelessWidget {
 
     return Container(
       width: 280.w, // A fixed width for the compact vertical view
-      padding: EdgeInsets.all(spacing.s16.r),
+      padding: EdgeInsets.all(spacing.s16),
       decoration: BoxDecoration(
         color: colors.backgroundBase, // White
-        borderRadius: BorderRadius.circular(radii.r12.r),
+        borderRadius: BorderRadius.circular(radii.r12),
         border: Border.all(
           color: colors.borderPrimary, // neutral/300
-          width: borderWidths.w1.w,
+          width: borderWidths.w1,
         ),
       ),
       child: Column(
@@ -143,7 +143,7 @@ class NasikoBanner extends StatelessWidget {
             children: [
               // Icon
               if (bannerIcon != null) ...[
-                Image(image: bannerIcon!, width: 32.r, height: 32.r),
+                Image(image: bannerIcon!, width: 32, height: 32),
                 SizedBox(width: spacing.s12.w),
               ],
               // Title
@@ -190,7 +190,7 @@ class NasikoBanner extends StatelessWidget {
             onTap: onClose,
             child: Icon(
               Icons.close,
-              size: context.iconSize.s.r, // 20px
+              size: context.iconSize.s, // 20px
               color: context.colors.foregroundSecondary,
             ),
           ),

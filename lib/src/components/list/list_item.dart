@@ -91,43 +91,43 @@ class _NasikoListItemState extends State<NasikoListItem> {
     return Opacity(
       opacity: opacity,
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: spacing.s2.h),
+        padding: EdgeInsets.symmetric(vertical: spacing.s2h),
         child: InkWell(
           onTap: widget.isDisabled ? null : widget.onTap,
           onHover: (val) => setState(() => _isHovering = val),
-          borderRadius: BorderRadius.circular(radii.r8.r),
+          borderRadius: BorderRadius.circular(radii.r8),
           child: Container(
             decoration: BoxDecoration(
               color: backgroundColor,
-              borderRadius: BorderRadius.circular(radii.r8.r),
-              border: Border.all(color: borderColor, width: borderWidths.w1.w),
+              borderRadius: BorderRadius.circular(radii.r8),
+              border: Border.all(color: borderColor, width: borderWidths.w1),
             ),
             padding: EdgeInsets.symmetric(
-              vertical: spacing.s8.h,
-              horizontal: spacing.s8.w,
+              vertical: spacing.s8h,
+              horizontal: spacing.s8w,
             ),
             child: Row(
               children: [
                 // 1. Indentation (Hierarchy)
-                SizedBox(width: widget.indentLevel * spacing.s24.w),
+                SizedBox(width: widget.indentLevel * spacing.s24w),
 
                 // 2. Expand/Collapse Chevron
                 if (widget.hasChildren)
                   InkWell(
                     onTap: widget.isDisabled ? null : widget.onToggleExpand,
-                    borderRadius: BorderRadius.circular(radii.r4.r),
+                    borderRadius: BorderRadius.circular(radii.r4),
                     child: Icon(
                       widget.isExpanded
                           ? Icons.keyboard_arrow_down_rounded
                           : Icons.keyboard_arrow_right_rounded,
-                      size: iconSizes.s.r,
+                      size: iconSizes.s,
                       color: colors.foregroundSecondary,
                     ),
                   )
                 else
-                  SizedBox(width: spacing.s20.w), // Placeholder for alignment
+                  SizedBox(width: spacing.s20w), // Placeholder for alignment
 
-                SizedBox(width: spacing.s8.w),
+                SizedBox(width: spacing.s8w),
 
                 // 3. Avatar (Image)
                 if (widget.imageUrl != null) ...[
@@ -135,17 +135,17 @@ class _NasikoListItemState extends State<NasikoListItem> {
                     size: NasikoAvatarSize.small, // Matches design (~32px)
                     imageUrl: widget.imageUrl,
                   ),
-                  SizedBox(width: spacing.s8.w),
+                  SizedBox(width: spacing.s8w),
                 ],
 
                 // 4. Leading Icon (The Hexagon)
                 if (widget.leadingIcon != null) ...[
                   Icon(
                     widget.leadingIcon,
-                    size: iconSizes.m.r,
+                    size: iconSizes.m,
                     color: colors.foregroundPrimary,
                   ),
-                  SizedBox(width: spacing.s8.w),
+                  SizedBox(width: spacing.s8w),
                 ],
 
                 // 5. Title
@@ -161,10 +161,10 @@ class _NasikoListItemState extends State<NasikoListItem> {
 
                 // 6. Status Dot
                 if (widget.showStatusDot) ...[
-                  SizedBox(width: spacing.s8.w),
+                  SizedBox(width: spacing.s8w),
                   Container(
-                    width: 8.r,
-                    height: 8.r,
+                    width: spacing.s8r,
+                    height: spacing.s8r,
                     decoration: BoxDecoration(
                       color: colors.backgroundSuccess, // Green
                       shape: BoxShape.circle,
@@ -172,21 +172,21 @@ class _NasikoListItemState extends State<NasikoListItem> {
                   ),
                 ],
 
-                SizedBox(width: spacing.s12.w),
+                SizedBox(width: spacing.s12w),
 
                 // 7. Badge (e.g., 1.85s)
                 if (widget.badgeLabel != null) ...[
                   Container(
                     padding: EdgeInsets.symmetric(
-                      horizontal: spacing.s8.w,
-                      vertical: spacing.s2.h,
+                      horizontal: spacing.s8w,
+                      vertical: spacing.s2h,
                     ),
                     decoration: BoxDecoration(
                       color: colors.backgroundSurface, // neutral/100
-                      borderRadius: BorderRadius.circular(radii.r4.r),
+                      borderRadius: BorderRadius.circular(radii.r4),
                       border: Border.all(
                         color: colors.borderPrimary,
-                        width: borderWidths.w1.w,
+                        width: borderWidths.w1,
                       ),
                     ),
                     child: Row(
@@ -195,28 +195,27 @@ class _NasikoListItemState extends State<NasikoListItem> {
                         if (widget.badgeIcon != null) ...[
                           Icon(
                             widget.badgeIcon,
-                            size: 12.r, // Tiny icon
+                            size: iconSizes.xs, // Tiny icon
                             color: colors.foregroundSecondary,
                           ),
-                          SizedBox(width: spacing.s4.w),
+                          SizedBox(width: spacing.s4w),
                         ],
                         Text(
                           widget.badgeLabel!,
                           style: typography.caption.copyWith(
                             color: colors.foregroundSecondary,
-                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(width: spacing.s8.w),
+                  SizedBox(width: spacing.s8w),
                 ],
 
                 // 8. Trailing Dropdown Arrow (Static in design)
                 Icon(
                   Icons.keyboard_arrow_down_rounded,
-                  size: iconSizes.s.r,
+                  size: iconSizes.s,
                   color: colors.foregroundSecondary,
                 ),
               ],

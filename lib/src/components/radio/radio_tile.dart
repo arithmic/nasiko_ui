@@ -30,11 +30,11 @@ class NasikoRadioTile<T> extends StatelessWidget {
         : colors.foregroundPrimary;
     return InkWell(
       onTap: _enabled ? () => onChanged!(value) : null,
-      borderRadius: BorderRadius.circular(context.radius.r8.r),
+      borderRadius: BorderRadius.circular(context.radius.r8),
       child: Padding(
         padding: EdgeInsets.symmetric(
-          vertical: spacing.s4.h,
-          horizontal: spacing.s4.w,
+          vertical: spacing.s4h,
+          horizontal: spacing.s4w,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -44,14 +44,14 @@ class NasikoRadioTile<T> extends StatelessWidget {
               groupValue: groupValue,
               onChanged: onChanged,
             ),
-            SizedBox(width: spacing.s8.w),
+            SizedBox(width: spacing.s8w),
             if (icon != null) ...[
               HugeIcon(
                 icon: icon!,
-                size: iconSizes.m.r, // 24px
+                size: iconSizes.m, // 24px
                 color: contentColor,
               ),
-              SizedBox(width: spacing.s8.w),
+              SizedBox(width: spacing.s8w),
             ],
             Text(
               label,

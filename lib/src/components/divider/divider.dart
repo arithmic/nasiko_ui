@@ -21,7 +21,7 @@ class NasikoDivider extends StatelessWidget {
     final borderWidths = context.borderWidth;
 
     final Color dividerColor = colors.borderPrimary; // neutral/300
-    final double dividerThickness = borderWidths.w1.w; // 1px
+    final double dividerThickness = borderWidths.w1; // 1px
 
     if (axis == NasikoDividerAxis.horizontal) {
       return Divider(

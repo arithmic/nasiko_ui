@@ -38,19 +38,19 @@ class SecondaryIconButton extends StatelessWidget {
 
     switch (size) {
       case NasikoButtonSize.large:
-        padding = spacing.s20.r;
-        iconSize = iconSizes.l.r;
-        borderRadius = radii.r10.r;
+        padding = spacing.s20r;
+        iconSize = iconSizes.l;
+        borderRadius = radii.r10;
         break;
       case NasikoButtonSize.medium:
-        padding = spacing.s12.r;
-        iconSize = iconSizes.m.r;
-        borderRadius = radii.r10.r;
+        padding = spacing.s12r;
+        iconSize = iconSizes.m;
+        borderRadius = radii.r10;
         break;
       case NasikoButtonSize.small:
-        padding = spacing.s8.r;
-        iconSize = iconSizes.s.r;
-        borderRadius = radii.r10.r;
+        padding = spacing.s8r;
+        iconSize = iconSizes.s;
+        borderRadius = radii.r10;
         break;
     }
 
@@ -89,22 +89,22 @@ class SecondaryIconButton extends StatelessWidget {
         if (states.contains(WidgetState.disabled)) {
           borderSide = BorderSide(
             color: colors.borderDisabled,
-            width: borderWidths.w1.w,
+            width: borderWidths.w1,
           );
         } else if (states.contains(WidgetState.hovered)) {
           borderSide = BorderSide(
             color: colors.borderHover,
-            width: borderWidths.w1.w,
+            width: borderWidths.w1,
           );
         } else if (states.contains(WidgetState.focused)) {
           borderSide = BorderSide(
             color: colors.borderSecondary,
-            width: borderWidths.w2.w,
+            width: borderWidths.w2,
           );
         } else {
           borderSide = BorderSide(
             color: colors.borderPrimary,
-            width: borderWidths.w1.w,
+            width: borderWidths.w1,
           );
         }
 

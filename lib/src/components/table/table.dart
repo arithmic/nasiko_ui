@@ -95,14 +95,14 @@ class _NasikoTableState extends State<NasikoTable> {
     return Container(
       decoration: BoxDecoration(
         color: colors.backgroundSurface,
-        borderRadius: BorderRadius.circular(radii.r12.r),
+        borderRadius: BorderRadius.circular(radii.r12),
         border: Border.all(
           color: colors.borderPrimary,
           width: borderWidths.w1.w,
         ),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(radii.r12.r),
+        borderRadius: BorderRadius.circular(radii.r12),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -171,7 +171,7 @@ class _NasikoTableState extends State<NasikoTable> {
                             padding: EdgeInsets.only(left: spacing.s4.w),
                             child: Icon(
                               Icons.arrow_downward_rounded,
-                              size: iconSizes.s.r,
+                              size: iconSizes.s,
                               color: colors.foregroundSecondary,
                             ),
                           ),
@@ -281,12 +281,12 @@ class NasikoTableCopyCell extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(
-          Icons.info_outline,
-          size: context.iconSize.s.r,
+        HugeIcon(
+          icon: HugeIcons.strokeRoundedInformationCircle,
+          size: context.iconSize.s,
           color: context.colors.foregroundSecondary,
         ),
-        SizedBox(width: context.spacing.s8.w),
+        SizedBox(width: context.spacing.s8w),
         Text(
           'Copy',
           style: context.typography.bodySecondary.copyWith(
@@ -351,7 +351,7 @@ class NasikoTableCellItem extends StatelessWidget {
               SizedBox(width: spacing.s8.w),
               Icon(
                 Icons.info_outline,
-                size: context.iconSize.xs.r,
+                size: context.iconSize.xs,
                 color: colors.foregroundBrand,
               ),
             ],
@@ -362,32 +362,32 @@ class NasikoTableCellItem extends StatelessWidget {
           SizedBox(height: spacing.s12.h),
           Row(
             children: [
-              _buildIconButton(context, Icons.content_copy),
+              // _buildIconButton(context, Icons.content_copy),
               SizedBox(width: spacing.s8.w),
-              _buildIconButton(context, Icons.content_copy),
+              // _buildIconButton(context, Icons.content_copy),
               SizedBox(width: spacing.s8.w),
-              _buildIconButton(context, Icons.content_copy),
+              // _buildIconButton(context, Icons.content_copy),
               SizedBox(width: spacing.s8.w),
-              _buildIconButton(context, Icons.content_copy),
+              // _buildIconButton(context, Icons.content_copy),
             ],
           ),
         ],
 
         if (showTags) ...[
-          SizedBox(height: spacing.s12.h),
+          SizedBox(height: spacing.s12h),
           Wrap(
             spacing: spacing.s8,
             runSpacing: spacing.s8,
             children: [
-              _buildTag(context, 'Tag'),
-              _buildTag(context, 'Tag'),
-              _buildTag(context, 'Tag'),
+              // _buildTag(context, 'Tag'),
+              // _buildTag(context, 'Tag'),
+              // _buildTag(context, 'Tag'),
             ],
           ),
         ],
 
         if (showCheckbox) ...[
-          SizedBox(height: spacing.s12),
+          SizedBox(height: spacing.s12h),
           NasikoCheckboxTile(
             label: 'Airplane Mode',
             icon: Icons.airplanemode_active,
@@ -401,8 +401,8 @@ class NasikoTableCellItem extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: 20.r,
-                height: 20.r,
+                width: spacing.s20r,
+                height: spacing.s20r,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: colors.backgroundBrand,
@@ -413,8 +413,8 @@ class NasikoTableCellItem extends StatelessWidget {
                 ),
                 child: Center(
                   child: Container(
-                    width: 8.r,
-                    height: 8.r,
+                    width: spacing.s8r,
+                    height: spacing.s8r,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: colors.foregroundPrimary,
@@ -425,7 +425,7 @@ class NasikoTableCellItem extends StatelessWidget {
               SizedBox(width: spacing.s12.w),
               Icon(
                 Icons.airplanemode_active,
-                size: context.iconSize.s.r,
+                size: context.iconSize.s,
                 color: colors.foregroundPrimary,
               ),
               SizedBox(width: spacing.s8.w),
@@ -467,7 +467,7 @@ class NasikoTableCellItem extends StatelessWidget {
             children: [
               Icon(
                 Icons.info_outline,
-                size: context.iconSize.s.r,
+                size: context.iconSize.s,
                 color: colors.foregroundSecondary,
               ),
               SizedBox(width: spacing.s12.w),
@@ -477,7 +477,7 @@ class NasikoTableCellItem extends StatelessWidget {
               SizedBox(width: spacing.s12.w),
               Icon(
                 Icons.info_outline,
-                size: context.iconSize.s.r,
+                size: context.iconSize.s,
                 color: colors.foregroundSecondary,
               ),
             ],
@@ -489,8 +489,8 @@ class NasikoTableCellItem extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: 8.r,
-                height: 8.r,
+                width: spacing.s8r,
+                height: spacing.s8r,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: colors.foregroundSuccess,
@@ -502,67 +502,6 @@ class NasikoTableCellItem extends StatelessWidget {
           ),
         ],
       ],
-    );
-  }
-
-  Widget _buildIconButton(BuildContext context, IconData icon) {
-    return Container(
-      width: 32.r,
-      height: 32.r,
-      decoration: BoxDecoration(
-        color: context.colors.backgroundSurface,
-        borderRadius: BorderRadius.circular(context.radius.r8.r),
-        border: Border.all(
-          color: context.colors.borderPrimary,
-          width: context.borderWidth.w1.w,
-        ),
-      ),
-      child: Icon(
-        icon,
-        size: context.iconSize.xs.r,
-        color: context.colors.foregroundSecondary,
-      ),
-    );
-  }
-
-  Widget _buildTag(BuildContext context, String label) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: context.spacing.s12.w,
-        vertical: context.spacing.s8.h,
-      ),
-      decoration: BoxDecoration(
-        color: context.colors.backgroundGroup,
-        borderRadius: BorderRadius.circular(context.radius.r16.r),
-        border: Border.all(
-          color: context.colors.borderPrimary,
-          width: context.borderWidth.w1.w,
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            Icons.label_outline,
-            size: context.iconSize.xs.r,
-            color: context.colors.foregroundSecondary,
-          ),
-          SizedBox(width: context.spacing.s4.w),
-          Text(
-            label,
-            style: context.typography.caption.copyWith(
-              color: context.colors.foregroundSecondary,
-              fontStyle: FontStyle.normal,
-            ),
-          ),
-          SizedBox(width: context.spacing.s4.w),
-          Icon(
-            Icons.close,
-            size: context.iconSize.xs.r,
-            color: context.colors.foregroundSecondary,
-          ),
-        ],
-      ),
     );
   }
 }

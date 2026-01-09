@@ -73,40 +73,40 @@ class NasikoInputField extends StatelessWidget {
     final iconSizes = context.iconSize;
 
     // Define size-specific values
-    final iconSize = iconSizes.s.r;
+    final iconSize = iconSizes.s;
     final textStyle = typography.bodySecondary;
-    final contentPadding = EdgeInsets.symmetric(vertical: spacing.s16.h);
+    final contentPadding = EdgeInsets.symmetric(vertical: spacing.s16h);
     // Define the border styles
     final defaultBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(radii.r8.r),
+      borderRadius: BorderRadius.circular(radii.r8),
       borderSide: BorderSide(
         color: colors.borderPrimary,
-        width: borderWidths.w1.w,
+        width: borderWidths.w1,
       ),
     );
 
     final focusedBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(radii.r8.r),
+      borderRadius: BorderRadius.circular(radii.r8),
       borderSide: BorderSide(
         color: colors.borderSecondary, // Your brand border color
-        width: borderWidths.w1.w, // Thicker border on focus
+        width: borderWidths.w1, // Thicker border on focus
       ),
     );
 
     // Add error/disabled borders for a complete component
     final errorBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(radii.r8.r),
+      borderRadius: BorderRadius.circular(radii.r8),
       borderSide: BorderSide(
         color: colors.borderError,
-        width: borderWidths.w1.w,
+        width: borderWidths.w1,
       ),
     );
 
     final disabledBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(radii.r8.r),
+      borderRadius: BorderRadius.circular(radii.r8),
       borderSide: BorderSide(
         color: colors.borderDisabled,
-        width: borderWidths.w1.w,
+        width: borderWidths.w1,
       ),
     );
 
@@ -117,7 +117,7 @@ class NasikoInputField extends StatelessWidget {
         // 1. Optional Label (outside the field)
         if (label != null) ...[
           _buildLabel(context),
-          SizedBox(height: spacing.s12.h),
+          SizedBox(height: spacing.s12h),
         ],
 
         // 2. The Text Field
@@ -147,8 +147,8 @@ class NasikoInputField extends StatelessWidget {
             prefixIcon: leadingIcon != null
                 ? Padding(
                     padding: EdgeInsets.only(
-                      left: spacing.s12.w,
-                      right: spacing.s4.w,
+                      left: spacing.s12w,
+                      right: spacing.s4w,
                     ),
                     child: IconTheme(
                       data: IconThemeData(size: iconSize),
@@ -169,8 +169,8 @@ class NasikoInputField extends StatelessWidget {
             suffixIcon: trailingIcon != null
                 ? Padding(
                     padding: EdgeInsets.only(
-                      left: spacing.s4.w,
-                      right: spacing.s12.w,
+                      left: spacing.s4w,
+                      right: spacing.s12w,
                     ),
                     child: IconTheme(
                       data: IconThemeData(size: iconSize),
@@ -189,7 +189,7 @@ class NasikoInputField extends StatelessWidget {
             hoverColor: colors.backgroundSurface,
             prefix: leadingIcon != null
                 ? SizedBox(width: spacing.s0)
-                : SizedBox(width: spacing.s8.w),
+                : SizedBox(width: spacing.s8w),
             contentPadding: contentPadding,
 
             // --- Borders ---
@@ -208,9 +208,9 @@ class NasikoInputField extends StatelessWidget {
 
         // 3. Optional Helper Text (below the field)
         if (helperText != null) ...[
-          SizedBox(height: spacing.s8.h),
+          SizedBox(height: spacing.s8h),
           Padding(
-            padding: EdgeInsets.only(left: spacing.s4.w),
+            padding: EdgeInsets.only(left: spacing.s4w),
             child: Text(
               helperText!,
               style: typography.bodyTertiary.copyWith(
@@ -259,10 +259,10 @@ class NasikoInputField extends StatelessWidget {
             ),
           ),
         if (labelInfoIcon != null) ...[
-          SizedBox(width: spacing.s8.w),
+          SizedBox(width: spacing.s8w),
           HugeIcon(
             icon: labelInfoIcon!,
-            size: iconSizes.s.r, // 20px
+            size: iconSizes.s, // 20px
             color: colors.foregroundIconPrimary,
           ),
         ],

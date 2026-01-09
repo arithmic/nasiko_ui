@@ -57,18 +57,18 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
         curve: Curves.easeInOut,
         decoration: BoxDecoration(
           color: backgroundColor,
-          border: Border.all(color: borderColor, width: borderWidths.w1.w),
-          borderRadius: BorderRadius.circular(radii.r8.r),
+          border: Border.all(color: borderColor, width: borderWidths.w1),
+          borderRadius: BorderRadius.circular(radii.r8),
         ),
         child: InkWell(
           onTap: widget.onTap,
-          borderRadius: BorderRadius.circular(radii.r8.r),
+          borderRadius: BorderRadius.circular(radii.r8),
           splashColor: colors.backgroundBrandSubtle.withValues(alpha: 0.5),
           highlightColor: colors.backgroundBrandSubtle.withValues(alpha: 0.5),
           child: Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: spacing.s12.w,
-              vertical: spacing.s8.h,
+              horizontal: spacing.s12w,
+              vertical: spacing.s8h,
             ),
             child: Row(
               children: [
@@ -149,41 +149,41 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
     return Material(
       color: Colors.transparent,
       child: Container(
-        width: widget.width.w,
-        constraints: BoxConstraints(maxHeight: widget.maxHeight.h),
+        width: widget.width,
+        constraints: BoxConstraints(maxHeight: widget.maxHeight),
         decoration: BoxDecoration(
           color: colors.backgroundGroup,
-          borderRadius: BorderRadius.circular(radii.r8.r),
+          borderRadius: BorderRadius.circular(radii.r8),
           border: Border.all(
             color: colors.borderPrimary,
-            width: borderWidths.w1.w,
+            width: borderWidths.w1,
           ),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 16.r,
-              offset: Offset(0, 4.h),
+              blurRadius: 16,
+              offset: Offset(0, spacing.s4h),
             ),
           ],
         ),
         child: Padding(
           padding: EdgeInsets.only(
-            left: spacing.s8.w,
-            top: spacing.s8.h,
-            bottom: spacing.s8.h,
+            left: spacing.s8w,
+            top: spacing.s8h,
+            bottom: spacing.s8h,
           ),
           child: Scrollbar(
             controller: _scrollController,
             thumbVisibility: true,
             child: ListView.separated(
               padding: EdgeInsets.only(
-                right: spacing.s8.w + scrollbarThickness.w,
+                right: spacing.s8w + scrollbarThickness,
               ), // for scrollbar to not overlap the content
               controller: _scrollController,
               shrinkWrap: true,
               itemCount: widget.items.length,
               separatorBuilder: (context, index) =>
-                  SizedBox(height: spacing.s4.h),
+                  SizedBox(height: spacing.s4h),
               itemBuilder: (context, index) {
                 return _NasikoMenuItem(
                   label: widget.items[index],
@@ -229,8 +229,8 @@ Future<int?> showNasikoPopupMenu({
           onItemSelected: (index) {
             Navigator.of(context).pop(index);
           },
-          width: width.w,
-          maxHeight: maxHeight.h,
+          width: width,
+          maxHeight: maxHeight,
         ),
       ),
     ],

@@ -132,6 +132,7 @@ class NasikoModal extends StatelessWidget {
   final NasikoModalVariant buttonLayout;
 
   /// Optional max width for the modal (defaults based on button layout)
+  /// Don't use "w" or "h" suffixes of ScreenUtill.
   final double? maxWidth;
   final Color? backgroundColor;
 
@@ -173,22 +174,22 @@ class NasikoModal extends StatelessWidget {
     return Dialog(
       backgroundColor: backgroundColor ?? context.colors.backgroundBase,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(radii.r8.r),
+        borderRadius: BorderRadius.circular(radii.r8),
       ),
       child: Container(
         constraints: BoxConstraints(maxWidth: effectiveMaxWidth),
-        padding: EdgeInsets.all(spacing.s24.r),
+        padding: EdgeInsets.all(spacing.s24r),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _buildHeader(context),
-            SizedBox(height: spacing.s16.h),
+            SizedBox(height: spacing.s16h),
             Flexible(child: content),
             if (primaryButtonLabel != null || secondaryButtonLabel != null) ...[
-              SizedBox(height: spacing.s16.h),
+              SizedBox(height: spacing.s16h),
               NasikoDivider(axis: NasikoDividerAxis.horizontal),
-              SizedBox(height: spacing.s16.h),
+              SizedBox(height: spacing.s16h),
               isVertical
                   ? _buildVerticalButtons(context)
                   : _buildHorizontalButtons(context),
@@ -212,7 +213,7 @@ class NasikoModal extends StatelessWidget {
             size: iconSizes.m,
             color: _iconColor(context),
           ),
-          SizedBox(width: spacing.s12.w),
+          SizedBox(width: spacing.s12w),
         ],
         Expanded(
           child: Text(
@@ -250,7 +251,7 @@ class NasikoModal extends StatelessWidget {
             trailingIcon: secondaryButtonTrailingIcon,
             fullWidth: false,
           ),
-          SizedBox(width: spacing.s16.w),
+          SizedBox(width: spacing.s16w),
         ],
 
         // Primary Button
@@ -286,7 +287,7 @@ class NasikoModal extends StatelessWidget {
             trailingIcon: secondaryButtonTrailingIcon,
             fullWidth: true,
           ),
-          SizedBox(height: spacing.s16.h),
+          SizedBox(height: spacing.s16h),
         ],
 
         // Primary Button (bottom)
