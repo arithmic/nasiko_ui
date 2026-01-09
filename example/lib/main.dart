@@ -1449,6 +1449,67 @@ class ExampleHomePage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         PrimaryButton(
+          onPressed: () {
+            showNasikoModal(
+              context: context,
+              title: 'Save changes',
+              content: const Text('Do you want to save your changes?'),
+              primaryButtonLabel: 'Save',
+              secondaryButtonLabel: 'Cancel',
+              backgroundColor: context.colors.backgroundSurface
+            );
+          },
+          label: 'Primary action modal',
+        ),
+        SizedBox(width: context.spacing.s16),
+        PrimaryButton(
+          onPressed: () {
+            showNasikoModal(
+              context: context,
+              title: 'Delete workspace',
+              titleType: NasikoModalTitleType.error,
+              titleIcon: HugeIcons.strokeRoundedUserWarning01,
+              content: const Text(
+                'This action is permanent and cannot be undone.',
+              ),
+              primaryButtonLabel: 'Delete',
+              primaryButtonIntent: NasikoModalButtonIntent.destructive,
+              secondaryButtonLabel: 'Cancel',
+            );
+          },
+          label: 'Primary destructive button modal',
+        ),
+        SizedBox(width: context.spacing.s16),
+        PrimaryButton(
+          onPressed: () {
+            showNasikoModal(
+              context: context,
+              title: 'Remove member',
+              content: const Text('The member will lose access immediately.'),
+              primaryButtonLabel: 'Remove',
+              secondaryButtonLabel: 'Remove anyway',
+              secondaryButtonHierarchy: NasikoModalButtonHierarchy.secondary,
+              secondaryButtonIntent: NasikoModalButtonIntent.destructive,
+            );
+          },
+          label: 'Secondary destructive button modal',
+        ),
+        SizedBox(width: context.spacing.s16),
+        PrimaryButton(
+          onPressed: () {
+            showNasikoModal(
+              context: context,
+              title: 'Clear history',
+              content: const Text('This will clear all local history.'),
+              secondaryButtonLabel: 'Clear history',
+              secondaryButtonHierarchy: NasikoModalButtonHierarchy.tertiary,
+              secondaryButtonIntent: NasikoModalButtonIntent.destructive,
+            );
+          },
+          label: 'Tertiary destructive button modal',
+        ),
+        SizedBox(width: context.spacing.s16),
+        PrimaryButton(
           label: 'Show Confirmation',
           onPressed: () {
             showNasikoModal(

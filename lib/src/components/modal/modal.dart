@@ -5,6 +5,12 @@ import 'package:nasiko_ui/nasiko_ui.dart';
 /// Layout variant for the modal
 enum NasikoModalVariant { horizontal, vertical }
 
+enum NasikoModalTitleType { normal, success, error }
+
+enum NasikoModalButtonHierarchy { primary, secondary, tertiary }
+
+enum NasikoModalButtonIntent { normal, destructive }
+
 // Helper function to easily display the modal
 Future<T?> showNasikoModal<T>({
   required BuildContext context,
@@ -14,17 +20,25 @@ Future<T?> showNasikoModal<T>({
   String? primaryButtonLabel,
   VoidCallback? onPrimaryAction,
   bool primaryButtonIsDanger = false,
+  NasikoModalButtonHierarchy primaryButtonHierarchy =
+      NasikoModalButtonHierarchy.primary,
+  NasikoModalButtonIntent? primaryButtonIntent,
   HugeIconsType? primaryButtonLeadingIcon,
   HugeIconsType? primaryButtonTrailingIcon,
   String? secondaryButtonLabel,
   VoidCallback? onSecondaryAction,
   bool secondaryButtonIsDanger = false,
+  NasikoModalButtonHierarchy secondaryButtonHierarchy =
+      NasikoModalButtonHierarchy.tertiary,
+  NasikoModalButtonIntent? secondaryButtonIntent,
   HugeIconsType? secondaryButtonLeadingIcon,
   HugeIconsType? secondaryButtonTrailingIcon,
   bool isDismissible = true,
   VoidCallback? onClose,
   NasikoModalVariant buttonLayout = NasikoModalVariant.horizontal,
   double? maxWidth,
+  Color? backgroundColor,
+  NasikoModalTitleType titleType = NasikoModalTitleType.normal,
 }) {
   return showDialog<T>(
     context: context,
@@ -34,14 +48,26 @@ Future<T?> showNasikoModal<T>({
         title: title,
         content: content,
         titleIcon: titleIcon,
+        titleType: titleType,
+        backgroundColor: backgroundColor,
         primaryButtonLabel: primaryButtonLabel,
         onPrimaryAction: onPrimaryAction,
-        primaryButtonIsDanger: primaryButtonIsDanger,
+        primaryButtonHierarchy: primaryButtonHierarchy,
+        primaryButtonIntent:
+            primaryButtonIntent ??
+            (primaryButtonIsDanger
+                ? NasikoModalButtonIntent.destructive
+                : NasikoModalButtonIntent.normal),
         primaryButtonLeadingIcon: primaryButtonLeadingIcon,
         primaryButtonTrailingIcon: primaryButtonTrailingIcon,
         secondaryButtonLabel: secondaryButtonLabel,
         onSecondaryAction: onSecondaryAction,
-        secondaryButtonIsDanger: secondaryButtonIsDanger,
+        secondaryButtonHierarchy: secondaryButtonHierarchy,
+        secondaryButtonIntent:
+            secondaryButtonIntent ??
+            (secondaryButtonIsDanger
+                ? NasikoModalButtonIntent.destructive
+                : NasikoModalButtonIntent.normal),
         secondaryButtonLeadingIcon: secondaryButtonLeadingIcon,
         secondaryButtonTrailingIcon: secondaryButtonTrailingIcon,
         onClose: onClose ?? () => Navigator.of(dialogContext).pop(),
@@ -59,19 +85,23 @@ class NasikoModal extends StatelessWidget {
     required this.title,
     required this.content,
     required this.onClose,
+    required this.primaryButtonHierarchy,
+    required this.primaryButtonIntent,
+    required this.secondaryButtonHierarchy,
+    required this.secondaryButtonIntent,
     this.titleIcon,
     this.primaryButtonLabel,
     this.onPrimaryAction,
-    this.primaryButtonIsDanger = false,
     this.primaryButtonLeadingIcon,
     this.primaryButtonTrailingIcon,
     this.secondaryButtonLabel,
     this.onSecondaryAction,
-    this.secondaryButtonIsDanger = false,
     this.secondaryButtonLeadingIcon,
     this.secondaryButtonTrailingIcon,
     this.buttonLayout = NasikoModalVariant.horizontal,
     this.maxWidth,
+    this.backgroundColor,
+    this.titleType = NasikoModalTitleType.normal,
   });
 
   final String title;
@@ -80,18 +110,21 @@ class NasikoModal extends StatelessWidget {
 
   /// Optional icon displayed before the title
   final HugeIconsType? titleIcon;
+  final NasikoModalTitleType titleType;
 
   // Primary Action Button
   final String? primaryButtonLabel;
   final VoidCallback? onPrimaryAction;
-  final bool primaryButtonIsDanger;
+  final NasikoModalButtonHierarchy primaryButtonHierarchy;
+  final NasikoModalButtonIntent primaryButtonIntent;
   final HugeIconsType? primaryButtonLeadingIcon;
   final HugeIconsType? primaryButtonTrailingIcon;
 
   // Secondary Action Button
   final String? secondaryButtonLabel;
   final VoidCallback? onSecondaryAction;
-  final bool secondaryButtonIsDanger;
+  final NasikoModalButtonHierarchy secondaryButtonHierarchy;
+  final NasikoModalButtonIntent secondaryButtonIntent;
   final HugeIconsType? secondaryButtonLeadingIcon;
   final HugeIconsType? secondaryButtonTrailingIcon;
 
@@ -100,21 +133,45 @@ class NasikoModal extends StatelessWidget {
 
   /// Optional max width for the modal (defaults based on button layout)
   final double? maxWidth;
+  final Color? backgroundColor;
+
+  Color _titleColor(BuildContext context) {
+    final color = context.colors;
+    switch (titleType) {
+      case NasikoModalTitleType.success:
+        return color.foregroundSuccess;
+      case NasikoModalTitleType.error:
+        return color.foregroundError;
+      case NasikoModalTitleType.normal:
+        return color.foregroundPrimary;
+    }
+  }
+
+  Color _iconColor(BuildContext context) {
+    final color = context.colors;
+    switch (titleType) {
+      case NasikoModalTitleType.success:
+        return color.foregroundSuccess;
+      case NasikoModalTitleType.error:
+        return color.foregroundError;
+      case NasikoModalTitleType.normal:
+        return color.foregroundIconPrimary;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
-    final typography = context.typography;
     final spacing = context.spacing;
     final radii = context.radius;
-    final iconSizes = context.iconSize;
 
     final isVertical = buttonLayout == NasikoModalVariant.vertical;
-    final effectiveMaxWidth = maxWidth ?? (isVertical ? 300.0 : 764.0);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final effectiveMaxWidth =
+        maxWidth ?? (isVertical ? 300.0 : screenWidth * 0.5);
 
     // Use a Dialog for standard modal behavior and default barrier
     return Dialog(
-      backgroundColor: colors.backgroundSurface,
+      backgroundColor: backgroundColor ?? context.colors.backgroundBase,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(radii.r8.r),
       ),
@@ -125,50 +182,57 @@ class NasikoModal extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // --- Header ---
-            Row(
-              children: [
-                if (titleIcon != null) ...[
-                  HugeIcon(icon: titleIcon!, size: iconSizes.m.r),
-                  SizedBox(width: spacing.s12.w),
-                ],
-                Expanded(child: Text(title, style: typography.bodyPrimaryBold)),
-                IconButton(
-                  icon: HugeIcon(
-                    icon: HugeIcons.strokeRoundedCancel01,
-                    size: iconSizes.s.r,
-                  ),
-                  iconSize: iconSizes.s.r,
-                  color: colors.foregroundSecondary,
-                  onPressed: onClose,
-                  splashRadius: iconSizes.s.r,
-                ),
-              ],
-            ),
+            _buildHeader(context),
             SizedBox(height: spacing.s16.h),
-
-            // --- Body Content ---
             Flexible(child: content),
-            SizedBox(height: spacing.s16.h),
-
-            // --- Divider (Above Footer) ---
             if (primaryButtonLabel != null || secondaryButtonLabel != null) ...[
+              SizedBox(height: spacing.s16.h),
               NasikoDivider(axis: NasikoDividerAxis.horizontal),
               SizedBox(height: spacing.s16.h),
-            ],
-
-            // --- Footer Actions ---
-            if (primaryButtonLabel != null || secondaryButtonLabel != null)
               isVertical
                   ? _buildVerticalButtons(context)
                   : _buildHorizontalButtons(context),
+            ],
           ],
         ),
       ),
     );
   }
 
-  /// Build horizontal buttons for large modal variant
+  Widget _buildHeader(BuildContext context) {
+    final spacing = context.spacing;
+    final typography = context.typography;
+    final iconSizes = context.iconSize;
+
+    return Row(
+      children: [
+        if (titleIcon != null) ...[
+          HugeIcon(
+            icon: titleIcon!,
+            size: iconSizes.m,
+            color: _iconColor(context),
+          ),
+          SizedBox(width: spacing.s12.w),
+        ],
+        Expanded(
+          child: Text(
+            title,
+            style: typography.bodyPrimaryBold.copyWith(
+              color: _titleColor(context),
+            ),
+          ),
+        ),
+        IconButton(
+          icon: HugeIcon(
+            icon: HugeIcons.strokeRoundedCancel01,
+            size: iconSizes.xs,
+          ),
+          onPressed: onClose,
+        ),
+      ],
+    );
+  }
+
   Widget _buildHorizontalButtons(BuildContext context) {
     final spacing = context.spacing;
 
@@ -177,28 +241,28 @@ class NasikoModal extends StatelessWidget {
       children: [
         // Secondary Button
         if (secondaryButtonLabel != null) ...[
-          _buildButton(
-            context: context,
+          _buildActionButton(
             label: secondaryButtonLabel!,
             onPressed: onSecondaryAction ?? onClose,
-            isDanger: secondaryButtonIsDanger,
+            hierarchy: secondaryButtonHierarchy,
+            intent: secondaryButtonIntent,
             leadingIcon: secondaryButtonLeadingIcon,
             trailingIcon: secondaryButtonTrailingIcon,
-            isFullWidth: false,
+            fullWidth: false,
           ),
           SizedBox(width: spacing.s16.w),
         ],
 
         // Primary Button
         if (primaryButtonLabel != null)
-          _buildButton(
-            context: context,
+          _buildActionButton(
             label: primaryButtonLabel!,
             onPressed: onPrimaryAction ?? onClose,
-            isDanger: primaryButtonIsDanger,
+            hierarchy: primaryButtonHierarchy,
+            intent: primaryButtonIntent,
             leadingIcon: primaryButtonLeadingIcon,
             trailingIcon: primaryButtonTrailingIcon,
-            isFullWidth: false,
+            fullWidth: false,
           ),
       ],
     );
@@ -213,112 +277,95 @@ class NasikoModal extends StatelessWidget {
       children: [
         // Secondary Button (top)
         if (secondaryButtonLabel != null) ...[
-          _buildButton(
-            context: context,
+          _buildActionButton(
             label: secondaryButtonLabel!,
             onPressed: onSecondaryAction ?? onClose,
-            isDanger: secondaryButtonIsDanger,
+            hierarchy: secondaryButtonHierarchy,
+            intent: secondaryButtonIntent,
             leadingIcon: secondaryButtonLeadingIcon,
             trailingIcon: secondaryButtonTrailingIcon,
-            isFullWidth: true,
+            fullWidth: true,
           ),
           SizedBox(height: spacing.s16.h),
         ],
 
         // Primary Button (bottom)
         if (primaryButtonLabel != null)
-          _buildButton(
-            context: context,
+          _buildActionButton(
             label: primaryButtonLabel!,
             onPressed: onPrimaryAction ?? onClose,
-            isDanger: primaryButtonIsDanger,
+            hierarchy: primaryButtonHierarchy,
+            intent: primaryButtonIntent,
             leadingIcon: primaryButtonLeadingIcon,
             trailingIcon: primaryButtonTrailingIcon,
-            isFullWidth: true,
+            fullWidth: true,
           ),
       ],
     );
   }
 
   /// Helper method to build buttons with appropriate styling
-  Widget _buildButton({
-    required BuildContext context,
+  Widget _buildActionButton({
     required String label,
     required VoidCallback onPressed,
-    required bool isDanger,
-    required bool isFullWidth,
+    required NasikoModalButtonHierarchy hierarchy,
+    required NasikoModalButtonIntent intent,
+    required bool fullWidth,
     HugeIconsType? leadingIcon,
     HugeIconsType? trailingIcon,
   }) {
-    final colors = context.colors;
-    final typography = context.typography;
-    final spacing = context.spacing;
-    final radii = context.radius;
-    final iconSizes = context.iconSize;
-    final borderWidths = context.borderWidth;
-
     Widget button;
 
-    if (isDanger) {
-      // Danger/Error outlined button
-      button = OutlinedButton(
-        onPressed: onPressed,
-        style: OutlinedButton.styleFrom(
-          foregroundColor: colors.foregroundError,
-          backgroundColor: Colors.transparent,
-          side: BorderSide(color: colors.borderError, width: borderWidths.w1.w),
-          padding: EdgeInsets.symmetric(
-            horizontal: spacing.s16.w,
-            vertical: spacing.s12.h,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(radii.r8.r),
-          ),
-        ),
-        child: Row(
-          mainAxisSize: isFullWidth ? MainAxisSize.max : MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (leadingIcon != null) ...[
-              HugeIcon(
-                icon: leadingIcon,
-                size: iconSizes.s.r,
-                color: colors.foregroundError,
-              ),
-              SizedBox(width: spacing.s8.w),
-            ],
-            Text(
-              label,
-              style: typography.buttonSecondary.copyWith(
-                color: colors.foregroundError,
-              ),
-            ),
-            if (trailingIcon != null) ...[
-              SizedBox(width: spacing.s8.w),
-              HugeIcon(
-                icon: trailingIcon,
-                size: iconSizes.s.r,
-                color: colors.foregroundError,
-              ),
-            ],
-          ],
-        ),
-      );
-    } else {
-      // Primary brand button
-      button = PrimaryButton(
-        onPressed: onPressed,
-        label: label,
-        leadingIcon: leadingIcon,
-        trailingIcon: trailingIcon,
-      );
+    switch (hierarchy) {
+      case NasikoModalButtonHierarchy.primary:
+        button = intent == NasikoModalButtonIntent.destructive
+            ? DestructiveButton(
+                label: label,
+                onPressed: onPressed,
+                leadingIcon: leadingIcon,
+                trailingIcon: trailingIcon,
+              )
+            : PrimaryButton(
+                label: label,
+                onPressed: onPressed,
+                leadingIcon: leadingIcon,
+                trailingIcon: trailingIcon,
+              );
+        break;
+
+      case NasikoModalButtonHierarchy.secondary:
+        button = intent == NasikoModalButtonIntent.destructive
+            ? DestructiveSecondaryButton(
+                label: label,
+                onPressed: onPressed,
+                leadingIcon: leadingIcon,
+                trailingIcon: trailingIcon,
+              )
+            : SecondaryButton(
+                label: label,
+                onPressed: onPressed,
+                leadingIcon: leadingIcon,
+                trailingIcon: trailingIcon,
+              );
+        break;
+
+      case NasikoModalButtonHierarchy.tertiary:
+        button = intent == NasikoModalButtonIntent.destructive
+            ? DestructiveTextButton(
+                label: label,
+                onPressed: onPressed,
+                leadingIcon: leadingIcon,
+                trailingIcon: trailingIcon,
+              )
+            : TertiaryButton(
+                label: label,
+                onPressed: onPressed,
+                leadingIcon: leadingIcon,
+                trailingIcon: trailingIcon,
+              );
+        break;
     }
 
-    // Wrap in SizedBox for full width if needed
-    if (isFullWidth && !isDanger) {
-      return SizedBox(width: double.infinity, child: button);
-    }
-
-    return button;
+    return fullWidth ? SizedBox(width: double.infinity, child: button) : button;
   }
 }
