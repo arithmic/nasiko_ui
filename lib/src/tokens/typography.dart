@@ -1,6 +1,7 @@
 // lib/src/tokens/app_typography.dart
 
 import 'package:flutter/material.dart';
+import 'package:nasiko_ui/nasiko_ui.dart';
 
 // Mark the class as immutable for performance and consistency
 @immutable
@@ -146,8 +147,8 @@ const String _interFontFamily = 'Inter';
 TextStyle get _baseTitlePrimary => TextStyle(
   fontFamily: _chivoMonoFontFamily,
   fontWeight: FontWeight.w500, // Medium
-  // fontSize: 40.sp.clamp(32, 44),
-  fontSize: 40,
+  fontSize: 40.sp.clamp(32, 44),
+  // fontSize: 40,
   height: 1.2,
   letterSpacing: 0.16,
 );
@@ -155,8 +156,8 @@ TextStyle get _baseTitlePrimary => TextStyle(
 TextStyle get _baseTitleSecondary => TextStyle(
   fontFamily: _chivoMonoFontFamily,
   fontWeight: FontWeight.w500, // Medium
-  // fontSize: 32.sp.clamp(28, 36),
-  fontSize: 32,
+  fontSize: 32.sp.clamp(28, 36),
+  // fontSize: 32,
   height: 1.125,
   letterSpacing: 0.16,
 );
@@ -164,8 +165,8 @@ TextStyle get _baseTitleSecondary => TextStyle(
 TextStyle get _baseButtonPrimary => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w500, // Medium
-  // fontSize: 20.sp.clamp(18, 22),
-  fontSize: 20,
+  fontSize: 20.sp.clamp(18, 22),
+  // fontSize: 20,
   height: 1.2,
   letterSpacing: 0.16,
 );
@@ -173,8 +174,8 @@ TextStyle get _baseButtonPrimary => TextStyle(
 TextStyle get _baseButtonSecondary => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w500, // Medium
-  // fontSize: 16.sp.clamp(14, 18),
-  fontSize: 16,
+  fontSize: 16.sp.clamp(14, 18),
+  // fontSize: 16,
   height: 1.25,
   letterSpacing: 0.16,
 );
@@ -182,8 +183,8 @@ TextStyle get _baseButtonSecondary => TextStyle(
 TextStyle get _baseBodyPrimary => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w400, // Regular
-  // fontSize: 20.sp.clamp(18, 22),
-  fontSize: 20,
+  fontSize: 20.sp.clamp(18, 22),
+  // fontSize: 20,
   height: 1.2,
 );
 
@@ -193,8 +194,8 @@ TextStyle get _baseBodyPrimaryBold =>
 TextStyle get _baseBodySecondary => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w400, // Regular
-  // fontSize: 16.sp.clamp(14, 18),
-  fontSize: 16,
+  fontSize: 16.sp.clamp(14, 18),
+  // fontSize: 16,
   height: 1.25,
 );
 
@@ -204,8 +205,8 @@ TextStyle get _baseBodySecondaryBold =>
 TextStyle get _baseBodyTertiary => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w400, // Regular
-  // fontSize: 12.sp.clamp(10, 14),
-  fontSize: 12,
+  fontSize: 12.sp.clamp(10, 14),
+  // fontSize: 12,
   height: 1.333,
 );
 
@@ -215,8 +216,8 @@ TextStyle get _baseBodyTertiaryBold =>
 TextStyle get _baseLinkPrimary => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w400, // Regular
-  // fontSize: 16.sp.clamp(14, 18),
-  fontSize: 16,
+  fontSize: 16.sp.clamp(14, 18),
+  // fontSize: 16,
   height: 1.25,
   decoration: TextDecoration.underline,
 );
@@ -225,8 +226,8 @@ TextStyle get _baseCaption => TextStyle(
   fontFamily: _interFontFamily,
   fontStyle: FontStyle.italic, // Regular Italics
   fontWeight: FontWeight.w400,
-  // fontSize: 12.sp.clamp(10, 14),
-  fontSize: 12,
+  fontSize: 12.sp.clamp(10, 14),
+  // fontSize: 12,
   height: 1.333,
   letterSpacing: -0.04,
 );
@@ -234,8 +235,8 @@ TextStyle get _baseCaption => TextStyle(
 TextStyle get _baseCode => TextStyle(
   fontFamily: _chivoMonoFontFamily,
   fontWeight: FontWeight.w400, // Regular
-  // fontSize: 16.sp.clamp(14, 18),
-  fontSize: 16,
+  fontSize: 16.sp.clamp(14, 18),
+  // fontSize: 16,
   height: 1.25,
   letterSpacing: 0,
 );
