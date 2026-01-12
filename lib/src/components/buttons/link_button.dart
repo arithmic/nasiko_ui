@@ -43,10 +43,7 @@ class LinkButton extends StatelessWidget {
       style: ButtonStyle(
         // --- Base Properties ---
         padding: WidgetStateProperty.all(
-          EdgeInsets.symmetric(
-            vertical: spacing.s8h,
-            horizontal: spacing.s12w,
-          ),
+          EdgeInsets.all(spacing.s12r),
         ),
         fixedSize: WidgetStateProperty.all(Size.fromHeight(spacing.s36h)),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -66,13 +63,13 @@ class LinkButton extends StatelessWidget {
           if (states.contains(WidgetState.focused)) {
             return colors.foregroundIconHover;
           }
-          return colors.foregroundPrimary; // Default brand color (yellow/600)
+          return colors.foregroundPrimary;
         }),
 
         // --- TextStyle (For Text & Underline) ---
         // This will style the text *and* apply the underline
         textStyle: WidgetStateProperty.resolveWith<TextStyle>((states) {
-          final baseStyle = typography.bodySecondary;
+          final baseStyle = typography.linkPrimary;
 
           if (states.contains(WidgetState.disabled)) {
             return baseStyle.copyWith(color: colors.foregroundDisabled);
@@ -81,16 +78,12 @@ class LinkButton extends StatelessWidget {
               states.contains(WidgetState.focused)) {
             return baseStyle.copyWith(
               color: colors.foregroundBrandHover,
-              decoration: TextDecoration.underline,
               decorationColor: colors.foregroundBrandHover,
               decorationThickness: borderWidth.w1,
             );
           }
           // Default state
-          return baseStyle.copyWith(
-            color: colors.foregroundBrand,
-            decoration: TextDecoration.underline,
-          );
+          return baseStyle.copyWith(color: colors.foregroundBrand);
         }),
       ),
       child: Row(
