@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
-import 'package:nasiko_ui/src/components/avatar/avatar_size.dart';
-import 'package:nasiko_ui/src/components/input_fields/input_field.dart';
-import 'package:nasiko_ui/src/tokens/tokens.dart';
 
 /// A circular avatar component for the Nasiko Design System.
 ///

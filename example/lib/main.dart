@@ -2120,9 +2120,9 @@ class _ListExampleState extends State<_ListExample> {
         NasikoListItem(
           title: 'POST/ chat',
           imageUrl: imageUrl,
-          leadingIcon: Icons.hexagon_outlined,
+          leadingIcon: HugeIcons.strokeRoundedChatBot,
           badgeLabel: '1.85s',
-          badgeIcon: Icons.check_circle_outline,
+          badgeIcon: HugeIcons.strokeRoundedTime03,
           showStatusDot: true,
 
           indentLevel: 0,
@@ -2141,9 +2141,9 @@ class _ListExampleState extends State<_ListExample> {
           NasikoListItem(
             title: 'POST/ chat (Selected)',
             imageUrl: imageUrl,
-            leadingIcon: Icons.hexagon_outlined,
+            leadingIcon: HugeIcons.strokeRoundedChatBot,
             badgeLabel: '1.85s',
-            badgeIcon: Icons.check_circle_outline,
+            badgeIcon: HugeIcons.strokeRoundedTime03,
             showStatusDot: true,
 
             indentLevel: 1, // Indented
@@ -2161,9 +2161,9 @@ class _ListExampleState extends State<_ListExample> {
           NasikoListItem(
             title: 'POST/ chat',
             imageUrl: imageUrl,
-            leadingIcon: Icons.hexagon_outlined,
+            leadingIcon: HugeIcons.strokeRoundedChatBot,
             badgeLabel: '1.85s',
-            badgeIcon: Icons.check_circle_outline,
+            badgeIcon: HugeIcons.strokeRoundedTime03,
             showStatusDot: true,
 
             indentLevel: 2, // Double Indented
@@ -2178,9 +2178,9 @@ class _ListExampleState extends State<_ListExample> {
           NasikoListItem(
             title: 'POST/ chat (Disabled)',
             imageUrl: imageUrl,
-            leadingIcon: Icons.hexagon_outlined,
+            leadingIcon: HugeIcons.strokeRoundedChatBot,
             badgeLabel: '1.85s',
-            badgeIcon: Icons.check_circle_outline,
+            badgeIcon: HugeIcons.strokeRoundedTime03,
 
             indentLevel: 2,
             isDisabled: true, // Disabled state

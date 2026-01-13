@@ -1,6 +1,7 @@
 // lib/src/components/list/nasiko_list_item.dart
 
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
 /// A comprehensive list item component that supports hierarchy,
@@ -27,7 +28,7 @@ class NasikoListItem extends StatefulWidget {
   final String title;
   final String? subtitle;
   final String? imageUrl;
-  final IconData? leadingIcon;
+  final HugeIconsType? leadingIcon;
 
   /// The depth of the item in the tree (0 = root).
   /// Each level adds indentation.
@@ -49,7 +50,7 @@ class NasikoListItem extends StatefulWidget {
   final String? badgeLabel;
 
   /// Icon for the trailing badge.
-  final IconData? badgeIcon;
+  final HugeIconsType? badgeIcon;
 
   final VoidCallback? onTap;
   final VoidCallback? onToggleExpand;
@@ -90,136 +91,117 @@ class _NasikoListItemState extends State<NasikoListItem> {
 
     return Opacity(
       opacity: opacity,
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: spacing.s2h),
-        child: InkWell(
-          onTap: widget.isDisabled ? null : widget.onTap,
-          onHover: (val) => setState(() => _isHovering = val),
-          borderRadius: BorderRadius.circular(radii.r8),
-          child: Container(
-            decoration: BoxDecoration(
-              color: backgroundColor,
-              borderRadius: BorderRadius.circular(radii.r8),
-              border: Border.all(color: borderColor, width: borderWidths.w1),
-            ),
-            padding: EdgeInsets.symmetric(
-              vertical: spacing.s8h,
-              horizontal: spacing.s8w,
-            ),
-            child: Row(
-              children: [
-                // 1. Indentation (Hierarchy)
-                SizedBox(width: widget.indentLevel * spacing.s24w),
+      child: InkWell(
+        onTap: widget.isDisabled ? null : widget.onTap,
+        onHover: (val) => setState(() => _isHovering = val),
+        borderRadius: BorderRadius.circular(radii.r4),
+        child: Container(
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(radii.r4),
+            border: Border.all(color: borderColor, width: borderWidths.w1),
+          ),
+          padding: EdgeInsets.symmetric(
+            vertical: spacing.s8h,
+            horizontal: spacing.s12w,
+          ),
+          child: Row(
+            children: [
+              // 1. Indentation (Hierarchy)
+              SizedBox(width: widget.indentLevel * spacing.s24w),
 
-                // 2. Expand/Collapse Chevron
-                if (widget.hasChildren)
-                  InkWell(
-                    onTap: widget.isDisabled ? null : widget.onToggleExpand,
-                    borderRadius: BorderRadius.circular(radii.r4),
-                    child: Icon(
-                      widget.isExpanded
-                          ? Icons.keyboard_arrow_down_rounded
-                          : Icons.keyboard_arrow_right_rounded,
-                      size: iconSizes.s,
-                      color: colors.foregroundSecondary,
-                    ),
-                  )
-                else
-                  SizedBox(width: spacing.s20w), // Placeholder for alignment
-
-                SizedBox(width: spacing.s8w),
-
-                // 3. Avatar (Image)
-                if (widget.imageUrl != null) ...[
-                  NasikoAvatar(
-                    size: NasikoAvatarSize.small, // Matches design (~32px)
-                    imageUrl: widget.imageUrl,
+              // 2. Expand/Collapse Chevron
+              if (widget.hasChildren)
+                InkWell(
+                  onTap: widget.isDisabled ? null : widget.onToggleExpand,
+                  borderRadius: BorderRadius.circular(radii.r4),
+                  child: Icon(
+                    widget.isExpanded
+                        ? Icons.keyboard_arrow_down_rounded
+                        : Icons.keyboard_arrow_right_rounded,
+                    size: iconSizes.s,
+                    color: colors.foregroundIconPrimary,
                   ),
-                  SizedBox(width: spacing.s8w),
-                ],
+                )
+              else
+                SizedBox(width: spacing.s20w), // Placeholder for alignment
 
-                // 4. Leading Icon (The Hexagon)
-                if (widget.leadingIcon != null) ...[
-                  Icon(
-                    widget.leadingIcon,
-                    size: iconSizes.m,
-                    color: colors.foregroundPrimary,
-                  ),
-                  SizedBox(width: spacing.s8w),
-                ],
+              SizedBox(width: spacing.s12w),
 
-                // 5. Title
-                Expanded(
-                  child: Text(
-                    widget.title,
-                    style: typography.bodyPrimary.copyWith(
-                      color: colors.foregroundPrimary,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
+              // 3. Avatar (Image)
+              if (widget.imageUrl != null) ...[
+                NasikoAvatar(
+                  size: NasikoAvatarSize.medium, // Matches design (~32px)
+                  imageUrl: widget.imageUrl,
                 ),
-
-                // 6. Status Dot
-                if (widget.showStatusDot) ...[
-                  SizedBox(width: spacing.s8w),
-                  Container(
-                    width: spacing.s8r,
-                    height: spacing.s8r,
-                    decoration: BoxDecoration(
-                      color: colors.backgroundSuccess, // Green
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ],
-
                 SizedBox(width: spacing.s12w),
+              ],
 
-                // 7. Badge (e.g., 1.85s)
-                if (widget.badgeLabel != null) ...[
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: spacing.s8w,
-                      vertical: spacing.s2h,
-                    ),
-                    decoration: BoxDecoration(
-                      color: colors.backgroundSurface, // neutral/100
-                      borderRadius: BorderRadius.circular(radii.r4),
-                      border: Border.all(
-                        color: colors.borderPrimary,
-                        width: borderWidths.w1,
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (widget.badgeIcon != null) ...[
-                          Icon(
-                            widget.badgeIcon,
-                            size: iconSizes.xs, // Tiny icon
-                            color: colors.foregroundSecondary,
-                          ),
-                          SizedBox(width: spacing.s4w),
-                        ],
-                        Text(
-                          widget.badgeLabel!,
-                          style: typography.caption.copyWith(
-                            color: colors.foregroundSecondary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(width: spacing.s8w),
-                ],
-
-                // 8. Trailing Dropdown Arrow (Static in design)
-                Icon(
-                  Icons.keyboard_arrow_down_rounded,
+              // 4. Leading Icon (The Hexagon)
+              if (widget.leadingIcon != null) ...[
+                HugeIcon(
+                  icon: widget.leadingIcon!,
                   size: iconSizes.s,
-                  color: colors.foregroundSecondary,
+                  color: colors.foregroundPrimary,
+                ),
+                SizedBox(width: spacing.s12w),
+              ],
+
+              // 5. Title
+              Flexible(
+                child: Text(
+                  widget.title,
+                  style: typography.bodySecondary,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+
+              // 6. Status Dot
+              if (widget.showStatusDot) ...[
+                SizedBox(width: spacing.s12w),
+                Container(
+                  width: spacing.s8r,
+                  height: spacing.s8r,
+                  decoration: BoxDecoration(
+                    color: colors.foregroundSuccess, // Green
+                    shape: BoxShape.circle,
+                  ),
                 ),
               ],
-            ),
+
+              SizedBox(width: spacing.s12w),
+
+              // 7. Badge (e.g., 1.85s)
+              if (widget.badgeLabel != null) ...[
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: spacing.s8w,
+                    vertical: spacing.s4h,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(radii.r4),
+                    border: Border.all(
+                      color: colors.borderPrimary,
+                      width: borderWidths.w1,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (widget.badgeIcon != null) ...[
+                        HugeIcon(
+                          icon: widget.badgeIcon!,
+                          size: iconSizes.xs, // Tiny icon
+                          color: colors.foregroundIconPrimary,
+                        ),
+                        SizedBox(width: spacing.s8w),
+                      ],
+                      Text(widget.badgeLabel!, style: typography.bodyTertiary),
+                    ],
+                  ),
+                ),
+              ],
+            ],
           ),
         ),
       ),
