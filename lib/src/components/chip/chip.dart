@@ -33,7 +33,7 @@ class NasikoChip extends StatelessWidget {
   final String label;
 
   /// An optional icon to display before the label.
-  final IconData? leadingIcon;
+  final HugeIconsType? leadingIcon;
 
   /// Callback when the chip is tapped.
   /// If `null` and [onDelete] is also `null`, the chip is non-actionable.
@@ -109,8 +109,8 @@ class NasikoChip extends StatelessWidget {
         children: [
           // Leading Icon
           if (leadingIcon != null) ...[
-            Icon(
-              leadingIcon,
+            HugeIcon(
+              icon: leadingIcon!,
               size: size == NasikoChipSize.small ? iconSizes.xs : iconSizes.s,
               color: foregroundColor,
             ),
@@ -197,8 +197,6 @@ class _InteractiveChipState extends State<_InteractiveChip> {
 
   @override
   Widget build(BuildContext context) {
-    final radii = context.radius;
-
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
