@@ -190,7 +190,6 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
                   isSelected: widget.selectedIndex == index,
                   onTap: () {
                     widget.onItemSelected(index);
-                    Navigator.of(context).pop();
                   },
                 );
               },
