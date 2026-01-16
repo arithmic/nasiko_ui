@@ -23,6 +23,7 @@ class NasikoInputField extends StatelessWidget {
     this.validator,
     this.onChanged,
     this.isRequired = false,
+    this.isReadOnly = false,
   });
 
   /// Controls the text being edited.
@@ -62,6 +63,9 @@ class NasikoInputField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
 
   final bool? isRequired;
+
+  final bool? isReadOnly;
+
   @override
   Widget build(BuildContext context) {
     // Get all design tokens from the theme
@@ -123,6 +127,8 @@ class NasikoInputField extends StatelessWidget {
         // 2. The Text Field
         TextFormField(
           controller: controller,
+          readOnly: isReadOnly!,
+          enabled: !isReadOnly!,
           validator: validator,
           onChanged: onChanged,
           obscureText: obscureText,
@@ -185,7 +191,7 @@ class NasikoInputField extends StatelessWidget {
 
             // --- Styling ---
             filled: true,
-            fillColor: colors.backgroundGroup, // neutral50
+            fillColor: isReadOnly! ? colors.backgroundDisabled : colors.backgroundGroup, // neutral50
             hoverColor: colors.backgroundSurface,
             prefix: leadingIcon != null
                 ? SizedBox(width: spacing.s0)
