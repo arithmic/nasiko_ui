@@ -210,8 +210,11 @@ class _InteractiveChipState extends State<_InteractiveChip> {
         onTapCancel: () => setState(() => _isPressed = false),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
-          decoration: BoxDecoration(color: _currentColor),
-          child: (widget.child as Container).child,
+          decoration: BoxDecoration(
+            color: _currentColor,
+            borderRadius: BorderRadius.circular(context.radius.r8),
+          ),
+          child: widget.child,
         ),
       ),
     );

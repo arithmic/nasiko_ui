@@ -1456,7 +1456,7 @@ class ExampleHomePage extends StatelessWidget {
               content: const Text('Do you want to save your changes?'),
               primaryButtonLabel: 'Save',
               secondaryButtonLabel: 'Cancel',
-              backgroundColor: context.colors.backgroundSurface
+              backgroundColor: context.colors.backgroundSurface,
             );
           },
           label: 'Primary action modal',
@@ -2336,20 +2336,20 @@ class _ChipExampleState extends State<_ChipExample> {
             ),
             NasikoChip(
               label: 'With Icon',
-              leadingIcon: Icons.star,
+              leadingIcon: HugeIcons.strokeRoundedStar,
               size: NasikoChipSize.large,
               variant: NasikoChipVariant.neutral,
             ),
             NasikoChip(
               label: 'Actionable',
-              leadingIcon: Icons.favorite,
+              leadingIcon: HugeIcons.strokeRoundedFavourite,
               size: NasikoChipSize.large,
               variant: NasikoChipVariant.neutral,
               onTap: () {},
             ),
             NasikoChip(
               label: 'Deletable',
-              leadingIcon: Icons.bookmark,
+              leadingIcon: HugeIcons.strokeRoundedBookmark02,
               size: NasikoChipSize.large,
               variant: NasikoChipVariant.neutral,
               onDelete: () {},
@@ -2362,13 +2362,13 @@ class _ChipExampleState extends State<_ChipExample> {
             ),
             NasikoChip(
               label: 'Brand Selected',
-              leadingIcon: Icons.check_circle,
+              leadingIcon: HugeIcons.strokeRoundedCircleLockCheck01,
               size: NasikoChipSize.large,
               variant: NasikoChipVariant.brand,
             ),
             NasikoChip(
               label: 'Brand Deletable',
-              leadingIcon: Icons.local_offer,
+              leadingIcon: HugeIcons.strokeRoundedSaleTag02,
               size: NasikoChipSize.large,
               variant: NasikoChipVariant.brand,
               onDelete: () {},
@@ -2376,7 +2376,7 @@ class _ChipExampleState extends State<_ChipExample> {
             // Disabled
             NasikoChip(
               label: 'Disabled',
-              leadingIcon: Icons.block,
+              leadingIcon: HugeIcons.strokeRoundedUnavailable,
               size: NasikoChipSize.large,
               enabled: false,
             ),
@@ -2405,20 +2405,20 @@ class _ChipExampleState extends State<_ChipExample> {
             ),
             NasikoChip(
               label: 'With Icon',
-              leadingIcon: Icons.star,
+              leadingIcon: HugeIcons.strokeRoundedStar,
               size: NasikoChipSize.small,
               variant: NasikoChipVariant.neutral,
             ),
             NasikoChip(
               label: 'Actionable',
-              leadingIcon: Icons.favorite,
+              leadingIcon: HugeIcons.strokeRoundedFavourite,
               size: NasikoChipSize.small,
               variant: NasikoChipVariant.neutral,
               onTap: () {},
             ),
             NasikoChip(
               label: 'Deletable',
-              leadingIcon: Icons.bookmark,
+              leadingIcon: HugeIcons.strokeRoundedBookmark02,
               size: NasikoChipSize.small,
               variant: NasikoChipVariant.neutral,
               onDelete: () {},
@@ -2431,13 +2431,13 @@ class _ChipExampleState extends State<_ChipExample> {
             ),
             NasikoChip(
               label: 'Brand Selected',
-              leadingIcon: Icons.check_circle,
+              leadingIcon: HugeIcons.strokeRoundedCircleLockCheck01,
               size: NasikoChipSize.small,
               variant: NasikoChipVariant.brand,
             ),
             NasikoChip(
               label: 'Brand Deletable',
-              leadingIcon: Icons.local_offer,
+              leadingIcon: HugeIcons.strokeRoundedSaleTag02,
               size: NasikoChipSize.small,
               variant: NasikoChipVariant.brand,
               onDelete: () {},
@@ -2445,7 +2445,7 @@ class _ChipExampleState extends State<_ChipExample> {
             // Disabled
             NasikoChip(
               label: 'Disabled',
-              leadingIcon: Icons.block,
+              leadingIcon: HugeIcons.strokeRoundedUnavailable,
               size: NasikoChipSize.small,
               enabled: false,
             ),
