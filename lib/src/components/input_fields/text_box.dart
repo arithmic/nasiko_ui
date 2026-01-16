@@ -1,6 +1,7 @@
 // lib/src/components/input_fields/nasiko_text_box.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hugeicons/hugeicons.dart';
 import "package:nasiko_ui/nasiko_ui.dart";
 
@@ -159,24 +160,52 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
               ),
               SizedBox(height: spacing.s12h),
             ],
-            TextField(
-              controller: _controller,
-              focusNode: _focusNode,
-              minLines: widget.minLines,
-              maxLines: widget.maxLines,
-              enabled: widget.enabled,
-              style: typography.bodyPrimary.copyWith(
-                color: colors.foregroundPrimary,
-              ),
-              onChanged: widget.onChanged,
-              decoration: InputDecoration(
-                hintText: widget.hintText,
-                hintStyle: typography.bodyPrimary.copyWith(
-                  color: colors.foregroundSecondary,
+
+            Focus(
+              onKeyEvent: (node, event) {
+                if (event is KeyDownEvent &&
+                    event.logicalKey == LogicalKeyboardKey.enter) {
+                  final isShiftPressed =
+                      HardwareKeyboard.instance.logicalKeysPressed.contains(
+                        LogicalKeyboardKey.shiftLeft,
+                      ) ||
+                      HardwareKeyboard.instance.logicalKeysPressed.contains(
+                        LogicalKeyboardKey.shiftRight,
+                      );
+
+                  if (isShiftPressed) {
+                    return KeyEventResult.ignored;
+                  }
+
+                  widget.onSend?.call();
+                  return KeyEventResult.handled;
+                }
+
+                return KeyEventResult.ignored;
+              },
+              child: TextField(
+                controller: _controller,
+                focusNode: _focusNode,
+                minLines: widget.minLines,
+                maxLines: null,
+                textInputAction: TextInputAction.newline,
+                enabled: widget.enabled,
+                style: typography.bodyPrimary.copyWith(
+                  color: colors.foregroundPrimary,
                 ),
-                border: InputBorder.none,
-                isDense: true,
-                contentPadding: EdgeInsets.zero,
+                onChanged: widget.onChanged,
+                decoration: InputDecoration(
+                  hintText: widget.hintText,
+                  hintStyle: typography.bodyPrimary.copyWith(
+                    color: colors.foregroundSecondary,
+                  ),
+                  border: InputBorder.none,
+                  isDense: true,
+                  contentPadding: EdgeInsets.zero,
+                ),
+                onSubmitted: (_) {
+                  widget.onSend?.call();
+                },
               ),
             ),
 
