@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
-/// Menu item data model (icon + label).
 class NasikoPopupMenuItemData {
   const NasikoPopupMenuItemData({
     required this.label,
@@ -14,16 +13,9 @@ class NasikoPopupMenuItemData {
 
   final String label;
   final IconData icon;
-
-  /// Optional styling for destructive actions (Logout, Delete, etc.)
   final bool isDestructive;
 }
 
-/// A single public widget:
-/// - Wraps any child
-/// - Shows Nasiko popup menu on tap
-/// - Handles overlay + outside tap close
-/// - Supports icon + text items
 class NasikoPopupMenu extends StatefulWidget {
   const NasikoPopupMenu({
     super.key,
@@ -47,15 +39,16 @@ class NasikoPopupMenu extends StatefulWidget {
 
   final double? width;
   final double maxHeight;
+  final bool enabled;
+
+  /// Offset applied to menu position relative to anchor.
+  /// If null -> defaults to spacing.s4 below anchor.
   final Offset? offset;
 
-  final bool enabled;
+  /// If null -> transparent but still blocks taps.
   final Color? barrierColor;
 
-  /// Close menu when any scroll happens in the page.
   final bool closeOnScroll;
-
-  /// Close menu when ESC key is pressed (web/desktop).
   final bool closeOnEscape;
 
   @override
@@ -65,10 +58,8 @@ class NasikoPopupMenu extends StatefulWidget {
 class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
   final LayerLink _layerLink = LayerLink();
 
-  OverlayEntry? _barrierEntry;
-  OverlayEntry? _menuEntry;
-
-  bool get _isOpen => _menuEntry != null;
+  OverlayEntry? _entry;
+  bool _isOpen = false;
 
   @override
   void dispose() {
@@ -77,16 +68,14 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
   }
 
   void _closeMenu() {
-    _menuEntry?.remove();
-    _menuEntry = null;
-
-    _barrierEntry?.remove();
-    _barrierEntry = null;
+    if (!_isOpen) return;
+    _entry?.remove();
+    _entry = null;
+    _isOpen = false;
   }
 
   void _toggleMenu() {
     if (!widget.enabled) return;
-
     if (_isOpen) {
       _closeMenu();
     } else {
@@ -95,102 +84,67 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
   }
 
   void _openMenu() {
-    final overlayState = Overlay.of(context);
+    final overlay = Overlay.of(context);
 
     final renderBox = context.findRenderObject() as RenderBox?;
     if (renderBox == null) return;
 
-    final size = renderBox.size;
+    final anchorSize = renderBox.size;
     final spacing = context.spacing;
 
     final dx = widget.offset?.dx ?? 0;
     final dy = widget.offset?.dy ?? spacing.s4;
 
-    final menuWidth = widget.width ?? size.width;
+    final menuWidth = widget.width ?? anchorSize.width;
 
-    // Barrier entry: outside tap + optional scroll close + ESC close
-    _barrierEntry = OverlayEntry(
-      builder: (context) {
-        Widget barrier = Positioned.fill(
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: _closeMenu,
-            child: ColoredBox(color: widget.barrierColor ?? Colors.transparent),
-          ),
-        );
+    _entry = OverlayEntry(
+      builder: (overlayContext) {
+        // IMPORTANT:
+        // Positioned must be directly under Stack.
+        // Do NOT wrap Positioned with Semantics/Focus/NotificationListener outside Stack.
+        return Stack(
+          children: [
+            // 1) Barrier: outside tap closes menu
+            Positioned.fill(
+              child: _NasikoMenuBarrier(
+                barrierColor: widget.barrierColor ?? Colors.transparent,
+                closeOnEscape: widget.closeOnEscape,
+                closeOnScroll: widget.closeOnScroll,
+                onClose: _closeMenu,
+              ),
+            ),
 
-        // Close on scroll anywhere in the page
-        if (widget.closeOnScroll) {
-          barrier = NotificationListener<ScrollNotification>(
-            onNotification: (notification) {
-              // Close on any scroll update/user scroll
-              if (notification is ScrollUpdateNotification ||
-                  notification is UserScrollNotification) {
-                _closeMenu();
-              }
-              return false;
-            },
-            child: barrier,
-          );
-        }
+            // 2) Menu: positioned relative to anchor
+            CompositedTransformFollower(
+              link: _layerLink,
+              showWhenUnlinked: false,
+              offset: Offset(dx, anchorSize.height + dy),
+              child: Material(
+                color: Colors.transparent,
+                child: _NasikoPopupMenuSurface(
+                  items: widget.items,
+                  selectedIndex: widget.selectedIndex,
+                  width: menuWidth,
+                  maxHeight: widget.maxHeight,
+                  onItemSelected: (index) {
+                    // Close first (overlay cleanup), then call consumer callback.
+                    _closeMenu();
 
-        // Close on ESC (desktop/web)
-        if (widget.closeOnEscape) {
-          barrier = Focus(
-            autofocus: true,
-            onKeyEvent: (node, event) {
-              if (event is KeyDownEvent &&
-                  event.logicalKey == LogicalKeyboardKey.escape) {
-                _closeMenu();
-                return KeyEventResult.handled;
-              }
-              return KeyEventResult.ignored;
-            },
-            child: barrier,
-          );
-        }
-
-        return barrier;
-      },
-    );
-
-    // Menu entry: positioned relative to anchor
-    _menuEntry = OverlayEntry(
-      builder: (context) {
-        return Positioned.fill(
-          child: Stack(
-            children: [
-              CompositedTransformFollower(
-                link: _layerLink,
-                showWhenUnlinked: false,
-                offset: Offset(dx, size.height + dy),
-                child: Material(
-                  color: Colors.transparent,
-                  child: _NasikoPopupMenuSurface(
-                    items: widget.items,
-                    selectedIndex: widget.selectedIndex,
-                    width: menuWidth,
-                    maxHeight: widget.maxHeight,
-                    onItemSelected: (index) {
-                      _closeMenu();
-
-                      // Safe for navigation (logout / pushReplacement / etc.)
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        if (!mounted) return;
-                        widget.onItemSelected(index);
-                      });
-                    },
-                  ),
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (!mounted) return;
+                      widget.onItemSelected(index);
+                    });
+                  },
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );
 
-    overlayState.insert(_barrierEntry!);
-    overlayState.insert(_menuEntry!);
+    overlay.insert(_entry!);
+    _isOpen = true;
   }
 
   @override
@@ -206,7 +160,62 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
   }
 }
 
-/// Internal surface widget (scrollable menu container).
+class _NasikoMenuBarrier extends StatelessWidget {
+  const _NasikoMenuBarrier({
+    required this.barrierColor,
+    required this.onClose,
+    required this.closeOnEscape,
+    required this.closeOnScroll,
+  });
+
+  final Color barrierColor;
+  final VoidCallback onClose;
+  final bool closeOnEscape;
+  final bool closeOnScroll;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget barrier = GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onClose,
+      child: ColoredBox(color: barrierColor),
+    );
+
+    // Close on scroll anywhere (optional)
+    if (closeOnScroll) {
+      barrier = NotificationListener<ScrollNotification>(
+        onNotification: (notification) {
+          // Close only on meaningful scroll signals
+          if (notification is UserScrollNotification ||
+              notification is ScrollUpdateNotification) {
+            onClose();
+          }
+          return false;
+        },
+        child: barrier,
+      );
+    }
+
+    // Close on ESC (optional)
+    if (closeOnEscape) {
+      barrier = Focus(
+        autofocus: true,
+        onKeyEvent: (node, event) {
+          if (event is KeyDownEvent &&
+              event.logicalKey == LogicalKeyboardKey.escape) {
+            onClose();
+            return KeyEventResult.handled;
+          }
+          return KeyEventResult.ignored;
+        },
+        child: barrier,
+      );
+    }
+
+    return barrier;
+  }
+}
+
 class _NasikoPopupMenuSurface extends StatefulWidget {
   const _NasikoPopupMenuSurface({
     required this.items,
@@ -283,7 +292,6 @@ class _NasikoPopupMenuSurfaceState extends State<_NasikoPopupMenuSurface> {
             separatorBuilder: (context, index) => SizedBox(height: spacing.s4h),
             itemBuilder: (context, index) {
               final item = widget.items[index];
-
               return _NasikoMenuItem(
                 label: item.label,
                 icon: item.icon,
@@ -299,7 +307,6 @@ class _NasikoPopupMenuSurfaceState extends State<_NasikoPopupMenuSurface> {
   }
 }
 
-/// Internal menu row widget (icon left, text next).
 class _NasikoMenuItem extends StatefulWidget {
   const _NasikoMenuItem({
     required this.label,
