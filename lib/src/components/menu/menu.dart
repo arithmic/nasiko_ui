@@ -1,6 +1,7 @@
 // lib/src/components/menu/nasiko_menu.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
 /// Menu item data model (icon + label).
@@ -35,34 +36,27 @@ class NasikoPopupMenu extends StatefulWidget {
     this.enabled = true,
     this.offset,
     this.barrierColor,
+    this.closeOnScroll = true,
+    this.closeOnEscape = true,
   });
 
-  /// The anchor widget (the one user taps).
   final Widget child;
-
-  /// Items shown in the menu.
   final List<NasikoPopupMenuItemData> items;
-
-  /// Currently selected index.
   final int selectedIndex;
-
-  /// Callback when user selects an item.
   final ValueChanged<int> onItemSelected;
 
-  /// If null -> defaults to child width.
   final double? width;
-
   final double maxHeight;
-
-  /// Offset applied to the popup menu position.
-  /// If null -> defaults to spacing.s4 below the anchor.
   final Offset? offset;
 
   final bool enabled;
-
-  /// Overlay barrier color (outside tap area).
-  /// If null -> defaults to transparent (but still tappable).
   final Color? barrierColor;
+
+  /// Close menu when any scroll happens in the page.
+  final bool closeOnScroll;
+
+  /// Close menu when ESC key is pressed (web/desktop).
+  final bool closeOnEscape;
 
   @override
   State<NasikoPopupMenu> createState() => _NasikoPopupMenuState();
@@ -114,20 +108,53 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
 
     final menuWidth = widget.width ?? size.width;
 
-    // 1) Barrier entry: captures outside taps and closes menu
+    // Barrier entry: outside tap + optional scroll close + ESC close
     _barrierEntry = OverlayEntry(
       builder: (context) {
-        return Positioned.fill(
+        Widget barrier = Positioned.fill(
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: _closeMenu,
             child: ColoredBox(color: widget.barrierColor ?? Colors.transparent),
           ),
         );
+
+        // Close on scroll anywhere in the page
+        if (widget.closeOnScroll) {
+          barrier = NotificationListener<ScrollNotification>(
+            onNotification: (notification) {
+              // Close on any scroll update/user scroll
+              if (notification is ScrollUpdateNotification ||
+                  notification is UserScrollNotification) {
+                _closeMenu();
+              }
+              return false;
+            },
+            child: barrier,
+          );
+        }
+
+        // Close on ESC (desktop/web)
+        if (widget.closeOnEscape) {
+          barrier = Focus(
+            autofocus: true,
+            onKeyEvent: (node, event) {
+              if (event is KeyDownEvent &&
+                  event.logicalKey == LogicalKeyboardKey.escape) {
+                _closeMenu();
+                return KeyEventResult.handled;
+              }
+              return KeyEventResult.ignored;
+            },
+            child: barrier,
+          );
+        }
+
+        return barrier;
       },
     );
 
-    // 2) Menu entry: positioned relative to anchor using CompositedTransform
+    // Menu entry: positioned relative to anchor
     _menuEntry = OverlayEntry(
       builder: (context) {
         return Positioned.fill(
@@ -146,7 +173,12 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
                     maxHeight: widget.maxHeight,
                     onItemSelected: (index) {
                       _closeMenu();
-                      widget.onItemSelected(index);
+
+                      // Safe for navigation (logout / pushReplacement / etc.)
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (!mounted) return;
+                        widget.onItemSelected(index);
+                      });
                     },
                   ),
                 ),
