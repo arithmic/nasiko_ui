@@ -3,18 +3,284 @@
 import 'package:flutter/material.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
-/// A single item for use within the [NasikoPopupMenu].
-///
-/// This is an internal-facing widget.
-class _NasikoMenuItem extends StatefulWidget {
-  const _NasikoMenuItem({
+/// Menu item data model (icon + label).
+class NasikoPopupMenuItemData {
+  const NasikoPopupMenuItemData({
     required this.label,
-    required this.isSelected,
-    required this.onTap,
+    required this.icon,
+    this.isDestructive = false,
   });
 
   final String label;
+  final IconData icon;
+
+  /// Optional styling for destructive actions (Logout, Delete, etc.)
+  final bool isDestructive;
+}
+
+/// A single public widget:
+/// - Wraps any child
+/// - Shows Nasiko popup menu on tap
+/// - Handles overlay + outside tap close
+/// - Supports icon + text items
+class NasikoPopupMenu extends StatefulWidget {
+  const NasikoPopupMenu({
+    super.key,
+    required this.child,
+    required this.items,
+    required this.selectedIndex,
+    required this.onItemSelected,
+    this.width,
+    this.maxHeight = 220.0,
+    this.enabled = true,
+    this.offset,
+    this.barrierColor,
+  });
+
+  /// The anchor widget (the one user taps).
+  final Widget child;
+
+  /// Items shown in the menu.
+  final List<NasikoPopupMenuItemData> items;
+
+  /// Currently selected index.
+  final int selectedIndex;
+
+  /// Callback when user selects an item.
+  final ValueChanged<int> onItemSelected;
+
+  /// If null -> defaults to child width.
+  final double? width;
+
+  final double maxHeight;
+
+  /// Offset applied to the popup menu position.
+  /// If null -> defaults to spacing.s4 below the anchor.
+  final Offset? offset;
+
+  final bool enabled;
+
+  /// Overlay barrier color (outside tap area).
+  /// If null -> defaults to transparent (but still tappable).
+  final Color? barrierColor;
+
+  @override
+  State<NasikoPopupMenu> createState() => _NasikoPopupMenuState();
+}
+
+class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
+  final LayerLink _layerLink = LayerLink();
+
+  OverlayEntry? _barrierEntry;
+  OverlayEntry? _menuEntry;
+
+  bool get _isOpen => _menuEntry != null;
+
+  @override
+  void dispose() {
+    _closeMenu();
+    super.dispose();
+  }
+
+  void _closeMenu() {
+    _menuEntry?.remove();
+    _menuEntry = null;
+
+    _barrierEntry?.remove();
+    _barrierEntry = null;
+  }
+
+  void _toggleMenu() {
+    if (!widget.enabled) return;
+
+    if (_isOpen) {
+      _closeMenu();
+    } else {
+      _openMenu();
+    }
+  }
+
+  void _openMenu() {
+    final overlayState = Overlay.of(context);
+
+    final renderBox = context.findRenderObject() as RenderBox?;
+    if (renderBox == null) return;
+
+    final size = renderBox.size;
+    final spacing = context.spacing;
+
+    final dx = widget.offset?.dx ?? 0;
+    final dy = widget.offset?.dy ?? spacing.s4;
+
+    final menuWidth = widget.width ?? size.width;
+
+    // 1) Barrier entry: captures outside taps and closes menu
+    _barrierEntry = OverlayEntry(
+      builder: (context) {
+        return Positioned.fill(
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: _closeMenu,
+            child: ColoredBox(color: widget.barrierColor ?? Colors.transparent),
+          ),
+        );
+      },
+    );
+
+    // 2) Menu entry: positioned relative to anchor using CompositedTransform
+    _menuEntry = OverlayEntry(
+      builder: (context) {
+        return Positioned.fill(
+          child: Stack(
+            children: [
+              CompositedTransformFollower(
+                link: _layerLink,
+                showWhenUnlinked: false,
+                offset: Offset(dx, size.height + dy),
+                child: Material(
+                  color: Colors.transparent,
+                  child: _NasikoPopupMenuSurface(
+                    items: widget.items,
+                    selectedIndex: widget.selectedIndex,
+                    width: menuWidth,
+                    maxHeight: widget.maxHeight,
+                    onItemSelected: (index) {
+                      _closeMenu();
+                      widget.onItemSelected(index);
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    overlayState.insert(_barrierEntry!);
+    overlayState.insert(_menuEntry!);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CompositedTransformTarget(
+      link: _layerLink,
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: _toggleMenu,
+        child: widget.child,
+      ),
+    );
+  }
+}
+
+/// Internal surface widget (scrollable menu container).
+class _NasikoPopupMenuSurface extends StatefulWidget {
+  const _NasikoPopupMenuSurface({
+    required this.items,
+    required this.selectedIndex,
+    required this.onItemSelected,
+    required this.width,
+    required this.maxHeight,
+  });
+
+  final List<NasikoPopupMenuItemData> items;
+  final int selectedIndex;
+  final ValueChanged<int> onItemSelected;
+  final double width;
+  final double maxHeight;
+
+  @override
+  State<_NasikoPopupMenuSurface> createState() =>
+      _NasikoPopupMenuSurfaceState();
+}
+
+class _NasikoPopupMenuSurfaceState extends State<_NasikoPopupMenuSurface> {
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final spacing = context.spacing;
+    final radii = context.radius;
+    final borderWidths = context.borderWidth;
+
+    const double scrollbarThickness = 6.0;
+
+    return Container(
+      width: widget.width,
+      constraints: BoxConstraints(maxHeight: widget.maxHeight),
+      decoration: BoxDecoration(
+        color: colors.backgroundGroup,
+        borderRadius: BorderRadius.circular(radii.r8),
+        border: Border.all(color: colors.borderPrimary, width: borderWidths.w1),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 16,
+            offset: Offset(0, spacing.s4h),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(
+          left: spacing.s8w,
+          top: spacing.s8h,
+          bottom: spacing.s8h,
+        ),
+        child: Scrollbar(
+          controller: _scrollController,
+          thumbVisibility: true,
+          child: ListView.separated(
+            padding: EdgeInsets.only(right: spacing.s8w + scrollbarThickness),
+            controller: _scrollController,
+            shrinkWrap: true,
+            itemCount: widget.items.length,
+            separatorBuilder: (context, index) => SizedBox(height: spacing.s4h),
+            itemBuilder: (context, index) {
+              final item = widget.items[index];
+
+              return _NasikoMenuItem(
+                label: item.label,
+                icon: item.icon,
+                isSelected: widget.selectedIndex == index,
+                isDestructive: item.isDestructive,
+                onTap: () => widget.onItemSelected(index),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Internal menu row widget (icon left, text next).
+class _NasikoMenuItem extends StatefulWidget {
+  const _NasikoMenuItem({
+    required this.label,
+    required this.icon,
+    required this.isSelected,
+    required this.onTap,
+    required this.isDestructive,
+  });
+
+  final String label;
+  final IconData icon;
   final bool isSelected;
+  final bool isDestructive;
   final VoidCallback onTap;
 
   @override
@@ -32,7 +298,6 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
     final spacing = context.spacing;
     final borderWidths = context.borderWidth;
 
-    // Determine the styles based on the selection and hover state
     Color backgroundColor;
     Color borderColor;
 
@@ -47,7 +312,14 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
       borderColor = Colors.transparent;
     }
 
-    // Use AnimatedContainer to smoothly transition between states
+    final foregroundColor = widget.isDestructive
+        ? colors.foregroundError
+        : colors.foregroundSecondary;
+
+    final textStyle = widget.isSelected
+        ? typography.bodySecondaryBold
+        : typography.bodySecondary.copyWith(color: foregroundColor);
+
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _isHovered = true),
@@ -72,16 +344,9 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
             ),
             child: Row(
               children: [
-                Expanded(
-                  child: Text(
-                    widget.label,
-                    style: widget.isSelected
-                        ? typography.bodySecondaryBold
-                        : typography.bodySecondary.copyWith(
-                            color: colors.foregroundSecondary,
-                          ),
-                  ),
-                ),
+                Icon(widget.icon, size: spacing.s16w, color: foregroundColor),
+                SizedBox(width: spacing.s8w),
+                Expanded(child: Text(widget.label, style: textStyle)),
               ],
             ),
           ),
@@ -89,149 +354,4 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
       ),
     );
   }
-}
-
-/// A popup menu component that displays a list of selectable items.
-///
-/// This widget creates a Material-style popup menu with a scrollable list
-/// of items, highlighting the currently selected item.
-class NasikoPopupMenu extends StatefulWidget {
-  const NasikoPopupMenu({
-    super.key,
-    required this.items,
-    required this.selectedIndex,
-    required this.onItemSelected,
-    this.width = 200.0,
-    this.maxHeight = 220.0,
-  });
-
-  /// The list of string labels for the menu items.
-  final List<String> items;
-
-  /// The index of the currently selected item.
-  final int selectedIndex;
-
-  /// Callback for when a new item is selected.
-  final ValueChanged<int> onItemSelected;
-
-  /// The width of the popup menu.
-  final double width;
-
-  /// The maximum height of the scrollable menu area.
-  final double maxHeight;
-
-  @override
-  State<NasikoPopupMenu> createState() => _NasikoPopupMenuState();
-}
-
-class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
-  late final ScrollController _scrollController;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    final spacing = context.spacing;
-    final radii = context.radius;
-    final borderWidths = context.borderWidth;
-    final double scrollbarThickness = 6.0;
-    return Material(
-      color: Colors.transparent,
-      child: Container(
-        width: widget.width,
-        constraints: BoxConstraints(maxHeight: widget.maxHeight),
-        decoration: BoxDecoration(
-          color: colors.backgroundGroup,
-          borderRadius: BorderRadius.circular(radii.r8),
-          border: Border.all(
-            color: colors.borderPrimary,
-            width: borderWidths.w1,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 16,
-              offset: Offset(0, spacing.s4h),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: EdgeInsets.only(
-            left: spacing.s8w,
-            top: spacing.s8h,
-            bottom: spacing.s8h,
-          ),
-          child: Scrollbar(
-            controller: _scrollController,
-            thumbVisibility: true,
-            child: ListView.separated(
-              padding: EdgeInsets.only(
-                right: spacing.s8w + scrollbarThickness,
-              ), // for scrollbar to not overlap the content
-              controller: _scrollController,
-              shrinkWrap: true,
-              itemCount: widget.items.length,
-              separatorBuilder: (context, index) =>
-                  SizedBox(height: spacing.s4h),
-              itemBuilder: (context, index) {
-                return _NasikoMenuItem(
-                  label: widget.items[index],
-                  isSelected: widget.selectedIndex == index,
-                  onTap: () {
-                    widget.onItemSelected(index);
-                  },
-                );
-              },
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Shows a popup menu at a specific position.
-///
-/// Returns the selected index when an item is tapped.
-Future<int?> showNasikoPopupMenu({
-  required BuildContext context,
-  required RelativeRect position,
-  required List<String> items,
-  required int selectedIndex,
-  double width = 200.0,
-  double maxHeight = 220.0,
-}) {
-  return showMenu<int>(
-    context: context,
-    position: position,
-    elevation: 0,
-    color: Colors.transparent,
-    shape: const RoundedRectangleBorder(),
-    items: [
-      PopupMenuItem<int>(
-        enabled: false,
-        padding: EdgeInsets.zero,
-        child: NasikoPopupMenu(
-          items: items,
-          selectedIndex: selectedIndex,
-          onItemSelected: (index) {
-            Navigator.of(context).pop(index);
-          },
-          width: width,
-          maxHeight: maxHeight,
-        ),
-      ),
-    ],
-  );
 }
