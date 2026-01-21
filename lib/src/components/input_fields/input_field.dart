@@ -100,10 +100,7 @@ class NasikoInputField extends StatelessWidget {
     // Add error/disabled borders for a complete component
     final errorBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(radii.r8),
-      borderSide: BorderSide(
-        color: colors.borderError,
-        width: borderWidths.w1,
-      ),
+      borderSide: BorderSide(color: colors.borderError, width: borderWidths.w1),
     );
 
     final disabledBorder = OutlineInputBorder(
@@ -191,7 +188,9 @@ class NasikoInputField extends StatelessWidget {
 
             // --- Styling ---
             filled: true,
-            fillColor: isReadOnly! ? colors.backgroundDisabled : colors.backgroundGroup, // neutral50
+            fillColor: isReadOnly!
+                ? colors.backgroundDisabled
+                : colors.backgroundGroup, // neutral50
             hoverColor: colors.backgroundSurface,
             prefix: leadingIcon != null
                 ? SizedBox(width: spacing.s0)

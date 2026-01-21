@@ -28,11 +28,14 @@ export 'src/components/tabs/tab_bar.dart';
 export 'src/components/toast/toast.dart';
 export 'src/components/toast/toast_service.dart';
 export 'src/components/toast/toast_type.dart';
+export 'src/theme/color_scheme_factory.dart';
 // Theme
 export 'src/theme/color_schemes.dart';
 export 'src/theme/theme.dart';
 // Tokens
 export 'src/tokens/border_width.dart';
+export 'src/tokens/colors/color_palette_type.dart';
+export 'src/tokens/colors/color_theme_factory.dart';
 export 'src/tokens/colors/colors.dart';
 export 'src/tokens/icon_size.dart';
 export 'src/tokens/radius.dart';

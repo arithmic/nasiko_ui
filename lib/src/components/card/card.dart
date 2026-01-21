@@ -338,16 +338,24 @@ class _NasikoCardState extends State<NasikoCard> {
     final colors = context.colors;
     final spacing = context.spacing;
 
+    final style = typography.bodySecondary.copyWith(
+      color: widget.enabled
+          ? colors.foregroundPrimary
+          : colors.foregroundDisabled,
+    );
+
+    // Reserve height for exactly 2 lines (since maxLines = 2)
+    final reservedHeight = (style.height ?? 1.2) * style.fontSize! * 2;
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: spacing.s20w),
-      child: Text(
-        widget.description!,
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-        style: typography.bodySecondary.copyWith(
-          color: widget.enabled
-              ? colors.foregroundPrimary
-              : colors.foregroundDisabled,
+      child: SizedBox(
+        height: reservedHeight,
+        child: Text(
+          widget.description!,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: style,
         ),
       ),
     );
