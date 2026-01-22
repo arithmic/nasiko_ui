@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
 class NasikoPopupMenuItemData {
@@ -9,7 +10,7 @@ class NasikoPopupMenuItemData {
   });
 
   final String label;
-  final IconData icon;
+  final HugeIconsType icon;
   final bool isDestructive;
 }
 
@@ -211,7 +212,7 @@ class _NasikoMenuItem extends StatefulWidget {
   });
 
   final String label;
-  final IconData icon;
+  final HugeIconsType icon;
   final bool isSelected;
   final bool isDestructive;
   final VoidCallback onTap;
@@ -271,13 +272,10 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
           splashColor: colors.backgroundBrandSubtle.withValues(alpha: 0.5),
           highlightColor: colors.backgroundBrandSubtle.withValues(alpha: 0.5),
           child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: spacing.s12w,
-              vertical: spacing.s8h,
-            ),
+            padding: EdgeInsets.all(spacing.s8r),
             child: Row(
               children: [
-                Icon(widget.icon, size: spacing.s16w, color: foregroundColor),
+                HugeIcon(icon: widget.icon, size: 20.r, color: foregroundColor),
                 SizedBox(width: spacing.s8w),
                 Expanded(child: Text(widget.label, style: textStyle)),
               ],
