@@ -1,8 +1,4 @@
-// lib/src/components/menu/nasiko_menu.dart
-
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
 class NasikoPopupMenuItemData {
@@ -17,7 +13,7 @@ class NasikoPopupMenuItemData {
   final bool isDestructive;
 }
 
-class NasikoPopupMenu extends StatefulWidget {
+class NasikoPopupMenu extends StatelessWidget {
   const NasikoPopupMenu({
     super.key,
     required this.child,
@@ -28,9 +24,6 @@ class NasikoPopupMenu extends StatefulWidget {
     this.maxHeight = 220.0,
     this.enabled = true,
     this.offset,
-    this.barrierColor,
-    this.closeOnScroll = true,
-    this.closeOnEscape = true,
   });
 
   final Widget child;
@@ -42,182 +35,70 @@ class NasikoPopupMenu extends StatefulWidget {
   final double maxHeight;
   final bool enabled;
 
-  /// Offset applied to menu position relative to anchor.
-  /// If null -> defaults to spacing.s4 below anchor.
+  /// Optional offset from anchor bottom-left.
+  /// If null -> defaults to spacing.s4 below.
   final Offset? offset;
 
-  /// If null -> transparent but still blocks taps.
-  final Color? barrierColor;
-
-  final bool closeOnScroll;
-  final bool closeOnEscape;
-
-  @override
-  State<NasikoPopupMenu> createState() => _NasikoPopupMenuState();
-}
-
-class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
-  final LayerLink _layerLink = LayerLink();
-
-  OverlayEntry? _entry;
-  bool _isOpen = false;
-
-  @override
-  void dispose() {
-    _closeMenu();
-    super.dispose();
-  }
-
-  void _closeMenu() {
-    if (!_isOpen) return;
-    _entry?.remove();
-    _entry = null;
-    _isOpen = false;
-  }
-
-  void _toggleMenu() {
-    if (!widget.enabled) return;
-    if (_isOpen) {
-      _closeMenu();
-    } else {
-      _openMenu();
-    }
-  }
-
-  void _openMenu() {
-    final overlay = Overlay.of(context);
+  Future<void> _openMenu(BuildContext context) async {
+    if (!enabled) return;
 
     final renderBox = context.findRenderObject() as RenderBox?;
     if (renderBox == null) return;
 
-    final anchorSize = renderBox.size;
+    final overlay =
+        Overlay.of(context).context.findRenderObject() as RenderBox?;
+    if (overlay == null) return;
+
     final spacing = context.spacing;
 
-    final dx = widget.offset?.dx ?? 0;
-    final dy = widget.offset?.dy ?? spacing.s4;
+    final position = renderBox.localToGlobal(Offset.zero, ancestor: overlay);
+    final size = renderBox.size;
 
-    final menuWidth = widget.width ?? anchorSize.width;
+    final dx = offset?.dx ?? 0;
+    final dy = offset?.dy ?? spacing.s4;
 
-    _entry = OverlayEntry(
-      builder: (overlayContext) {
-        // IMPORTANT:
-        // Positioned must be directly under Stack.
-        // Do NOT wrap Positioned with Semantics/Focus/NotificationListener outside Stack.
-        return Stack(
-          children: [
-            // 1) Barrier: outside tap closes menu
-            Positioned.fill(
-              child: _NasikoMenuBarrier(
-                barrierColor: widget.barrierColor ?? Colors.transparent,
-                closeOnEscape: widget.closeOnEscape,
-                closeOnScroll: widget.closeOnScroll,
-                onClose: _closeMenu,
-              ),
-            ),
+    final menuWidth = width ?? size.width;
 
-            // 2) Menu: positioned relative to anchor
-            CompositedTransformFollower(
-              link: _layerLink,
-              showWhenUnlinked: true,
-              offset: Offset(dx, anchorSize.height + dy),
-              child: Material(
-                color: Colors.transparent,
-                child: _NasikoPopupMenuSurface(
-                  items: widget.items,
-                  selectedIndex: widget.selectedIndex,
-                  width: menuWidth,
-                  maxHeight: widget.maxHeight,
-                  onItemSelected: (index) {
-                    // Close first (overlay cleanup), then call consumer callback.
-                    _closeMenu();
-
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (!mounted) return;
-                      widget.onItemSelected(index);
-                    });
-                  },
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-
-    overlay.insert(_entry!);
-    _isOpen = true;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return CompositedTransformTarget(
-      link: _layerLink,
-      child: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onTap: _toggleMenu,
-        child: widget.child,
+    final selected = await showMenu<int>(
+      context: context,
+      position: RelativeRect.fromLTRB(
+        position.dx + dx,
+        position.dy + size.height + dy,
+        overlay.size.width - position.dx - size.width,
+        overlay.size.height - position.dy - size.height,
       ),
+      elevation: 0,
+      color: Colors.transparent,
+      shape: const RoundedRectangleBorder(),
+      items: [
+        PopupMenuItem<int>(
+          enabled: false,
+          padding: EdgeInsets.zero,
+          child: _NasikoPopupMenuSurface(
+            items: items,
+            selectedIndex: selectedIndex,
+            width: menuWidth,
+            maxHeight: maxHeight,
+            onItemSelected: (index) {
+              Navigator.of(context).pop(index);
+            },
+          ),
+        ),
+      ],
     );
+
+    if (selected != null) {
+      onItemSelected(selected);
+    }
   }
-}
-
-class _NasikoMenuBarrier extends StatelessWidget {
-  const _NasikoMenuBarrier({
-    required this.barrierColor,
-    required this.onClose,
-    required this.closeOnEscape,
-    required this.closeOnScroll,
-  });
-
-  final Color barrierColor;
-  final VoidCallback onClose;
-  final bool closeOnEscape;
-  final bool closeOnScroll;
 
   @override
   Widget build(BuildContext context) {
-    Widget barrier = GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: onClose,
-      child: ColoredBox(color: barrierColor),
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () => _openMenu(context),
+      child: child,
     );
-
-    if (closeOnScroll) {
-      barrier = NotificationListener<ScrollNotification>(
-        onNotification: (notification) {
-          // Close only on intentional user scrolling.
-          // This avoids "fluctuation" on trackpads where a tap triggers tiny updates.
-          if (notification is UserScrollNotification) {
-            if (notification.direction != ScrollDirection.idle) {
-              onClose();
-            }
-          } else if (notification is ScrollStartNotification) {
-            onClose();
-          }
-
-          return false;
-        },
-        child: barrier,
-      );
-    }
-
-    // Close on ESC (optional)
-    if (closeOnEscape) {
-      barrier = Focus(
-        autofocus: true,
-        onKeyEvent: (node, event) {
-          if (event is KeyDownEvent &&
-              event.logicalKey == LogicalKeyboardKey.escape) {
-            onClose();
-            return KeyEventResult.handled;
-          }
-          return KeyEventResult.ignored;
-        },
-        child: barrier,
-      );
-    }
-
-    return barrier;
   }
 }
 
@@ -265,46 +146,54 @@ class _NasikoPopupMenuSurfaceState extends State<_NasikoPopupMenuSurface> {
 
     const double scrollbarThickness = 6.0;
 
-    return Container(
-      width: widget.width,
-      constraints: BoxConstraints(maxHeight: widget.maxHeight),
-      decoration: BoxDecoration(
-        color: colors.backgroundGroup,
-        borderRadius: BorderRadius.circular(radii.r8),
-        border: Border.all(color: colors.borderPrimary, width: borderWidths.w1),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 16,
-            offset: Offset(0, spacing.s4h),
+    return Material(
+      color: Colors.transparent,
+      child: Container(
+        width: widget.width,
+        constraints: BoxConstraints(maxHeight: widget.maxHeight),
+        decoration: BoxDecoration(
+          color: colors.backgroundGroup,
+          borderRadius: BorderRadius.circular(radii.r8),
+          border: Border.all(
+            color: colors.borderPrimary,
+            width: borderWidths.w1,
           ),
-        ],
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: spacing.s8w,
-          top: spacing.s8h,
-          bottom: spacing.s8h,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.08),
+              blurRadius: 16,
+              offset: Offset(0, spacing.s4h),
+            ),
+          ],
         ),
-        child: Scrollbar(
-          controller: _scrollController,
-          thumbVisibility: true,
-          child: ListView.separated(
-            padding: EdgeInsets.only(right: spacing.s8w + scrollbarThickness),
+        child: Padding(
+          padding: EdgeInsets.only(
+            left: spacing.s8w,
+            top: spacing.s8h,
+            bottom: spacing.s8h,
+          ),
+          child: Scrollbar(
             controller: _scrollController,
-            shrinkWrap: true,
-            itemCount: widget.items.length,
-            separatorBuilder: (context, index) => SizedBox(height: spacing.s4h),
-            itemBuilder: (context, index) {
-              final item = widget.items[index];
-              return _NasikoMenuItem(
-                label: item.label,
-                icon: item.icon,
-                isSelected: widget.selectedIndex == index,
-                isDestructive: item.isDestructive,
-                onTap: () => widget.onItemSelected(index),
-              );
-            },
+            thumbVisibility: true,
+            child: ListView.separated(
+              padding: EdgeInsets.only(right: spacing.s8w + scrollbarThickness),
+              controller: _scrollController,
+              shrinkWrap: true,
+              itemCount: widget.items.length,
+              separatorBuilder: (context, index) =>
+                  SizedBox(height: spacing.s4h),
+              itemBuilder: (context, index) {
+                final item = widget.items[index];
+
+                return _NasikoMenuItem(
+                  label: item.label,
+                  icon: item.icon,
+                  isSelected: widget.selectedIndex == index,
+                  isDestructive: item.isDestructive,
+                  onTap: () => widget.onItemSelected(index),
+                );
+              },
+            ),
           ),
         ),
       ),
