@@ -59,6 +59,10 @@ class NasikoPopupMenu extends StatefulWidget {
 class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
   final LayerLink _layerLink = LayerLink();
 
+  bool _isInsideScrollable(BuildContext context) {
+    return Scrollable.maybeOf(context) != null;
+  }
+
   OverlayEntry? _entry;
   bool _isOpen = false;
 
@@ -103,6 +107,10 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
         // IMPORTANT:
         // Positioned must be directly under Stack.
         // Do NOT wrap Positioned with Semantics/Focus/NotificationListener outside Stack.
+
+        final shouldCloseOnScroll =
+            widget.closeOnScroll && !_isInsideScrollable(context);
+
         return Stack(
           children: [
             // 1) Barrier: outside tap closes menu
@@ -110,7 +118,7 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
               child: _NasikoMenuBarrier(
                 barrierColor: widget.barrierColor ?? Colors.transparent,
                 closeOnEscape: widget.closeOnEscape,
-                closeOnScroll: widget.closeOnScroll,
+                closeOnScroll: shouldCloseOnScroll,
                 onClose: _closeMenu,
               ),
             ),
@@ -118,7 +126,7 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
             // 2) Menu: positioned relative to anchor
             CompositedTransformFollower(
               link: _layerLink,
-              showWhenUnlinked: false,
+              showWhenUnlinked: true,
               offset: Offset(dx, anchorSize.height + dy),
               child: Material(
                 color: Colors.transparent,
