@@ -1,6 +1,7 @@
 // lib/src/components/menu/nasiko_menu.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
@@ -181,15 +182,19 @@ class _NasikoMenuBarrier extends StatelessWidget {
       child: ColoredBox(color: barrierColor),
     );
 
-    // Close on scroll anywhere (optional)
     if (closeOnScroll) {
       barrier = NotificationListener<ScrollNotification>(
         onNotification: (notification) {
-          // Close only on meaningful scroll signals
-          if (notification is UserScrollNotification ||
-              notification is ScrollUpdateNotification) {
+          // Close only on intentional user scrolling.
+          // This avoids "fluctuation" on trackpads where a tap triggers tiny updates.
+          if (notification is UserScrollNotification) {
+            if (notification.direction != ScrollDirection.idle) {
+              onClose();
+            }
+          } else if (notification is ScrollStartNotification) {
             onClose();
           }
+
           return false;
         },
         child: barrier,
