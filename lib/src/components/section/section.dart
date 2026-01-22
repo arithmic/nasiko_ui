@@ -26,6 +26,7 @@ class Section extends StatefulWidget {
     super.key,
     required this.label,
     required this.icon,
+    this.maxLines,
     this.children,
     this.selectedChild,
     this.isSelected = false,
@@ -37,6 +38,9 @@ class Section extends StatefulWidget {
 
   /// The display label for this section.
   final String label;
+
+  /// Set maximum lines for the label
+  final int? maxLines;
 
   /// Leading icon for this section.
   final HugeIconsType? icon;
@@ -158,6 +162,7 @@ class _SectionState extends State<Section> {
                         padding: EdgeInsets.symmetric(vertical: spacing.s4h),
                         child: Text(
                           widget.label,
+                          maxLines: widget.maxLines,
                           style: typography.bodySecondaryBold.copyWith(
                             color: widget.isDisabled
                                 ? colors.foregroundDisabled
