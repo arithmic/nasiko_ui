@@ -44,6 +44,7 @@ class NasikoCard extends StatefulWidget {
     this.onSecondaryPressed,
     this.onPressed,
     this.maxWidth = 400,
+    this.pinActionsToBottom = true,
   }) : enabled = true,
        disabledButtonLabel = null;
 
@@ -59,6 +60,7 @@ class NasikoCard extends StatefulWidget {
     required this.disabledButtonLabel,
     required this.enabled,
     this.maxWidth = 400,
+    this.pinActionsToBottom = true,
   }) : secondaryButtonLabel = null,
        secondaryButtonIcon = null,
        secondaryButtonTrailingIcon = null,
@@ -76,6 +78,7 @@ class NasikoCard extends StatefulWidget {
     String? description,
     required String disabledButtonLabel,
     double maxWidth = 400,
+    bool pinActionsToBottom = true,
   }) {
     return NasikoCard._internal(
       key: key,
@@ -89,6 +92,7 @@ class NasikoCard extends StatefulWidget {
       disabledButtonLabel: disabledButtonLabel,
       enabled: false,
       maxWidth: maxWidth,
+      pinActionsToBottom: pinActionsToBottom,
     );
   }
 
@@ -110,6 +114,7 @@ class NasikoCard extends StatefulWidget {
   final bool enabled;
 
   final double maxWidth;
+  final bool pinActionsToBottom;
 
   @override
   State<NasikoCard> createState() => _NasikoCardState();
@@ -172,32 +177,48 @@ class _NasikoCardState extends State<NasikoCard> {
   Widget _buildContent(BuildContext context) {
     final spacing = context.spacing;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min, // CRITICAL for grid safety
+    final body = Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (widget.image != null) _buildImage(context),
         _buildTitle(context),
-
         if (widget.tags.isNotEmpty) ...[
           SizedBox(height: spacing.s16h),
           _buildTags(context),
         ],
-
         if (widget.subtitle != null) ...[
           SizedBox(height: spacing.s8h),
           _buildSubtitle(context),
         ],
-
         if (widget.description?.isNotEmpty == true) ...[
           SizedBox(height: spacing.s8h),
           _buildDescription(context),
         ],
+      ],
+    );
 
-        if (_hasButtons) ...[
-          SizedBox(height: spacing.s16h),
-          _buildButtons(context),
+    if (!_hasButtons || !widget.pinActionsToBottom) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          body,
+          if (_hasButtons) ...[
+            SizedBox(height: spacing.s16h),
+            _buildButtons(context),
+          ],
         ],
+      );
+    }
+
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(child: body),
+        SizedBox(height: spacing.s16h),
+        _buildButtons(context),
       ],
     );
   }
@@ -344,19 +365,13 @@ class _NasikoCardState extends State<NasikoCard> {
           : colors.foregroundDisabled,
     );
 
-    // Reserve height for exactly 2 lines (since maxLines = 2)
-    final reservedHeight = (style.height ?? 1.2) * style.fontSize! * 2;
-
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: spacing.s20w),
-      child: SizedBox(
-        height: reservedHeight,
-        child: Text(
-          widget.description!,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: style,
-        ),
+      child: Text(
+        widget.description!,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+        style: style,
       ),
     );
   }
