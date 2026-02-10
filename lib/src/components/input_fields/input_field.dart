@@ -238,8 +238,8 @@ class NasikoInputField extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (isRequired!)
-          RichText(
-            text: TextSpan(
+          Text.rich(
+            TextSpan(
               text: '* ', // The asterisk part
               style: TextStyle(
                 color: colors.foregroundError, // Style for the asterisk
