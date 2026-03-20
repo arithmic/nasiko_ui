@@ -54,7 +54,7 @@ class SecondaryButton extends StatelessWidget {
           vertical: spacing.s20h,
           horizontal: spacing.s24w,
         );
-        textStyle = typography.buttonPrimary;
+        textStyle = typography.buttonPrimaryBold;
         iconSize = iconSizes.l; // 28px
         borderRadius = radii.r10; // 10px radius
         iconSpacing = spacing.s12w; // 12px spacing
@@ -65,7 +65,7 @@ class SecondaryButton extends StatelessWidget {
           vertical: spacing.s12h,
           horizontal: spacing.s16w,
         );
-        textStyle = typography.buttonSecondary;
+        textStyle = typography.buttonSecondaryBold;
         iconSize = iconSizes.s; // 20px
         borderRadius = radii.r8; // 8px radius
         iconSpacing = spacing.s8w; // 8px spacing
@@ -76,7 +76,7 @@ class SecondaryButton extends StatelessWidget {
           vertical: spacing.s8h,
           horizontal: spacing.s12w,
         );
-        textStyle = typography.buttonSecondary;
+        textStyle = typography.buttonSecondaryBold;
         iconSize = iconSizes.s; // 20px
         borderRadius = radii.r8; // 8px radius
         iconSpacing = spacing.s8w; // 8px spacing

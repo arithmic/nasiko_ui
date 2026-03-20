@@ -101,13 +101,13 @@ class PrimaryButton extends StatelessWidget {
           return colors.backgroundDisabled;
         }
         if (states.contains(WidgetState.hovered)) {
-          return colors.backgroundBrandHover;
+          return colors.foregroundConstantBlackSecondary;
         }
         if (states.contains(WidgetState.pressed)) {
-          return colors.backgroundBrand;
+          return colors.foregroundPrimary;
         }
         // Default state
-        return colors.backgroundBrand;
+        return colors.foregroundPrimary;
       }),
 
       // --- Foreground Color (Handles Default, Disabled) ---
