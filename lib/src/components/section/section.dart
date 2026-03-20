@@ -34,6 +34,7 @@ class Section extends StatefulWidget {
     this.onChildTap,
     this.backgroundColor,
     this.isDisabled = false,
+    this.expandedBgColor
   });
 
   /// The display label for this section.
@@ -63,6 +64,7 @@ class Section extends StatefulWidget {
   /// custom background color for the sidebar section.
   final Color? backgroundColor;
 
+  final Color? expandedBgColor;
   /// Whether this section is currently disabled.
   final bool isDisabled;
   bool get isExpandable => children != null && children!.isNotEmpty;
@@ -123,7 +125,7 @@ class _SectionState extends State<Section> {
           color: hasSelectedChild && !_isExpanded
               ? colors.backgroundSecondaryBrand
               : _isExpanded
-              ? colors.backgroundBase
+              ? (widget.expandedBgColor ?? colors.backgroundBase)
               : (widget.backgroundColor ?? colors.backgroundBase),
           borderRadius: BorderRadius.circular(radii.r12),
           border: Border.all(
