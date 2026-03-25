@@ -72,7 +72,7 @@ class _NasikoListItemState extends State<NasikoListItem> {
     final iconSizes = context.iconSize;
 
     // --- Determine Styles based on State ---
-    Color backgroundColor = colors.backgroundBase;
+    Color backgroundColor = colors.backgroundSurface;
     Color borderColor = Colors.transparent;
 
     if (widget.isDisabled) {
@@ -99,124 +99,132 @@ class _NasikoListItemState extends State<NasikoListItem> {
           vertical: spacing.s8h,
           horizontal: spacing.s12w,
         ),
-        child: Row(
-          children: [
-            // 1. Indentation (Hierarchy)
-            SizedBox(width: widget.indentLevel * spacing.s24w),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final indentWidth = (widget.indentLevel * spacing.s24w).clamp(
+              0.0,
+              constraints.maxWidth * 0.4,
+            );
+            return Row(
+              children: [
+                // 1. Indentation (Hierarchy)
+                if (widget.indentLevel > 0) SizedBox(width: indentWidth),
 
-            // 2. Expand/Collapse Chevron
-            if (widget.hasChildren)
-              InkWell(
-                onTap: widget.isDisabled ? null : widget.onToggleExpand,
-                borderRadius: BorderRadius.circular(radii.r4),
-                child: Icon(
-                  widget.isExpanded
-                      ? Icons.keyboard_arrow_down_rounded
-                      : Icons.keyboard_arrow_right_rounded,
-                  size: iconSizes.s,
-                  color: widget.isDisabled
-                      ? colors.foregroundDisabled
-                      : colors.foregroundIconPrimary,
-                ),
-              )
-            else
-              SizedBox(width: spacing.s20w), // Placeholder for alignment
+                // 2. Expand/Collapse Chevron
+                if (widget.hasChildren)
+                  InkWell(
+                    onTap: widget.isDisabled ? null : widget.onToggleExpand,
+                    borderRadius: BorderRadius.circular(radii.r4),
+                    child: Icon(
+                      widget.isExpanded
+                          ? Icons.keyboard_arrow_down_rounded
+                          : Icons.keyboard_arrow_right_rounded,
+                      size: iconSizes.s,
+                      color: widget.isDisabled
+                          ? colors.foregroundDisabled
+                          : colors.foregroundIconPrimary,
+                    ),
+                  )
+                else
+                  SizedBox(width: spacing.s20w), // Placeholder for alignment
 
-            SizedBox(width: spacing.s12w),
+                SizedBox(width: spacing.s12w),
 
-            // 3. Avatar (Image)
-            if (widget.imageUrl != null) ...[
-              NasikoAvatar(
-                size: NasikoAvatarSize.medium, // Matches design (~32px)
-                imageUrl: widget.imageUrl,
-              ),
-              SizedBox(width: spacing.s12w),
-            ],
+                // 3. Avatar (Image)
+                if (widget.imageUrl != null) ...[
+                  NasikoAvatar(
+                    size: NasikoAvatarSize.medium, // Matches design (~32px)
+                    imageUrl: widget.imageUrl,
+                  ),
+                  SizedBox(width: spacing.s12w),
+                ],
 
-            // 4. Leading Icon (The Hexagon)
-            if (widget.leadingIcon != null) ...[
-              HugeIcon(
-                icon: widget.leadingIcon!,
-                size: iconSizes.s,
-                color: widget.isDisabled
-                    ? colors.foregroundDisabled
-                    : colors.foregroundPrimary,
-              ),
-              SizedBox(width: spacing.s12w),
-            ],
-
-            // 5. Title
-            Flexible(
-              child: Text(
-                widget.title,
-                style: typography.bodySecondary.copyWith(
-                  color: widget.isDisabled
-                      ? colors.foregroundDisabled
-                      : colors.foregroundPrimary,
-                ),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-
-            // 6. Status Dot
-            if (widget.showStatusDot) ...[
-              SizedBox(width: spacing.s12w),
-              Container(
-                width: spacing.s8r,
-                height: spacing.s8r,
-                decoration: BoxDecoration(
-                  color: colors.foregroundSuccess, // Green
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ],
-
-            SizedBox(width: spacing.s12w),
-
-            // 7. Badge (e.g., 1.85s)
-            if (widget.badgeLabel != null) ...[
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: spacing.s8w,
-                  vertical: spacing.s4h,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(radii.r4),
-                  border: Border.all(
+                // 4. Leading Icon (The Hexagon)
+                if (widget.leadingIcon != null) ...[
+                  HugeIcon(
+                    icon: widget.leadingIcon!,
+                    size: iconSizes.s,
                     color: widget.isDisabled
-                        ? colors.borderDisabled
-                        : widget.isSelected
-                        ? colors.borderSecondary
-                        : colors.borderPrimary,
-                    width: borderWidths.w1,
+                        ? colors.foregroundDisabled
+                        : colors.foregroundPrimary,
+                  ),
+                  SizedBox(width: spacing.s12w),
+                ],
+
+                // 5. Title
+                Expanded(
+                  child: Text(
+                    widget.title,
+                    style: typography.bodySecondary.copyWith(
+                      color: widget.isDisabled
+                          ? colors.foregroundDisabled
+                          : colors.foregroundPrimary,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (widget.badgeIcon != null) ...[
-                      HugeIcon(
-                        icon: widget.badgeIcon!,
-                        size: iconSizes.xs, // Tiny icon
+
+                // 6. Status Dot
+                if (widget.showStatusDot) ...[
+                  SizedBox(width: spacing.s12w),
+                  Container(
+                    width: spacing.s8r,
+                    height: spacing.s8r,
+                    decoration: BoxDecoration(
+                      color: colors.foregroundSuccess, // Green
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ],
+
+                SizedBox(width: spacing.s12w),
+
+                // 7. Badge (e.g., 1.85s)
+                if (widget.badgeLabel != null) ...[
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: spacing.s8w,
+                      vertical: spacing.s4h,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(radii.r4),
+                      border: Border.all(
                         color: widget.isDisabled
-                            ? colors.foregroundDisabled
-                            : colors.foregroundIconPrimary,
-                      ),
-                      SizedBox(width: spacing.s8w),
-                    ],
-                    Text(
-                      widget.badgeLabel!,
-                      style: typography.bodyTertiary.copyWith(
-                        color: widget.isDisabled
-                            ? colors.foregroundDisabled
-                            : colors.foregroundPrimary,
+                            ? colors.borderDisabled
+                            : widget.isSelected
+                            ? colors.borderSecondary
+                            : colors.borderPrimary,
+                        width: borderWidths.w1,
                       ),
                     ),
-                  ],
-                ),
-              ),
-            ],
-          ],
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (widget.badgeIcon != null) ...[
+                          HugeIcon(
+                            icon: widget.badgeIcon!,
+                            size: iconSizes.xs, // Tiny icon
+                            color: widget.isDisabled
+                                ? colors.foregroundDisabled
+                                : colors.foregroundIconPrimary,
+                          ),
+                          SizedBox(width: spacing.s8w),
+                        ],
+                        Text(
+                          widget.badgeLabel!,
+                          style: typography.bodyTertiary.copyWith(
+                            color: widget.isDisabled
+                                ? colors.foregroundDisabled
+                                : colors.foregroundPrimary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ],
+            );
+          },
         ),
       ),
     );
