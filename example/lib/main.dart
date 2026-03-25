@@ -1878,55 +1878,59 @@ class _MenuExample extends StatefulWidget {
 
 class _MenuExampleState extends State<_MenuExample> {
   // This list can be as long as you want
-  final List<String> _menuItems = [
-    'Label 1',
-    'Label 2',
-    'Label 3',
-    'Label 4',
-    'Label 5',
-    'Label 6',
-    'Label 7',
-    'Label 8',
+  final List<NasikoPopupMenuItemData> _menuItems = [
+    NasikoPopupMenuItemData(
+      label: 'Label 1',
+      icon: HugeIcons.strokeRoundedCheckmarkCircle01,
+    ),
+    NasikoPopupMenuItemData(
+      label: 'Label 2',
+      icon: HugeIcons.strokeRoundedCheckmarkCircle01,
+    ),
+    NasikoPopupMenuItemData(
+      label: 'Label 3',
+      icon: HugeIcons.strokeRoundedCheckmarkCircle01,
+    ),
+    NasikoPopupMenuItemData(
+      label: 'Label 4',
+      icon: HugeIcons.strokeRoundedCheckmarkCircle01,
+    ),
+    NasikoPopupMenuItemData(
+      label: 'Label 5',
+      icon: HugeIcons.strokeRoundedCheckmarkCircle01,
+    ),
+    NasikoPopupMenuItemData(
+      label: 'Label 6',
+      icon: HugeIcons.strokeRoundedCheckmarkCircle01,
+    ),
+    NasikoPopupMenuItemData(
+      label: 'Label 7',
+      icon: HugeIcons.strokeRoundedCheckmarkCircle01,
+    ),
+    NasikoPopupMenuItemData(
+      label: 'Label 8',
+      icon: HugeIcons.strokeRoundedCheckmarkCircle01,
+    ),
   ];
 
   int _selectedIndex = 0;
 
-  void _showMenu(BuildContext context) async {
-    final RenderBox button = context.findRenderObject() as RenderBox;
-    final RenderBox overlay =
-        Overlay.of(context).context.findRenderObject() as RenderBox;
-    final RelativeRect position = RelativeRect.fromRect(
-      Rect.fromPoints(
-        button.localToGlobal(Offset.zero, ancestor: overlay),
-        button.localToGlobal(
-          button.size.bottomRight(Offset.zero),
-          ancestor: overlay,
-        ),
-      ),
-      Offset.zero & overlay.size,
-    );
-
-    final int? selected = await showNasikoPopupMenu(
-      context: context,
-      position: position,
-      items: _menuItems,
-      selectedIndex: _selectedIndex,
-    );
-
-    if (selected != null) {
-      setState(() {
-        _selectedIndex = selected;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return SecondaryButton(
-      label: _menuItems[_selectedIndex],
-      size: NasikoButtonSize.medium,
-      trailingIcon: HugeIcons.strokeRoundedArrowDown01,
-      onPressed: () => _showMenu(context),
+    return NasikoPopupMenu(
+      items: _menuItems,
+      selectedIndex: _selectedIndex,
+      onItemSelected: (index) {
+        setState(() {
+          _selectedIndex = index;
+        });
+      },
+      child: SecondaryButton(
+        label: _menuItems[_selectedIndex].label,
+        size: NasikoButtonSize.medium,
+        trailingIcon: HugeIcons.strokeRoundedArrowDown01,
+        onPressed: () {},
+      ),
     );
   }
 }
@@ -2124,11 +2128,9 @@ class _ListExampleState extends State<_ListExample> {
           badgeLabel: '1.85s',
           badgeIcon: HugeIcons.strokeRoundedTime03,
           showStatusDot: true,
-
           indentLevel: 0,
           hasChildren: true,
           isExpanded: _isRootExpanded,
-
           // Toggle logic
           onToggleExpand: () =>
               setState(() => _isRootExpanded = !_isRootExpanded),
@@ -2145,11 +2147,9 @@ class _ListExampleState extends State<_ListExample> {
             badgeLabel: '1.85s',
             badgeIcon: HugeIcons.strokeRoundedTime03,
             showStatusDot: true,
-
             indentLevel: 1, // Indented
             hasChildren: true,
             isExpanded: _isChildExpanded,
-
             onToggleExpand: () =>
                 setState(() => _isChildExpanded = !_isChildExpanded),
             onTap: () => setState(() => _selectedId = 2),
@@ -2165,10 +2165,8 @@ class _ListExampleState extends State<_ListExample> {
             badgeLabel: '1.85s',
             badgeIcon: HugeIcons.strokeRoundedTime03,
             showStatusDot: true,
-
             indentLevel: 2, // Double Indented
             hasChildren: false,
-
             onTap: () => setState(() => _selectedId = 3),
             isSelected: _selectedId == 3,
           ),
@@ -2181,7 +2179,6 @@ class _ListExampleState extends State<_ListExample> {
             leadingIcon: HugeIcons.strokeRoundedChatBot,
             badgeLabel: '1.85s',
             badgeIcon: HugeIcons.strokeRoundedTime03,
-
             indentLevel: 2,
             isDisabled: true, // Disabled state
           ),
