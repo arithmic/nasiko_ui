@@ -213,10 +213,10 @@ class _NasikoCardState extends State<NasikoCard> {
     }
 
     return Column(
-      mainAxisSize: MainAxisSize.max,
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(child: body),
+        Flexible(child: body),
         SizedBox(height: spacing.s16h),
         _buildButtons(context),
       ],
