@@ -92,7 +92,7 @@ class _NasikoListItemState extends State<NasikoListItem> {
       child: Container(
         decoration: BoxDecoration(
           color: backgroundColor,
-          borderRadius: BorderRadius.circular(radii.r12),
+          borderRadius: BorderRadius.circular(radii.r4),
           border: Border.all(color: borderColor, width: borderWidths.w1),
         ),
         padding: EdgeInsets.symmetric(
