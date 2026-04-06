@@ -279,35 +279,38 @@ class _NasikoCardState extends State<NasikoCard> {
     final spacing = context.spacing;
     final iconSize = context.iconSize;
 
-    return Row(
-      children: [
-        if (widget.titleIcon != null) ...[
-          SizedBox(
-            height: iconSize.m,
-            child: HugeIcon(
-              icon: widget.titleIcon!,
-              color: _hovered
-                  ? colors.foregroundIconSecondary
-                  : colors.foregroundIconPrimary,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: spacing.s20w),
+      child: Row(
+        children: [
+          if (widget.titleIcon != null) ...[
+            SizedBox(
+              height: iconSize.m,
+              child: HugeIcon(
+                icon: widget.titleIcon!,
+                color: _hovered
+                    ? colors.foregroundIconSecondary
+                    : colors.foregroundIconPrimary,
+              ),
+            ),
+            SizedBox(width: spacing.s8w),
+          ],
+          Expanded(
+            child: Text(
+              widget.title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: typography.bodyPrimaryBold.copyWith(
+                color: !widget.enabled
+                    ? colors.foregroundDisabled
+                    : _hovered
+                    ? colors.foregroundBrand
+                    : colors.foregroundPrimary,
+              ),
             ),
           ),
-          SizedBox(width: spacing.s8w),
         ],
-        Expanded(
-          child: Text(
-            widget.title,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: typography.bodyPrimaryBold.copyWith(
-              color: !widget.enabled
-                  ? colors.foregroundDisabled
-                  : _hovered
-                  ? colors.foregroundBrand
-                  : colors.foregroundPrimary,
-            ),
-          ),
-        ),
-      ],
+      ),
     );
   }
 
@@ -316,6 +319,7 @@ class _NasikoCardState extends State<NasikoCard> {
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
+      padding: EdgeInsets.only(left: spacing.s20w),
       child: Row(
         children: widget.tags
             .map(
@@ -336,15 +340,19 @@ class _NasikoCardState extends State<NasikoCard> {
   Widget _buildSubtitle(BuildContext context) {
     final typography = context.typography;
     final colors = context.colors;
+    final spacing = context.spacing;
 
-    return Text(
-      widget.subtitle!,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: typography.bodyTertiaryBold.copyWith(
-        color: widget.enabled
-            ? colors.foregroundSecondary
-            : colors.foregroundDisabled,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: spacing.s20w),
+      child: Text(
+        widget.subtitle!,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: typography.bodyTertiaryBold.copyWith(
+          color: widget.enabled
+              ? colors.foregroundSecondary
+              : colors.foregroundDisabled,
+        ),
       ),
     );
   }
@@ -352,6 +360,7 @@ class _NasikoCardState extends State<NasikoCard> {
   Widget _buildDescription(BuildContext context) {
     final typography = context.typography;
     final colors = context.colors;
+    final spacing = context.spacing;
 
     final style = typography.bodySecondary.copyWith(
       color: widget.enabled
@@ -362,37 +371,48 @@ class _NasikoCardState extends State<NasikoCard> {
     // Reserve height for exactly 2 lines (since maxLines = 2)
     final reservedHeight = (style.height ?? 1.2) * style.fontSize! * 2;
 
-    return SizedBox(
-      height: reservedHeight,
-      child: Text(
-        widget.description!,
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-        style: style,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: spacing.s20w),
+      child: SizedBox(
+        height: reservedHeight,
+        child: Text(
+          widget.description!,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: style,
+        ),
       ),
     );
   }
 
   Widget _buildButtons(BuildContext context) {
+    final spacing = context.spacing;
+
     if (!widget.enabled && widget.disabledButtonLabel != null) {
-      return SizedBox(
-        width: double.infinity,
-        child: PrimaryButton(
-          onPressed: null,
-          label: widget.disabledButtonLabel!,
-          size: NasikoButtonSize.small,
+      return Padding(
+        padding: EdgeInsets.symmetric(horizontal: spacing.s20w),
+        child: SizedBox(
+          width: double.infinity,
+          child: PrimaryButton(
+            onPressed: null,
+            label: widget.disabledButtonLabel!,
+            size: NasikoButtonSize.small,
+          ),
         ),
       );
     }
 
-    return SizedBox(
-      width: double.infinity,
-      child: SecondaryButton(
-        onPressed: widget.onSecondaryPressed,
-        label: widget.secondaryButtonLabel!,
-        leadingIcon: widget.secondaryButtonIcon,
-        trailingIcon: widget.secondaryButtonTrailingIcon,
-        size: NasikoButtonSize.small,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: spacing.s20w),
+      child: SizedBox(
+        width: double.infinity,
+        child: SecondaryButton(
+          onPressed: widget.onSecondaryPressed,
+          label: widget.secondaryButtonLabel!,
+          leadingIcon: widget.secondaryButtonIcon,
+          trailingIcon: widget.secondaryButtonTrailingIcon,
+          size: NasikoButtonSize.small,
+        ),
       ),
     );
   }
