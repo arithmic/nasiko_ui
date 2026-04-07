@@ -124,8 +124,8 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
       },
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: spacing.s16w,
-          vertical: spacing.s12h,
+          horizontal: spacing.s16,
+          vertical: spacing.s12,
         ),
         decoration: BoxDecoration(
           color: widget.enabled
@@ -141,10 +141,10 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
             if (widget.attachments.isNotEmpty) ...[
               Container(
                 width: double.infinity,
-                margin: EdgeInsets.only(bottom: spacing.s16h),
+                margin: EdgeInsets.only(bottom: spacing.s16),
                 child: Wrap(
-                  spacing: spacing.s8w,
-                  runSpacing: spacing.s8h,
+                  spacing: spacing.s8,
+                  runSpacing: spacing.s8,
                   children: widget.attachments.asMap().entries.map((entry) {
                     final index = entry.key;
                     final file = entry.value;
@@ -158,7 +158,7 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
                   }).toList(),
                 ),
               ),
-              SizedBox(height: spacing.s12h),
+              SizedBox(height: spacing.s12),
             ],
 
             Focus(
@@ -211,7 +211,7 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
 
             // Action buttons row
             if (widget.showAttachmentButton || widget.showSendButton) ...[
-              SizedBox(height: spacing.s12h),
+              SizedBox(height: spacing.s12),
               Row(
                 children: [
                   // Attachment button
