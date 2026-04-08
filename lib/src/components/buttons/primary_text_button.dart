@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
+import 'button_layout.dart';
 
 /// A primary text button for Nasiko UI with optional icons.
 ///
@@ -32,20 +33,16 @@ class PrimaryTextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
-    final spacing = context.spacing;
     final typography = context.typography;
-    final iconSizes = context.iconSize;
     final borderRadius = context.radius;
     final borderWidth = context.borderWidth;
+    final layout = textButtonLayout(context);
 
     return TextButton(
       onPressed: onPressed,
       style: ButtonStyle(
-        // --- Base Properties ---
-        padding: WidgetStateProperty.all(
-          EdgeInsets.symmetric(vertical: spacing.s8h, horizontal: spacing.s12w),
-        ),
-        fixedSize: WidgetStateProperty.all(Size.fromHeight(spacing.s36h)),
+        padding: WidgetStateProperty.all(layout.padding),
+        fixedSize: WidgetStateProperty.all(Size.fromHeight(layout.minHeight)),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         textStyle: WidgetStateProperty.all(typography.buttonSecondary),
         elevation: WidgetStateProperty.all(0),
@@ -81,8 +78,8 @@ class PrimaryTextButton extends StatelessWidget {
         children: [
           // Leading Icon
           if (leadingIcon != null) ...[
-            HugeIcon(icon: leadingIcon!, size: iconSizes.s),
-            SizedBox(width: spacing.s8w),
+            HugeIcon(icon: leadingIcon!, size: layout.iconSize),
+            SizedBox(width: layout.iconSpacing),
           ],
 
           // Label
@@ -90,8 +87,8 @@ class PrimaryTextButton extends StatelessWidget {
 
           // Trailing Icon
           if (trailingIcon != null) ...[
-            SizedBox(width: spacing.s8w),
-            HugeIcon(icon: trailingIcon!, size: iconSizes.s),
+            SizedBox(width: layout.iconSpacing),
+            HugeIcon(icon: trailingIcon!, size: layout.iconSize),
           ],
         ],
       ),

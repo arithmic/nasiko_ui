@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
+import 'button_layout.dart';
 
 /// A secondary text button for Nasiko UI with optional icons.
 ///
@@ -33,19 +34,15 @@ class LinkButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
-    final spacing = context.spacing;
     final typography = context.typography;
-    final iconSizes = context.iconSize;
     final borderWidth = context.borderWidth;
+    final layout = linkButtonLayout(context);
 
     return TextButton(
       onPressed: onPressed,
       style: ButtonStyle(
-        // --- Base Properties ---
-        padding: WidgetStateProperty.all(
-          EdgeInsets.all(spacing.s12r),
-        ),
-        fixedSize: WidgetStateProperty.all(Size.fromHeight(spacing.s36h)),
+        padding: WidgetStateProperty.all(layout.padding),
+        fixedSize: WidgetStateProperty.all(Size.fromHeight(layout.minHeight)),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         elevation: WidgetStateProperty.all(0),
         shadowColor: WidgetStateProperty.all(Colors.transparent),
@@ -91,8 +88,8 @@ class LinkButton extends StatelessWidget {
         children: [
           // Leading Icon
           if (leadingIcon != null) ...[
-            HugeIcon(icon: leadingIcon!, size: iconSizes.s),
-            SizedBox(width: spacing.s8w),
+            HugeIcon(icon: leadingIcon!, size: layout.iconSize),
+            SizedBox(width: layout.iconSpacing),
           ],
 
           // Label
@@ -100,8 +97,8 @@ class LinkButton extends StatelessWidget {
 
           // Trailing Icon
           if (trailingIcon != null) ...[
-            SizedBox(width: spacing.s8w),
-            HugeIcon(icon: trailingIcon!, size: iconSizes.s),
+            SizedBox(width: layout.iconSpacing),
+            HugeIcon(icon: trailingIcon!, size: layout.iconSize),
           ],
         ],
       ),

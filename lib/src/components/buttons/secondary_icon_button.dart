@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
+import 'button_layout.dart';
 
 /// A secondary icon button for Nasiko UI.
 ///
@@ -27,36 +28,13 @@ class SecondaryIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
-    final spacing = context.spacing;
     final radii = context.radius;
-    final iconSizes = context.iconSize;
     final borderWidths = context.borderWidth;
-
-    final double padding;
-    final double iconSize;
-    final double borderRadius;
-
-    switch (size) {
-      case NasikoButtonSize.large:
-        padding = spacing.s20r;
-        iconSize = iconSizes.l;
-        borderRadius = radii.r10;
-        break;
-      case NasikoButtonSize.medium:
-        padding = spacing.s12r;
-        iconSize = iconSizes.m;
-        borderRadius = radii.r10;
-        break;
-      case NasikoButtonSize.small:
-        padding = spacing.s8r;
-        iconSize = iconSizes.s;
-        borderRadius = radii.r10;
-        break;
-    }
+    final layout = iconButtonLayout(context, size);
+    final borderRadius = radii.r10;
 
     final style = ButtonStyle(
-      // --- Padding ---
-      padding: WidgetStateProperty.all(EdgeInsets.all(padding)),
+      padding: WidgetStateProperty.all(layout.padding),
       minimumSize: WidgetStateProperty.all(Size.zero),
       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       elevation: WidgetStateProperty.all(0),
@@ -120,7 +98,7 @@ class SecondaryIconButton extends StatelessWidget {
     return IconButton(
       onPressed: onPressed,
       style: style,
-      icon: HugeIcon(icon: icon, size: iconSize),
+      icon: HugeIcon(icon: icon, size: layout.iconSize),
     );
   }
 }

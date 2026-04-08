@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
+import 'button_layout.dart';
 
 /// A destructive call-to-action button for Nasiko UI.
 ///
@@ -36,58 +37,19 @@ class DestructiveButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
-    final spacing = context.spacing;
     final typography = context.typography;
     final radii = context.radius;
-    final iconSizes = context.iconSize;
-
-    final EdgeInsets padding;
-    final TextStyle textStyle;
-    final double iconSize;
-    final double borderRadius;
-    final double iconSpacing;
-    final double minHeight;
-
-    switch (size) {
-      case NasikoButtonSize.large:
-        padding = EdgeInsets.symmetric(
-          vertical: spacing.s20h,
-          horizontal: spacing.s24w,
-        );
-        textStyle = typography.buttonPrimary;
-        iconSize = iconSizes.l; // 28px
-        borderRadius = radii.r10; // 10px radius
-        iconSpacing = spacing.s12w; // 12px spacing
-        minHeight = spacing.s64h;
-        break;
-      case NasikoButtonSize.medium:
-        padding = EdgeInsets.symmetric(
-          vertical: spacing.s12h,
-          horizontal: spacing.s16w,
-        );
-        textStyle = typography.buttonSecondary;
-        iconSize = iconSizes.s; // 20px
-        borderRadius = radii.r8; // 8px radius
-        iconSpacing = spacing.s8w; // 8px spacing
-        minHeight = spacing.s48h;
-        break;
-      case NasikoButtonSize.small:
-        padding = EdgeInsets.symmetric(
-          vertical: spacing.s8h,
-          horizontal: spacing.s12w,
-        );
-        textStyle = typography.buttonSecondary;
-        iconSize = iconSizes.s; // 20px
-        borderRadius = radii.r8; // 8px radius
-        iconSpacing = spacing.s8w; // 8px spacing
-        minHeight = spacing.s36h;
-        break;
-    }
+    final layout = standardButtonLayout(context, size);
+    final textStyle = switch (size) {
+      NasikoButtonSize.large => typography.buttonPrimary,
+      NasikoButtonSize.medium || NasikoButtonSize.small =>
+        typography.buttonSecondary,
+    };
+    final borderRadius = size == NasikoButtonSize.large ? radii.r10 : radii.r8;
 
     final style = ButtonStyle(
-      // --- Base Properties ---
-      padding: WidgetStateProperty.all(padding),
-      fixedSize: WidgetStateProperty.all(Size.fromHeight(minHeight)),
+      padding: WidgetStateProperty.all(layout.padding),
+      fixedSize: WidgetStateProperty.all(Size.fromHeight(layout.minHeight)),
       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       textStyle: WidgetStateProperty.all(textStyle),
       elevation: WidgetStateProperty.all(0),
@@ -144,8 +106,8 @@ class DestructiveButton extends StatelessWidget {
         children: [
           // Leading Icon
           if (leadingIcon != null) ...[
-            HugeIcon(icon: leadingIcon!, size: iconSize),
-            SizedBox(width: iconSpacing),
+            HugeIcon(icon: leadingIcon!, size: layout.iconSize),
+            SizedBox(width: layout.iconSpacing),
           ],
 
           // Label
@@ -153,8 +115,8 @@ class DestructiveButton extends StatelessWidget {
 
           // Trailing Icon
           if (trailingIcon != null) ...[
-            SizedBox(width: iconSpacing),
-            HugeIcon(icon: trailingIcon!, size: iconSize),
+            SizedBox(width: layout.iconSpacing),
+            HugeIcon(icon: trailingIcon!, size: layout.iconSize),
           ],
         ],
       ),
