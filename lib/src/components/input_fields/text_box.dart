@@ -186,6 +186,7 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
               child: TextField(
                 controller: _controller,
                 focusNode: _focusNode,
+                autofocus: true,
                 minLines: widget.minLines,
                 maxLines: null,
                 textInputAction: TextInputAction.newline,
