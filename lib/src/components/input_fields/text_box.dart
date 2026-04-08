@@ -6,9 +6,6 @@ import 'package:hugeicons/hugeicons.dart';
 import "package:nasiko_ui/nasiko_ui.dart";
 
 /// A multi-line text input component for the Nasiko Design System.
-///
-/// This component provides a text area with optional attachment and send buttons,
-/// and supports an "Orchestrator" mode with distinctive styling.
 class NasikoTextBox extends StatefulWidget {
   const NasikoTextBox({
     super.key,

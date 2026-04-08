@@ -295,7 +295,7 @@ class _NasikoCardState extends State<NasikoCard> {
             ),
             SizedBox(width: spacing.s8w),
           ],
-          Expanded(
+          Flexible(
             child: Text(
               widget.title,
               maxLines: 1,

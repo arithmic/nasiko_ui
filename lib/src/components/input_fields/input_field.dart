@@ -134,7 +134,6 @@ class NasikoInputField extends StatelessWidget {
             isDense: true,
             hintText: hintText,
             hintStyle: textStyle.copyWith(color: colors.foregroundSecondary),
-
             prefixIconConstraints: BoxConstraints(
               minWidth: iconSize,
               minHeight: iconSize,
@@ -183,9 +182,6 @@ class NasikoInputField extends StatelessWidget {
                 ? colors.backgroundDisabled
                 : colors.backgroundGroup,
             hoverColor: colors.backgroundSurface,
-            prefix: leadingIcon != null
-                ? SizedBox(width: spacing.s0)
-                : SizedBox(width: spacing.s8),
             contentPadding: contentPadding,
 
             border: defaultBorder,
