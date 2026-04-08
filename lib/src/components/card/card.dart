@@ -133,7 +133,7 @@ class _NasikoCardState extends State<NasikoCard> {
       constraints: BoxConstraints(maxWidth: widget.maxWidth),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: EdgeInsets.symmetric(vertical: spacing.s20h),
+        padding: EdgeInsets.symmetric(vertical: spacing.s20),
         decoration: BoxDecoration(
           color: widget.enabled
               ? colors.backgroundGroup
@@ -153,7 +153,7 @@ class _NasikoCardState extends State<NasikoCard> {
                       alpha: 0.1,
                     ),
                     blurRadius: 16,
-                    offset: Offset(0, spacing.s2h),
+                    offset: Offset(0, spacing.s2),
                   ),
                 ]
               : null,
@@ -185,17 +185,17 @@ class _NasikoCardState extends State<NasikoCard> {
         _buildTitle(context),
 
         if (widget.tags.isNotEmpty) ...[
-          SizedBox(height: spacing.s16h),
+          SizedBox(height: spacing.s16),
           _buildTags(context),
         ],
 
         if (widget.subtitle != null) ...[
-          SizedBox(height: spacing.s8h),
+          SizedBox(height: spacing.s8),
           _buildSubtitle(context),
         ],
 
         if (widget.description?.isNotEmpty == true) ...[
-          SizedBox(height: spacing.s8h),
+          SizedBox(height: spacing.s8),
           _buildDescription(context),
         ],
       ],
@@ -208,7 +208,7 @@ class _NasikoCardState extends State<NasikoCard> {
         children: [
           body,
           if (_hasButtons) ...[
-            SizedBox(height: spacing.s16h),
+            SizedBox(height: spacing.s16),
             _buildButtons(context),
           ],
         ],
@@ -220,7 +220,7 @@ class _NasikoCardState extends State<NasikoCard> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Flexible(child: body),
-        SizedBox(height: spacing.s16h),
+        SizedBox(height: spacing.s16),
         _buildButtons(context),
       ],
     );
@@ -236,7 +236,7 @@ class _NasikoCardState extends State<NasikoCard> {
     final typography = context.typography;
 
     return Padding(
-      padding: EdgeInsets.all(spacing.s12r),
+      padding: EdgeInsets.all(spacing.s12),
       child: Stack(
         children: [
           ClipRRect(
@@ -248,7 +248,7 @@ class _NasikoCardState extends State<NasikoCard> {
               top: 0,
               right: 0,
               child: Container(
-                padding: EdgeInsets.all(spacing.s8r),
+                padding: EdgeInsets.all(spacing.s8),
                 decoration: BoxDecoration(
                   color: widget.enabled
                       ? colors.backgroundBrand
@@ -280,7 +280,7 @@ class _NasikoCardState extends State<NasikoCard> {
     final iconSize = context.iconSize;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: spacing.s20w),
+      padding: EdgeInsets.symmetric(horizontal: spacing.s20),
       child: Row(
         children: [
           if (widget.titleIcon != null) ...[
@@ -293,7 +293,7 @@ class _NasikoCardState extends State<NasikoCard> {
                     : colors.foregroundIconPrimary,
               ),
             ),
-            SizedBox(width: spacing.s8w),
+            SizedBox(width: spacing.s8),
           ],
           Flexible(
             child: Text(
@@ -319,12 +319,12 @@ class _NasikoCardState extends State<NasikoCard> {
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      padding: EdgeInsets.only(left: spacing.s20w),
+      padding: EdgeInsets.only(left: spacing.s20),
       child: Row(
         children: widget.tags
             .map(
               (tag) => Padding(
-                padding: EdgeInsets.only(right: spacing.s8w),
+                padding: EdgeInsets.only(right: spacing.s8),
                 child: NasikoChip(
                   label: tag,
                   enabled: widget.enabled,
@@ -343,7 +343,7 @@ class _NasikoCardState extends State<NasikoCard> {
     final spacing = context.spacing;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: spacing.s20w),
+      padding: EdgeInsets.symmetric(horizontal: spacing.s20),
       child: Text(
         widget.subtitle!,
         maxLines: 1,
@@ -372,7 +372,7 @@ class _NasikoCardState extends State<NasikoCard> {
     final reservedHeight = (style.height ?? 1.2) * style.fontSize! * 2;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: spacing.s20w),
+      padding: EdgeInsets.symmetric(horizontal: spacing.s20),
       child: SizedBox(
         height: reservedHeight,
         child: Text(
@@ -390,7 +390,7 @@ class _NasikoCardState extends State<NasikoCard> {
 
     if (!widget.enabled && widget.disabledButtonLabel != null) {
       return Padding(
-        padding: EdgeInsets.symmetric(horizontal: spacing.s20w),
+        padding: EdgeInsets.symmetric(horizontal: spacing.s20),
         child: SizedBox(
           width: double.infinity,
           child: PrimaryButton(
@@ -403,7 +403,7 @@ class _NasikoCardState extends State<NasikoCard> {
     }
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: spacing.s20w),
+      padding: EdgeInsets.symmetric(horizontal: spacing.s20),
       child: SizedBox(
         width: double.infinity,
         child: SecondaryButton(
