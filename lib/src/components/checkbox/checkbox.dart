@@ -95,7 +95,7 @@ class _NasikoCheckboxState extends State<NasikoCheckbox> {
           decoration: BoxDecoration(
             color: fillColor,
             border: border,
-            borderRadius: BorderRadius.circular(radii.r6.r), // 6px radius
+            borderRadius: BorderRadius.circular(radii.r6), // 6px radius
           ),
           child: checkIcon,
         ),

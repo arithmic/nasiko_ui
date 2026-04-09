@@ -139,7 +139,7 @@ class _NasikoAccordionItemWidget extends StatelessWidget {
           splashColor: colors.backgroundBrandSubtle.withValues(alpha: 0.5),
           highlightColor: colors.backgroundBrandSubtle.withValues(alpha: 0.5),
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: spacing.s16.h),
+            padding: EdgeInsets.symmetric(vertical: spacing.s16),
             child: Row(
               children: [
                 // Title
@@ -175,8 +175,8 @@ class _NasikoAccordionItemWidget extends StatelessWidget {
                 ? Padding(
                     // Add padding to content
                     padding: EdgeInsets.only(
-                      bottom: spacing.s16.h,
-                      right: spacing.s24.w, // Keep content from hitting icon
+                      bottom: spacing.s16,
+                      right: spacing.s24, // Keep content from hitting icon
                     ),
                     child: DefaultTextStyle(
                       style: typography.bodySecondary.copyWith(

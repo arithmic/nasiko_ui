@@ -98,7 +98,7 @@ class _NasikoTableState extends State<NasikoTable> {
         borderRadius: BorderRadius.circular(radii.r12),
         border: Border.all(
           color: colors.borderPrimary,
-          width: borderWidths.w1.w,
+          width: borderWidths.w1,
         ),
       ),
       child: ClipRRect(
@@ -111,16 +111,16 @@ class _NasikoTableState extends State<NasikoTable> {
 
             // Body with vertical scroll
             Container(
-              height: widget.bodyHeight ?? 400.h,
+              height: widget.bodyHeight ?? 400,
               padding: EdgeInsets.only(
-                left: spacing.s16.w,
-                bottom: spacing.s12.h,
+                left: spacing.s16,
+                bottom: spacing.s12,
               ),
               child: Scrollbar(
                 controller: _verticalController,
                 thumbVisibility: true,
                 child: SingleChildScrollView(
-                  padding: EdgeInsets.only(right: spacing.s16.w),
+                  padding: EdgeInsets.only(right: spacing.s16),
                   controller: _verticalController,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -148,8 +148,8 @@ class _NasikoTableState extends State<NasikoTable> {
         children: [
           Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: spacing.s16.w,
-              vertical: spacing.s12.h,
+              horizontal: spacing.s16,
+              vertical: spacing.s12,
             ),
             child: Row(
               children: widget.columns.map((col) {
@@ -168,7 +168,7 @@ class _NasikoTableState extends State<NasikoTable> {
                         ),
                         if (col.isSortable)
                           Padding(
-                            padding: EdgeInsets.only(left: spacing.s4.w),
+                            padding: EdgeInsets.only(left: spacing.s4),
                             child: Icon(
                               Icons.arrow_downward_rounded,
                               size: iconSizes.s,
@@ -230,7 +230,7 @@ class _NasikoTableRowState extends State<_NasikoTableRow> {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(vertical: spacing.s12.h),
+              padding: EdgeInsets.symmetric(vertical: spacing.s12),
               child: Row(
                 children: List.generate(widget.columns.length, (i) {
                   final column = widget.columns[i];
@@ -286,7 +286,7 @@ class NasikoTableCopyCell extends StatelessWidget {
           size: context.iconSize.s,
           color: context.colors.foregroundSecondary,
         ),
-        SizedBox(width: context.spacing.s8w),
+        SizedBox(width: context.spacing.s8),
         Text(
           'Copy',
           style: context.typography.bodySecondary.copyWith(
@@ -333,7 +333,7 @@ class NasikoTableCellItem extends StatelessWidget {
         Row(
           children: [
             Text('Copy', style: context.typography.bodyPrimary),
-            SizedBox(width: spacing.s16.w),
+            SizedBox(width: spacing.s16),
             Text('Copy', style: context.typography.bodyPrimary),
           ],
         ),
@@ -348,7 +348,7 @@ class NasikoTableCellItem extends StatelessWidget {
                   color: colors.foregroundBrand,
                 ),
               ),
-              SizedBox(width: spacing.s8.w),
+              SizedBox(width: spacing.s8),
               Icon(
                 Icons.info_outline,
                 size: context.iconSize.xs,
@@ -359,22 +359,22 @@ class NasikoTableCellItem extends StatelessWidget {
         ],
 
         if (showIcons) ...[
-          SizedBox(height: spacing.s12.h),
+          SizedBox(height: spacing.s12),
           Row(
             children: [
               // _buildIconButton(context, Icons.content_copy),
-              SizedBox(width: spacing.s8.w),
+              SizedBox(width: spacing.s8),
               // _buildIconButton(context, Icons.content_copy),
-              SizedBox(width: spacing.s8.w),
+              SizedBox(width: spacing.s8),
               // _buildIconButton(context, Icons.content_copy),
-              SizedBox(width: spacing.s8.w),
+              SizedBox(width: spacing.s8),
               // _buildIconButton(context, Icons.content_copy),
             ],
           ),
         ],
 
         if (showTags) ...[
-          SizedBox(height: spacing.s12h),
+          SizedBox(height: spacing.s12),
           Wrap(
             spacing: spacing.s8,
             runSpacing: spacing.s8,
@@ -387,7 +387,7 @@ class NasikoTableCellItem extends StatelessWidget {
         ],
 
         if (showCheckbox) ...[
-          SizedBox(height: spacing.s12h),
+          SizedBox(height: spacing.s12),
           NasikoCheckboxTile(
             label: 'Airplane Mode',
             icon: Icons.airplanemode_active,
@@ -401,20 +401,20 @@ class NasikoTableCellItem extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: spacing.s20r,
-                height: spacing.s20r,
+                width: spacing.s20,
+                height: spacing.s20,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: colors.backgroundBrand,
                   border: Border.all(
                     color: colors.borderSecondary,
-                    width: context.borderWidth.w2.w,
+                    width: context.borderWidth.w2,
                   ),
                 ),
                 child: Center(
                   child: Container(
-                    width: spacing.s8r,
-                    height: spacing.s8r,
+                    width: spacing.s8,
+                    height: spacing.s8,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: colors.foregroundPrimary,
@@ -422,32 +422,32 @@ class NasikoTableCellItem extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(width: spacing.s12.w),
+              SizedBox(width: spacing.s12),
               Icon(
                 Icons.airplanemode_active,
                 size: context.iconSize.s,
                 color: colors.foregroundPrimary,
               ),
-              SizedBox(width: spacing.s8.w),
+              SizedBox(width: spacing.s8),
               Text('Airplane Mode', style: context.typography.bodyPrimary),
             ],
           ),
         ],
 
         if (showAvatar) ...[
-          SizedBox(height: spacing.s12.h),
+          SizedBox(height: spacing.s12),
           Row(
             children: [
               const NasikoAvatar(
                 size: NasikoAvatarSize.small,
                 icon: HugeIcons.strokeRoundedRelieved01,
               ),
-              SizedBox(width: spacing.s8.w),
+              SizedBox(width: spacing.s8),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Label', style: context.typography.bodyPrimary),
-                  SizedBox(height: spacing.s4.h),
+                  SizedBox(height: spacing.s4),
                   Text(
                     'anskjames2001@gmail.com',
                     style: context.typography.caption.copyWith(
@@ -462,7 +462,7 @@ class NasikoTableCellItem extends StatelessWidget {
         ],
 
         if (showSwitch) ...[
-          SizedBox(height: spacing.s12.h),
+          SizedBox(height: spacing.s12),
           Row(
             children: [
               Icon(
@@ -470,11 +470,11 @@ class NasikoTableCellItem extends StatelessWidget {
                 size: context.iconSize.s,
                 color: colors.foregroundSecondary,
               ),
-              SizedBox(width: spacing.s12.w),
+              SizedBox(width: spacing.s12),
               NasikoSwitch(value: true, onChanged: (value) {}),
-              SizedBox(width: spacing.s12.w),
+              SizedBox(width: spacing.s12),
               Text('Airplane Mode', style: context.typography.bodyPrimary),
-              SizedBox(width: spacing.s12.w),
+              SizedBox(width: spacing.s12),
               Icon(
                 Icons.info_outline,
                 size: context.iconSize.s,
@@ -485,18 +485,18 @@ class NasikoTableCellItem extends StatelessWidget {
         ],
 
         if (showStatus) ...[
-          SizedBox(height: spacing.s12.h),
+          SizedBox(height: spacing.s12),
           Row(
             children: [
               Container(
-                width: spacing.s8r,
-                height: spacing.s8r,
+                width: spacing.s8,
+                height: spacing.s8,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: colors.foregroundSuccess,
                 ),
               ),
-              SizedBox(width: spacing.s8.w),
+              SizedBox(width: spacing.s8),
               Text('Copy', style: context.typography.bodyPrimary),
             ],
           ),

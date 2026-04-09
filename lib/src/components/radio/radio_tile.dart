@@ -33,8 +33,8 @@ class NasikoRadioTile<T> extends StatelessWidget {
       borderRadius: BorderRadius.circular(context.radius.r8),
       child: Padding(
         padding: EdgeInsets.symmetric(
-          vertical: spacing.s4h,
-          horizontal: spacing.s4w,
+          vertical: spacing.s4,
+          horizontal: spacing.s4,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -44,14 +44,14 @@ class NasikoRadioTile<T> extends StatelessWidget {
               groupValue: groupValue,
               onChanged: onChanged,
             ),
-            SizedBox(width: spacing.s8w),
+            SizedBox(width: spacing.s8),
             if (icon != null) ...[
               HugeIcon(
                 icon: icon!,
                 size: iconSizes.m, // 24px
                 color: contentColor,
               ),
-              SizedBox(width: spacing.s8w),
+              SizedBox(width: spacing.s8),
             ],
             Text(
               label,

@@ -163,26 +163,26 @@ class _NasikoPopupMenuSurfaceState extends State<_NasikoPopupMenuSurface> {
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.08),
               blurRadius: 16,
-              offset: Offset(0, spacing.s4h),
+              offset: Offset(0, spacing.s4),
             ),
           ],
         ),
         child: Padding(
           padding: EdgeInsets.only(
-            left: spacing.s8w,
-            top: spacing.s8h,
-            bottom: spacing.s8h,
+            left: spacing.s8,
+            top: spacing.s8,
+            bottom: spacing.s8,
           ),
           child: Scrollbar(
             controller: _scrollController,
             thumbVisibility: true,
             child: ListView.separated(
-              padding: EdgeInsets.only(right: spacing.s8w + scrollbarThickness),
+              padding: EdgeInsets.only(right: spacing.s8 + scrollbarThickness),
               controller: _scrollController,
               shrinkWrap: true,
               itemCount: widget.items.length,
               separatorBuilder: (context, index) =>
-                  SizedBox(height: spacing.s4h),
+                  SizedBox(height: spacing.s4),
               itemBuilder: (context, index) {
                 final item = widget.items[index];
 
@@ -272,11 +272,11 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
           splashColor: colors.backgroundBrandSubtle.withValues(alpha: 0.5),
           highlightColor: colors.backgroundBrandSubtle.withValues(alpha: 0.5),
           child: Padding(
-            padding: EdgeInsets.all(spacing.s8r),
+            padding: EdgeInsets.all(spacing.s8),
             child: Row(
               children: [
-                HugeIcon(icon: widget.icon, size: 20.r, color: foregroundColor),
-                SizedBox(width: spacing.s8w),
+                HugeIcon(icon: widget.icon, size: 20, color: foregroundColor),
+                SizedBox(width: spacing.s8),
                 Expanded(child: Text(widget.label, style: textStyle)),
               ],
             ),

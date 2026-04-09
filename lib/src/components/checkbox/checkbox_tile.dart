@@ -49,21 +49,21 @@ class NasikoCheckboxTile extends StatelessWidget {
       highlightColor: colors.backgroundBrandSubtle,
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: spacing.s4w,
-          vertical: spacing.s8h,
+          horizontal: spacing.s4,
+          vertical: spacing.s8,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             NasikoCheckbox(isChecked: isChecked, onChanged: onChanged),
-            SizedBox(width: spacing.s12w),
+            SizedBox(width: spacing.s12),
             if (icon != null) ...[
               Icon(
                 icon,
                 size: iconSizes.m, // 24px
                 color: contentColor,
               ),
-              SizedBox(width: spacing.s8w),
+              SizedBox(width: spacing.s8),
             ],
             Text(
               label,

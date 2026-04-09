@@ -135,7 +135,7 @@ class _SectionState extends State<Section> {
             width: borderWidths.w1,
           ),
         ),
-        padding: EdgeInsets.all(spacing.s8r),
+        padding: EdgeInsets.all(spacing.s8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -156,12 +156,12 @@ class _SectionState extends State<Section> {
                           ? colors.foregroundPrimary
                           : colors.foregroundIconTertiary,
                     ),
-                    SizedBox(width: spacing.s8w),
+                    SizedBox(width: spacing.s8),
 
                     // Label
                     Expanded(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: spacing.s4h),
+                        padding: EdgeInsets.symmetric(vertical: spacing.s4),
                         child: Text(
                           widget.label,
                           maxLines: widget.maxLines,
@@ -175,7 +175,7 @@ class _SectionState extends State<Section> {
                     ),
 
                     // Chevron icon
-                    SizedBox(width: spacing.s8w),
+                    SizedBox(width: spacing.s8),
                     AnimatedRotation(
                       turns: _isExpanded ? 0.5 : 0,
                       duration: const Duration(milliseconds: 200),
@@ -194,7 +194,7 @@ class _SectionState extends State<Section> {
 
             // Expanded children
             if (_isExpanded) ...[
-              SizedBox(height: spacing.s8h),
+              SizedBox(height: spacing.s8),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: widget.children!.map((child) {
@@ -257,8 +257,8 @@ class _SectionState extends State<Section> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           padding: EdgeInsets.symmetric(
-            horizontal: spacing.s8w,
-            vertical: spacing.s12h,
+            horizontal: spacing.s8,
+            vertical: spacing.s12,
           ),
           decoration: BoxDecoration(
             color: backgroundColor,
@@ -277,7 +277,7 @@ class _SectionState extends State<Section> {
                     ? colors.foregroundPrimary
                     : colors.foregroundIconTertiary,
               ),
-              SizedBox(width: spacing.s8w),
+              SizedBox(width: spacing.s8),
               // Label
               Expanded(
                 child: Text(
@@ -353,10 +353,10 @@ class _SectionChildItemState extends State<_SectionChildItem> {
         onTap: _canInteract ? widget.onTap : null,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
-          margin: EdgeInsets.only(bottom: spacing.s4h),
+          margin: EdgeInsets.only(bottom: spacing.s4),
           padding: EdgeInsets.symmetric(
-            horizontal: spacing.s12w,
-            vertical: spacing.s8h,
+            horizontal: spacing.s12,
+            vertical: spacing.s8,
           ),
           decoration: BoxDecoration(
             color: backgroundColor,

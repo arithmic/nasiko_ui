@@ -181,7 +181,7 @@ class ExampleHomePage extends StatelessWidget {
             _buildSection(
               context,
               title: 'Tab Bar',
-              child: _buildTabBarExample(context),
+              child: const _TabBarExample(),
             ),
             SizedBox(height: context.spacing.s28),
             _buildSection(
@@ -1148,64 +1148,6 @@ class ExampleHomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildTabBarExample(BuildContext context) {
-    final List<NasikoTabItem> tabs = [
-      const NasikoTabItem(
-        label: 'Trace',
-        icon: HugeIcon(icon: HugeIcons.strokeRoundedNeuralNetwork),
-      ),
-      const NasikoTabItem(
-        label: 'Trace',
-        icon: HugeIcon(icon: HugeIcons.strokeRoundedNeuralNetwork),
-      ),
-      const NasikoTabItem(
-        label: 'Trace',
-        icon: HugeIcon(icon: HugeIcons.strokeRoundedNeuralNetwork),
-      ),
-      const NasikoTabItem(
-        label: 'Trace',
-        icon: HugeIcon(icon: HugeIcons.strokeRoundedNeuralNetwork),
-      ),
-      const NasikoTabItem(
-        label: 'Trace',
-        icon: HugeIcon(icon: HugeIcons.strokeRoundedNeuralNetwork),
-      ),
-      const NasikoTabItem(
-        label: 'Trace',
-        icon: HugeIcon(icon: HugeIcons.strokeRoundedNeuralNetwork),
-      ),
-      const NasikoTabItem(
-        label: 'Trace',
-        icon: HugeIcon(icon: HugeIcons.strokeRoundedNeuralNetwork),
-      ),
-    ];
-
-    return DefaultTabController(
-      length: tabs.length,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          NasikoTabBar(tabs: tabs),
-
-          Container(
-            height: 100,
-            margin: EdgeInsets.only(top: context.spacing.s16),
-            child: TabBarView(
-              children: tabs.map((item) {
-                return Center(
-                  child: Text(
-                    '${item.label} Content',
-                    style: context.typography.bodyPrimary,
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildAccordionExample(BuildContext context) {
     final items = [
       NasikoAccordionItem(
@@ -1873,6 +1815,84 @@ class ExampleHomePage extends StatelessWidget {
 
   Widget _buildQueryBoxExample(BuildContext context) {
     return const TextBoxExample();
+  }
+}
+
+class _TabBarExample extends StatefulWidget {
+  const _TabBarExample();
+
+  @override
+  State<_TabBarExample> createState() => _TabBarExampleState();
+}
+
+class _TabBarExampleState extends State<_TabBarExample>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 7, vsync: this, initialIndex: 0);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final List<NasikoTabItem> tabs = [
+      const NasikoTabItem(
+        label: 'Trace',
+        icon: HugeIcon(icon: HugeIcons.strokeRoundedNeuralNetwork),
+      ),
+      const NasikoTabItem(
+        label: 'Trace',
+        icon: HugeIcon(icon: HugeIcons.strokeRoundedNeuralNetwork),
+      ),
+      const NasikoTabItem(
+        label: 'Trace',
+        icon: HugeIcon(icon: HugeIcons.strokeRoundedNeuralNetwork),
+      ),
+      const NasikoTabItem(
+        label: 'Trace',
+        icon: HugeIcon(icon: HugeIcons.strokeRoundedNeuralNetwork),
+      ),
+      const NasikoTabItem(
+        label: 'Trace',
+        icon: HugeIcon(icon: HugeIcons.strokeRoundedNeuralNetwork),
+      ),
+      const NasikoTabItem(
+        label: 'Trace',
+        icon: HugeIcon(icon: HugeIcons.strokeRoundedNeuralNetwork),
+      ),
+      const NasikoTabItem(
+        label: 'Trace',
+        icon: HugeIcon(icon: HugeIcons.strokeRoundedNeuralNetwork),
+      ),
+    ];
+
+    return Column(
+      children: [
+        NasikoTabBar(controller: _tabController, tabs: tabs),
+        SizedBox(
+          height: 200,
+          child: TabBarView(
+            controller: _tabController,
+            children: tabs.map((item) {
+              return Center(
+                child: Text(
+                  '${item.label} ${tabs.indexOf(item)} Content',
+                  style: context.typography.bodyPrimary,
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 }
 

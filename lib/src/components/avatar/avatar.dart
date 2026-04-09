@@ -52,17 +52,17 @@ class NasikoAvatar extends StatelessWidget {
 
     switch (size) {
       case NasikoAvatarSize.large:
-        radius = 32.0.r; // 64px diameter
+        radius = 32.0; // 64px diameter
         textStyle = typography.buttonPrimary; // 20px
         iconSize = iconSizes.m; // 24px
         break;
       case NasikoAvatarSize.medium:
-        radius = 24.0.r; // 48px diameter
+        radius = 24.0; // 48px diameter
         textStyle = typography.buttonSecondary; // 18px
         iconSize = iconSizes.m; // 24px
         break;
       case NasikoAvatarSize.small:
-        radius = 18.0.r; // 36px diameter
+        radius = 18.0; // 36px diameter
         textStyle = typography.bodySecondary; // 16px
         iconSize = iconSizes.s; // 20px
         break;

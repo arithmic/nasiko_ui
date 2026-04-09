@@ -44,11 +44,11 @@ class NasikoToastService {
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         // Add padding around the toast to match the design spacing
-        padding: EdgeInsets.all(context.spacing.s16r),
+        padding: EdgeInsets.all(context.spacing.s16),
 
         margin: EdgeInsets.only(
-          left: context.spacing.s24w,
-          bottom: context.spacing.s48h,
+          left: context.spacing.s24,
+          bottom: context.spacing.s48,
         ),
       ),
     );

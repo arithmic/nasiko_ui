@@ -97,8 +97,8 @@ class NasikoChip extends StatelessWidget {
 
     Widget chipContent = Container(
       padding: EdgeInsets.symmetric(
-        horizontal: size == NasikoChipSize.large ? spacing.s12w : spacing.s8w,
-        vertical: size == NasikoChipSize.large ? spacing.s8h : spacing.s4h,
+        horizontal: size == NasikoChipSize.large ? spacing.s12 : spacing.s8,
+        vertical: size == NasikoChipSize.large ? spacing.s8 : spacing.s4,
       ),
       decoration: BoxDecoration(
         color: backgroundColor,
@@ -114,11 +114,11 @@ class NasikoChip extends StatelessWidget {
               size: size == NasikoChipSize.small ? iconSizes.xs : iconSizes.s,
               color: foregroundColor,
             ),
-            SizedBox(width: spacing.s4w),
+            SizedBox(width: spacing.s4),
           ],
           if (size == NasikoChipSize.small)
             Padding(
-              padding: EdgeInsets.only(top: spacing.s4h, bottom: spacing.s4h),
+              padding: EdgeInsets.only(top: spacing.s4, bottom: spacing.s4),
               child: Text(
                 label,
                 style: typography.bodyTertiary.copyWith(color: foregroundColor),
@@ -133,7 +133,7 @@ class NasikoChip extends StatelessWidget {
 
           // Delete Icon (only for actionable chips)
           if (onDelete != null) ...[
-            SizedBox(width: spacing.s4w),
+            SizedBox(width: spacing.s4),
             GestureDetector(
               onTap: enabled ? onDelete : null,
               child: HugeIcon(

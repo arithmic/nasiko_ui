@@ -48,14 +48,14 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
     final borderWidths = context.borderWidth;
 
     return SizedBox(
-      height: spacing.s36h,
+      height: spacing.s36,
       child: TabBar(
         controller: controller,
         onTap: onTap,
         isScrollable: true,
         padding: EdgeInsets.zero,
         tabAlignment: tabAlignment,
-        labelPadding: EdgeInsets.symmetric(horizontal: spacing.s16w),
+        labelPadding: EdgeInsets.symmetric(horizontal: spacing.s16),
 
         // --- Active Tab Styling ---
         labelColor: colors.foregroundBrand,
@@ -81,13 +81,13 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
 
         tabs: tabs.map((item) {
           return Tab(
-            height: spacing.s36h - borderWidths.w1, // Account for divider
+            height: spacing.s36 - borderWidths.w1, // Account for divider
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
                 item.icon,
-                SizedBox(width: spacing.s8w),
+                SizedBox(width: spacing.s8),
                 Text(item.label),
               ],
             ),

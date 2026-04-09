@@ -178,18 +178,18 @@ class NasikoModal extends StatelessWidget {
       ),
       child: Container(
         constraints: BoxConstraints(maxWidth: effectiveMaxWidth),
-        padding: EdgeInsets.all(spacing.s24r),
+        padding: EdgeInsets.all(spacing.s24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _buildHeader(context),
-            SizedBox(height: spacing.s16h),
+            SizedBox(height: spacing.s16),
             Flexible(child: content),
             if (primaryButtonLabel != null || secondaryButtonLabel != null) ...[
-              SizedBox(height: spacing.s16h),
+              SizedBox(height: spacing.s16),
               NasikoDivider(axis: NasikoDividerAxis.horizontal),
-              SizedBox(height: spacing.s16h),
+              SizedBox(height: spacing.s16),
               isVertical
                   ? _buildVerticalButtons(context)
                   : _buildHorizontalButtons(context),
@@ -213,7 +213,7 @@ class NasikoModal extends StatelessWidget {
             size: iconSizes.m,
             color: _iconColor(context),
           ),
-          SizedBox(width: spacing.s12w),
+          SizedBox(width: spacing.s12),
         ],
         Expanded(
           child: Text(
@@ -251,7 +251,7 @@ class NasikoModal extends StatelessWidget {
             trailingIcon: secondaryButtonTrailingIcon,
             fullWidth: false,
           ),
-          SizedBox(width: spacing.s16w),
+          SizedBox(width: spacing.s16),
         ],
 
         // Primary Button
@@ -287,7 +287,7 @@ class NasikoModal extends StatelessWidget {
             trailingIcon: secondaryButtonTrailingIcon,
             fullWidth: true,
           ),
-          SizedBox(height: spacing.s16h),
+          SizedBox(height: spacing.s16),
         ],
 
         // Primary Button (bottom)

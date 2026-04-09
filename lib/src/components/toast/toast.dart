@@ -75,10 +75,10 @@ class NasikoToast extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: Container(
-        constraints: BoxConstraints(minWidth: 400.w),
+        constraints: const BoxConstraints(minWidth: 400),
         padding: EdgeInsets.symmetric(
-          horizontal: spacing.s16w,
-          vertical: spacing.s12h,
+          horizontal: spacing.s16,
+          vertical: spacing.s12,
         ),
         decoration: BoxDecoration(
           color: backgroundColor,
@@ -99,8 +99,8 @@ class NasikoToast extends StatelessWidget {
                     : Icon(icon, size: iconSizes.m, color: iconColor),
               ),
               inProgress == true
-                  ? SizedBox(width: spacing.s8w)
-                  : SizedBox(width: spacing.s4w),
+                  ? SizedBox(width: spacing.s8)
+                  : SizedBox(width: spacing.s4),
 
               Expanded(
                 child: Text(

@@ -96,12 +96,12 @@ class _NasikoListItemState extends State<NasikoListItem> {
           border: Border.all(color: borderColor, width: borderWidths.w1),
         ),
         padding: EdgeInsets.symmetric(
-          vertical: spacing.s8h,
-          horizontal: spacing.s12w,
+          vertical: spacing.s8,
+          horizontal: spacing.s12,
         ),
         child: LayoutBuilder(
           builder: (context, constraints) {
-            final indentWidth = (widget.indentLevel * spacing.s24w).clamp(
+            final indentWidth = (widget.indentLevel * spacing.s24).clamp(
               0.0,
               constraints.maxWidth * 0.4,
             );
@@ -126,9 +126,9 @@ class _NasikoListItemState extends State<NasikoListItem> {
                     ),
                   )
                 else
-                  SizedBox(width: spacing.s20w), // Placeholder for alignment
+                  SizedBox(width: spacing.s20), // Placeholder for alignment
 
-                SizedBox(width: spacing.s12w),
+                SizedBox(width: spacing.s12),
 
                 // 3. Avatar (Image)
                 if (widget.imageUrl != null) ...[
@@ -136,7 +136,7 @@ class _NasikoListItemState extends State<NasikoListItem> {
                     size: NasikoAvatarSize.medium, // Matches design (~32px)
                     imageUrl: widget.imageUrl,
                   ),
-                  SizedBox(width: spacing.s12w),
+                  SizedBox(width: spacing.s12),
                 ],
 
                 // 4. Leading Icon (The Hexagon)
@@ -148,7 +148,7 @@ class _NasikoListItemState extends State<NasikoListItem> {
                         ? colors.foregroundDisabled
                         : colors.foregroundPrimary,
                   ),
-                  SizedBox(width: spacing.s12w),
+                  SizedBox(width: spacing.s12),
                 ],
 
                 // 5. Title
@@ -166,10 +166,10 @@ class _NasikoListItemState extends State<NasikoListItem> {
 
                 // 6. Status Dot
                 if (widget.showStatusDot) ...[
-                  SizedBox(width: spacing.s12w),
+                  SizedBox(width: spacing.s12),
                   Container(
-                    width: spacing.s8r,
-                    height: spacing.s8r,
+                    width: spacing.s8,
+                    height: spacing.s8,
                     decoration: BoxDecoration(
                       color: colors.foregroundSuccess, // Green
                       shape: BoxShape.circle,
@@ -177,14 +177,14 @@ class _NasikoListItemState extends State<NasikoListItem> {
                   ),
                 ],
 
-                SizedBox(width: spacing.s12w),
+                SizedBox(width: spacing.s12),
 
                 // 7. Badge (e.g., 1.85s)
                 if (widget.badgeLabel != null) ...[
                   Container(
                     padding: EdgeInsets.symmetric(
-                      horizontal: spacing.s8w,
-                      vertical: spacing.s4h,
+                      horizontal: spacing.s8,
+                      vertical: spacing.s4,
                     ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(radii.r4),
@@ -208,7 +208,7 @@ class _NasikoListItemState extends State<NasikoListItem> {
                                 ? colors.foregroundDisabled
                                 : colors.foregroundIconPrimary,
                           ),
-                          SizedBox(width: spacing.s8w),
+                          SizedBox(width: spacing.s8),
                         ],
                         Text(
                           widget.badgeLabel!,
