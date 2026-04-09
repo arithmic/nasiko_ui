@@ -1,9 +1,7 @@
-// lib/src/components/input_fields/nasiko_text_box.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hugeicons/hugeicons.dart';
-import "package:nasiko_ui/nasiko_ui.dart";
+import 'package:nasiko_ui/nasiko_ui.dart';
 
 /// A multi-line text input component for the Nasiko Design System.
 class NasikoTextBox extends StatefulWidget {
@@ -23,51 +21,23 @@ class NasikoTextBox extends StatefulWidget {
     this.attachments = const [],
     this.onRemoveAttachment,
     this.isLoading = false,
-    this.focusNode
+    this.focusNode,
   });
 
-  /// Controls the text being edited.
   final TextEditingController? controller;
-
-  /// Text displayed inside the field when it's empty.
   final String hintText;
-
-  /// Whether the text box is in "Orchestrator" mode.
-  /// When true, displays a distinctive border color.
   final bool isOrchestrator;
-
-  /// Whether to show the attachment button.
   final bool showAttachmentButton;
-
-  /// Whether to show the send button.
   final bool showSendButton;
-
-  /// Callback when the send button is tapped.
   final VoidCallback? onSend;
-
-  /// Callback when the attachment button is tapped.
   final VoidCallback? onAttachmentTap;
-
-  /// Called when the user initiates a change to the field's value.
   final ValueChanged<String>? onChanged;
-
-  /// The minimum number of lines to display.
   final int minLines;
-
-  /// The maximum number of lines to display.
   final int maxLines;
-
-  /// Whether the text box is enabled.
   final bool enabled;
-
-  /// Attachments shown inside the text box
   final List<String> attachments;
-
-  /// Callback when an attachment is removed
   final void Function(int index)? onRemoveAttachment;
-
   final bool isLoading;
-
   final FocusNode? focusNode;
 
   @override
@@ -77,29 +47,66 @@ class NasikoTextBox extends StatefulWidget {
 class _NasikoTextBoxState extends State<NasikoTextBox> {
   late TextEditingController _controller;
   late FocusNode _focusNode;
+  bool _ownsController = false;
+  bool _ownsFocusNode = false;
   bool _isFocused = false;
 
   @override
   void initState() {
     super.initState();
-    _controller = widget.controller ?? TextEditingController();
-    _focusNode = widget.focusNode ?? FocusNode();
-    _focusNode.addListener(_handleFocusChange);
+    _bindController(widget.controller);
+    _bindFocusNode(widget.focusNode);
+  }
+
+  @override
+  void didUpdateWidget(covariant NasikoTextBox oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.controller != widget.controller) {
+      _unbindController();
+      _bindController(widget.controller);
+    }
+
+    if (oldWidget.focusNode != widget.focusNode) {
+      _unbindFocusNode();
+      _bindFocusNode(widget.focusNode);
+    }
   }
 
   @override
   void dispose() {
-    _focusNode.removeListener(_handleFocusChange);
-   if (widget.focusNode == null) {
-    _focusNode.dispose();
-  }
-    if (widget.controller == null) {
-      _controller.dispose();
-    }
+    _unbindFocusNode();
+    _unbindController();
     super.dispose();
   }
 
+  void _bindController(TextEditingController? controller) {
+    _ownsController = controller == null;
+    _controller = controller ?? TextEditingController();
+  }
+
+  void _unbindController() {
+    if (_ownsController) {
+      _controller.dispose();
+    }
+  }
+
+  void _bindFocusNode(FocusNode? focusNode) {
+    _ownsFocusNode = focusNode == null;
+    _focusNode = focusNode ?? FocusNode();
+    _isFocused = _focusNode.hasFocus;
+    _focusNode.addListener(_handleFocusChange);
+  }
+
+  void _unbindFocusNode() {
+    _focusNode.removeListener(_handleFocusChange);
+    if (_ownsFocusNode) {
+      _focusNode.dispose();
+    }
+  }
+
   void _handleFocusChange() {
+    if (!mounted) return;
     setState(() {
       _isFocused = _focusNode.hasFocus;
     });
@@ -113,8 +120,7 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
     final radii = context.radius;
     final borderWidths = context.borderWidth;
 
-    // Determine border color based on mode and focus state
-    final Color borderColor = widget.isOrchestrator
+    final borderColor = widget.isOrchestrator
         ? colors.borderSecondary
         : (_isFocused ? colors.borderSecondary : colors.borderPrimary);
 
@@ -140,7 +146,6 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Text input field
             if (widget.attachments.isNotEmpty) ...[
               Container(
                 width: double.infinity,
@@ -163,7 +168,6 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
               ),
               SizedBox(height: spacing.s12),
             ],
-
             Focus(
               onKeyEvent: (node, event) {
                 if (event is KeyDownEvent &&
@@ -189,9 +193,8 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
               child: TextField(
                 controller: _controller,
                 focusNode: _focusNode,
-                autofocus: true,
                 minLines: widget.minLines,
-                maxLines: null,
+                maxLines: widget.maxLines,
                 textInputAction: TextInputAction.newline,
                 enabled: widget.enabled,
                 style: typography.bodyPrimary.copyWith(
@@ -207,28 +210,19 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
                   isDense: true,
                   contentPadding: EdgeInsets.zero,
                 ),
-                onSubmitted: (_) {
-                  widget.onSend?.call();
-                },
               ),
             ),
-
-            // Action buttons row
             if (widget.showAttachmentButton || widget.showSendButton) ...[
               SizedBox(height: spacing.s12),
               Row(
                 children: [
-                  // Attachment button
                   if (widget.showAttachmentButton)
                     SecondaryIconButton(
                       icon: HugeIcons.strokeRoundedAttachment01,
                       onPressed: widget.enabled ? widget.onAttachmentTap : null,
                       size: NasikoButtonSize.small,
                     ),
-
                   const Spacer(),
-
-                  // Send button
                   if (widget.showSendButton)
                     PrimaryIconButton(
                       icon: HugeIcons.strokeRoundedSent,
