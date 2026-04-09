@@ -2,25 +2,77 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Data models
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// An action that appears in the trailing popup menu of a [SectionItem].
+class SectionItemAction {
+  const SectionItemAction({
+    required this.label,
+    required this.icon,
+    required this.onTap,
+    this.isDestructive = false,
+  });
+
+  /// Label shown in the popup menu row.
+  final String label;
+
+  /// Icon shown in the popup menu row.
+  final HugeIconsType icon;
+
+  /// Called when this action is selected.
+  final VoidCallback onTap;
+
+  /// When true the label and icon are rendered in the error/destructive colour.
+  final bool isDestructive;
+}
+
 /// A model representing a single section item.
 class SectionItem {
-  const SectionItem({required this.label, this.icon, this.onTap});
+  const SectionItem({
+    required this.label,
+    this.id,
+    this.icon,
+    this.onTap,
+    this.menuActions,
+    this.maxLines,
+  });
 
   /// The display label for this item.
   final String label;
 
+  /// Optional stable identifier used for ID-based selection via
+  /// [Section.selectedChildId]. Falls back to [label] when absent.
+  final String? id;
+
   /// Optional leading icon for this item.
   final IconData? icon;
 
-  /// Callback when item is tapped (for non-expandable sections).
+  /// Callback when the item row is tapped.
   final VoidCallback? onTap;
+
+  /// When non-empty a three-dot icon appears on hover / selection and opens a
+  /// popup menu containing these actions.
+  final List<SectionItemAction>? menuActions;
+
+  /// Maximum lines for the label text.
+  final int? maxLines;
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Section widget
+// ─────────────────────────────────────────────────────────────────────────────
 
 /// A navigation section component for sidebars.
 ///
-/// Supports two types:
-/// 1. Simple (non-expandable) - Clicking navigates to a page, shows selected state
-/// 2. Expandable - Clicking toggles expand/collapse, shows children inline below
+/// Supports two modes:
+/// 1. **Simple** – tapping navigates; shows selected state via [isSelected].
+/// 2. **Expandable** – tapping toggles inline children; selected child is
+///    tracked via [selectedChild] (label) or [selectedChildId] (id).
+///
+/// Expandable sections also support [isLoading] and [emptyMessage] so callers
+/// never need to build their own expandable wrappers.
 class Section extends StatefulWidget {
   const Section({
     super.key,
@@ -29,18 +81,21 @@ class Section extends StatefulWidget {
     this.maxLines,
     this.children,
     this.selectedChild,
+    this.selectedChildId,
     this.isSelected = false,
     this.onTap,
     this.onChildTap,
     this.backgroundColor,
-    this.isDisabled = false,
     this.expandedBgColor,
+    this.isDisabled = false,
+    this.isLoading = false,
+    this.emptyMessage,
   });
 
   /// The display label for this section.
   final String label;
 
-  /// Set maximum lines for the label
+  /// Maximum lines for the section label.
   final int? maxLines;
 
   /// Leading icon for this section.
@@ -49,27 +104,46 @@ class Section extends StatefulWidget {
   /// Optional list of child items (makes this section expandable).
   final List<SectionItem>? children;
 
-  /// The label of the currently selected child item.
+  /// The label of the currently selected child item (label-based matching).
+  /// Ignored when [selectedChildId] is provided.
   final String? selectedChild;
 
-  /// Whether this section is currently selected (for non-expandable sections).
+  /// The id of the currently selected child item (id-based matching).
+  /// Takes precedence over [selectedChild].
+  final String? selectedChildId;
+
+  /// Whether this section is currently selected (non-expandable sections only).
   final bool isSelected;
 
-  /// Callback when section is tapped (for non-expandable sections).
+  /// Callback when section header is tapped (non-expandable sections only).
   final VoidCallback? onTap;
 
-  /// Callback when a child item is tapped.
+  /// Callback when a child item is tapped; receives the child's [SectionItem.id]
+  /// if set, otherwise its [SectionItem.label].
   final ValueChanged<String>? onChildTap;
 
-  /// custom background color for the sidebar section.
+  /// Background colour for the collapsed expandable container.
   final Color? backgroundColor;
 
+  /// Background colour when the expandable container is expanded.
   final Color? expandedBgColor;
 
-  /// Whether this section is currently disabled.
+  /// Whether this section is disabled.
   final bool isDisabled;
 
-  bool get isExpandable => children != null && children!.isNotEmpty;
+  /// When true an expandable section shows a loading indicator instead of
+  /// children. The section remains expandable even if [children] is empty.
+  final bool isLoading;
+
+  /// Message shown inside an expanded section when [children] is empty and
+  /// [isLoading] is false. The section remains expandable when this is set.
+  final String? emptyMessage;
+
+  /// A section is expandable when it has children, is loading, or has an
+  /// empty-state message to show.
+  bool get isExpandable =>
+      children != null &&
+      (children!.isNotEmpty || isLoading || emptyMessage != null);
 
   @override
   State<Section> createState() => _SectionState();
@@ -78,7 +152,9 @@ class Section extends StatefulWidget {
 class _SectionState extends State<Section> {
   bool _isExpanded = false;
   bool _isHovered = false;
+
   bool get _canInteract => !widget.isDisabled;
+
   @override
   void initState() {
     super.initState();
@@ -88,15 +164,30 @@ class _SectionState extends State<Section> {
   @override
   void didUpdateWidget(Section oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Auto-expand when a child becomes selected
     if (_hasSelectedChild() && !_isExpanded) {
       setState(() => _isExpanded = true);
     }
   }
 
   bool _hasSelectedChild() {
-    if (!widget.isExpandable || widget.selectedChild == null) return false;
-    return widget.children!.any((child) => child.label == widget.selectedChild);
+    if (!widget.isExpandable) return false;
+    final children = widget.children;
+    if (children == null || children.isEmpty) return false;
+
+    if (widget.selectedChildId != null) {
+      return children.any((c) => (c.id ?? c.label) == widget.selectedChildId);
+    }
+    if (widget.selectedChild != null) {
+      return children.any((c) => c.label == widget.selectedChild);
+    }
+    return false;
+  }
+
+  bool _isChildSelected(SectionItem child) {
+    if (widget.selectedChildId != null) {
+      return (child.id ?? child.label) == widget.selectedChildId;
+    }
+    return child.label == widget.selectedChild;
   }
 
   void _toggleExpanded() {
@@ -117,9 +208,7 @@ class _SectionState extends State<Section> {
     final iconSizes = context.iconSize;
     final borderWidths = context.borderWidth;
 
-    // Expandable sections get wrapped in a white container
     if (widget.isExpandable) {
-      // Determine if this expandable section has a selected child
       final bool hasSelectedChild = _hasSelectedChild();
 
       return Container(
@@ -141,14 +230,13 @@ class _SectionState extends State<Section> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Main section button (header)
+            // ── Header ────────────────────────────────────────────────────
             GestureDetector(
               onTap: _canInteract ? _toggleExpanded : null,
               child: MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: Row(
                   children: [
-                    // Leading icon
                     HugeIcon(
                       icon: widget.icon!,
                       size: iconSizes.s,
@@ -159,8 +247,6 @@ class _SectionState extends State<Section> {
                           : colors.foregroundIconTertiary,
                     ),
                     SizedBox(width: spacing.s8),
-
-                    // Label
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.symmetric(vertical: spacing.s4),
@@ -175,8 +261,6 @@ class _SectionState extends State<Section> {
                         ),
                       ),
                     ),
-
-                    // Chevron icon
                     SizedBox(width: spacing.s8),
                     AnimatedRotation(
                       turns: _isExpanded ? 0.5 : 0,
@@ -194,39 +278,57 @@ class _SectionState extends State<Section> {
               ),
             ),
 
-            // Expanded children
+            // ── Expanded content ──────────────────────────────────────────
             if (_isExpanded) ...[
               SizedBox(height: spacing.s8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: widget.children!.map((child) {
-                  return _SectionChildItem(
-                    item: child,
-
-                    isSelected: child.label == widget.selectedChild,
-                    onTap: () {
-                      // Call child.onTap first if provided
-                      if (child.onTap != null) {
-                        child.onTap!();
-                      }
-                      // Then update parent selection state
-                      // This ensures selection state is updated even if child.onTap
-                      // doesn't navigate or if there's no route
-                      if (widget.onChildTap != null) {
-                        widget.onChildTap!(child.label);
-                      }
-                    },
-                    isDisabled: widget.isDisabled,
-                  );
-                }).toList(),
-              ),
+              if (widget.isLoading)
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: spacing.s12,
+                    vertical: spacing.s8,
+                  ),
+                  child: Text(
+                    'Loading...',
+                    style: typography.bodySecondary.copyWith(
+                      color: colors.foregroundSecondary,
+                    ),
+                  ),
+                )
+              else if (widget.children == null || widget.children!.isEmpty)
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: spacing.s12,
+                    vertical: spacing.s8,
+                  ),
+                  child: Text(
+                    widget.emptyMessage ?? '',
+                    style: typography.bodySecondary.copyWith(
+                      color: colors.foregroundSecondary,
+                    ),
+                  ),
+                )
+              else
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: widget.children!.map((child) {
+                    return _SectionChildItem(
+                      item: child,
+                      isSelected: _isChildSelected(child),
+                      onTap: () {
+                        child.onTap?.call();
+                        widget.onChildTap?.call(child.id ?? child.label);
+                      },
+                      isDisabled: widget.isDisabled,
+                    );
+                  }).toList(),
+                ),
             ],
           ],
         ),
       );
     }
 
-    // Non-expandable sections
+    // ── Non-expandable section ─────────────────────────────────────────────
     final bool showSelectedState = widget.isSelected;
 
     Color backgroundColor;
@@ -234,12 +336,10 @@ class _SectionState extends State<Section> {
     if (widget.isDisabled) {
       backgroundColor = colors.backgroundSurface;
       borderColor = colors.borderDisabled;
-    }
-    if (showSelectedState) {
+    } else if (showSelectedState) {
       backgroundColor = colors.backgroundSecondaryBrand;
       borderColor = colors.foregroundBrand;
     } else if (_isHovered) {
-      // Hover state for non-expandable sections
       backgroundColor = Colors.transparent;
       borderColor = colors.borderSecondary;
     } else {
@@ -255,7 +355,6 @@ class _SectionState extends State<Section> {
       onExit: _canInteract ? (_) => setState(() => _isHovered = false) : null,
       child: GestureDetector(
         onTap: _canInteract ? _toggleExpanded : null,
-
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           padding: EdgeInsets.symmetric(
@@ -269,7 +368,6 @@ class _SectionState extends State<Section> {
           ),
           child: Row(
             children: [
-              // Leading icon
               HugeIcon(
                 icon: widget.icon!,
                 size: iconSizes.s,
@@ -280,10 +378,10 @@ class _SectionState extends State<Section> {
                     : colors.foregroundIconTertiary,
               ),
               SizedBox(width: spacing.s8),
-              // Label
               Expanded(
                 child: Text(
                   widget.label,
+                  maxLines: widget.maxLines,
                   style: typography.bodySecondaryBold.copyWith(
                     color: widget.isDisabled
                         ? colors.foregroundDisabled
@@ -299,7 +397,10 @@ class _SectionState extends State<Section> {
   }
 }
 
-/// Internal child item widget.
+// ─────────────────────────────────────────────────────────────────────────────
+// Internal child item widget
+// ─────────────────────────────────────────────────────────────────────────────
+
 class _SectionChildItem extends StatefulWidget {
   const _SectionChildItem({
     required this.item,
@@ -319,7 +420,15 @@ class _SectionChildItem extends StatefulWidget {
 
 class _SectionChildItemState extends State<_SectionChildItem> {
   bool _isHovered = false;
+
+  /// Guards against the row's onTap firing when the user clicks the popup menu
+  /// trigger, since pointer-down on the menu button precedes the tap event.
+  bool _isMenuPointerDown = false;
+
   bool get _canInteract => !widget.isDisabled;
+  bool get _hasMenu =>
+      widget.item.menuActions != null && widget.item.menuActions!.isNotEmpty;
+
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
@@ -327,16 +436,16 @@ class _SectionChildItemState extends State<_SectionChildItem> {
     final radii = context.radius;
     final typography = context.typography;
     final borderWidths = context.borderWidth;
+    final iconSizes = context.iconSize;
 
     Color backgroundColor;
     Color borderColor;
     if (widget.isDisabled) {
       backgroundColor = colors.backgroundSurface;
       borderColor = colors.borderDisabled;
-    }
-    if (widget.isSelected) {
+    } else if (widget.isSelected) {
       backgroundColor = colors.backgroundSecondaryBrand;
-      borderColor = colors.borderSecondary;
+      borderColor = Colors.transparent;
     } else if (_isHovered) {
       backgroundColor = Colors.transparent;
       borderColor = colors.borderSecondary;
@@ -345,6 +454,9 @@ class _SectionChildItemState extends State<_SectionChildItem> {
       borderColor = Colors.transparent;
     }
 
+    final showTrailing =
+        _hasMenu && (_isHovered || widget.isSelected) && _canInteract;
+
     return MouseRegion(
       cursor: _canInteract
           ? SystemMouseCursors.click
@@ -352,9 +464,16 @@ class _SectionChildItemState extends State<_SectionChildItem> {
       onEnter: _canInteract ? (_) => setState(() => _isHovered = true) : null,
       onExit: _canInteract ? (_) => setState(() => _isHovered = false) : null,
       child: GestureDetector(
-        onTap: _canInteract ? widget.onTap : null,
+        behavior: HitTestBehavior.opaque,
+        onTap: _canInteract
+            ? () {
+                if (_isMenuPointerDown) return;
+                widget.onTap();
+              }
+            : null,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
+          margin: EdgeInsets.only(bottom: spacing.s4),
           padding: EdgeInsets.symmetric(
             horizontal: spacing.s12,
             vertical: spacing.s8,
@@ -364,20 +483,112 @@ class _SectionChildItemState extends State<_SectionChildItem> {
             borderRadius: BorderRadius.circular(radii.r8),
             border: Border.all(color: borderColor, width: borderWidths.w1),
           ),
-          child: Text(
-            widget.item.label,
-            style: widget.isSelected
-                ? typography.bodySecondaryBold.copyWith(
-                    color: widget.isDisabled
-                        ? colors.foregroundDisabled
-                        : colors.foregroundPrimary,
-                  )
-                : typography.bodySecondary.copyWith(
-                    color: widget.isDisabled
-                        ? colors.foregroundDisabled
-                        : colors.foregroundSecondary,
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  widget.item.label,
+                  maxLines: widget.item.maxLines,
+                  overflow: widget.item.maxLines != null
+                      ? TextOverflow.ellipsis
+                      : null,
+                  style: widget.isSelected
+                      ? typography.bodySecondaryBold.copyWith(
+                          color: widget.isDisabled
+                              ? colors.foregroundDisabled
+                              : colors.foregroundPrimary,
+                        )
+                      : typography.bodySecondary.copyWith(
+                          color: widget.isDisabled
+                              ? colors.foregroundDisabled
+                              : colors.foregroundSecondary,
+                        ),
+                ),
+              ),
+              if (showTrailing)
+                Listener(
+                  behavior: HitTestBehavior.opaque,
+                  onPointerDown: (_) => _isMenuPointerDown = true,
+                  onPointerUp: (_) => _isMenuPointerDown = false,
+                  onPointerCancel: (_) => _isMenuPointerDown = false,
+                  child: _MenuButton(
+                    actions: widget.item.menuActions!,
+                    iconSize: iconSizes.s,
+                    leftPadding: spacing.s4,
                   ),
+                ),
+            ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Trailing popup menu button
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _MenuButton extends StatelessWidget {
+  const _MenuButton({
+    required this.actions,
+    required this.iconSize,
+    required this.leftPadding,
+  });
+
+  final List<SectionItemAction> actions;
+  final double iconSize;
+  final double leftPadding;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final spacing = context.spacing;
+    final radii = context.radius;
+    final typography = context.typography;
+
+    return PopupMenuButton<int>(
+      padding: EdgeInsets.zero,
+      constraints: const BoxConstraints(minWidth: 130),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(radii.r8),
+      ),
+      color: colors.backgroundBase,
+      elevation: 4,
+      position: PopupMenuPosition.under,
+      onSelected: (index) => actions[index].onTap(),
+      itemBuilder: (_) => [
+        for (int i = 0; i < actions.length; i++)
+          PopupMenuItem<int>(
+            value: i,
+            child: Row(
+              children: [
+                HugeIcon(
+                  icon: actions[i].icon,
+                  size: iconSize,
+                  color: actions[i].isDestructive
+                      ? colors.foregroundError
+                      : colors.foregroundPrimary,
+                ),
+                SizedBox(width: spacing.s8),
+                Text(
+                  actions[i].label,
+                  style: typography.bodySecondary.copyWith(
+                    color: actions[i].isDestructive
+                        ? colors.foregroundError
+                        : colors.foregroundPrimary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
+      child: Padding(
+        padding: EdgeInsets.only(left: leftPadding),
+        child: Icon(
+          Icons.more_vert_rounded,
+          size: iconSize,
+          color: colors.foregroundSecondary,
         ),
       ),
     );
