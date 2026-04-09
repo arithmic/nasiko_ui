@@ -34,7 +34,7 @@ class Section extends StatefulWidget {
     this.onChildTap,
     this.backgroundColor,
     this.isDisabled = false,
-    this.expandedBgColor
+    this.expandedBgColor,
   });
 
   /// The display label for this section.
@@ -65,8 +65,10 @@ class Section extends StatefulWidget {
   final Color? backgroundColor;
 
   final Color? expandedBgColor;
+
   /// Whether this section is currently disabled.
   final bool isDisabled;
+
   bool get isExpandable => children != null && children!.isNotEmpty;
 
   @override
@@ -353,7 +355,6 @@ class _SectionChildItemState extends State<_SectionChildItem> {
         onTap: _canInteract ? widget.onTap : null,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
-          margin: EdgeInsets.only(bottom: spacing.s4),
           padding: EdgeInsets.symmetric(
             horizontal: spacing.s12,
             vertical: spacing.s8,
