@@ -19,7 +19,7 @@ class SectionItemAction {
   final String label;
 
   /// Icon shown in the popup menu row.
-  final HugeIconsType icon;
+  final IconData icon;
 
   /// Called when this action is selected.
   final VoidCallback onTap;
@@ -333,13 +333,10 @@ class _SectionState extends State<Section> {
 
     Color backgroundColor;
     Color borderColor;
-    if (widget.isDisabled) {
-      backgroundColor = colors.backgroundSurface;
-      borderColor = colors.borderDisabled;
-    } else if (showSelectedState) {
+    if (showSelectedState) {
       backgroundColor = colors.backgroundSecondaryBrand;
       borderColor = colors.foregroundBrand;
-    } else if (_isHovered) {
+    } else if (_isHovered && _canInteract) {
       backgroundColor = Colors.transparent;
       borderColor = colors.borderSecondary;
     } else {
@@ -549,7 +546,7 @@ class _MenuButton extends StatelessWidget {
 
     return PopupMenuButton<int>(
       padding: EdgeInsets.zero,
-      constraints: const BoxConstraints(minWidth: 130),
+      constraints: BoxConstraints(minWidth: 130),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(radii.r8),
       ),
@@ -563,8 +560,8 @@ class _MenuButton extends StatelessWidget {
             value: i,
             child: Row(
               children: [
-                HugeIcon(
-                  icon: actions[i].icon,
+                Icon(
+                  actions[i].icon,
                   size: iconSize,
                   color: actions[i].isDestructive
                       ? colors.foregroundError
