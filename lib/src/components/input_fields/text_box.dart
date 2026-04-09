@@ -23,6 +23,7 @@ class NasikoTextBox extends StatefulWidget {
     this.attachments = const [],
     this.onRemoveAttachment,
     this.isLoading = false,
+    this.focusNode
   });
 
   /// Controls the text being edited.
@@ -66,6 +67,9 @@ class NasikoTextBox extends StatefulWidget {
   final void Function(int index)? onRemoveAttachment;
 
   final bool isLoading;
+
+  final FocusNode? focusNode;
+
   @override
   State<NasikoTextBox> createState() => _NasikoTextBoxState();
 }
@@ -79,14 +83,16 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
   void initState() {
     super.initState();
     _controller = widget.controller ?? TextEditingController();
-    _focusNode = FocusNode();
+    _focusNode = widget.focusNode ?? FocusNode();
     _focusNode.addListener(_handleFocusChange);
   }
 
   @override
   void dispose() {
     _focusNode.removeListener(_handleFocusChange);
+   if (widget.focusNode == null) {
     _focusNode.dispose();
+  }
     if (widget.controller == null) {
       _controller.dispose();
     }
