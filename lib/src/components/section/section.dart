@@ -19,7 +19,7 @@ class SectionItemAction {
   final String label;
 
   /// Icon shown in the popup menu row.
-  final IconData icon;
+  final HugeIconsType? icon;
 
   /// Called when this action is selected.
   final VoidCallback onTap;
@@ -47,7 +47,7 @@ class SectionItem {
   final String? id;
 
   /// Optional leading icon for this item.
-  final IconData? icon;
+  final HugeIconsType? icon;
 
   /// Callback when the item row is tapped.
   final VoidCallback? onTap;
@@ -511,7 +511,6 @@ class _SectionChildItemState extends State<_SectionChildItem> {
                   child: _MenuButton(
                     actions: widget.item.menuActions!,
                     iconSize: iconSizes.s,
-                    leftPadding: spacing.s4,
                   ),
                 ),
             ],
@@ -527,15 +526,10 @@ class _SectionChildItemState extends State<_SectionChildItem> {
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _MenuButton extends StatelessWidget {
-  const _MenuButton({
-    required this.actions,
-    required this.iconSize,
-    required this.leftPadding,
-  });
+  const _MenuButton({required this.actions, required this.iconSize});
 
   final List<SectionItemAction> actions;
   final double iconSize;
-  final double leftPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -560,8 +554,8 @@ class _MenuButton extends StatelessWidget {
             value: i,
             child: Row(
               children: [
-                Icon(
-                  actions[i].icon,
+                HugeIcon(
+                  icon: actions[i].icon!,
                   size: iconSize,
                   color: actions[i].isDestructive
                       ? colors.foregroundError
@@ -581,9 +575,9 @@ class _MenuButton extends StatelessWidget {
           ),
       ],
       child: Padding(
-        padding: EdgeInsets.only(left: leftPadding),
-        child: Icon(
-          Icons.more_vert_rounded,
+        padding: EdgeInsets.only(left: spacing.s4),
+        child: HugeIcon(
+          icon: HugeIcons.strokeRoundedMore01,
           size: iconSize,
           color: colors.foregroundSecondary,
         ),
