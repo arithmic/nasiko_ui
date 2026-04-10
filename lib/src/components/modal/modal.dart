@@ -322,12 +322,14 @@ class NasikoModal extends StatelessWidget {
         button = intent == NasikoModalButtonIntent.destructive
             ? DestructiveButton(
                 label: label,
+                size: NasikoButtonSize.small,
                 onPressed: onPressed,
                 leadingIcon: leadingIcon,
                 trailingIcon: trailingIcon,
               )
             : PrimaryButton(
                 label: label,
+                size: NasikoButtonSize.small,
                 onPressed: onPressed,
                 leadingIcon: leadingIcon,
                 trailingIcon: trailingIcon,
@@ -338,12 +340,14 @@ class NasikoModal extends StatelessWidget {
         button = intent == NasikoModalButtonIntent.destructive
             ? DestructiveSecondaryButton(
                 label: label,
+                size: NasikoButtonSize.small,
                 onPressed: onPressed,
                 leadingIcon: leadingIcon,
                 trailingIcon: trailingIcon,
               )
             : SecondaryButton(
                 label: label,
+                size: NasikoButtonSize.small,
                 onPressed: onPressed,
                 leadingIcon: leadingIcon,
                 trailingIcon: trailingIcon,
@@ -354,12 +358,14 @@ class NasikoModal extends StatelessWidget {
         button = intent == NasikoModalButtonIntent.destructive
             ? DestructiveTextButton(
                 label: label,
+                size: NasikoButtonSize.small,
                 onPressed: onPressed,
                 leadingIcon: leadingIcon,
                 trailingIcon: trailingIcon,
               )
             : TertiaryButton(
                 label: label,
+                size: NasikoButtonSize.small,
                 onPressed: onPressed,
                 leadingIcon: leadingIcon,
                 trailingIcon: trailingIcon,
