@@ -577,8 +577,8 @@ class _MenuButton extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.only(left: spacing.s4),
         child: HugeIcon(
-          icon: HugeIcons.strokeRoundedMore01,
-          size: iconSize,
+          icon: HugeIcons.strokeRoundedMore,
+          size: iconSize - 2,
           color: colors.foregroundSecondary,
         ),
       ),
