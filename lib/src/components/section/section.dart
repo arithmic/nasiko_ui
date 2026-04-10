@@ -508,10 +508,7 @@ class _SectionChildItemState extends State<_SectionChildItem> {
                   onPointerDown: (_) => _isMenuPointerDown = true,
                   onPointerUp: (_) => _isMenuPointerDown = false,
                   onPointerCancel: (_) => _isMenuPointerDown = false,
-                  child: _MenuButton(
-                    actions: widget.item.menuActions!,
-                    iconSize: iconSizes.s,
-                  ),
+                  child: _MenuButton(actions: widget.item.menuActions!),
                 ),
             ],
           ),
@@ -526,10 +523,9 @@ class _SectionChildItemState extends State<_SectionChildItem> {
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _MenuButton extends StatelessWidget {
-  const _MenuButton({required this.actions, required this.iconSize});
+  const _MenuButton({required this.actions});
 
   final List<SectionItemAction> actions;
-  final double iconSize;
 
   @override
   Widget build(BuildContext context) {
@@ -537,6 +533,7 @@ class _MenuButton extends StatelessWidget {
     final spacing = context.spacing;
     final radii = context.radius;
     final typography = context.typography;
+    final iconSizes = context.iconSize;
 
     return PopupMenuButton<int>(
       padding: EdgeInsets.zero,
@@ -556,7 +553,6 @@ class _MenuButton extends StatelessWidget {
               children: [
                 HugeIcon(
                   icon: actions[i].icon!,
-                  size: iconSize,
                   color: actions[i].isDestructive
                       ? colors.foregroundError
                       : colors.foregroundPrimary,
@@ -578,7 +574,7 @@ class _MenuButton extends StatelessWidget {
         padding: EdgeInsets.only(left: spacing.s4),
         child: HugeIcon(
           icon: HugeIcons.strokeRoundedMoreVertical,
-          size: iconSize - 2,
+          size: iconSizes.s,
           color: colors.foregroundSecondary,
         ),
       ),
