@@ -433,7 +433,6 @@ class _SectionChildItemState extends State<_SectionChildItem> {
     final radii = context.radius;
     final typography = context.typography;
     final borderWidths = context.borderWidth;
-    final iconSizes = context.iconSize;
 
     Color backgroundColor;
     Color borderColor;
@@ -573,7 +572,7 @@ class _MenuButton extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.only(left: spacing.s4),
         child: HugeIcon(
-          icon: HugeIcons.strokeRoundedMoreVertical,
+          icon: HugeIcons.strokeRoundedMoreHorizontal,
           size: iconSizes.s,
           color: colors.foregroundSecondary,
         ),
