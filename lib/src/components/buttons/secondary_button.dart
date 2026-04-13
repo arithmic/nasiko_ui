@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
+
 import 'button_layout.dart';
 
 /// The secondary call-to-action button for Nasiko UI.
@@ -42,8 +43,8 @@ class SecondaryButton extends StatelessWidget {
     final layout = standardButtonLayout(context, size);
     final textStyle = switch (size) {
       NasikoButtonSize.large => typography.buttonPrimaryBold,
-      NasikoButtonSize.medium || NasikoButtonSize.small =>
-        typography.buttonSecondaryBold,
+      NasikoButtonSize.medium ||
+      NasikoButtonSize.small => typography.buttonSecondaryBold,
     };
     final borderRadius = size == NasikoButtonSize.large ? radii.r10 : radii.r8;
 

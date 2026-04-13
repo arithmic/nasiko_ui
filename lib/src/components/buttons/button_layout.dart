@@ -38,7 +38,7 @@ NasikoButtonLayout standardButtonLayout(
         vertical: spacing.s12,
         horizontal: spacing.s16,
       ),
-      minHeight: spacing.s48,
+      minHeight: spacing.s24 + spacing.s20,
       iconSize: iconSizes.s,
       iconSpacing: spacing.s8,
     ),

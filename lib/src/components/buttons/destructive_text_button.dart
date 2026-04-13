@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
+
 import 'button_layout.dart';
 
 /// A destructive outlined button for Nasiko UI.
@@ -42,8 +43,8 @@ class DestructiveTextButton extends StatelessWidget {
     final layout = quietButtonLayout(context, size);
     final textStyle = switch (size) {
       NasikoButtonSize.large => typography.buttonPrimary,
-      NasikoButtonSize.medium || NasikoButtonSize.small =>
-        typography.buttonSecondary,
+      NasikoButtonSize.medium ||
+      NasikoButtonSize.small => typography.buttonSecondary,
     };
     final borderRadius = radii.r8;
 
