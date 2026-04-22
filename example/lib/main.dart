@@ -1920,9 +1920,7 @@ class _MenuExample extends StatelessWidget {
         final actionLabel = menuItems[index].label;
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
-          ..showSnackBar(
-            SnackBar(content: Text('$actionLabel tapped')),
-          );
+          ..showSnackBar(SnackBar(content: Text('$actionLabel tapped')));
       },
       child: SecondaryButton(
         label: 'Open menu',
@@ -2204,9 +2202,7 @@ class _SectionExampleState extends State<_SectionExample> {
       decoration: BoxDecoration(
         color: context.colors.backgroundBase,
         borderRadius: BorderRadius.circular(context.radius.r8),
-        border: Border.all(
-          color: context.colors.borderPrimary,
-        ),
+        border: Border.all(color: context.colors.borderPrimary),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -362,7 +362,15 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
                 children: [
                   HugeIcon(icon: widget.icon, size: 20, color: foregroundColor),
                   SizedBox(width: spacing.s8),
-                  Expanded(child: Text(widget.label, style: textStyle)),
+                  Expanded(
+                    child: Text(
+                      widget.label,
+                      style: textStyle,
+                      maxLines: 1,
+                      softWrap: false,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ],
               ),
             ),
