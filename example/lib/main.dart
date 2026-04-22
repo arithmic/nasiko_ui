@@ -1896,64 +1896,36 @@ class _TabBarExampleState extends State<_TabBarExample>
   }
 }
 
-class _MenuExample extends StatefulWidget {
+class _MenuExample extends StatelessWidget {
   const _MenuExample();
 
   @override
-  State<_MenuExample> createState() => _MenuExampleState();
-}
-
-class _MenuExampleState extends State<_MenuExample> {
-  // This list can be as long as you want
-  final List<NasikoPopupMenuItemData> _menuItems = [
-    NasikoPopupMenuItemData(
-      label: 'Label 1',
-      icon: HugeIcons.strokeRoundedCheckmarkCircle01,
-    ),
-    NasikoPopupMenuItemData(
-      label: 'Label 2',
-      icon: HugeIcons.strokeRoundedCheckmarkCircle01,
-    ),
-    NasikoPopupMenuItemData(
-      label: 'Label 3',
-      icon: HugeIcons.strokeRoundedCheckmarkCircle01,
-    ),
-    NasikoPopupMenuItemData(
-      label: 'Label 4',
-      icon: HugeIcons.strokeRoundedCheckmarkCircle01,
-    ),
-    NasikoPopupMenuItemData(
-      label: 'Label 5',
-      icon: HugeIcons.strokeRoundedCheckmarkCircle01,
-    ),
-    NasikoPopupMenuItemData(
-      label: 'Label 6',
-      icon: HugeIcons.strokeRoundedCheckmarkCircle01,
-    ),
-    NasikoPopupMenuItemData(
-      label: 'Label 7',
-      icon: HugeIcons.strokeRoundedCheckmarkCircle01,
-    ),
-    NasikoPopupMenuItemData(
-      label: 'Label 8',
-      icon: HugeIcons.strokeRoundedCheckmarkCircle01,
-    ),
-  ];
-
-  int _selectedIndex = 0;
-
-  @override
   Widget build(BuildContext context) {
+    final menuItems = [
+      NasikoPopupMenuItemData(
+        label: 'Rollback',
+        icon: HugeIcons.strokeRoundedRotateClockwise,
+      ),
+      NasikoPopupMenuItemData(
+        label: 'Delete version',
+        icon: HugeIcons.strokeRoundedDelete02,
+        isDestructive: true,
+      ),
+    ];
+
     return NasikoPopupMenu(
-      items: _menuItems,
-      selectedIndex: _selectedIndex,
+      width: 200.w,
+      items: menuItems,
       onItemSelected: (index) {
-        setState(() {
-          _selectedIndex = index;
-        });
+        final actionLabel = menuItems[index].label;
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(content: Text('$actionLabel tapped')),
+          );
       },
       child: SecondaryButton(
-        label: _menuItems[_selectedIndex].label,
+        label: 'Open menu',
         size: NasikoButtonSize.medium,
         trailingIcon: HugeIcons.strokeRoundedArrowDown01,
         onPressed: () {},
@@ -2234,7 +2206,6 @@ class _SectionExampleState extends State<_SectionExample> {
         borderRadius: BorderRadius.circular(context.radius.r8),
         border: Border.all(
           color: context.colors.borderPrimary,
-          width: context.borderWidth.w1,
         ),
       ),
       child: Column(

@@ -14,12 +14,11 @@ class NasikoPopupMenuItemData {
   final bool isDestructive;
 }
 
-class NasikoPopupMenu extends StatelessWidget {
+class NasikoPopupMenu extends StatefulWidget {
   const NasikoPopupMenu({
     super.key,
     required this.child,
     required this.items,
-    required this.selectedIndex,
     required this.onItemSelected,
     this.width,
     this.maxHeight = 220.0,
@@ -29,7 +28,6 @@ class NasikoPopupMenu extends StatelessWidget {
 
   final Widget child;
   final List<NasikoPopupMenuItemData> items;
-  final int selectedIndex;
   final ValueChanged<int> onItemSelected;
 
   final double? width;
@@ -40,65 +38,115 @@ class NasikoPopupMenu extends StatelessWidget {
   /// If null -> defaults to spacing.s4 below.
   final Offset? offset;
 
-  Future<void> _openMenu(BuildContext context) async {
-    if (!enabled) return;
+  @override
+  State<NasikoPopupMenu> createState() => _NasikoPopupMenuState();
+}
+
+class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
+  final LayerLink _layerLink = LayerLink();
+  OverlayEntry? _overlayEntry;
+  double? _resolvedMenuWidth;
+  double _resolvedYOffset = 0;
+  double _anchorHeight = 0;
+
+  @override
+  void dispose() {
+    _removeMenu();
+    super.dispose();
+  }
+
+  void _toggleMenu() {
+    if (_overlayEntry != null) {
+      _removeMenu();
+      return;
+    }
+
+    _openMenu();
+  }
+
+  void _openMenu() {
+    if (!widget.enabled) return;
 
     final renderBox = context.findRenderObject() as RenderBox?;
     if (renderBox == null) return;
 
-    final overlay =
-        Overlay.of(context).context.findRenderObject() as RenderBox?;
-    if (overlay == null) return;
-
     final spacing = context.spacing;
-
-    final position = renderBox.localToGlobal(Offset.zero, ancestor: overlay);
     final size = renderBox.size;
+    final overlay = Overlay.of(context);
 
-    final dx = offset?.dx ?? 0;
-    final dy = offset?.dy ?? spacing.s4;
+    _resolvedMenuWidth = widget.width ?? size.width;
+    _resolvedYOffset = widget.offset?.dy ?? spacing.s4;
+    _anchorHeight = size.height;
 
-    final menuWidth = width ?? size.width;
-
-    final selected = await showMenu<int>(
-      context: context,
-      position: RelativeRect.fromLTRB(
-        position.dx + dx,
-        position.dy + size.height + dy,
-        overlay.size.width - position.dx - size.width,
-        overlay.size.height - position.dy - size.height,
-      ),
-      elevation: 0,
-      color: Colors.transparent,
-      shape: const RoundedRectangleBorder(),
-      items: [
-        PopupMenuItem<int>(
-          enabled: false,
-          padding: EdgeInsets.zero,
-          child: _NasikoPopupMenuSurface(
-            items: items,
-            selectedIndex: selectedIndex,
-            width: menuWidth,
-            maxHeight: maxHeight,
-            onItemSelected: (index) {
-              Navigator.of(context).pop(index);
-            },
-          ),
+    _overlayEntry = OverlayEntry(
+      builder: (_) => Positioned.fill(
+        child: Stack(
+          children: [
+            GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: _removeMenu,
+              child: const SizedBox.expand(),
+            ),
+            CompositedTransformFollower(
+              link: _layerLink,
+              showWhenUnlinked: false,
+              offset: Offset(
+                widget.offset?.dx ?? 0,
+                _anchorHeight + _resolvedYOffset,
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: Theme(
+                  data: Theme.of(context).copyWith(
+                    splashFactory: NoSplash.splashFactory,
+                    highlightColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    focusColor: Colors.transparent,
+                    splashColor: Colors.transparent,
+                  ),
+                  child: _NasikoPopupMenuSurface(
+                    items: widget.items,
+                    width: _resolvedMenuWidth!,
+                    maxHeight: widget.maxHeight,
+                    onItemSelected: (index) {
+                      _removeMenu();
+                      widget.onItemSelected(index);
+                    },
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
 
-    if (selected != null) {
-      onItemSelected(selected);
+    overlay.insert(_overlayEntry!);
+  }
+
+  void _removeMenu() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+  }
+
+  @override
+  void didUpdateWidget(covariant NasikoPopupMenu oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (!widget.enabled && _overlayEntry != null) {
+      _removeMenu();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTap: () => _openMenu(context),
-      child: child,
+    return CompositedTransformTarget(
+      link: _layerLink,
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: _toggleMenu,
+        child: AbsorbPointer(child: widget.child),
+      ),
     );
   }
 }
@@ -106,14 +154,12 @@ class NasikoPopupMenu extends StatelessWidget {
 class _NasikoPopupMenuSurface extends StatefulWidget {
   const _NasikoPopupMenuSurface({
     required this.items,
-    required this.selectedIndex,
     required this.onItemSelected,
     required this.width,
     required this.maxHeight,
   });
 
   final List<NasikoPopupMenuItemData> items;
-  final int selectedIndex;
   final ValueChanged<int> onItemSelected;
   final double width;
   final double maxHeight;
@@ -125,11 +171,15 @@ class _NasikoPopupMenuSurface extends StatefulWidget {
 
 class _NasikoPopupMenuSurfaceState extends State<_NasikoPopupMenuSurface> {
   late final ScrollController _scrollController;
+  bool _isScrollable = false;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateScrollability();
+    });
   }
 
   @override
@@ -139,13 +189,38 @@ class _NasikoPopupMenuSurfaceState extends State<_NasikoPopupMenuSurface> {
   }
 
   @override
+  void didUpdateWidget(covariant _NasikoPopupMenuSurface oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.items.length != widget.items.length ||
+        oldWidget.maxHeight != widget.maxHeight ||
+        oldWidget.width != widget.width) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _updateScrollability();
+      });
+    }
+  }
+
+  void _updateScrollability() {
+    if (!_scrollController.hasClients || !mounted) {
+      return;
+    }
+
+    final isScrollable = _scrollController.position.maxScrollExtent > 0;
+    if (isScrollable != _isScrollable) {
+      setState(() {
+        _isScrollable = isScrollable;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colors = context.colors;
     final spacing = context.spacing;
     final radii = context.radius;
-    final borderWidths = context.borderWidth;
 
-    const double scrollbarThickness = 6.0;
+    const double scrollbarThickness = 4.0;
 
     return Material(
       color: Colors.transparent,
@@ -155,10 +230,7 @@ class _NasikoPopupMenuSurfaceState extends State<_NasikoPopupMenuSurface> {
         decoration: BoxDecoration(
           color: colors.backgroundGroup,
           borderRadius: BorderRadius.circular(radii.r16),
-          border: Border.all(
-            color: colors.borderPrimary,
-            width: borderWidths.w1,
-          ),
+          border: Border.all(color: colors.borderPrimary),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.08),
@@ -169,27 +241,43 @@ class _NasikoPopupMenuSurfaceState extends State<_NasikoPopupMenuSurface> {
         ),
         child: Padding(
           padding: EdgeInsets.all(spacing.s12),
-          child: Scrollbar(
-            controller: _scrollController,
-            thumbVisibility: true,
-            child: ListView.separated(
-              padding: EdgeInsets.only(right: spacing.s8 + scrollbarThickness),
+          child: NotificationListener<ScrollMetricsNotification>(
+            onNotification: (notification) {
+              final isScrollable = notification.metrics.maxScrollExtent > 0;
+              if (isScrollable != _isScrollable) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted) {
+                    setState(() {
+                      _isScrollable = isScrollable;
+                    });
+                  }
+                });
+              }
+              return false;
+            },
+            child: Scrollbar(
               controller: _scrollController,
-              shrinkWrap: true,
-              itemCount: widget.items.length,
-              separatorBuilder: (context, index) =>
-                  SizedBox(height: spacing.s8),
-              itemBuilder: (context, index) {
-                final item = widget.items[index];
+              thumbVisibility: true,
+              child: ListView.separated(
+                padding: EdgeInsets.only(
+                  right: _isScrollable ? spacing.s4 + scrollbarThickness : 0,
+                ),
+                controller: _scrollController,
+                shrinkWrap: true,
+                itemCount: widget.items.length,
+                separatorBuilder: (context, index) =>
+                    SizedBox(height: spacing.s4),
+                itemBuilder: (context, index) {
+                  final item = widget.items[index];
 
-                return _NasikoMenuItem(
-                  label: item.label,
-                  icon: item.icon,
-                  isSelected: widget.selectedIndex == index,
-                  isDestructive: item.isDestructive,
-                  onTap: () => widget.onItemSelected(index),
-                );
-              },
+                  return _NasikoMenuItem(
+                    label: item.label,
+                    icon: item.icon,
+                    isDestructive: item.isDestructive,
+                    onTap: () => widget.onItemSelected(index),
+                  );
+                },
+              ),
             ),
           ),
         ),
@@ -202,14 +290,12 @@ class _NasikoMenuItem extends StatefulWidget {
   const _NasikoMenuItem({
     required this.label,
     required this.icon,
-    required this.isSelected,
     required this.onTap,
     required this.isDestructive,
   });
 
   final String label;
   final HugeIconsType icon;
-  final bool isSelected;
   final bool isDestructive;
   final VoidCallback onTap;
 
@@ -219,6 +305,19 @@ class _NasikoMenuItem extends StatefulWidget {
 
 class _NasikoMenuItemState extends State<_NasikoMenuItem> {
   bool _isHovered = false;
+  bool _isFocused = false;
+
+  void _setHovered(bool value) {
+    if (value != _isHovered) {
+      setState(() => _isHovered = value);
+    }
+  }
+
+  void _setFocused(bool value) {
+    if (value != _isFocused) {
+      setState(() => _isFocused = value);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -226,52 +325,46 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
     final radii = context.radius;
     final typography = context.typography;
     final spacing = context.spacing;
-
-    Color backgroundColor;
-
-    if (widget.isSelected) {
-      backgroundColor = colors.backgroundSecondaryBrand;
-    } else if (_isHovered) {
-      backgroundColor = colors.backgroundSecondaryBrandHover;
-    } else {
-      backgroundColor = Colors.transparent;
-    }
+    final isHighlighted = _isHovered || _isFocused;
 
     final foregroundColor = widget.isDestructive
         ? colors.foregroundError
         : colors.foregroundPrimary;
 
     final textStyle =
-        (widget.isSelected
+        (isHighlighted
                 ? typography.bodySecondaryBold
                 : typography.bodySecondary)
             .copyWith(color: foregroundColor);
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 100),
-        curve: Curves.easeInOut,
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(radii.r16),
-        ),
-        child: InkWell(
+      onEnter: (_) => _setHovered(true),
+      onExit: (_) => _setHovered(false),
+      child: FocusableActionDetector(
+        onShowFocusHighlight: _setFocused,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: widget.onTap,
-          borderRadius: BorderRadius.circular(radii.r8),
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: spacing.s12,
-              vertical: spacing.s8,
+          child: Container(
+            decoration: BoxDecoration(
+              color: isHighlighted
+                  ? colors.backgroundSecondaryBrandHover
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(radii.r8),
             ),
-            child: Row(
-              children: [
-                HugeIcon(icon: widget.icon, size: 20, color: foregroundColor),
-                SizedBox(width: spacing.s8),
-                Expanded(child: Text(widget.label, style: textStyle)),
-              ],
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: spacing.s12,
+                vertical: spacing.s8,
+              ),
+              child: Row(
+                children: [
+                  HugeIcon(icon: widget.icon, size: 20, color: foregroundColor),
+                  SizedBox(width: spacing.s8),
+                  Expanded(child: Text(widget.label, style: textStyle)),
+                ],
+              ),
             ),
           ),
         ),
