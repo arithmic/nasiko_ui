@@ -239,14 +239,12 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
 
     final foregroundColor = widget.isDestructive
         ? colors.foregroundError
-        : (widget.isSelected
-              ? colors.foregroundPrimary
-              : colors.foregroundSecondary);
+        : colors.foregroundPrimary;
 
     final textStyle =
         (widget.isSelected
-                ? typography.bodyPrimaryBold
-                : typography.bodyPrimary)
+                ? typography.bodySecondaryBold
+                : typography.bodySecondary)
             .copyWith(color: foregroundColor);
 
     return MouseRegion(
