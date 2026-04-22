@@ -260,18 +260,16 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
         ),
         child: InkWell(
           onTap: widget.onTap,
-          borderRadius: BorderRadius.circular(radii.r16),
-          splashColor: colors.backgroundBrandSubtle.withValues(alpha: 0.5),
-          highlightColor: colors.backgroundBrandSubtle.withValues(alpha: 0.5),
+          borderRadius: BorderRadius.circular(radii.r8),
           child: Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: spacing.s16,
-              vertical: spacing.s16,
+              horizontal: spacing.s12,
+              vertical: spacing.s8,
             ),
             child: Row(
               children: [
-                HugeIcon(icon: widget.icon, size: 28, color: foregroundColor),
-                SizedBox(width: spacing.s16),
+                HugeIcon(icon: widget.icon, size: 20, color: foregroundColor),
+                SizedBox(width: spacing.s8),
                 Expanded(child: Text(widget.label, style: textStyle)),
               ],
             ),
