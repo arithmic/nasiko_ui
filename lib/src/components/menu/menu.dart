@@ -142,10 +142,14 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
   Widget build(BuildContext context) {
     return CompositedTransformTarget(
       link: _layerLink,
-      child: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onTap: _toggleMenu,
-        child: AbsorbPointer(child: widget.child),
+      child: MouseRegion(
+        // ← add this
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: _toggleMenu,
+          child: AbsorbPointer(child: widget.child),
+        ),
       ),
     );
   }
