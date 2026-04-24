@@ -452,7 +452,7 @@ class _SectionChildItemState extends State<_SectionChildItem> {
     }
 
     final showTrailing =
-        _hasMenu && (_isHovered || widget.isSelected || _isMenuOpen) && _canInteract;
+        _hasMenu && (_isHovered || _isMenuOpen) && _canInteract;
 
     return MouseRegion(
       cursor: _canInteract
