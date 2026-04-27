@@ -68,7 +68,7 @@ class DestructiveButton extends StatelessWidget {
           return const Color(0xFFDC2626); // red600
         }
         // Default state
-        return const Color(0xFFDC2626); // red600
+        return colors.backgroundError; 
       }),
 
       // --- Foreground Color (Handles Default, Disabled) ---

@@ -179,9 +179,9 @@ class NasikoInputField extends StatelessWidget {
 
             filled: true,
             fillColor: isReadOnly!
-                ? colors.backgroundDisabled
-                : colors.backgroundGroup,
-            hoverColor: colors.backgroundSurface,
+                ? Color.fromRGBO(237, 237, 237, 1)
+                : Color.fromRGBO(248, 248, 248, 1),
+            hoverColor: Color.fromRGBO(240, 240, 240, 1),
             contentPadding: contentPadding,
 
             border: defaultBorder,

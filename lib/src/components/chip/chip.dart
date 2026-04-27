@@ -27,6 +27,7 @@ class NasikoChip extends StatelessWidget {
     this.variant = NasikoChipVariant.neutral,
     this.size = NasikoChipSize.large,
     this.enabled = true,
+    this.borderColor =const Color.fromRGBO(248, 248, 248, 1),
   });
 
   /// The text label displayed on the chip.
@@ -55,6 +56,9 @@ class NasikoChip extends StatelessWidget {
   /// When `false`, the chip appears disabled and ignores interactions.
   final bool enabled;
 
+
+  final Color borderColor;
+
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
@@ -62,24 +66,21 @@ class NasikoChip extends StatelessWidget {
     final typography = context.typography;
     final iconSizes = context.iconSize;
     final radii = context.radius;
-
+ final borderWidths = context.borderWidth;
     // Determine colors based on variant and enabled state
     final Color backgroundColor;
     final Color hoverColor;
     final Color pressedColor;
     final Color foregroundColor;
-
     if (!enabled) {
-      backgroundColor = colors.backgroundDisabled;
+      backgroundColor = colors.backgroundBase;
       hoverColor = colors.backgroundDisabled;
       pressedColor = colors.backgroundDisabled;
       foregroundColor = colors.foregroundDisabled;
     } else {
       switch (variant) {
         case NasikoChipVariant.neutral:
-          backgroundColor = colors.backgroundSurfaceHover.withValues(
-            alpha: 0.7,
-          );
+          backgroundColor = colors.backgroundBase;
           hoverColor = colors.backgroundSurface;
           pressedColor = colors.backgroundSurfaceActive;
           foregroundColor = colors.foregroundPrimary;
@@ -102,7 +103,8 @@ class NasikoChip extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(radii.r8),
+        borderRadius: BorderRadius.circular(radii.r40),
+        border: Border.all(color: borderColor, width: borderWidths.w1)
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

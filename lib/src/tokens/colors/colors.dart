@@ -459,19 +459,19 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
 const NasikoColorTheme lightColors = NasikoColorTheme(
   // Background Default
   backgroundBase: white,
-  backgroundGroup: neutral50,
+  backgroundGroup: Color.fromRGBO(224, 217, 204, 1),
   backgroundSurface: neutral100,
-  backgroundSurfaceHover: neutral200,
-  backgroundSurfaceActive: neutral300,
-  backgroundSurfaceSubtle: neutral500,
-  backgroundOverlay: neutral500,
-  backgroundDisabled: neutral200,
+  backgroundSurfaceHover: Color.fromRGBO(245, 240, 232, 1),
+  backgroundSurfaceActive: Color.fromRGBO(255, 253, 247, 1),
+  backgroundSurfaceSubtle: Color.fromRGBO(240, 235, 224, 1),
+  backgroundOverlay: Color.fromRGBO(28,24,18,.45),
+  backgroundDisabled: Color.fromRGBO(237, 232, 224, 1),
 
   // Background Primary
-  backgroundBrand: yellow600,
-  backgroundBrandHover: yellow800,
-  backgroundBrandActive: yellow500,
-  backgroundBrandSubtle: yellow200,
+  backgroundBrand: Color.fromRGBO(200, 146, 10, 1),
+  backgroundBrandHover: Color.fromRGBO(168, 120, 8, 1),
+  backgroundBrandActive: Color.fromRGBO(138, 96, 6, 1),
+  backgroundBrandSubtle: Color.fromRGBO(245, 228, 190, 1),
 
   // Background Secondary
   backgroundSecondaryBrand: yellow100,
@@ -482,48 +482,48 @@ const NasikoColorTheme lightColors = NasikoColorTheme(
   backgroundTertiary: purple500,
 
   // Background Feedback
-  backgroundSuccess: green100,
-  backgroundWarning: orange100,
-  backgroundError: red100,
-  backgroundInformation: blue100,
+  backgroundSuccess: Color.fromRGBO(40, 164, 106, 1),
+  backgroundWarning: Color.fromRGBO(186, 117, 23, 1),
+  backgroundError: Color.fromRGBO(192, 68, 10, 1),
+  backgroundInformation: Color.fromRGBO(46, 84, 112, 1),
 
   // Foreground Default
-  foregroundPrimary: neutral700,
-  foregroundSecondary: neutral500,
-  foregroundDisabled: neutral400,
+  foregroundPrimary: Color.fromRGBO(28, 24, 18, 1),
+  foregroundSecondary: Color.fromRGBO(107, 101, 88, 1),
+  foregroundDisabled: Color.fromRGBO(176, 168, 158, 1),
   foregroundOnAction: white,
-  foregroundIconPrimary: neutral700,
-  foregroundIconSecondary: yellow600,
-  foregroundIconTertiary: neutral500,
-  foregroundIconHover: yellow800,
+  foregroundIconPrimary: Color.fromRGBO(28, 24, 18, 1),
+  foregroundIconSecondary: Color.fromRGBO(187, 143, 6, 1),
+  foregroundIconTertiary: Color.fromRGBO(100, 116, 139, 1),
+  foregroundIconHover: Color.fromRGBO(105, 81, 4, 1),
 
   // Foreground Constant
   // NOTE: Corrected based on swatches, spec labels had typos.
   foregroundConstantWhite: white,
-  foregroundConstantBlack: black,
-  foregroundConstantBlackSecondary: neutral900,
+  foregroundConstantBlack: Color.fromRGBO(28, 24, 18, 1),
+  foregroundConstantBlackSecondary: Color.fromRGBO(44, 39, 32, 1),
 
   // Foreground Primary (Brand)
-  foregroundBrand: yellow600,
-  foregroundBrandHover: yellow800,
-  foregroundBrandLink: yellow600,
-  foregroundBrandHighlight: yellow500,
+  foregroundBrand: Color.fromRGBO(200, 146, 10, 1),
+  foregroundBrandHover: Color.fromRGBO(168, 120, 8, 1),
+  foregroundBrandLink: Color.fromRGBO(200, 146, 10, 1),
+  foregroundBrandHighlight: Color.fromRGBO(245, 228, 190, 1),
 
   // Foreground Feedback
-  foregroundSuccess: green600,
-  foregroundWarning: orange600,
-  foregroundError: red600,
-  foregroundInformation: blue600,
+  foregroundSuccess: Color.fromRGBO(26, 112, 72, 1),
+  foregroundWarning: Color.fromRGBO(122, 85, 0, 1),
+  foregroundError: Color.fromRGBO(139, 46, 16, 1),
+  foregroundInformation: Color.fromRGBO(28, 61, 90, 1),
 
   // Border Default
-  borderPrimary: neutral300,
-  borderSecondary: yellow600,
-  borderHover: yellow600,
-  borderSuccess: green300,
-  borderError: red300,
-  borderWarning: orange300,
-  borderInformation: blue300,
-  borderDisabled: neutral200,
+  borderPrimary: Color.fromRGBO(208, 201, 188, 1),
+  borderSecondary: Color.fromRGBO(184, 176, 164, 1),
+  borderHover: Color.fromRGBO(200, 146, 10, 1),
+  borderSuccess: Color.fromRGBO(40, 164, 106, 1),
+  borderError: Color.fromRGBO(192, 68, 10, 1),
+  borderWarning: Color.fromRGBO(186, 117, 23, 1),
+  borderInformation: Color.fromRGBO(46, 84, 112, 1),
+  borderDisabled: Color.fromRGBO(224, 217, 204, 1),
 );
 
 // --- Dark Instance ---

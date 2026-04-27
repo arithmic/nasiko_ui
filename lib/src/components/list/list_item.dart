@@ -72,7 +72,7 @@ class _NasikoListItemState extends State<NasikoListItem> {
     final iconSizes = context.iconSize;
 
     // --- Determine Styles based on State ---
-    Color backgroundColor = colors.backgroundSurface;
+    Color backgroundColor = Color.fromRGBO(248, 248, 248, 1);
     Color borderColor = Colors.transparent;
 
     if (widget.isDisabled) {

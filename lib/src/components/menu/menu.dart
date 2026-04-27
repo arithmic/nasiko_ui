@@ -5,13 +5,15 @@ import 'package:nasiko_ui/nasiko_ui.dart';
 class NasikoPopupMenuItemData {
   const NasikoPopupMenuItemData({
     required this.label,
-    required this.icon,
+    this.icon,
     this.isDestructive = false,
+    this.isDisabled = false,
   });
 
   final String label;
-  final HugeIconsType icon;
+  final HugeIconsType? icon;
   final bool isDestructive;
+  final bool isDisabled;
 }
 
 class NasikoPopupMenu extends StatelessWidget {
@@ -187,6 +189,7 @@ class _NasikoPopupMenuSurfaceState extends State<_NasikoPopupMenuSurface> {
                   icon: item.icon,
                   isSelected: widget.selectedIndex == index,
                   isDestructive: item.isDestructive,
+                  isDisabled: item.isDisabled,
                   onTap: () => widget.onItemSelected(index),
                 );
               },
@@ -205,12 +208,14 @@ class _NasikoMenuItem extends StatefulWidget {
     required this.isSelected,
     required this.onTap,
     required this.isDestructive,
+    this.isDisabled = false,
   });
 
   final String label;
-  final HugeIconsType icon;
+  final HugeIconsType? icon;
   final bool isSelected;
   final bool isDestructive;
+  final bool isDisabled;
   final VoidCallback onTap;
 
   @override
@@ -229,7 +234,9 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
 
     Color backgroundColor;
 
-    if (widget.isSelected) {
+    if (widget.isDisabled) {
+      backgroundColor = Colors.transparent;
+    } else if (widget.isSelected) {
       backgroundColor = colors.backgroundSecondaryBrand;
     } else if (_isHovered) {
       backgroundColor = colors.backgroundSecondaryBrandHover;
@@ -237,22 +244,30 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
       backgroundColor = Colors.transparent;
     }
 
-    final foregroundColor = widget.isDestructive
-        ? colors.foregroundError
-        : (widget.isSelected
-              ? colors.foregroundPrimary
-              : colors.foregroundSecondary);
+    final foregroundColor = widget.isDisabled
+        ? colors.foregroundDisabled
+        : widget.isDestructive
+            ? colors.foregroundError
+            : (widget.isSelected
+                  ? colors.foregroundPrimary
+                  : colors.foregroundSecondary);
 
     final textStyle =
-        (widget.isSelected
+        (widget.isSelected && !widget.isDisabled
                 ? typography.bodyPrimaryBold
                 : typography.bodyPrimary)
             .copyWith(color: foregroundColor);
 
     return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
+      cursor: widget.isDisabled
+          ? SystemMouseCursors.basic
+          : SystemMouseCursors.click,
+      onEnter: widget.isDisabled
+          ? null
+          : (_) => setState(() => _isHovered = true),
+      onExit: widget.isDisabled
+          ? null
+          : (_) => setState(() => _isHovered = false),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 100),
         curve: Curves.easeInOut,
@@ -261,7 +276,7 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
           borderRadius: BorderRadius.circular(radii.r16),
         ),
         child: InkWell(
-          onTap: widget.onTap,
+          onTap: widget.isDisabled ? null : widget.onTap,
           borderRadius: BorderRadius.circular(radii.r16),
           splashColor: colors.backgroundBrandSubtle.withValues(alpha: 0.5),
           highlightColor: colors.backgroundBrandSubtle.withValues(alpha: 0.5),
@@ -271,9 +286,15 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
               vertical: spacing.s16,
             ),
             child: Row(
-              children: [
-                HugeIcon(icon: widget.icon, size: 28, color: foregroundColor),
-                SizedBox(width: spacing.s16),
+              children: [   
+                if (widget.icon != null) ...[
+                  HugeIcon(
+                    icon: widget.icon!,
+                    size: 28,
+                    color: foregroundColor,
+                  ),
+                  SizedBox(width: spacing.s8),
+                ],
                 Expanded(child: Text(widget.label, style: textStyle)),
               ],
             ),

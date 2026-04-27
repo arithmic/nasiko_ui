@@ -17,6 +17,7 @@ class SecondaryTextButton extends StatelessWidget {
     required this.label,
     this.leadingIcon,
     this.trailingIcon,
+    this.foregroundColor,
   });
 
   /// The callback that is called when the button is tapped.
@@ -32,6 +33,7 @@ class SecondaryTextButton extends StatelessWidget {
   /// An optional icon to display after the label.
   final HugeIconsType? trailingIcon;
 
+  final Color? foregroundColor;
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
@@ -56,12 +58,12 @@ class SecondaryTextButton extends StatelessWidget {
             return colors.foregroundDisabled;
           }
           if (states.contains(WidgetState.hovered)) {
-            return colors.foregroundBrand; // Darker brand color (yellow/800)
+            return  foregroundColor?? colors.foregroundBrand; // Darker brand color (yellow/800)
           }
           if (states.contains(WidgetState.focused)) {
-            return colors.foregroundIconHover;
+            return  foregroundColor ?? colors.foregroundIconHover;
           }
-          return colors.foregroundPrimary; // Default brand color (yellow/600)
+          return foregroundColor ?? colors.foregroundPrimary; // Default brand color (yellow/600)
         }),
 
         // --- TextStyle (For Text & Underline) ---

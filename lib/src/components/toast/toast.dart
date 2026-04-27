@@ -35,23 +35,23 @@ class NasikoToast extends StatelessWidget {
     switch (type) {
       case NasikoToastType.success:
         backgroundColor = colors.backgroundSuccess;
-        foregroundColor = colors.foregroundSuccess;
-        iconColor = colors.foregroundSuccess;
+        foregroundColor = colors.foregroundConstantWhite;
+        iconColor = colors.foregroundConstantWhite;
         break;
       case NasikoToastType.error:
         backgroundColor = colors.backgroundError;
-        foregroundColor = colors.foregroundError;
-        iconColor = colors.foregroundError;
+        foregroundColor = colors.foregroundConstantWhite;
+        iconColor = colors.foregroundConstantWhite;
         break;
       case NasikoToastType.warning:
         backgroundColor = colors.backgroundWarning;
-        foregroundColor = colors.foregroundWarning;
-        iconColor = colors.foregroundWarning;
+        foregroundColor = colors.foregroundConstantWhite;
+        iconColor = colors.foregroundConstantWhite;
         break;
       case NasikoToastType.info:
         backgroundColor = colors.backgroundInformation;
-        foregroundColor = colors.foregroundInformation;
-        iconColor = colors.foregroundInformation;
+        foregroundColor = colors.foregroundConstantWhite;
+        iconColor = colors.foregroundConstantWhite;
         break;
     }
 
@@ -114,7 +114,7 @@ class NasikoToast extends StatelessWidget {
               ),
 
               if (showCancel)
-                SecondaryTextButton(onPressed: onCancel, label: 'Cancel'),
+                SecondaryTextButton(onPressed: onCancel, label: 'Cancel', foregroundColor : colors.foregroundConstantWhite),
             ],
           ),
         ),
