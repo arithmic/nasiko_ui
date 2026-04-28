@@ -4,6 +4,7 @@ export 'package:flutter_screenutil/flutter_screenutil.dart';
 // Components
 export 'src/components/accordion/accordion.dart';
 export 'src/components/avatar/avatar.dart';
+export 'src/components/avatar/avatar_shape.dart';
 export 'src/components/avatar/avatar_size.dart';
 export 'src/components/banner/banner.dart';
 export 'src/components/breadcrumb/breadcrumb.dart';

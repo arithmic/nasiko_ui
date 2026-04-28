@@ -72,6 +72,9 @@ class NasikoSidebar extends StatefulWidget {
     this.onItemSelected,
     this.avatarImageUrl,
     this.avatarLabel,
+    this.userName,
+    this.userSubtitle,
+    this.isUserLoading = false,
     this.onAvatarTap,
     this.panelWidth = 200,
     this.panelBuilder,
@@ -85,6 +88,20 @@ class NasikoSidebar extends StatefulWidget {
   final ValueChanged<String>? onItemSelected;
   final String? avatarImageUrl;
   final String? avatarLabel;
+
+  /// Full username shown beside the avatar in the expanded rail. Falls back to
+  /// [avatarLabel] when null.
+  final String? userName;
+
+  /// Secondary line under [userName] in the expanded rail (e.g. email, role).
+  /// Hidden when null or empty.
+  final String? userSubtitle;
+
+  /// When true, the avatar (and the username/subtitle in the expanded rail) is
+  /// replaced with a shimmer placeholder. Use this while the user profile is
+  /// being fetched on initial load.
+  final bool isUserLoading;
+
   final VoidCallback? onAvatarTap;
   final double panelWidth;
   final Widget Function(NasikoSidebarItem item)? panelBuilder;
@@ -178,6 +195,9 @@ class _NasikoSidebarState extends State<NasikoSidebar>
               onItemSelected: _onItemSelected,
               avatarImageUrl: widget.avatarImageUrl,
               avatarLabel: widget.avatarLabel,
+              userName: widget.userName,
+              userSubtitle: widget.userSubtitle,
+              isUserLoading: widget.isUserLoading,
               onAvatarTap: widget.onAvatarTap,
               isPanelVisible: widget.showPanel,
             ),
@@ -315,6 +335,7 @@ class _NasikoSidebarState extends State<NasikoSidebar>
               onItemSelected: _onItemSelected,
               avatarImageUrl: widget.avatarImageUrl,
               avatarLabel: widget.avatarLabel,
+              isUserLoading: widget.isUserLoading,
               onAvatarTap: widget.onAvatarTap,
             )
           else
@@ -327,6 +348,9 @@ class _NasikoSidebarState extends State<NasikoSidebar>
                 onItemSelected: _onItemSelected,
                 avatarImageUrl: widget.avatarImageUrl,
                 avatarLabel: widget.avatarLabel,
+                userName: widget.userName,
+                userSubtitle: widget.userSubtitle,
+                isUserLoading: widget.isUserLoading,
                 onAvatarTap: widget.onAvatarTap,
                 showShadow: false,
                 isPanelVisible: _isPanelVisible,
@@ -359,6 +383,7 @@ class _SidebarRail extends StatelessWidget {
     required this.onItemSelected,
     this.avatarImageUrl,
     this.avatarLabel,
+    this.isUserLoading = false,
     this.onAvatarTap,
   });
 
@@ -368,6 +393,7 @@ class _SidebarRail extends StatelessWidget {
   final ValueChanged<String> onItemSelected;
   final String? avatarImageUrl;
   final String? avatarLabel;
+  final bool isUserLoading;
   final VoidCallback? onAvatarTap;
 
   @override
@@ -407,17 +433,21 @@ class _SidebarRail extends StatelessWidget {
             ),
           ),
           SizedBox(height: spacing.s8),
-          // Avatar
-          GestureDetector(
-            onTap: onAvatarTap,
-            child: NasikoAvatar(
-              size: NasikoAvatarSize.small,
-              imageUrl: avatarImageUrl,
-              text: avatarLabel,
-              backgroundColor: context.colors.foregroundConstantBlack,
-              foregroundColor: context.colors.foregroundConstantWhite,
+          // Avatar — shimmer placeholder while user profile is loading.
+          if (isUserLoading)
+            const _ShimmerBlock(width: 36, height: 36, radius: 8)
+          else
+            GestureDetector(
+              onTap: onAvatarTap,
+              child: NasikoAvatar(
+                size: NasikoAvatarSize.small,
+                shape: NasikoAvatarShape.square,
+                imageUrl: avatarImageUrl,
+                text: avatarLabel,
+                backgroundColor: context.colors.foregroundConstantBlack,
+                foregroundColor: context.colors.foregroundConstantWhite,
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -869,6 +899,9 @@ class _ExpandedRailOverlay extends StatelessWidget {
     required this.onItemSelected,
     this.avatarImageUrl,
     this.avatarLabel,
+    this.userName,
+    this.userSubtitle,
+    this.isUserLoading = false,
     this.onAvatarTap,
     this.showShadow = true,
     required this.isPanelVisible,
@@ -880,6 +913,9 @@ class _ExpandedRailOverlay extends StatelessWidget {
   final ValueChanged<String> onItemSelected;
   final String? avatarImageUrl;
   final String? avatarLabel;
+  final String? userName;
+  final String? userSubtitle;
+  final bool isUserLoading;
   final VoidCallback? onAvatarTap;
   final bool showShadow;
   final bool isPanelVisible;
@@ -940,33 +976,73 @@ class _ExpandedRailOverlay extends StatelessWidget {
             ),
           ),
           SizedBox(height: spacing.s8),
-          // Avatar row
-          GestureDetector(
-            onTap: onAvatarTap,
-            child: Row(
+          // Avatar row — shimmer placeholder while loading, otherwise the
+          // username (with optional subtitle like email/role) next to the avatar.
+          if (isUserLoading)
+            Row(
               children: [
-                NasikoAvatar(
-                  size: NasikoAvatarSize.small,
-                  imageUrl: avatarImageUrl,
-                  text: avatarLabel,
-                  backgroundColor: context.colors.foregroundConstantBlack,
-                  foregroundColor: context.colors.foregroundConstantWhite,
-                ),
-                if (avatarLabel != null) ...[
-                  SizedBox(width: spacing.s8),
-                  Expanded(
-                    child: Text(
-                      avatarLabel!,
-                      style: typography.bodySecondary.copyWith(
-                        color: colors.foregroundPrimary,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                const _ShimmerBlock(width: 36, height: 36, radius: 8),
+                SizedBox(width: spacing.s8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const _ShimmerBlock(width: 110, height: 12),
+                      SizedBox(height: spacing.s4),
+                      const _ShimmerBlock(width: 150, height: 10),
+                    ],
                   ),
-                ],
+                ),
               ],
+            )
+          else
+            GestureDetector(
+              onTap: onAvatarTap,
+              child: Row(
+                children: [
+                  NasikoAvatar(
+                    size: NasikoAvatarSize.small,
+                    shape: NasikoAvatarShape.square,
+                    imageUrl: avatarImageUrl,
+                    text: avatarLabel,
+                    backgroundColor: context.colors.foregroundConstantBlack,
+                    foregroundColor: context.colors.foregroundConstantWhite,
+                  ),
+                  if (userName != null || avatarLabel != null) ...[
+                    SizedBox(width: spacing.s8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            userName ?? avatarLabel!,
+                            style: typography.bodySecondary.copyWith(
+                              color: colors.foregroundPrimary,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          if (userSubtitle != null &&
+                              userSubtitle!.isNotEmpty) ...[
+                            SizedBox(height: spacing.s2),
+                            Text(
+                              userSubtitle!,
+                              style: typography.bodyTertiary.copyWith(
+                                color: colors.foregroundSecondary,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -1085,5 +1161,95 @@ class _ExpandedRailItemState extends State<_ExpandedRailItem> {
         ),
       ),
     );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Shimmer placeholder used by the user/avatar area while the profile loads.
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _ShimmerBlock extends StatefulWidget {
+  const _ShimmerBlock({
+    required this.width,
+    required this.height,
+    this.radius,
+  });
+
+  final double width;
+  final double height;
+
+  /// Corner radius. Defaults to a pill (height / 2) — pass an explicit value
+  /// to match a non-pill shape (e.g. a rounded-square avatar).
+  final double? radius;
+
+  @override
+  State<_ShimmerBlock> createState() => _ShimmerBlockState();
+}
+
+class _ShimmerBlockState extends State<_ShimmerBlock>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1300),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Tonal pair tuned to read against the beige sidebar background.
+    const baseColor = Color.fromRGBO(225, 220, 210, 1);
+    const highlightColor = Color.fromRGBO(245, 240, 232, 1);
+    final radius = BorderRadius.circular(widget.radius ?? widget.height / 2);
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, _) {
+        return ShaderMask(
+          blendMode: BlendMode.srcATop,
+          shaderCallback: (bounds) {
+            return LinearGradient(
+              colors: const [
+                baseColor,
+                baseColor,
+                highlightColor,
+                baseColor,
+                baseColor,
+              ],
+              stops: const [0.0, 0.32, 0.5, 0.68, 1.0],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              transform: _SlidingGradientTransform(_controller.value),
+            ).createShader(bounds);
+          },
+          child: Container(
+            width: widget.width,
+            height: widget.height,
+            decoration: BoxDecoration(color: baseColor, borderRadius: radius),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _SlidingGradientTransform extends GradientTransform {
+  const _SlidingGradientTransform(this.progress);
+
+  final double progress;
+
+  @override
+  Matrix4? transform(Rect bounds, {TextDirection? textDirection}) {
+    final dx = bounds.width * (progress * 2.8 - 1.4);
+    return Matrix4.translationValues(dx, 0, 0);
   }
 }
