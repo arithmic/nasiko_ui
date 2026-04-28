@@ -175,8 +175,7 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildHeader(colors, spacing, typography, iconSizes),
-                SizedBox(height: spacing.s4),
+                SizedBox(height: 28,child: _buildHeader(colors, spacing, typography, iconSizes)),
                 SizedBox(
                   height: subtitleReservedHeight,
                   child: Padding(
@@ -263,7 +262,7 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
                 ? colors.foregroundDisabled
                 : (widget.leadingIconColor ?? colors.foregroundSuccess),
           ),
-          SizedBox(width: spacing.s8),
+          SizedBox(width: spacing.s4),
         ],
         Expanded(
           child: Wrap(
@@ -302,7 +301,7 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
                   child: _AgentCardMenuButton(actions: widget.menuActions!),
                 )
               : Padding(
-                  padding: EdgeInsets.all(spacing.s8),
+                  padding: EdgeInsets.all(spacing.s2),
                   child: HugeIcon(
                     icon: HugeIcons.strokeRoundedMoreVertical,
                     size: iconSizes.s,
@@ -407,7 +406,7 @@ class _AgentCardMenuButton extends StatelessWidget {
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: Container(
-          padding: EdgeInsets.all(spacing.s8),
+          padding: EdgeInsets.all(spacing.s2),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(radii.r8),
           ),
