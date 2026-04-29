@@ -8,12 +8,16 @@ class NasikoNavigationSection {
 
   final String id;
   final String title;
-  final List<NavigationItem> children;
+  final List<NasikoNavigationItem> children;
   final bool isCollapsible;
 }
 
-class NavigationItem {
-  const NavigationItem({required this.id, required this.label, this.onTap});
+class NasikoNavigationItem {
+  const NasikoNavigationItem({
+    required this.id,
+    required this.label,
+    this.onTap,
+  });
 
   final String id;
   final String label;
