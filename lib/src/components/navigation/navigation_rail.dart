@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 import 'navigation_rail_item.dart';
 
@@ -43,7 +44,7 @@ class NasikoNavigationRail extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Icon(item.icon),
+                  HugeIcon(icon: item.icon),
                   if (isExpanded) ...[
                     const SizedBox(width: 8),
                     Expanded(child: Text(item.label)),

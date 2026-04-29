@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:nasiko_ui/nasiko_ui.dart';
 
 class NasikoNavigationRailItem {
   const NasikoNavigationRailItem({
@@ -9,7 +9,7 @@ class NasikoNavigationRailItem {
   });
 
   final String id;
-  final IconData icon;
+  final HugeIconsType icon;
   final String label;
   final bool isDisabled;
 }
