@@ -27,6 +27,7 @@ export 'src/components/radio/radio_tile.dart';
 export 'src/components/section/section.dart';
 export 'src/components/navigation/sidebar.dart';
 export 'src/components/navigation/navigation_layout.dart';
+export 'src/components/navigation/navigation.dart';
 export 'src/components/switch/switches.dart';
 export 'src/components/table/table.dart';
 export 'src/components/tabs/tab_bar.dart';
