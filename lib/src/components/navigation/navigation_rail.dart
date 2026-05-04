@@ -10,8 +10,8 @@ class NasikoNavigationRail extends StatelessWidget {
     required this.selectedId,
     required this.onSelect,
     this.isExpanded = false,
-    this.widthCollapsed = 36,
-    this.widthExpanded = 170,
+    this.widthCollapsed = 60,
+    this.widthExpanded = 194,
   });
 
   final List<NasikoNavigationRailItem> items;
