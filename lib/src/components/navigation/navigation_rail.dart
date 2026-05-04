@@ -44,7 +44,7 @@ class NasikoNavigationRail extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  HugeIcon(icon: item.icon),
+                  HugeIcon(icon: item.icon, size: 20),
                   if (isExpanded) ...[
                     const SizedBox(width: 8),
                     Expanded(child: Text(item.label)),
