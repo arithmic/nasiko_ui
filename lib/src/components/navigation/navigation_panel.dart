@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'navigation_section.dart';
 
 class NasikoNavigationPanel extends StatelessWidget {
-  const NasikoNavigationPanel({super.key, required this.sections, this.width = 260});
+  const NasikoNavigationPanel({
+    super.key,
+    required this.sections,
+    this.width = 200,
+  });
 
   final List<NasikoNavigationSection> sections;
   final double width;
