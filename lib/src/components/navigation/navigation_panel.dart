@@ -6,7 +6,7 @@ class NasikoNavigationPanel extends StatelessWidget {
   const NasikoNavigationPanel({
     super.key,
     required this.sections,
-    this.width = 224,
+    this.width = 200,
   });
 
   final List<NasikoNavigationSection> sections;
