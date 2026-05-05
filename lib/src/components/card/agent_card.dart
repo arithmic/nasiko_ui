@@ -53,6 +53,7 @@ class NasikoAgentCard extends StatefulWidget {
     this.onTap,
     this.maxWidth = double.infinity,
     this.variant = NasikoAgentCardVariant.normal,
+    this.errorTitle,
     this.errorBody,
     this.errorDetails,
     this.onRetry,
@@ -110,6 +111,10 @@ class NasikoAgentCard extends StatefulWidget {
 
   /// Card state variant — controls the left accent colour and body layout.
   final NasikoAgentCardVariant variant;
+
+  /// Bold headline shown at the top of the error body.
+  /// Only rendered when [variant] is [NasikoAgentCardVariant.error].
+  final String? errorTitle;
 
   /// Status message from the API shown as the error description.
   /// Only rendered when [variant] is [NasikoAgentCardVariant.error].
@@ -551,13 +556,13 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: spacing.s12),
-        // Hardcoded per design spec — always "Agent upload failed!"
-        Text(
-          'Agent upload failed!',
-          style: typography.bodySecondaryBold.copyWith(
-            color: colors.foregroundError,
+        if (widget.errorTitle != null)
+          Text(
+            widget.errorTitle!,
+            style: typography.bodySecondaryBold.copyWith(
+              color: colors.foregroundError,
+            ),
           ),
-        ),
         SizedBox(height: spacing.s4),
         // API status_message shown in a reserved 2-line area (matches
         // the description slot height in normal cards for visual height parity).
