@@ -53,7 +53,6 @@ class NasikoAgentCard extends StatefulWidget {
     this.onTap,
     this.maxWidth = double.infinity,
     this.variant = NasikoAgentCardVariant.normal,
-    this.errorTitle,
     this.errorBody,
     this.errorDetails,
     this.onRetry,
@@ -111,10 +110,6 @@ class NasikoAgentCard extends StatefulWidget {
 
   /// Card state variant — controls the left accent colour and body layout.
   final NasikoAgentCardVariant variant;
-
-  /// Bold headline shown at the top of the error body.
-  /// Only rendered when [variant] is [NasikoAgentCardVariant.error].
-  final String? errorTitle;
 
   /// Status message from the API shown as the error description.
   /// Only rendered when [variant] is [NasikoAgentCardVariant.error].
@@ -242,7 +237,7 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
     final overflowCount = widget.tags.length - visibleTags.length;
 
     final showHover = _isHovered && !widget.disabled;
-    final showYellowBg = !widget.disabled && (showHover || widget.selected);
+    final showYellowBg = showHover || widget.selected;
 
     // Left accent bar colour — null means no accent bar.
     final Color? accentColor = widget.disabled
@@ -278,9 +273,7 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
         cursor: widget.onTap != null && !widget.disabled
             ? SystemMouseCursors.click
             : SystemMouseCursors.basic,
-        onEnter: (_) {
-          if (!widget.disabled) setState(() => _isHovered = true);
-        },
+        onEnter: (_) => setState(() => _isHovered = true),
         onExit: (_) => setState(() => _isHovered = false),
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
@@ -290,128 +283,139 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
                   if (_isMenuPointerDown) return;
                   widget.onTap!();
                 },
-          child: Container(
-            decoration: BoxDecoration(
-              color: bgColor,
-              borderRadius: BorderRadius.circular(radii.r4),
-              border: Border.all(color: borderColor, width: borderWidths.w1),
-              boxShadow: showYellowBg
-                  ? [
-                      BoxShadow(
-                        color: const Color.fromRGBO(251, 240, 206, 1),
-                        blurRadius: 4,
-                        offset: const Offset(0, 4),
+          child: Stack(
+            children: [
+              // ── Card body ──────────────────────────────────────────────
+              Container(
+                padding: EdgeInsets.all(spacing.s16),
+                decoration: BoxDecoration(
+                  color: bgColor,
+                  borderRadius: BorderRadius.circular(radii.r4),
+                  border: Border.all(
+                    color: borderColor,
+                    width: borderWidths.w1,
+                  ),
+                  boxShadow: showYellowBg
+                      ? [
+                          BoxShadow(
+                            color: const Color.fromRGBO(251, 240, 206, 1),
+                            blurRadius: 4,
+                            offset: const Offset(0, 4),
+                          ),
+                        ]
+                      : [],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 24,
+                      child: _buildHeader(
+                        colors,
+                        spacing,
+                        typography,
+                        iconSizes,
                       ),
-                    ]
-                  : [],
-            ),
-            // Clips children (including accent bar) to the card's rounded corners.
-            clipBehavior: Clip.antiAlias,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // ── Left accent bar ──────────────────────────────────────
-                if (accentColor != null)
-                  Container(width: borderWidths.w4, color: accentColor),
-                // ── Card body ────────────────────────────────────────────
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.all(spacing.s16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 24,
-                          child: _buildHeader(
-                            colors,
-                            spacing,
-                            typography,
-                            iconSizes,
+                    ),
+                    if (!_isError) ...[
+                      if (widget.subtitle != null &&
+                          widget.subtitle!.isNotEmpty) ...[
+                        SizedBox(height: spacing.s4),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            left: widget.leadingIcon != null
+                                ? iconSizes.m + spacing.s8
+                                : 0.0,
+                          ),
+                          child: Text(
+                            widget.subtitle!,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: typography.bodyTertiaryBold.copyWith(
+                              color: widget.disabled
+                                  ? colors.foregroundDisabled
+                                  : colors.foregroundSecondary,
+                            ),
                           ),
                         ),
-                        if (!_isError) ...[
-                          if (widget.subtitle != null &&
-                              widget.subtitle!.isNotEmpty) ...[
-                            SizedBox(height: spacing.s4),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                left: widget.leadingIcon != null
-                                    ? iconSizes.m + spacing.s8
-                                    : 0.0,
-                              ),
-                              child: Text(
-                                widget.subtitle!,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: typography.bodyTertiaryBold.copyWith(
-                                  color: widget.disabled
-                                      ? colors.foregroundDisabled
-                                      : colors.foregroundSecondary,
-                                ),
-                              ),
+                      ],
+                      if (widget.tags.isNotEmpty) ...[
+                        SizedBox(height: spacing.s12),
+                        _buildTags(
+                          visibleTags,
+                          overflowCount,
+                          showYellowBg,
+                          widget.disabled,
+                        ),
+                      ],
+                      if (widget.description != null) ...[
+                        SizedBox(height: spacing.s12),
+                        SizedBox(
+                          height: descriptionReservedHeight,
+                          child: Text(
+                            widget.description!,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: descriptionStyle,
+                          ),
+                        ),
+                      ],
+                      if (widget.author != null &&
+                          widget.author!.isNotEmpty) ...[
+                        SizedBox(height: spacing.s8),
+                        RichText(
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          text: TextSpan(
+                            style: typography.bodyTertiary.copyWith(
+                              color: widget.disabled
+                                  ? colors.foregroundDisabled
+                                  : colors.foregroundSecondary,
                             ),
-                          ],
-                          if (widget.tags.isNotEmpty) ...[
-                            SizedBox(height: spacing.s12),
-                            _buildTags(
-                              visibleTags,
-                              overflowCount,
-                              showYellowBg,
-                              widget.disabled,
-                            ),
-                          ],
-                          if (widget.description != null) ...[
-                            SizedBox(height: spacing.s12),
-                            SizedBox(
-                              height: descriptionReservedHeight,
-                              child: Text(
-                                widget.description!,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: descriptionStyle,
-                              ),
-                            ),
-                          ],
-                          if (widget.author != null &&
-                              widget.author!.isNotEmpty) ...[
-                            SizedBox(height: spacing.s8),
-                            RichText(
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              text: TextSpan(
+                            children: [
+                              const TextSpan(text: 'Author : '),
+                              TextSpan(
+                                text: widget.author!,
                                 style: typography.bodyTertiary.copyWith(
                                   color: widget.disabled
                                       ? colors.foregroundDisabled
-                                      : colors.foregroundSecondary,
+                                      : colors.foregroundPrimary,
                                 ),
-                                children: [
-                                  const TextSpan(text: 'Author : '),
-                                  TextSpan(
-                                    text: widget.author!,
-                                    style: typography.bodyTertiary.copyWith(
-                                      color: widget.disabled
-                                          ? colors.foregroundDisabled
-                                          : colors.foregroundPrimary,
-                                    ),
-                                  ),
-                                ],
                               ),
-                            ),
-                          ],
-                        ] else ...[
-                          _buildErrorBody(
-                            colors,
-                            spacing,
-                            typography,
-                            descriptionReservedHeight,
+                            ],
                           ),
-                        ],
+                        ),
                       ],
+                    ] else ...[
+                      _buildErrorBody(
+                        colors,
+                        spacing,
+                        typography,
+                        descriptionReservedHeight,
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+
+              // ── Left accent bar ────────────────────────────────────────
+              if (accentColor != null)
+                Positioned(
+                  left: 0,
+                  top: 0,
+                  bottom: 0,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(radii.r4),
+                      bottomLeft: Radius.circular(radii.r4),
+                    ),
+                    child: Container(
+                      width: borderWidths.w4,
+                      color: accentColor,
                     ),
                   ),
                 ),
-              ],
-            ),
+            ],
           ),
         ),
       ),
@@ -547,14 +551,16 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: spacing.s12),
-        if (widget.errorTitle != null)
-          Text(
-            widget.errorTitle!,
-            style: typography.bodySecondaryBold.copyWith(
-              color: colors.foregroundError,
-            ),
+        // Hardcoded per design spec — always "Agent upload failed!"
+        Text(
+          'Agent upload failed!',
+          style: typography.bodySecondaryBold.copyWith(
+            color: colors.foregroundError,
           ),
-        SizedBox(height: spacing.s8),
+        ),
+        SizedBox(height: spacing.s4),
+        // API status_message shown in a reserved 2-line area (matches
+        // the description slot height in normal cards for visual height parity).
         SizedBox(
           height: descriptionReservedHeight,
           child: widget.errorBody != null
