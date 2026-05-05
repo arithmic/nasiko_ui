@@ -97,7 +97,8 @@ class NasikoAgentCard extends StatefulWidget {
   /// suppressed.
   final bool disabled;
 
-  /// When `true`, the card shows the hover background persistently.
+  /// When `true`, the card shows the hover background persistently unless
+  /// disabled or rendered as an error card.
   final bool selected;
 
   /// Optional attribution line rendered below the description.
@@ -241,8 +242,9 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
     final visibleTags = widget.tags.take(widget.maxVisibleTags).toList();
     final overflowCount = widget.tags.length - visibleTags.length;
 
-    final showHover = _isHovered && !widget.disabled;
-    final showYellowBg = showHover || widget.selected;
+    final canShowHoverBg = !widget.disabled && !_isError;
+    final showHover = _isHovered && canShowHoverBg;
+    final showYellowBg = canShowHoverBg && (showHover || widget.selected);
 
     // Left accent bar colour — null means no accent bar.
     final Color? accentColor = widget.disabled
