@@ -39,6 +39,7 @@ class NasikoAgentCard extends StatefulWidget {
     super.key,
     required this.title,
     this.version,
+    this.subtitle,
     this.leadingIcon,
     this.leadingIconColor,
     this.description,
@@ -63,6 +64,9 @@ class NasikoAgentCard extends StatefulWidget {
 
   /// Optional small text shown after the title (e.g. "v1.1.0").
   final String? version;
+
+  /// Optional supporting line shown directly below the title row.
+  final String? subtitle;
 
   /// Optional icon at the top-left — useful for a verification/status badge.
   final HugeIconsType? leadingIcon;
@@ -314,6 +318,27 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
                       ),
                     ),
                     if (!_isError) ...[
+                      if (widget.subtitle != null &&
+                          widget.subtitle!.isNotEmpty) ...[
+                        SizedBox(height: spacing.s4),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            left: widget.leadingIcon != null
+                                ? iconSizes.m + spacing.s8
+                                : 0.0,
+                          ),
+                          child: Text(
+                            widget.subtitle!,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: typography.bodyTertiaryBold.copyWith(
+                              color: widget.disabled
+                                  ? colors.foregroundDisabled
+                                  : colors.foregroundSecondary,
+                            ),
+                          ),
+                        ),
+                      ],
                       if (widget.tags.isNotEmpty) ...[
                         SizedBox(height: spacing.s12),
                         _buildTags(
