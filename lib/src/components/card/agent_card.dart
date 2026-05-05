@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
@@ -6,6 +8,9 @@ import 'package:nasiko_ui/nasiko_ui.dart';
 ///
 /// Controls the left accent border colour and, for [error], the body layout.
 enum NasikoAgentCardVariant {
+  /// Default — no left accent border.
+  normal,
+
   /// Agent is being configured / deployed — yellow left accent.
   settingUp,
 
@@ -23,19 +28,17 @@ enum NasikoAgentCardVariant {
 /// chips, and a trailing three-dot menu for contextual actions.
 ///
 /// Set [variant] to control the left-accent colour and body layout:
-/// - [NasikoAgentCardVariant.settingUp] — yellow accent; supply a yellow
-///   [leadingIcon] + [leadingIconColor].
-/// - [NasikoAgentCardVariant.active] — green accent; supply a green
-///   [leadingIcon] + [leadingIconColor].
-/// - [NasikoAgentCardVariant.error] — red accent; supply a warning
-///   [leadingIcon] and the [errorTitle], [errorBody], [errorDetails],
-///   [onRetry], and [onDelete] props.
+/// - [NasikoAgentCardVariant.normal] — no accent (default).
+/// - [NasikoAgentCardVariant.settingUp] — yellow accent.
+/// - [NasikoAgentCardVariant.active] — green accent.
+/// - [NasikoAgentCardVariant.error] — red accent; supply [errorBody],
+///   [errorDetails], [onRetry], and [onDelete]. Title is always
+///   "Agent upload failed!".
 class NasikoAgentCard extends StatefulWidget {
   const NasikoAgentCard({
     super.key,
     required this.title,
     this.version,
-    this.subtitle,
     this.leadingIcon,
     this.leadingIconColor,
     this.description,
@@ -48,8 +51,7 @@ class NasikoAgentCard extends StatefulWidget {
     this.author,
     this.onTap,
     this.maxWidth = double.infinity,
-    required this.variant,
-    this.errorTitle,
+    this.variant = NasikoAgentCardVariant.normal,
     this.errorBody,
     this.errorDetails,
     this.onRetry,
@@ -62,16 +64,11 @@ class NasikoAgentCard extends StatefulWidget {
   /// Optional small text shown after the title (e.g. "v1.1.0").
   final String? version;
 
-  /// Optional supporting line shown directly below the title.
-  final String? subtitle;
-
   /// Optional icon at the top-left — useful for a verification/status badge.
   final HugeIconsType? leadingIcon;
 
-  /// Colour of [leadingIcon].
-  ///
-  /// Defaults to success green for [NasikoAgentCardVariant.active]; ignored for
-  /// [NasikoAgentCardVariant.error] (always rendered in error red).
+  /// Colour of [leadingIcon]. Ignored for [NasikoAgentCardVariant.error]
+  /// (always rendered in error red).
   final Color? leadingIconColor;
 
   /// Short description — clamps to 2 lines with ellipsis.
@@ -84,20 +81,18 @@ class NasikoAgentCard extends StatefulWidget {
   /// Maximum number of tag chips rendered before the "+N" overflow chip.
   final int maxVisibleTags;
 
-  /// When non-empty, a three-dot menu appears at the top-right on hover or
-  /// when the card is selected/focused.
+  /// When non-empty, a three-dot menu appears at the top-right.
   final List<SectionItemAction>? menuActions;
 
   /// Whether to render the three-dot menu slot at all. Ignored when
-  /// [variant] is [NasikoAgentCardVariant.error] (retry/delete shown instead).
+  /// [variant] is [NasikoAgentCardVariant.error].
   final bool showMore;
 
-  /// When `true`, the card renders in a muted visual style, hover effects
-  /// are suppressed, `onTap` is ignored, and the menu button (if any) is
-  /// replaced by a non-interactive disabled three-dot icon.
+  /// When `true`, the card renders in a muted style and interactions are
+  /// suppressed.
   final bool disabled;
 
-  /// When `true`, the card shows the yellow hover background persistently.
+  /// When `true`, the card shows the hover background persistently.
   final bool selected;
 
   /// Optional attribution line rendered below the description.
@@ -112,16 +107,12 @@ class NasikoAgentCard extends StatefulWidget {
   /// Card state variant — controls the left accent colour and body layout.
   final NasikoAgentCardVariant variant;
 
-  /// Bold error headline shown in the error body.
-  /// Only rendered when [variant] is [NasikoAgentCardVariant.error].
-  final String? errorTitle;
-
-  /// Secondary error description shown below [errorTitle].
+  /// Status message from the API shown as the error description.
   /// Only rendered when [variant] is [NasikoAgentCardVariant.error].
   final String? errorBody;
 
-  /// Tooltip text revealed when hovering "Know more".
-  /// Only used when [variant] is [NasikoAgentCardVariant.error].
+  /// Full error detail text shown in the click-triggered overlay when the user
+  /// taps "Know more". Only used when [variant] is [NasikoAgentCardVariant.error].
   final String? errorDetails;
 
   /// Callback for the retry icon button in the error header.
@@ -136,15 +127,98 @@ class NasikoAgentCard extends StatefulWidget {
 
 class _NasikoAgentCardState extends State<NasikoAgentCard> {
   bool _isHovered = false;
-
-  /// Guards against the row's onTap firing when the user clicks the popup
-  /// menu trigger.
   bool _isMenuPointerDown = false;
+
+  OverlayEntry? _errorDetailsOverlay;
+  final GlobalKey _knowMoreKey = GlobalKey();
 
   bool get _hasMenu =>
       widget.menuActions != null && widget.menuActions!.isNotEmpty;
 
   bool get _isError => widget.variant == NasikoAgentCardVariant.error;
+
+  @override
+  void dispose() {
+    _hideErrorDetails();
+    super.dispose();
+  }
+
+  // ── Error-details click overlay ──────────────────────────────────────────────
+
+  void _showErrorDetails() {
+    if (_errorDetailsOverlay != null || widget.errorDetails == null) return;
+
+    final renderBox =
+        _knowMoreKey.currentContext?.findRenderObject() as RenderBox?;
+    if (renderBox == null) return;
+
+    final offset = renderBox.localToGlobal(Offset.zero);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    final colors = context.colors;
+    final spacing = context.spacing;
+    final radii = context.radius;
+    final typography = context.typography;
+
+    // Position the bubble above "Know more", clamped to screen bounds.
+    final bubbleLeft = min(max(8.0, offset.dx), screenWidth - 256.0);
+    // bottom = distance from screen bottom to the top of "Know more" + gap
+    final bubbleBottom = screenHeight - offset.dy + spacing.s8;
+
+    _errorDetailsOverlay = OverlayEntry(
+      builder: (ctx) => Stack(
+        children: [
+          // Full-screen barrier — tap anywhere outside to dismiss.
+          Positioned.fill(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: _hideErrorDetails,
+              child: const ColoredBox(color: Colors.transparent),
+            ),
+          ),
+          // Tooltip bubble — grows upward so its height doesn't matter.
+          Positioned(
+            left: bubbleLeft,
+            bottom: bubbleBottom,
+            child: Material(
+              type: MaterialType.transparency,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 240),
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: spacing.s12,
+                    vertical: spacing.s8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: colors.foregroundConstantBlack,
+                    borderRadius: BorderRadius.circular(radii.r8),
+                  ),
+                  child: Text(
+                    widget.errorDetails!,
+                    style: typography.bodyTertiary.copyWith(
+                      color: colors.foregroundConstantWhite,
+                      fontStyle: FontStyle.normal,
+                      height: 1.4,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    Overlay.of(context).insert(_errorDetailsOverlay!);
+  }
+
+  void _hideErrorDetails() {
+    _errorDetailsOverlay?.remove();
+    _errorDetailsOverlay = null;
+  }
+
+  // ── Build ────────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
@@ -165,6 +239,7 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
     final Color? accentColor = widget.disabled
         ? null
         : switch (widget.variant) {
+            NasikoAgentCardVariant.normal => null,
             NasikoAgentCardVariant.settingUp => colors.borderHover,
             NasikoAgentCardVariant.active => colors.borderSuccess,
             NasikoAgentCardVariant.error => colors.borderError,
@@ -187,17 +262,6 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
     );
     final descriptionReservedHeight =
         (descriptionStyle.height ?? 1.2) * descriptionStyle.fontSize! * 2;
-
-    final subtitleStyle = typography.bodyTertiaryBold.copyWith(
-      color: widget.disabled
-          ? colors.foregroundDisabled
-          : colors.foregroundSecondary,
-    );
-    final subtitleReservedHeight =
-        (subtitleStyle.height ?? 1.2) * subtitleStyle.fontSize!;
-    final subtitleLeftIndent = widget.leadingIcon != null
-        ? iconSizes.m + spacing.s8
-        : 0.0;
 
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: widget.maxWidth),
@@ -241,7 +305,7 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: 28,
+                      height: 24,
                       child: _buildHeader(
                         colors,
                         spacing,
@@ -250,22 +314,6 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
                       ),
                     ),
                     if (!_isError) ...[
-                      SizedBox(
-                        height: subtitleReservedHeight,
-                        child: Padding(
-                          padding: EdgeInsets.only(left: subtitleLeftIndent),
-                          child:
-                              (widget.subtitle != null &&
-                                  widget.subtitle!.isNotEmpty)
-                              ? Text(
-                                  widget.subtitle!,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: subtitleStyle,
-                                )
-                              : null,
-                        ),
-                      ),
                       if (widget.tags.isNotEmpty) ...[
                         SizedBox(height: spacing.s12),
                         _buildTags(
@@ -314,7 +362,12 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
                         ),
                       ],
                     ] else ...[
-                      _buildErrorBody(colors, spacing, typography),
+                      _buildErrorBody(
+                        colors,
+                        spacing,
+                        typography,
+                        descriptionReservedHeight,
+                      ),
                     ],
                   ],
                 ),
@@ -396,7 +449,7 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
             ],
           ),
         ),
-        // Error variant: retry + delete icon buttons replace the 3-dot menu.
+        // Error variant: retry + delete replace the 3-dot menu.
         if (_isError) ...[
           if (widget.onRetry != null)
             _buildIconButton(
@@ -467,32 +520,40 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
     NasikoColorTheme colors,
     NasikoSpacingTheme spacing,
     NasikoTypography typography,
+    double descriptionReservedHeight,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: spacing.s8),
-        if (widget.errorTitle != null)
-          Text(
-            widget.errorTitle!,
-            style: typography.bodySecondaryBold.copyWith(
-              color: colors.foregroundError,
-            ),
+        SizedBox(height: spacing.s12),
+        // Hardcoded per design spec — always "Agent upload failed!"
+        Text(
+          'Agent upload failed!',
+          style: typography.bodySecondaryBold.copyWith(
+            color: colors.foregroundError,
           ),
-        if (widget.errorBody != null) ...[
-          SizedBox(height: spacing.s4),
-          Text(
-            widget.errorBody!,
-            style: typography.bodySecondary.copyWith(
-              color: colors.foregroundSecondary,
-            ),
-          ),
-        ],
+        ),
+        SizedBox(height: spacing.s4),
+        // API status_message shown in a reserved 2-line area (matches
+        // the description slot height in normal cards for visual height parity).
+        SizedBox(
+          height: descriptionReservedHeight,
+          child: widget.errorBody != null
+              ? Text(
+                  widget.errorBody!,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: typography.bodySecondary.copyWith(
+                    color: colors.foregroundSecondary,
+                  ),
+                )
+              : null,
+        ),
         if (widget.errorDetails != null) ...[
           SizedBox(height: spacing.s8),
-          NasikoTooltip(
-            message: widget.errorDetails!,
-            preferBelow: true,
+          GestureDetector(
+            key: _knowMoreKey,
+            onTap: _showErrorDetails,
             child: MouseRegion(
               cursor: SystemMouseCursors.click,
               child: Text(
