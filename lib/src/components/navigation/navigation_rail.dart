@@ -11,13 +11,16 @@ class NasikoNavigationRail extends StatelessWidget {
     this.isExpanded = false,
     this.widthCollapsed = 36,
     this.widthExpanded = 170,
+    this.footerItems,
+    this.footer,
   });
 
   final List<NasikoNavigationRailItem> items;
+  final List<NasikoNavigationRailItem>? footerItems;
   final String? selectedId;
   final ValueChanged<String> onSelect;
+  final Widget? footer;
   final bool isExpanded;
-
   final double widthExpanded;
   final double widthCollapsed;
 
@@ -31,18 +34,36 @@ class NasikoNavigationRail extends StatelessWidget {
       duration: const Duration(milliseconds: 200),
       width: width,
       color: const Color.fromRGBO(240, 235, 225, 1),
-      padding: EdgeInsets.symmetric(vertical: spacing.s12),
+      padding: EdgeInsets.symmetric(vertical: spacing.s8),
       child: Column(
-        children: items.map((item) {
-          final isSelected = item.id == selectedId;
+        children: [
+          ...items.map((item) {
+            final isSelected = item.id == selectedId;
 
-          return _RailItem(
-            item: item,
-            isSelected: isSelected,
-            isExpanded: isExpanded,
-            onTap: () => onSelect(item.id),
-          );
-        }).toList(),
+            return _RailItem(
+              item: item,
+              isSelected: isSelected,
+              isExpanded: isExpanded,
+              onTap: () => onSelect(item.id),
+            );
+          }),
+
+          const Spacer(),
+
+          if (footerItems != null)
+            ...footerItems!.map((item) {
+              final isSelected = item.id == selectedId;
+
+              return _RailItem(
+                item: item,
+                isSelected: isSelected,
+                isExpanded: isExpanded,
+                onTap: () => onSelect(item.id),
+              );
+            }),
+
+          if (footer != null) footer!,
+        ],
       ),
     );
   }
