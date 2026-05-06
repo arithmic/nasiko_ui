@@ -650,23 +650,6 @@ class _AgentCardMenuButton extends StatelessWidget {
 
   final List<SectionItemAction> actions;
 
-  void _openMenu(BuildContext context) {
-    NasikoPopover.show(
-      context: context,
-      anchorContext: context,
-      items: [
-        for (final action in actions)
-          NasikoPopupMenuItemData(
-            label: action.label,
-            icon: action.icon,
-            isDestructive: action.isDestructive,
-          ),
-      ],
-      onSelect: (index) => actions[index].onTap(),
-      width: 160,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
@@ -674,21 +657,26 @@ class _AgentCardMenuButton extends StatelessWidget {
     final radii = context.radius;
     final iconSizes = context.iconSize;
 
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () => _openMenu(context),
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: Container(
-          padding: EdgeInsets.all(spacing.s2),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(radii.r8),
+    return NasikoPopupMenu(
+      width: 160,
+      items: [
+        for (final action in actions)
+          NasikoPopupMenuItemData(
+            label: action.label,
+            icon: action.icon ?? HugeIcons.strokeRoundedMoreVertical,
+            isDestructive: action.isDestructive,
           ),
-          child: HugeIcon(
-            icon: HugeIcons.strokeRoundedMoreVertical,
-            size: iconSizes.s,
-            color: colors.foregroundIconPrimary,
-          ),
+      ],
+      onItemSelected: (index) => actions[index].onTap(),
+      child: Container(
+        padding: EdgeInsets.all(spacing.s2),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(radii.r8),
+        ),
+        child: HugeIcon(
+          icon: HugeIcons.strokeRoundedMoreVertical,
+          size: iconSizes.s,
+          color: colors.foregroundIconPrimary,
         ),
       ),
     );
