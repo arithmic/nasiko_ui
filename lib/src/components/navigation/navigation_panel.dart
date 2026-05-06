@@ -13,9 +13,8 @@ class NasikoNavigationPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: width,
-      color: Colors.white,
       child: ListView(
         children: sections.map((section) {
           return _Section(section: section);

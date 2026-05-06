@@ -269,12 +269,6 @@ class ExampleHomePage extends StatelessWidget {
               title: 'Query Box',
               child: _buildQueryBoxExample(context),
             ),
-            SizedBox(height: context.spacing.s28),
-            _buildSection(
-              context,
-              title: 'Sidebar',
-              child: const _SidebarExample(),
-            ),
           ],
         ),
       ),
@@ -1952,7 +1946,6 @@ class _MenuExampleState extends State<_MenuExample> {
   Widget build(BuildContext context) {
     return NasikoPopupMenu(
       items: _menuItems,
-      selectedIndex: _selectedIndex,
       onItemSelected: (index) {
         setState(() {
           _selectedIndex = index;
@@ -2482,132 +2475,6 @@ class _ChipExampleState extends State<_ChipExample> {
           ],
         ),
       ],
-    );
-  }
-}
-
-class _SidebarExample extends StatefulWidget {
-  const _SidebarExample();
-
-  @override
-  State<_SidebarExample> createState() => _SidebarExampleState();
-}
-
-class _SidebarExampleState extends State<_SidebarExample> {
-  String _selectedItemId = 'agent_registry';
-
-  @override
-  Widget build(BuildContext context) {
-    final items = [
-      NasikoSidebarItem(
-        id: 'agent_registry',
-        label: 'Agent Registry',
-        icon: HugeIcons.strokeRoundedRobotic,
-        sections: [
-          NasikoSidebarSection(
-            title: 'Agent Sources',
-            icon: HugeIcons.strokeRoundedRobotic,
-            children: const [
-              SectionItem(label: 'Agent hub'),
-              SectionItem(label: 'Published by you'),
-            ],
-          ),
-          NasikoSidebarSection(
-            title: 'Your Registries',
-            icon: HugeIcons.strokeRoundedDatabase01,
-            trailingIcon: HugeIcons.strokeRoundedAdd01,
-            children: const [
-              SectionItem(label: 'Digital Ocean'),
-              SectionItem(label: "Ans's registry"),
-            ],
-          ),
-          NasikoSidebarSection(
-            title: 'Pinned Agents',
-            icon: HugeIcons.strokeRoundedPin,
-            isCollapsible: true,
-            children: const [],
-            emptyMessage: 'No pinned agents',
-          ),
-          NasikoSidebarSection(
-            title: 'Recent Agents',
-            icon: HugeIcons.strokeRoundedTime03,
-            children: const [
-              SectionItem(label: 'Payment agent'),
-              SectionItem(label: 'Github agent'),
-            ],
-          ),
-        ],
-      ),
-      NasikoSidebarItem(
-        id: 'orchestrator',
-        label: 'Orchestrator',
-        icon: HugeIcons.strokeRoundedAiBrain01,
-      ),
-      NasikoSidebarItem(
-        id: 'dashboard',
-        label: 'Dashboard',
-        icon: HugeIcons.strokeRoundedDashboardSquare01,
-      ),
-      NasikoSidebarItem(
-        id: 'observability',
-        label: 'Observability',
-        icon: HugeIcons.strokeRoundedVision,
-      ),
-      NasikoSidebarItem(
-        id: 'operations',
-        label: 'Operations',
-        icon: HugeIcons.strokeRoundedWrench01,
-      ),
-      NasikoSidebarItem(
-        id: 'access_control',
-        label: 'Access Control',
-        icon: HugeIcons.strokeRoundedAccess,
-      ),
-      NasikoSidebarItem(
-        id: 'usage',
-        label: 'Usage',
-        icon: HugeIcons.strokeRoundedMoney03,
-      ),
-      NasikoSidebarItem(
-        id: 'recent_sessions',
-        label: 'Recent Sessions',
-        icon: HugeIcons.strokeRoundedClock03,
-      ),
-    ];
-
-    final footerItems = [
-      NasikoSidebarFooterItem(
-        id: 'settings',
-        icon: HugeIcons.strokeRoundedSettings03,
-        label: 'Settings',
-        onTap: () => debugPrint('Settings tapped'),
-      ),
-      NasikoSidebarFooterItem(
-        id: 'help',
-        icon: HugeIcons.strokeRoundedHelpSquare,
-        label: 'Help',
-        onTap: () => debugPrint('Help tapped'),
-      ),
-    ];
-
-    return Container(
-      height: 600,
-      decoration: BoxDecoration(
-        // border: Border.all(
-        //   color: context.colors.borderPrimary,
-        //   width: context.borderWidth.w1,
-        // ),
-        // borderRadius: BorderRadius.circular(context.radius.r12),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: NasikoSidebar(
-        items: items,
-        footerItems: footerItems,
-        selectedItemId: _selectedItemId,
-        onItemSelected: (id) => setState(() => _selectedItemId = id),
-        avatarLabel: 'AJ',
-        onAvatarTap: () => debugPrint('Avatar tapped'),
-      ),
     );
   }
 }
