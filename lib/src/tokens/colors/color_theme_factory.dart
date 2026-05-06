@@ -78,7 +78,7 @@ class NasikoColorThemeFactory {
 
       // Border Default
       borderPrimary: Color.fromRGBO(208, 201, 188, 1),
-      borderSecondary: Color.fromRGBO(184, 176, 164, 1),
+      borderSecondary: yellow600,
       borderHover: Color.fromRGBO(200, 146, 10, 1),
       borderSuccess: Color.fromRGBO(40, 164, 106, 1),
       borderError: Color.fromRGBO(192, 68, 10, 1),
