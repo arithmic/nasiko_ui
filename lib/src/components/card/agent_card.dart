@@ -196,10 +196,7 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 240),
                 child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: spacing.s12,
-                    vertical: spacing.s8,
-                  ),
+                  padding: EdgeInsets.all(spacing.s8),
                   decoration: BoxDecoration(
                     color: colors.foregroundConstantBlack,
                     borderRadius: BorderRadius.circular(radii.r8),
@@ -208,8 +205,6 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
                     widget.errorDetails!,
                     style: typography.bodyTertiary.copyWith(
                       color: colors.foregroundConstantWhite,
-                      fontStyle: FontStyle.normal,
-                      height: 1.4,
                     ),
                   ),
                 ),
@@ -251,8 +246,8 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
         ? null
         : switch (widget.variant) {
             NasikoAgentCardVariant.normal => null,
-            NasikoAgentCardVariant.settingUp => colors.borderHover,
-            NasikoAgentCardVariant.active => colors.borderSuccess,
+            NasikoAgentCardVariant.settingUp => colors.backgroundBrand,
+            NasikoAgentCardVariant.active => colors.foregroundSuccess,
             NasikoAgentCardVariant.error => colors.borderError,
           };
 
