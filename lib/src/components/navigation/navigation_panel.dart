@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'navigation_section.dart';
+import 'package:nasiko_ui/nasiko_ui.dart';
 
 class NasikoNavigationPanel extends StatelessWidget {
   const NasikoNavigationPanel({
@@ -39,23 +38,40 @@ class _SectionState extends State<_Section> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        GestureDetector(
-          onTap: widget.section.isCollapsible
-              ? () => setState(() => isExpanded = !isExpanded)
-              : null,
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Text(widget.section.title.toUpperCase()),
+    final spacing = context.spacing;
+    final typography = context.typography;
+
+    return Padding(
+      padding: EdgeInsets.all(spacing.s12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: widget.section.isCollapsible
+                ? () => setState(() => isExpanded = !isExpanded)
+                : null,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    widget.section.title.toUpperCase(),
+                    style: typography.bodyTertiaryBold,
+                  ),
+                ),
+                if (widget.section.isCollapsible)
+                  Icon(Icons.keyboard_arrow_down),
+              ],
+            ),
           ),
-        ),
-        if (isExpanded)
-          ...widget.section.children.map((item) {
-            return ListTile(title: Text(item.label), onTap: item.onTap);
-          }),
-      ],
+
+          if (isExpanded) ...[
+            SizedBox(height: spacing.s8),
+            ...widget.section.children.map((item) {
+              return NasikoNavigationListItem(item: item);
+            }),
+          ],
+        ],
+      ),
     );
   }
 }
