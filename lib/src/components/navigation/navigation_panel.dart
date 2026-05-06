@@ -17,20 +17,59 @@ class NasikoNavigationPanel extends StatelessWidget {
       width: width,
       child: ListView(
         children: sections.map((section) {
-          return Section(
-            label: section.title,
-            icon: null,
-            children: section.children.map((item) {
-              return SectionItem(
-                id: item.id,
-                label: item.label,
-                onTap: item.onTap,
-              );
-            }).toList(),
-            isInitiallyExpanded: true,
-            isCollapsible: section.isCollapsible,
-          );
+          return _Section(section: section);
         }).toList(),
+      ),
+    );
+  }
+}
+
+class _Section extends StatefulWidget {
+  const _Section({required this.section});
+  final NasikoNavigationSection section;
+
+  @override
+  State<_Section> createState() => _SectionState();
+}
+
+class _SectionState extends State<_Section> {
+  bool isExpanded = true;
+
+  @override
+  Widget build(BuildContext context) {
+    final spacing = context.spacing;
+    final typography = context.typography;
+
+    return Padding(
+      padding: EdgeInsets.all(spacing.s12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: widget.section.isCollapsible
+                ? () => setState(() => isExpanded = !isExpanded)
+                : null,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    widget.section.title.toUpperCase(),
+                    style: typography.bodyTertiaryBold,
+                  ),
+                ),
+                if (widget.section.isCollapsible)
+                  Icon(Icons.keyboard_arrow_down),
+              ],
+            ),
+          ),
+
+          if (isExpanded) ...[
+            SizedBox(height: spacing.s8),
+            ...widget.section.children.map((item) {
+              return NasikoNavigationListItem(item: item);
+            }),
+          ],
+        ],
       ),
     );
   }
