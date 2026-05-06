@@ -96,7 +96,7 @@ class _RailItemState extends State<_RailItem> {
     final iconSizes = context.iconSize;
     final borderWidths = context.borderWidth;
 
-    final bg = widget.isSelected ? colors.backgroundBase : Colors.transparent;
+    final bgColor = widget.isSelected ? colors.backgroundBase : Colors.transparent;
 
     final border = (_hovered || widget.isSelected)
         ? colors.borderSecondary
@@ -114,7 +114,7 @@ class _RailItemState extends State<_RailItem> {
           margin: EdgeInsets.symmetric(vertical: spacing.s4),
           padding: EdgeInsets.all(spacing.s8),
           decoration: BoxDecoration(
-            color: bg,
+            color: bgColor,
             borderRadius: BorderRadius.circular(radii.r8),
             border: Border.all(color: border, width: borderWidths.w1),
           ),

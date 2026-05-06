@@ -464,7 +464,7 @@ const NasikoColorTheme lightColors = NasikoColorTheme(
   backgroundSurfaceHover: Color.fromRGBO(245, 240, 232, 1),
   backgroundSurfaceActive: Color.fromRGBO(255, 253, 247, 1),
   backgroundSurfaceSubtle: Color.fromRGBO(240, 235, 224, 1),
-  backgroundOverlay: Color.fromRGBO(28,24,18,.45),
+  backgroundOverlay: Color.fromRGBO(28, 24, 18, .45),
   backgroundDisabled: Color.fromRGBO(237, 232, 224, 1),
 
   // Background Primary
@@ -517,7 +517,7 @@ const NasikoColorTheme lightColors = NasikoColorTheme(
 
   // Border Default
   borderPrimary: Color.fromRGBO(208, 201, 188, 1),
-  borderSecondary: Color.fromRGBO(184, 176, 164, 1),
+  borderSecondary: yellow600,
   borderHover: Color.fromRGBO(200, 146, 10, 1),
   borderSuccess: Color.fromRGBO(40, 164, 106, 1),
   borderError: Color.fromRGBO(192, 68, 10, 1),
