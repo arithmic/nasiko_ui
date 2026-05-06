@@ -13,63 +13,35 @@ class NasikoNavigationPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final spacing = context.spacing;
+
     return SizedBox(
       width: width,
-      child: ListView(
-        children: sections.map((section) {
-          return _Section(section: section);
-        }).toList(),
-      ),
-    );
-  }
-}
-
-class _Section extends StatefulWidget {
-  const _Section({required this.section});
-  final NasikoNavigationSection section;
-
-  @override
-  State<_Section> createState() => _SectionState();
-}
-
-class _SectionState extends State<_Section> {
-  bool isExpanded = true;
-
-  @override
-  Widget build(BuildContext context) {
-    final spacing = context.spacing;
-    final typography = context.typography;
-
-    return Padding(
-      padding: EdgeInsets.all(spacing.s12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          GestureDetector(
-            onTap: widget.section.isCollapsible
-                ? () => setState(() => isExpanded = !isExpanded)
+      child: ListView.separated(
+        padding: EdgeInsets.all(spacing.s12),
+        itemCount: sections.length,
+        separatorBuilder: (_, __) => SizedBox(height: spacing.s8),
+        itemBuilder: (_, i) {
+          final section = sections[i];
+          return Section(
+            label: section.title.toUpperCase(),
+            icon: section.icon,
+            children: section.children.isNotEmpty
+                ? section.children
+                      .map(
+                        (item) => SectionItem(
+                          id: item.id,
+                          label: item.label,
+                          subtitle: item.subtitle,
+                          onTap: item.onTap,
+                        ),
+                      )
+                      .toList()
                 : null,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    widget.section.title.toUpperCase(),
-                    style: typography.bodyTertiaryBold,
-                  ),
-                ),
-                if (widget.section.isCollapsible)
-                  Icon(Icons.keyboard_arrow_down),
-              ],
-            ),
-          ),
-
-          if (isExpanded) ...[
-            SizedBox(height: spacing.s8),
-            ...widget.section.children.map((item) {
-              return NasikoNavigationListItem(item: item);
-            }),
-          ],
-        ],
+            selectedChildId: section.selectedChildId,
+            onChildTap: section.onChildTap,
+          );
+        },
       ),
     );
   }

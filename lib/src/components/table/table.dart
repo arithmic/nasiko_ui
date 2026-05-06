@@ -215,7 +215,6 @@ class _NasikoTableRowState extends State<_NasikoTableRow> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
     final spacing = context.spacing;
 
     final Color backgroundColor = _isHovering

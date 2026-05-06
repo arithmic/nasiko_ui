@@ -34,6 +34,7 @@ class SectionItem {
     required this.label,
     this.id,
     this.icon,
+    this.subtitle,
     this.onTap,
     this.menuActions,
     this.maxLines,
@@ -48,6 +49,9 @@ class SectionItem {
 
   /// Optional leading icon for this item.
   final HugeIconsType? icon;
+
+  /// Optional subtitle shown below the label when this item is selected.
+  final String? subtitle;
 
   /// Callback when the item row is tapped.
   final VoidCallback? onTap;
@@ -237,16 +241,18 @@ class _SectionState extends State<Section> {
                 cursor: SystemMouseCursors.click,
                 child: Row(
                   children: [
-                    HugeIcon(
-                      icon: widget.icon!,
-                      size: iconSizes.s,
-                      color: widget.isDisabled
-                          ? colors.foregroundDisabled
-                          : hasSelectedChild
-                          ? colors.foregroundPrimary
-                          : colors.foregroundIconTertiary,
-                    ),
-                    SizedBox(width: spacing.s8),
+                    if (widget.icon != null) ...[
+                      HugeIcon(
+                        icon: widget.icon!,
+                        size: iconSizes.s,
+                        color: widget.isDisabled
+                            ? colors.foregroundDisabled
+                            : hasSelectedChild
+                            ? colors.foregroundPrimary
+                            : colors.foregroundIconTertiary,
+                      ),
+                      SizedBox(width: spacing.s8),
+                    ],
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.symmetric(vertical: spacing.s4),
@@ -440,8 +446,8 @@ class _SectionChildItemState extends State<_SectionChildItem> {
       backgroundColor = colors.backgroundSurface;
       borderColor = colors.borderDisabled;
     } else if (widget.isSelected) {
-      backgroundColor = colors.backgroundSecondaryBrand;
-      borderColor = Colors.transparent;
+      backgroundColor = colors.backgroundBase;
+      borderColor = colors.foregroundBrand;
     } else if (_isHovered) {
       backgroundColor = Colors.transparent;
       borderColor = colors.borderSecondary;
@@ -467,50 +473,68 @@ class _SectionChildItemState extends State<_SectionChildItem> {
                 widget.onTap();
               }
             : null,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          margin: EdgeInsets.only(bottom: spacing.s4),
-          padding: EdgeInsets.symmetric(
-            horizontal: spacing.s12,
-            vertical: spacing.s8,
-          ),
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(radii.r8),
-            border: Border.all(color: borderColor, width: borderWidths.w1),
-          ),
-          child: Row(
-            children: [
-              Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 150),
+              margin: EdgeInsets.only(bottom: spacing.s4),
+              padding: EdgeInsets.symmetric(
+                horizontal: spacing.s12,
+                vertical: spacing.s8,
+              ),
+              decoration: BoxDecoration(
+                color: backgroundColor,
+                borderRadius: BorderRadius.circular(radii.r8),
+                border: Border.all(color: borderColor, width: borderWidths.w1),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      widget.item.label,
+                      maxLines: widget.item.maxLines,
+                      overflow: widget.item.maxLines != null
+                          ? TextOverflow.ellipsis
+                          : null,
+                      style: widget.isSelected
+                          ? typography.bodySecondaryBold.copyWith(
+                              color: widget.isDisabled
+                                  ? colors.foregroundDisabled
+                                  : colors.foregroundPrimary,
+                            )
+                          : typography.bodySecondary.copyWith(
+                              color: widget.isDisabled
+                                  ? colors.foregroundDisabled
+                                  : colors.foregroundSecondary,
+                            ),
+                    ),
+                  ),
+                  if (showTrailing)
+                    Listener(
+                      behavior: HitTestBehavior.opaque,
+                      onPointerDown: (_) => _isMenuPointerDown = true,
+                      onPointerUp: (_) => _isMenuPointerDown = false,
+                      onPointerCancel: (_) => _isMenuPointerDown = false,
+                      child: _MenuButton(actions: widget.item.menuActions!),
+                    ),
+                ],
+              ),
+            ),
+            if (widget.isSelected && widget.item.subtitle != null)
+              Padding(
+                padding: EdgeInsets.only(
+                  left: spacing.s12,
+                  bottom: spacing.s4,
+                ),
                 child: Text(
-                  widget.item.label,
-                  maxLines: widget.item.maxLines,
-                  overflow: widget.item.maxLines != null
-                      ? TextOverflow.ellipsis
-                      : null,
-                  style: widget.isSelected
-                      ? typography.bodySecondaryBold.copyWith(
-                          color: widget.isDisabled
-                              ? colors.foregroundDisabled
-                              : colors.foregroundPrimary,
-                        )
-                      : typography.bodySecondary.copyWith(
-                          color: widget.isDisabled
-                              ? colors.foregroundDisabled
-                              : colors.foregroundSecondary,
-                        ),
+                  widget.item.subtitle!,
+                  style: typography.bodySecondary.copyWith(
+                    color: colors.foregroundSecondary,
+                  ),
                 ),
               ),
-              if (showTrailing)
-                Listener(
-                  behavior: HitTestBehavior.opaque,
-                  onPointerDown: (_) => _isMenuPointerDown = true,
-                  onPointerUp: (_) => _isMenuPointerDown = false,
-                  onPointerCancel: (_) => _isMenuPointerDown = false,
-                  child: _MenuButton(actions: widget.item.menuActions!),
-                ),
-            ],
-          ),
+          ],
         ),
       ),
     );
