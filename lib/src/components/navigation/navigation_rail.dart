@@ -9,6 +9,8 @@ class NasikoNavigationRail extends StatelessWidget {
     required this.selectedId,
     required this.onSelect,
     this.isExpanded = false,
+    this.widthCollapsed = 36,
+    this.widthExpanded = 170,
   });
 
   final List<NasikoNavigationRailItem> items;
@@ -16,16 +18,18 @@ class NasikoNavigationRail extends StatelessWidget {
   final ValueChanged<String> onSelect;
   final bool isExpanded;
 
-  static const double _collapsedWidth = 56;
-  static const double _expandedWidth = 240;
+  final double widthExpanded;
+  final double widthCollapsed;
 
   @override
   Widget build(BuildContext context) {
     final spacing = context.spacing;
 
+    final width = isExpanded ? widthExpanded : widthCollapsed;
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
-      width: isExpanded ? _expandedWidth : _collapsedWidth,
+      width: width,
       color: const Color.fromRGBO(240, 235, 225, 1),
       padding: EdgeInsets.symmetric(vertical: spacing.s12),
       child: Column(
