@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
+const Color _sectionNavigationTextColor = Color(0xFF334155);
+const Color _sectionNavigationMutedColor = Color(0xFF64748B);
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Data models
 // ─────────────────────────────────────────────────────────────────────────────
@@ -90,6 +93,8 @@ class Section extends StatefulWidget {
     this.isDisabled = false,
     this.isLoading = false,
     this.emptyMessage,
+    this.isInitiallyExpanded = false,
+    this.isCollapsible = true,
   });
 
   /// The display label for this section.
@@ -139,6 +144,12 @@ class Section extends StatefulWidget {
   /// [isLoading] is false. The section remains expandable when this is set.
   final String? emptyMessage;
 
+  /// Whether an expandable section should be expanded on first build.
+  final bool isInitiallyExpanded;
+
+  /// Whether an expandable section can be collapsed by tapping its header.
+  final bool isCollapsible;
+
   /// A section is expandable when it has children, is loading, or has an
   /// empty-state message to show.
   bool get isExpandable =>
@@ -154,16 +165,25 @@ class _SectionState extends State<Section> {
   bool _isHovered = false;
 
   bool get _canInteract => !widget.isDisabled;
+  bool get _headerCanInteract =>
+      _canInteract && (!widget.isExpandable || widget.isCollapsible);
 
   @override
   void initState() {
     super.initState();
-    _isExpanded = _hasSelectedChild();
+    _isExpanded =
+        widget.isInitiallyExpanded ||
+        _hasSelectedChild() ||
+        (widget.isExpandable && !widget.isCollapsible);
   }
 
   @override
   void didUpdateWidget(Section oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (widget.isExpandable && !widget.isCollapsible && !_isExpanded) {
+      setState(() => _isExpanded = true);
+      return;
+    }
     if (_hasSelectedChild() && !_isExpanded) {
       setState(() => _isExpanded = true);
     }
@@ -193,6 +213,7 @@ class _SectionState extends State<Section> {
   void _toggleExpanded() {
     if (!_canInteract) return;
     if (widget.isExpandable) {
+      if (!widget.isCollapsible) return;
       setState(() => _isExpanded = !_isExpanded);
     } else if (widget.onTap != null) {
       widget.onTap!();
@@ -209,70 +230,55 @@ class _SectionState extends State<Section> {
     final borderWidths = context.borderWidth;
 
     if (widget.isExpandable) {
-      final bool hasSelectedChild = _hasSelectedChild();
-
       return Container(
-        decoration: BoxDecoration(
-          color: hasSelectedChild && !_isExpanded
-              ? colors.backgroundSecondaryBrand
-              : _isExpanded
-              ? (widget.expandedBgColor ?? colors.backgroundBase)
-              : (widget.backgroundColor ?? colors.backgroundBase),
-          borderRadius: BorderRadius.circular(radii.r12),
-          border: Border.all(
-            color: hasSelectedChild && !_isExpanded
-                ? colors.borderSecondary
-                : (_isExpanded ? colors.borderPrimary : Colors.transparent),
-            width: borderWidths.w1,
-          ),
+        color: _isExpanded ? widget.expandedBgColor : widget.backgroundColor,
+        padding: EdgeInsets.symmetric(
+          horizontal: spacing.s24,
+          vertical: spacing.s20,
         ),
-        padding: EdgeInsets.all(spacing.s8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // ── Header ────────────────────────────────────────────────────
             GestureDetector(
-              onTap: _canInteract ? _toggleExpanded : null,
+              onTap: _headerCanInteract ? _toggleExpanded : null,
               child: MouseRegion(
-                cursor: SystemMouseCursors.click,
+                cursor: _headerCanInteract
+                    ? SystemMouseCursors.click
+                    : SystemMouseCursors.basic,
                 child: Row(
                   children: [
-                    HugeIcon(
-                      icon: widget.icon!,
-                      size: iconSizes.s,
-                      color: widget.isDisabled
-                          ? colors.foregroundDisabled
-                          : hasSelectedChild
-                          ? colors.foregroundPrimary
-                          : colors.foregroundIconTertiary,
-                    ),
-                    SizedBox(width: spacing.s8),
                     Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: spacing.s4),
-                        child: Text(
-                          widget.label,
-                          maxLines: widget.maxLines,
-                          style: typography.bodySecondaryBold.copyWith(
-                            color: widget.isDisabled
-                                ? colors.foregroundDisabled
-                                : colors.foregroundPrimary,
-                          ),
+                      child: Text(
+                        widget.label.toUpperCase(),
+                        maxLines: widget.maxLines,
+                        overflow: widget.maxLines != null
+                            ? TextOverflow.ellipsis
+                            : null,
+                        style: typography.bodyPrimaryBold.copyWith(
+                          color: widget.isDisabled
+                              ? colors.foregroundDisabled
+                              : _sectionNavigationTextColor,
+                          fontSize: 30,
+                          height: 1.2,
+                          letterSpacing: 0,
                         ),
                       ),
                     ),
-                    SizedBox(width: spacing.s8),
-                    AnimatedRotation(
-                      turns: _isExpanded ? 0.5 : 0,
-                      duration: const Duration(milliseconds: 200),
-                      child: Icon(
-                        Icons.keyboard_arrow_down_rounded,
-                        size: iconSizes.s,
-                        color: widget.isDisabled
-                            ? colors.foregroundDisabled
-                            : colors.foregroundIconPrimary,
+                    if (widget.isCollapsible) ...[
+                      SizedBox(width: spacing.s8),
+                      AnimatedRotation(
+                        turns: _isExpanded ? 0 : 0.5,
+                        duration: const Duration(milliseconds: 200),
+                        child: Icon(
+                          Icons.keyboard_arrow_up_rounded,
+                          size: iconSizes.m,
+                          color: widget.isDisabled
+                              ? colors.foregroundDisabled
+                              : _sectionNavigationMutedColor,
+                        ),
                       ),
-                    ),
+                    ],
                   ],
                 ),
               ),
@@ -280,16 +286,16 @@ class _SectionState extends State<Section> {
 
             // ── Expanded content ──────────────────────────────────────────
             if (_isExpanded) ...[
-              SizedBox(height: spacing.s8),
+              SizedBox(height: spacing.s28),
               if (widget.isLoading)
                 Padding(
                   padding: EdgeInsets.symmetric(
-                    horizontal: spacing.s12,
-                    vertical: spacing.s8,
+                    horizontal: spacing.s28,
+                    vertical: spacing.s20,
                   ),
                   child: Text(
                     'Loading...',
-                    style: typography.bodySecondary.copyWith(
+                    style: typography.bodyPrimary.copyWith(
                       color: colors.foregroundSecondary,
                     ),
                   ),
@@ -297,12 +303,12 @@ class _SectionState extends State<Section> {
               else if (widget.children == null || widget.children!.isEmpty)
                 Padding(
                   padding: EdgeInsets.symmetric(
-                    horizontal: spacing.s12,
-                    vertical: spacing.s8,
+                    horizontal: spacing.s28,
+                    vertical: spacing.s20,
                   ),
                   child: Text(
                     widget.emptyMessage ?? '',
-                    style: typography.bodySecondary.copyWith(
+                    style: typography.bodyPrimary.copyWith(
                       color: colors.foregroundSecondary,
                     ),
                   ),
@@ -365,16 +371,18 @@ class _SectionState extends State<Section> {
           ),
           child: Row(
             children: [
-              HugeIcon(
-                icon: widget.icon!,
-                size: iconSizes.s,
-                color: widget.isDisabled
-                    ? colors.foregroundDisabled
-                    : showSelectedState
-                    ? colors.foregroundPrimary
-                    : colors.foregroundIconTertiary,
-              ),
-              SizedBox(width: spacing.s8),
+              if (widget.icon != null) ...[
+                HugeIcon(
+                  icon: widget.icon!,
+                  size: iconSizes.s,
+                  color: widget.isDisabled
+                      ? colors.foregroundDisabled
+                      : showSelectedState
+                      ? colors.foregroundPrimary
+                      : colors.foregroundIconTertiary,
+                ),
+                SizedBox(width: spacing.s8),
+              ],
               Expanded(
                 child: Text(
                   widget.label,
@@ -417,6 +425,7 @@ class _SectionChildItem extends StatefulWidget {
 
 class _SectionChildItemState extends State<_SectionChildItem> {
   bool _isHovered = false;
+  bool _isMenuOpen = false;
 
   /// Guards against the row's onTap firing when the user clicks the popup menu
   /// trigger, since pointer-down on the menu button precedes the tap event.
@@ -437,21 +446,21 @@ class _SectionChildItemState extends State<_SectionChildItem> {
     Color backgroundColor;
     Color borderColor;
     if (widget.isDisabled) {
-      backgroundColor = colors.backgroundSurface;
+      backgroundColor = Colors.transparent;
       borderColor = colors.borderDisabled;
     } else if (widget.isSelected) {
-      backgroundColor = colors.backgroundSecondaryBrand;
-      borderColor = Colors.transparent;
+      backgroundColor = colors.backgroundBase;
+      borderColor = colors.foregroundBrand;
     } else if (_isHovered) {
-      backgroundColor = Colors.transparent;
-      borderColor = colors.borderSecondary;
+      backgroundColor = colors.backgroundSurfaceHover;
+      borderColor = Colors.transparent;
     } else {
       backgroundColor = Colors.transparent;
       borderColor = Colors.transparent;
     }
 
     final showTrailing =
-        _hasMenu && (_isHovered || widget.isSelected) && _canInteract;
+        _hasMenu && (_isHovered || _isMenuOpen) && _canInteract;
 
     return MouseRegion(
       cursor: _canInteract
@@ -469,18 +478,28 @@ class _SectionChildItemState extends State<_SectionChildItem> {
             : null,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
-          margin: EdgeInsets.only(bottom: spacing.s4),
+          margin: EdgeInsets.only(bottom: spacing.s12),
           padding: EdgeInsets.symmetric(
-            horizontal: spacing.s12,
-            vertical: spacing.s8,
+            horizontal: spacing.s28,
+            vertical: spacing.s20,
           ),
           decoration: BoxDecoration(
             color: backgroundColor,
             borderRadius: BorderRadius.circular(radii.r8),
-            border: Border.all(color: borderColor, width: borderWidths.w1),
+            border: Border.all(color: borderColor, width: borderWidths.w2),
           ),
           child: Row(
             children: [
+              if (widget.item.icon != null) ...[
+                HugeIcon(
+                  icon: widget.item.icon!,
+                  size: context.iconSize.s,
+                  color: widget.isDisabled
+                      ? colors.foregroundDisabled
+                      : _sectionNavigationMutedColor,
+                ),
+                SizedBox(width: spacing.s12),
+              ],
               Expanded(
                 child: Text(
                   widget.item.label,
@@ -488,17 +507,18 @@ class _SectionChildItemState extends State<_SectionChildItem> {
                   overflow: widget.item.maxLines != null
                       ? TextOverflow.ellipsis
                       : null,
-                  style: widget.isSelected
-                      ? typography.bodySecondaryBold.copyWith(
-                          color: widget.isDisabled
-                              ? colors.foregroundDisabled
-                              : colors.foregroundPrimary,
-                        )
-                      : typography.bodySecondary.copyWith(
-                          color: widget.isDisabled
-                              ? colors.foregroundDisabled
-                              : colors.foregroundSecondary,
-                        ),
+                  style: typography.titlePrimary.copyWith(
+                    color: widget.isDisabled
+                        ? colors.foregroundDisabled
+                        : _sectionNavigationTextColor,
+                    fontFamily: typography.bodyPrimary.fontFamily,
+                    fontWeight: widget.isSelected
+                        ? FontWeight.w500
+                        : FontWeight.w400,
+                    fontSize: 40,
+                    height: 1.2,
+                    letterSpacing: 0,
+                  ),
                 ),
               ),
               if (showTrailing)
@@ -507,7 +527,11 @@ class _SectionChildItemState extends State<_SectionChildItem> {
                   onPointerDown: (_) => _isMenuPointerDown = true,
                   onPointerUp: (_) => _isMenuPointerDown = false,
                   onPointerCancel: (_) => _isMenuPointerDown = false,
-                  child: _MenuButton(actions: widget.item.menuActions!),
+                  child: _MenuButton(
+                    actions: widget.item.menuActions!,
+                    onMenuOpened: () => setState(() => _isMenuOpen = true),
+                    onMenuClosed: () => setState(() => _isMenuOpen = false),
+                  ),
                 ),
             ],
           ),
@@ -522,9 +546,15 @@ class _SectionChildItemState extends State<_SectionChildItem> {
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _MenuButton extends StatelessWidget {
-  const _MenuButton({required this.actions});
+  const _MenuButton({
+    required this.actions,
+    this.onMenuOpened,
+    this.onMenuClosed,
+  });
 
   final List<SectionItemAction> actions;
+  final VoidCallback? onMenuOpened;
+  final VoidCallback? onMenuClosed;
 
   @override
   Widget build(BuildContext context) {
@@ -543,7 +573,12 @@ class _MenuButton extends StatelessWidget {
       color: colors.backgroundBase,
       elevation: 4,
       position: PopupMenuPosition.under,
-      onSelected: (index) => actions[index].onTap(),
+      onOpened: onMenuOpened,
+      onCanceled: onMenuClosed,
+      onSelected: (index) {
+        onMenuClosed?.call();
+        actions[index].onTap();
+      },
       itemBuilder: (_) => [
         for (int i = 0; i < actions.length; i++)
           PopupMenuItem<int>(
