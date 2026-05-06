@@ -134,9 +134,7 @@ class _RailItemState extends State<_RailItem> {
                   child: Text(
                     widget.item.label,
                     style: widget.isSelected
-                        ? typography.buttonSecondary.copyWith(
-                            color: colors.backgroundError,
-                          )
+                        ? typography.buttonSecondary
                         : typography.bodySecondary,
                   ),
                 ),
