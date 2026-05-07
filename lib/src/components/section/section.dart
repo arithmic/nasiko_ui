@@ -215,9 +215,7 @@ class _SectionState extends State<Section> {
     if (widget.isExpandable) {
       final bool hasSelectedChild = _hasSelectedChild();
 
-      return Container(
-        padding: EdgeInsets.all(spacing.s8),
-        child: Column(
+      return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // ── Header ────────────────────────────────────────────────────
@@ -316,7 +314,6 @@ class _SectionState extends State<Section> {
                 ),
             ],
           ],
-        ),
       );
     }
 
