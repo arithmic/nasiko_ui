@@ -216,20 +216,6 @@ class _SectionState extends State<Section> {
       final bool hasSelectedChild = _hasSelectedChild();
 
       return Container(
-        decoration: BoxDecoration(
-          color: hasSelectedChild && !_isExpanded
-              ? colors.backgroundSecondaryBrand
-              : _isExpanded
-              ? (widget.expandedBgColor ?? colors.backgroundBase)
-              : (widget.backgroundColor ?? colors.backgroundBase),
-          borderRadius: BorderRadius.circular(radii.r12),
-          border: Border.all(
-            color: hasSelectedChild && !_isExpanded
-                ? colors.borderSecondary
-                : (_isExpanded ? colors.borderPrimary : Colors.transparent),
-            width: borderWidths.w1,
-          ),
-        ),
         padding: EdgeInsets.all(spacing.s8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -523,10 +509,7 @@ class _SectionChildItemState extends State<_SectionChildItem> {
             ),
             if (widget.isSelected && widget.item.subtitle != null)
               Padding(
-                padding: EdgeInsets.only(
-                  left: spacing.s12,
-                  bottom: spacing.s4,
-                ),
+                padding: EdgeInsets.only(left: spacing.s12, bottom: spacing.s4),
                 child: Text(
                   widget.item.subtitle!,
                   style: typography.bodySecondary.copyWith(
