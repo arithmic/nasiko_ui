@@ -87,17 +87,17 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
     }
 
     // ── Horizontal ────────────────────────────────────────────────────────────
-    // Left-align with anchor by default; flip to right-align when the menu
-    // would overflow the right edge of the screen.
-    final spaceRight = screen.width - anchor.dx;
-    final overflowsRight = spaceRight < menuWidth;
+    // Default: right-align the menu to the anchor's right edge so it opens
+    // to the LEFT (natural for trailing "⋮" buttons).
+    // Flip to left-align only when that would push the menu off the left edge.
+    final anchorRight = anchor.dx + anchorSize.width;
+    final overflowsLeft = anchorRight - menuWidth < 0;
 
     double? left, right;
-    if (overflowsRight) {
-      // Align menu's right edge to anchor's right edge.
-      right = screen.width - (anchor.dx + anchorSize.width);
+    if (overflowsLeft) {
+      left = 0;
     } else {
-      left = anchor.dx;
+      right = screen.width - anchorRight;
     }
 
     final themeData = Theme.of(context).copyWith(
