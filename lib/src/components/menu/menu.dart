@@ -78,6 +78,14 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
     _resolvedYOffset = widget.offset?.dy ?? spacing.s4;
     _anchorHeight = size.height;
 
+    final globalPosition = renderBox.localToGlobal(Offset.zero);
+    final screenHeight = MediaQuery.of(context).size.height;
+    final spaceBelow = screenHeight - (globalPosition.dy + _anchorHeight);
+    final openUpward = spaceBelow < widget.maxHeight + _resolvedYOffset;
+    final yOffset = openUpward
+        ? -(widget.maxHeight + _resolvedYOffset)
+        : _anchorHeight + _resolvedYOffset;
+
     _overlayEntry = OverlayEntry(
       builder: (_) => Positioned.fill(
         child: Stack(
@@ -92,7 +100,7 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
               showWhenUnlinked: false,
               offset: Offset(
                 widget.offset?.dx ?? 0,
-                _anchorHeight + _resolvedYOffset,
+                yOffset,
               ),
               child: Material(
                 color: Colors.transparent,
