@@ -145,6 +145,7 @@ class _RailItemState extends State<_RailItem> {
       ),
     );
 
+    if (widget.isExpanded) return content;
     return Tooltip(message: widget.item.label, child: content);
   }
 }
