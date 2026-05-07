@@ -67,29 +67,37 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
 
     final spacing = context.spacing;
     final anchorSize = renderBox.size;
-    final anchor = renderBox.localToGlobal(Offset.zero);
-    final screen = MediaQuery.of(context).size;
+
+    // Convert anchor position into the overlay's coordinate space rather than
+    // screen space. Positioned() inside the overlay uses overlay-local coords,
+    // which can differ from screen coords when the overlay is inside a
+    // Navigator/Scaffold with an offset (common in Flutter web).
+    final overlay = Overlay.of(context);
+    final overlayBox = overlay.context.findRenderObject() as RenderBox;
+    final anchor = renderBox.localToGlobal(Offset.zero, ancestor: overlayBox);
+    final overlaySize = overlayBox.size;
+
     final gap = widget.offset?.dy ?? spacing.s4;
     final menuWidth = widget.width ?? anchorSize.width;
 
     // ── Vertical ──────────────────────────────────────────────────────────────
     // Open below by default; flip upward when there isn't enough space below.
-    final spaceBelow = screen.height - (anchor.dy + anchorSize.height);
+    final spaceBelow = overlaySize.height - (anchor.dy + anchorSize.height);
     final openUpward = spaceBelow < widget.maxHeight + gap;
 
     double? top, bottom;
     if (openUpward) {
-      // Menu's bottom edge aligns with the anchor's bottom edge — grows upward.
-      bottom = screen.height - (anchor.dy + anchorSize.height);
+      // Menu bottom aligns with anchor bottom — grows upward.
+      bottom = overlaySize.height - (anchor.dy + anchorSize.height);
     } else {
-      // Menu's top edge aligns with the anchor's top edge — grows downward.
+      // Menu top aligns with anchor top — grows downward (industry standard).
       top = anchor.dy;
     }
 
     // ── Horizontal ────────────────────────────────────────────────────────────
-    // Default: right-align the menu to the anchor's right edge so it opens
-    // to the LEFT (natural for trailing "⋮" buttons).
-    // Flip to left-align only when that would push the menu off the left edge.
+    // Right-align menu's right edge to anchor's right edge so it opens to the
+    // LEFT — natural for trailing "⋮" buttons.
+    // Flip to left-align only if that would clip the left edge.
     final anchorRight = anchor.dx + anchorSize.width;
     final overflowsLeft = anchorRight - menuWidth < 0;
 
@@ -97,7 +105,7 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
     if (overflowsLeft) {
       left = 0;
     } else {
-      right = screen.width - anchorRight;
+      right = overlaySize.width - anchorRight;
     }
 
     final themeData = Theme.of(context).copyWith(
