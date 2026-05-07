@@ -82,8 +82,12 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
     final screenHeight = MediaQuery.of(context).size.height;
     final spaceBelow = screenHeight - (globalPosition.dy + _anchorHeight);
     final openUpward = spaceBelow < widget.maxHeight + _resolvedYOffset;
+
+    // When opening upward, anchor the follower to the top of the widget with a
+    // small gap, then use FractionalTranslation(-1 y) so the menu's *bottom*
+    // edge sits at that point — no need to know the actual rendered height.
     final yOffset = openUpward
-        ? -(widget.maxHeight + _resolvedYOffset)
+        ? -_resolvedYOffset
         : _anchorHeight + _resolvedYOffset;
 
     _overlayEntry = OverlayEntry(
@@ -98,10 +102,7 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
             CompositedTransformFollower(
               link: _layerLink,
               showWhenUnlinked: false,
-              offset: Offset(
-                widget.offset?.dx ?? 0,
-                yOffset,
-              ),
+              offset: Offset(widget.offset?.dx ?? 0, yOffset),
               child: Material(
                 color: Colors.transparent,
                 child: Theme(
@@ -112,14 +113,19 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
                     focusColor: Colors.transparent,
                     splashColor: Colors.transparent,
                   ),
-                  child: _NasikoPopupMenuSurface(
-                    items: widget.items,
-                    width: _resolvedMenuWidth!,
-                    maxHeight: widget.maxHeight,
-                    onItemSelected: (index) {
-                      _removeMenu();
-                      widget.onItemSelected(index);
-                    },
+                  child: FractionalTranslation(
+                    translation: openUpward
+                        ? const Offset(0, -1)
+                        : Offset.zero,
+                    child: _NasikoPopupMenuSurface(
+                      items: widget.items,
+                      width: _resolvedMenuWidth!,
+                      maxHeight: widget.maxHeight,
+                      onItemSelected: (index) {
+                        _removeMenu();
+                        widget.onItemSelected(index);
+                      },
+                    ),
                   ),
                 ),
               ),
