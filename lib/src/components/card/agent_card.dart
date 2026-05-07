@@ -46,6 +46,7 @@ class NasikoAgentCard extends StatefulWidget {
     this.tags = const [],
     this.maxVisibleTags = 2,
     this.menuActions,
+    this.onMenuActionSelected,
     this.showMore = true,
     this.disabled = false,
     this.selected = false,
@@ -87,7 +88,10 @@ class NasikoAgentCard extends StatefulWidget {
   final int maxVisibleTags;
 
   /// When non-empty, a three-dot menu appears at the top-right.
-  final List<SectionItemAction>? menuActions;
+  final List<NasikoPopupMenuItemData>? menuActions;
+
+  /// Called with the index of the selected menu item when [menuActions] is set.
+  final ValueChanged<int>? onMenuActionSelected;
 
   /// Whether to render the three-dot menu slot at all. Ignored when
   /// [variant] is [NasikoAgentCardVariant.error].
@@ -503,7 +507,10 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
                   onPointerDown: (_) => _isMenuPointerDown = true,
                   onPointerUp: (_) => _isMenuPointerDown = false,
                   onPointerCancel: (_) => _isMenuPointerDown = false,
-                  child: _AgentCardMenuButton(actions: widget.menuActions!),
+                  child: _AgentCardMenuButton(
+                    actions: widget.menuActions!,
+                    onItemSelected: widget.onMenuActionSelected,
+                  ),
                 )
               : Padding(
                   padding: EdgeInsets.all(spacing.s2),
@@ -646,9 +653,13 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
 /// Three-dot popover trigger rendered at the end of a [NasikoAgentCard]
 /// header.
 class _AgentCardMenuButton extends StatelessWidget {
-  const _AgentCardMenuButton({required this.actions});
+  const _AgentCardMenuButton({
+    required this.actions,
+    this.onItemSelected,
+  });
 
-  final List<SectionItemAction> actions;
+  final List<NasikoPopupMenuItemData> actions;
+  final ValueChanged<int>? onItemSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -659,15 +670,8 @@ class _AgentCardMenuButton extends StatelessWidget {
 
     return NasikoPopupMenu(
       width: 160,
-      items: [
-        for (final action in actions)
-          NasikoPopupMenuItemData(
-            label: action.label,
-            icon: action.icon ?? HugeIcons.strokeRoundedMoreVertical,
-            isDestructive: action.isDestructive,
-          ),
-      ],
-      onItemSelected: (index) => actions[index].onTap(),
+      items: actions,
+      onItemSelected: (index) => onItemSelected?.call(index),
       child: Container(
         padding: EdgeInsets.all(spacing.s2),
         decoration: BoxDecoration(
