@@ -175,10 +175,12 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
     final radii = context.radius;
     final typography = context.typography;
 
-    // Position the bubble above "Know more", clamped to screen bounds.
+    // Position the bubble below "Know more", clamped to screen bounds.
     final bubbleLeft = min(max(8.0, offset.dx), screenWidth - 256.0);
-    // bottom = distance from screen bottom to the top of "Know more" + gap
-    final bubbleBottom = screenHeight - offset.dy + spacing.s8;
+    // top = bottom edge of "Know more" + gap
+    final bubbleTop = offset.dy + renderBox.size.height + spacing.s8;
+    // Clamp so the bubble doesn't run off the bottom of the screen.
+    final bubbleTopClamped = min(bubbleTop, screenHeight - 80.0);
 
     _errorDetailsOverlay = OverlayEntry(
       builder: (ctx) => Stack(
@@ -191,10 +193,10 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
               child: const ColoredBox(color: Colors.transparent),
             ),
           ),
-          // Tooltip bubble — grows upward so its height doesn't matter.
+          // Tooltip bubble — grows downward from just below "Know more".
           Positioned(
             left: bubbleLeft,
-            bottom: bubbleBottom,
+            top: bubbleTopClamped,
             child: Material(
               type: MaterialType.transparency,
               child: ConstrainedBox(
