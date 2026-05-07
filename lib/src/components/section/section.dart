@@ -554,13 +554,15 @@ class _MenuButton extends StatelessWidget {
             value: i,
             child: Row(
               children: [
-                HugeIcon(
-                  icon: actions[i].icon!,
-                  color: actions[i].isDestructive
-                      ? colors.foregroundError
-                      : colors.foregroundPrimary,
-                ),
-                SizedBox(width: spacing.s8),
+                if (actions[i].icon != null) ...[
+                  HugeIcon(
+                    icon: actions[i].icon!,
+                    color: actions[i].isDestructive
+                        ? colors.foregroundError
+                        : colors.foregroundPrimary,
+                  ),
+                  SizedBox(width: spacing.s8),
+                ],
                 Text(
                   actions[i].label,
                   style: typography.bodySecondary.copyWith(
