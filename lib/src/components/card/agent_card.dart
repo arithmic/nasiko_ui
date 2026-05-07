@@ -238,9 +238,6 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
     final iconSizes = context.iconSize;
     final borderWidths = context.borderWidth;
 
-    final visibleTags = widget.tags.take(widget.maxVisibleTags).toList();
-    final overflowCount = widget.tags.length - visibleTags.length;
-
     final canShowHoverBg = !widget.disabled && !_isError;
     final showHover = _isHovered && canShowHoverBg;
     final showYellowBg = canShowHoverBg && (showHover || widget.selected);
@@ -347,12 +344,7 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
                       ],
                       if (widget.tags.isNotEmpty) ...[
                         SizedBox(height: spacing.s12),
-                        _buildTags(
-                          visibleTags,
-                          overflowCount,
-                          showYellowBg,
-                          widget.disabled,
-                        ),
+                        _buildTags(showYellowBg, widget.disabled),
                       ],
                       if (widget.description != null) ...[
                         SizedBox(height: spacing.s12),
@@ -607,43 +599,92 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
 
   // ── Tags ────────────────────────────────────────────────────────────────────
 
-  Widget _buildTags(
-    List<String> visibleTags,
-    int overflowCount,
-    bool accent,
-    bool disabled,
-  ) {
+  /// Measures how many tags from [widget.tags] fit in [availableWidth] as a
+  /// single row, accounting for the "+N" overflow chip that must also fit when
+  /// not all tags are shown.
+  List<String> _fittingTags(double availableWidth) {
+    final tags = widget.tags;
+    if (tags.isEmpty) return [];
+
+    final style = context.typography.bodyTertiary;
+    final gap = context.spacing.s8;
+    // Small chip: s8 horizontal padding on each side + 1px border on each side.
+    final chipHPad = context.spacing.s8 * 2 + 2.0;
+
+    double textWidth(String text) {
+      final tp = TextPainter(
+        text: TextSpan(text: text, style: style),
+        textDirection: TextDirection.ltr,
+      )..layout();
+      return tp.width;
+    }
+
+    final chipWidths = tags
+        .map((t) => chipHPad + textWidth(t.toUpperCase()))
+        .toList();
+
+    // Try fitting count tags (most → fewest). When count < total, a "+N" chip
+    // must also fit on the same row.
+    for (int count = tags.length; count >= 0; count--) {
+      double total = chipWidths.take(count).fold(0.0, (a, b) => a + b);
+      if (count > 1) total += gap * (count - 1);
+
+      if (count < tags.length) {
+        final overflowLabel = '+${tags.length - count}';
+        final overflowWidth = chipHPad + textWidth(overflowLabel);
+        total += (count > 0 ? gap : 0) + overflowWidth;
+      }
+
+      if (total <= availableWidth) return tags.sublist(0, count);
+    }
+
+    return [];
+  }
+
+  Widget _buildTags(bool accent, bool disabled) {
     final colors = context.colors;
     final spacing = context.spacing;
 
-    return Wrap(
-      spacing: spacing.s8,
-      runSpacing: spacing.s8,
-      children: [
-        for (final tag in visibleTags)
-          NasikoChip(
-            label: tag.toUpperCase(),
-            size: NasikoChipSize.small,
-            variant: NasikoChipVariant.neutral,
-            enabled: !disabled,
-            borderColor: accent ? colors.borderHover : colors.borderPrimary,
-          ),
-        if (overflowCount > 0)
-          NasikoTooltip(
-            message: widget.tags
-                .skip(widget.maxVisibleTags)
-                .map((t) => t.toUpperCase())
-                .join(', '),
-            preferBelow: false,
-            child: NasikoChip(
-              label: '+$overflowCount',
-              size: NasikoChipSize.small,
-              variant: NasikoChipVariant.neutral,
-              enabled: !disabled,
-              borderColor: accent ? colors.borderHover : colors.borderPrimary,
-            ),
-          ),
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final visibleTags = _fittingTags(constraints.maxWidth);
+        final overflowCount = widget.tags.length - visibleTags.length;
+
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (int i = 0; i < visibleTags.length; i++) ...[
+              if (i > 0) SizedBox(width: spacing.s8),
+              NasikoChip(
+                label: visibleTags[i].toUpperCase(),
+                size: NasikoChipSize.small,
+                variant: NasikoChipVariant.neutral,
+                enabled: !disabled,
+                borderColor: accent ? colors.borderHover : colors.borderPrimary,
+              ),
+            ],
+            if (overflowCount > 0) ...[
+              if (visibleTags.isNotEmpty) SizedBox(width: spacing.s8),
+              NasikoTooltip(
+                message: widget.tags
+                    .skip(visibleTags.length)
+                    .map((t) => t.toUpperCase())
+                    .join(', '),
+                preferBelow: false,
+                child: NasikoChip(
+                  label: '+$overflowCount',
+                  size: NasikoChipSize.small,
+                  variant: NasikoChipVariant.neutral,
+                  enabled: !disabled,
+                  borderColor: accent
+                      ? colors.borderHover
+                      : colors.borderPrimary,
+                ),
+              ),
+            ],
+          ],
+        );
+      },
     );
   }
 }
@@ -653,10 +694,7 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
 /// Three-dot popover trigger rendered at the end of a [NasikoAgentCard]
 /// header.
 class _AgentCardMenuButton extends StatelessWidget {
-  const _AgentCardMenuButton({
-    required this.actions,
-    this.onItemSelected,
-  });
+  const _AgentCardMenuButton({required this.actions, this.onItemSelected});
 
   final List<NasikoPopupMenuItemData> actions;
   final ValueChanged<int>? onItemSelected;
