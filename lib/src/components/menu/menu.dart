@@ -232,7 +232,7 @@ class _NasikoPopupMenuSurfaceState extends State<_NasikoPopupMenuSurface> {
         width: widget.width,
         constraints: BoxConstraints(maxHeight: widget.maxHeight),
         decoration: BoxDecoration(
-          color: colors.backgroundGroup,
+          color: const Color(0xFF242628),
           borderRadius: BorderRadius.circular(radii.r16),
           border: Border.all(color: colors.borderPrimary),
           boxShadow: [
@@ -333,13 +333,9 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
 
     final foregroundColor = widget.isDestructive
         ? colors.foregroundError
-        : colors.foregroundPrimary;
+        : const Color(0xFFFFFFFF);
 
-    final textStyle =
-        (isHighlighted
-                ? typography.bodySecondaryBold
-                : typography.bodySecondary)
-            .copyWith(color: foregroundColor);
+    final textStyle = typography.bodySecondary.copyWith(color: foregroundColor);
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
@@ -353,7 +349,7 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
           child: Container(
             decoration: BoxDecoration(
               color: isHighlighted
-                  ? colors.backgroundSecondaryBrandHover
+                  ? const Color(0xFF6D737A)
                   : Colors.transparent,
               borderRadius: BorderRadius.circular(radii.r8),
             ),
