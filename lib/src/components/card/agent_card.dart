@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
@@ -144,7 +142,7 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
   bool _isMenuPointerDown = false;
 
   OverlayEntry? _errorDetailsOverlay;
-  final GlobalKey _knowMoreKey = GlobalKey();
+  final LayerLink _knowMoreLayerLink = LayerLink();
 
   bool get _hasMenu =>
       widget.menuActions != null && widget.menuActions!.isNotEmpty;
@@ -162,25 +160,10 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
   void _showErrorDetails() {
     if (_errorDetailsOverlay != null || widget.errorDetails == null) return;
 
-    final renderBox =
-        _knowMoreKey.currentContext?.findRenderObject() as RenderBox?;
-    if (renderBox == null) return;
-
-    final offset = renderBox.localToGlobal(Offset.zero);
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
     final colors = context.colors;
     final spacing = context.spacing;
     final radii = context.radius;
     final typography = context.typography;
-
-    // Position the bubble below "Know more", clamped to screen bounds.
-    final bubbleLeft = min(max(8.0, offset.dx), screenWidth - 256.0);
-    // top = bottom edge of "Know more" + gap
-    final bubbleTop = offset.dy + renderBox.size.height + spacing.s8;
-    // Clamp so the bubble doesn't run off the bottom of the screen.
-    final bubbleTopClamped = min(bubbleTop, screenHeight - 80.0);
 
     _errorDetailsOverlay = OverlayEntry(
       builder: (ctx) => Stack(
@@ -193,10 +176,13 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
               child: const ColoredBox(color: Colors.transparent),
             ),
           ),
-          // Tooltip bubble — grows downward from just below "Know more".
-          Positioned(
-            left: bubbleLeft,
-            top: bubbleTopClamped,
+          // Follows "Know more" exactly — no manual coordinate math.
+          CompositedTransformFollower(
+            link: _knowMoreLayerLink,
+            showWhenUnlinked: false,
+            targetAnchor: Alignment.bottomLeft,
+            followerAnchor: Alignment.topLeft,
+            offset: Offset(0, spacing.s8),
             child: Material(
               type: MaterialType.transparency,
               child: ConstrainedBox(
@@ -579,17 +565,19 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
         ),
         if (widget.errorDetails != null) ...[
           SizedBox(height: spacing.s8),
-          GestureDetector(
-            key: _knowMoreKey,
-            onTap: _showErrorDetails,
-            child: MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: Text(
-                'Know more',
-                style: typography.bodySecondary.copyWith(
-                  color: colors.foregroundPrimary,
-                  decoration: TextDecoration.underline,
-                  decorationColor: colors.foregroundPrimary,
+          CompositedTransformTarget(
+            link: _knowMoreLayerLink,
+            child: GestureDetector(
+              onTap: _showErrorDetails,
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Text(
+                  'Know more',
+                  style: typography.bodySecondary.copyWith(
+                    color: colors.foregroundPrimary,
+                    decoration: TextDecoration.underline,
+                    decorationColor: colors.foregroundPrimary,
+                  ),
                 ),
               ),
             ),
