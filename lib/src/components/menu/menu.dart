@@ -43,11 +43,7 @@ class NasikoPopupMenu extends StatefulWidget {
 }
 
 class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
-  final LayerLink _layerLink = LayerLink();
   OverlayEntry? _overlayEntry;
-  double? _resolvedMenuWidth;
-  double _resolvedYOffset = 0;
-  double _anchorHeight = 0;
 
   @override
   void dispose() {
@@ -60,7 +56,6 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
       _removeMenu();
       return;
     }
-
     _openMenu();
   }
 
@@ -71,33 +66,56 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
     if (renderBox == null) return;
 
     final spacing = context.spacing;
-    final size = renderBox.size;
-    final overlay = Overlay.of(context);
+    final anchorSize = renderBox.size;
+    final anchor = renderBox.localToGlobal(Offset.zero);
+    final screen = MediaQuery.of(context).size;
+    final gap = widget.offset?.dy ?? spacing.s4;
+    final menuWidth = widget.width ?? anchorSize.width;
 
-    _resolvedMenuWidth = widget.width ?? size.width;
-    _resolvedYOffset = widget.offset?.dy ?? spacing.s4;
-    _anchorHeight = size.height;
+    // ── Vertical ──────────────────────────────────────────────────────────────
+    // Open below by default; flip upward when there isn't enough space below.
+    final spaceBelow = screen.height - (anchor.dy + anchorSize.height);
+    final openUpward = spaceBelow < widget.maxHeight + gap;
 
-    final globalPosition = renderBox.localToGlobal(Offset.zero);
-    final screenSize = MediaQuery.of(context).size;
-
-    // Vertical: open upward if there isn't enough space below.
-    final spaceBelow =
-        screenSize.height - (globalPosition.dy + _anchorHeight);
-    final openUpward = spaceBelow < widget.maxHeight + _resolvedYOffset;
-    final yOffset = openUpward
-        ? -_resolvedYOffset
-        : _anchorHeight + _resolvedYOffset;
-
-    // Horizontal: clamp so the menu never overflows the right (or left) edge.
-    double xOffset = widget.offset?.dx ?? 0;
-    final menuRight = globalPosition.dx + xOffset + _resolvedMenuWidth!;
-    if (menuRight > screenSize.width) {
-      xOffset -= menuRight - screenSize.width;
+    double? top, bottom;
+    if (openUpward) {
+      // Bottom of menu sits gap above the anchor's top edge.
+      bottom = screen.height - anchor.dy + gap;
+    } else {
+      // Top of menu sits gap below the anchor's bottom edge.
+      top = anchor.dy + anchorSize.height + gap;
     }
-    if (globalPosition.dx + xOffset < 0) {
-      xOffset = -globalPosition.dx;
+
+    // ── Horizontal ────────────────────────────────────────────────────────────
+    // Left-align with anchor by default; flip to right-align when the menu
+    // would overflow the right edge of the screen.
+    final spaceRight = screen.width - anchor.dx;
+    final overflowsRight = spaceRight < menuWidth;
+
+    double? left, right;
+    if (overflowsRight) {
+      // Align menu's right edge to anchor's right edge.
+      right = screen.width - (anchor.dx + anchorSize.width);
+    } else {
+      left = anchor.dx;
     }
+
+    final themeData = Theme.of(context).copyWith(
+      splashFactory: NoSplash.splashFactory,
+      highlightColor: Colors.transparent,
+      hoverColor: Colors.transparent,
+      focusColor: Colors.transparent,
+      splashColor: Colors.transparent,
+    );
+    final surface = _NasikoPopupMenuSurface(
+      items: widget.items,
+      width: menuWidth,
+      maxHeight: widget.maxHeight,
+      onItemSelected: (index) {
+        _removeMenu();
+        widget.onItemSelected(index);
+      },
+    );
 
     _overlayEntry = OverlayEntry(
       builder: (_) => Positioned.fill(
@@ -108,34 +126,16 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
               onTap: _removeMenu,
               child: const SizedBox.expand(),
             ),
-            CompositedTransformFollower(
-              link: _layerLink,
-              showWhenUnlinked: false,
-              offset: Offset(xOffset, yOffset),
+            Positioned(
+              top: top,
+              bottom: bottom,
+              left: left,
+              right: right,
               child: Material(
                 color: Colors.transparent,
                 child: Theme(
-                  data: Theme.of(context).copyWith(
-                    splashFactory: NoSplash.splashFactory,
-                    highlightColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    focusColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                  ),
-                  child: FractionalTranslation(
-                    translation: openUpward
-                        ? const Offset(0, -1)
-                        : Offset.zero,
-                    child: _NasikoPopupMenuSurface(
-                      items: widget.items,
-                      width: _resolvedMenuWidth!,
-                      maxHeight: widget.maxHeight,
-                      onItemSelected: (index) {
-                        _removeMenu();
-                        widget.onItemSelected(index);
-                      },
-                    ),
-                  ),
+                  data: themeData,
+                  child: surface,
                 ),
               ),
             ),
@@ -144,7 +144,7 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
       ),
     );
 
-    overlay.insert(_overlayEntry!);
+    Overlay.of(context).insert(_overlayEntry!);
   }
 
   void _removeMenu() {
@@ -155,7 +155,6 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
   @override
   void didUpdateWidget(covariant NasikoPopupMenu oldWidget) {
     super.didUpdateWidget(oldWidget);
-
     if (!widget.enabled && _overlayEntry != null) {
       _removeMenu();
     }
@@ -163,16 +162,12 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return CompositedTransformTarget(
-      link: _layerLink,
-      child: MouseRegion(
-        // ← add this
-        cursor: SystemMouseCursors.click,
-        child: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: _toggleMenu,
-          child: AbsorbPointer(child: widget.child),
-        ),
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: _toggleMenu,
+        child: AbsorbPointer(child: widget.child),
       ),
     );
   }
