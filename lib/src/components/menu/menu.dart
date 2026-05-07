@@ -79,11 +79,11 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
 
     double? top, bottom;
     if (openUpward) {
-      // Bottom of menu sits gap above the anchor's top edge.
-      bottom = screen.height - anchor.dy + gap;
+      // Menu's bottom edge aligns with the anchor's bottom edge — grows upward.
+      bottom = screen.height - (anchor.dy + anchorSize.height);
     } else {
-      // Top of menu sits gap below the anchor's bottom edge.
-      top = anchor.dy + anchorSize.height + gap;
+      // Menu's top edge aligns with the anchor's top edge — grows downward.
+      top = anchor.dy;
     }
 
     // ── Horizontal ────────────────────────────────────────────────────────────
