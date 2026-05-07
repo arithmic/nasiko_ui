@@ -79,16 +79,25 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
     _anchorHeight = size.height;
 
     final globalPosition = renderBox.localToGlobal(Offset.zero);
-    final screenHeight = MediaQuery.of(context).size.height;
-    final spaceBelow = screenHeight - (globalPosition.dy + _anchorHeight);
-    final openUpward = spaceBelow < widget.maxHeight + _resolvedYOffset;
+    final screenSize = MediaQuery.of(context).size;
 
-    // When opening upward, anchor the follower to the top of the widget with a
-    // small gap, then use FractionalTranslation(-1 y) so the menu's *bottom*
-    // edge sits at that point — no need to know the actual rendered height.
+    // Vertical: open upward if there isn't enough space below.
+    final spaceBelow =
+        screenSize.height - (globalPosition.dy + _anchorHeight);
+    final openUpward = spaceBelow < widget.maxHeight + _resolvedYOffset;
     final yOffset = openUpward
         ? -_resolvedYOffset
         : _anchorHeight + _resolvedYOffset;
+
+    // Horizontal: clamp so the menu never overflows the right (or left) edge.
+    double xOffset = widget.offset?.dx ?? 0;
+    final menuRight = globalPosition.dx + xOffset + _resolvedMenuWidth!;
+    if (menuRight > screenSize.width) {
+      xOffset -= menuRight - screenSize.width;
+    }
+    if (globalPosition.dx + xOffset < 0) {
+      xOffset = -globalPosition.dx;
+    }
 
     _overlayEntry = OverlayEntry(
       builder: (_) => Positioned.fill(
@@ -102,7 +111,7 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
             CompositedTransformFollower(
               link: _layerLink,
               showWhenUnlinked: false,
-              offset: Offset(widget.offset?.dx ?? 0, yOffset),
+              offset: Offset(xOffset, yOffset),
               child: Material(
                 color: Colors.transparent,
                 child: Theme(
