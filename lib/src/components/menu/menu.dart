@@ -5,12 +5,12 @@ import 'package:nasiko_ui/nasiko_ui.dart';
 class NasikoPopupMenuItemData {
   const NasikoPopupMenuItemData({
     required this.label,
-    required this.icon,
+    this.icon,
     this.isDestructive = false,
   });
 
   final String label;
-  final HugeIconsType icon;
+  final HugeIconsType? icon;
   final bool isDestructive;
 }
 
@@ -293,13 +293,13 @@ class _NasikoPopupMenuSurfaceState extends State<_NasikoPopupMenuSurface> {
 class _NasikoMenuItem extends StatefulWidget {
   const _NasikoMenuItem({
     required this.label,
-    required this.icon,
     required this.onTap,
     required this.isDestructive,
+    this.icon,
   });
 
   final String label;
-  final HugeIconsType icon;
+  final HugeIconsType? icon;
   final bool isDestructive;
   final VoidCallback onTap;
 
@@ -360,8 +360,14 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
               ),
               child: Row(
                 children: [
-                  HugeIcon(icon: widget.icon, size: 20, color: foregroundColor),
-                  SizedBox(width: spacing.s8),
+                  if (widget.icon != null) ...[
+                    HugeIcon(
+                      icon: widget.icon!,
+                      size: 20,
+                      color: foregroundColor,
+                    ),
+                    SizedBox(width: spacing.s8),
+                  ],
                   Expanded(
                     child: Text(
                       widget.label,
