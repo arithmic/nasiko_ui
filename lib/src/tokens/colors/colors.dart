@@ -26,14 +26,12 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
     required this.backgroundSecondaryBrandHover,
     required this.backgroundSecondaryBrandActive,
 
-    // Background Tertiary
-    required this.backgroundTertiary,
-
     // Background Feedback
     required this.backgroundSuccess,
     required this.backgroundWarning,
     required this.backgroundError,
     required this.backgroundInformation,
+    required this.backgroundInformationOverlay,
 
     // Foreground Default
     required this.foregroundPrimary,
@@ -61,6 +59,7 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
     required this.foregroundWarning,
     required this.foregroundError,
     required this.foregroundInformation,
+    required this.foregroundInformationOverlay,
 
     // Border Default
     required this.borderPrimary,
@@ -69,8 +68,9 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
     required this.borderSuccess,
     required this.borderError,
     required this.borderWarning,
-    required this.borderInformation,
     required this.borderDisabled,
+    required this.borderInformation,
+    required this.borderInformationOverlay,
   });
 
   // Background Default
@@ -94,14 +94,12 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
   final Color backgroundSecondaryBrandHover;
   final Color backgroundSecondaryBrandActive;
 
-  // Background Tertiary
-  final Color backgroundTertiary;
-
   // Background Feedback
   final Color backgroundSuccess;
   final Color backgroundWarning;
   final Color backgroundError;
   final Color backgroundInformation;
+  final Color backgroundInformationOverlay;
 
   // Foreground Default
   final Color foregroundPrimary;
@@ -129,6 +127,7 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
   final Color foregroundWarning;
   final Color foregroundError;
   final Color foregroundInformation;
+  final Color foregroundInformationOverlay;
 
   // Border Default
   final Color borderPrimary;
@@ -137,8 +136,9 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
   final Color borderSuccess;
   final Color borderError;
   final Color borderWarning;
-  final Color borderInformation;
   final Color borderDisabled;
+  final Color borderInformation;
+  final Color borderInformationOverlay;
 
   @override
   NasikoColorTheme copyWith({
@@ -162,6 +162,7 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
     Color? backgroundWarning,
     Color? backgroundError,
     Color? backgroundInformation,
+    Color? backgroundInformationOverlay,
     Color? foregroundPrimary,
     Color? foregroundSecondary,
     Color? foregroundDisabled,
@@ -181,14 +182,16 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
     Color? foregroundWarning,
     Color? foregroundError,
     Color? foregroundInformation,
+    Color? foregroundInformationOverlay,
     Color? borderPrimary,
     Color? borderSecondary,
     Color? borderHover,
     Color? borderSuccess,
     Color? borderError,
     Color? borderWarning,
-    Color? borderInformation,
     Color? borderDisabled,
+    Color? borderInformation,
+    Color? borderInformationOverlay,
   }) {
     return NasikoColorTheme(
       backgroundBase: backgroundBase ?? this.backgroundBase,
@@ -214,12 +217,13 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
           backgroundSecondaryBrandHover ?? this.backgroundSecondaryBrandHover,
       backgroundSecondaryBrandActive:
           backgroundSecondaryBrandActive ?? this.backgroundSecondaryBrandActive,
-      backgroundTertiary: backgroundTertiary ?? this.backgroundTertiary,
       backgroundSuccess: backgroundSuccess ?? this.backgroundSuccess,
       backgroundWarning: backgroundWarning ?? this.backgroundWarning,
       backgroundError: backgroundError ?? this.backgroundError,
       backgroundInformation:
           backgroundInformation ?? this.backgroundInformation,
+      backgroundInformationOverlay:
+          backgroundInformationOverlay ?? this.backgroundInformationOverlay,
       foregroundPrimary: foregroundPrimary ?? this.foregroundPrimary,
       foregroundSecondary: foregroundSecondary ?? this.foregroundSecondary,
       foregroundDisabled: foregroundDisabled ?? this.foregroundDisabled,
@@ -248,14 +252,18 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
       foregroundError: foregroundError ?? this.foregroundError,
       foregroundInformation:
           foregroundInformation ?? this.foregroundInformation,
+      foregroundInformationOverlay:
+          foregroundInformationOverlay ?? this.foregroundInformationOverlay,
       borderPrimary: borderPrimary ?? this.borderPrimary,
       borderSecondary: borderSecondary ?? this.borderSecondary,
       borderHover: borderHover ?? this.borderHover,
       borderSuccess: borderSuccess ?? this.borderSuccess,
       borderError: borderError ?? this.borderError,
       borderWarning: borderWarning ?? this.borderWarning,
-      borderInformation: borderInformation ?? this.borderInformation,
       borderDisabled: borderDisabled ?? this.borderDisabled,
+      borderInformation: borderInformation ?? this.borderInformation,
+      borderInformationOverlay:
+          borderInformationOverlay ?? this.borderInformationOverlay,
     );
   }
 
@@ -328,11 +336,6 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
         other.backgroundSecondaryBrandActive,
         t,
       )!,
-      backgroundTertiary: Color.lerp(
-        backgroundTertiary,
-        other.backgroundTertiary,
-        t,
-      )!,
       backgroundSuccess: Color.lerp(
         backgroundSuccess,
         other.backgroundSuccess,
@@ -349,6 +352,11 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
         other.backgroundInformation,
         t,
       )!,
+      backgroundInformationOverlay: Color.lerp(
+        backgroundInformationOverlay,
+        other.backgroundInformationOverlay,
+        t,
+      )!,
       foregroundPrimary: Color.lerp(
         foregroundPrimary,
         other.foregroundPrimary,
@@ -357,6 +365,11 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
       foregroundSecondary: Color.lerp(
         foregroundSecondary,
         other.foregroundSecondary,
+        t,
+      )!,
+      foregroundIconTertiary: Color.lerp(
+        foregroundIconTertiary,
+        other.foregroundIconTertiary,
         t,
       )!,
       foregroundDisabled: Color.lerp(
@@ -377,11 +390,6 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
       foregroundIconSecondary: Color.lerp(
         foregroundIconSecondary,
         other.foregroundIconSecondary,
-        t,
-      )!,
-      foregroundIconTertiary: Color.lerp(
-        foregroundIconTertiary,
-        other.foregroundIconTertiary,
         t,
       )!,
       foregroundIconHover: Color.lerp(
@@ -436,18 +444,28 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
         other.foregroundInformation,
         t,
       )!,
+      foregroundInformationOverlay: Color.lerp(
+        foregroundInformationOverlay,
+        other.foregroundInformationOverlay,
+        t,
+      )!,
       borderPrimary: Color.lerp(borderPrimary, other.borderPrimary, t)!,
       borderSecondary: Color.lerp(borderSecondary, other.borderSecondary, t)!,
       borderHover: Color.lerp(borderHover, other.borderHover, t)!,
       borderSuccess: Color.lerp(borderSuccess, other.borderSuccess, t)!,
       borderError: Color.lerp(borderError, other.borderError, t)!,
       borderWarning: Color.lerp(borderWarning, other.borderWarning, t)!,
+      borderDisabled: Color.lerp(borderDisabled, other.borderDisabled, t)!,
       borderInformation: Color.lerp(
         borderInformation,
         other.borderInformation,
         t,
       )!,
-      borderDisabled: Color.lerp(borderDisabled, other.borderDisabled, t)!,
+      borderInformationOverlay: Color.lerp(
+        borderInformationOverlay,
+        other.borderInformationOverlay,
+        t,
+      )!,
     );
   }
 }
@@ -456,127 +474,126 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
 // Mappings are now 1-to-1 with your "Nasiko Light" spec.
 // "default" is assumed to be the 500-weight color.
 
-const NasikoColorTheme lightColors = NasikoColorTheme(
+final NasikoColorTheme lightColors = NasikoColorTheme(
   // Background Default
   backgroundBase: white,
-  backgroundGroup: Color.fromRGBO(224, 217, 204, 1),
-  backgroundSurface: neutral100,
-  backgroundSurfaceHover: Color.fromRGBO(245, 240, 232, 1),
-  backgroundSurfaceActive: Color.fromRGBO(255, 253, 247, 1),
-  backgroundSurfaceSubtle: Color.fromRGBO(240, 235, 224, 1),
-  backgroundOverlay: Color.fromRGBO(28, 24, 18, .45),
-  backgroundDisabled: Color.fromRGBO(237, 232, 224, 1),
+  backgroundGroup: sand50,
+  backgroundSurface: sand100,
+  backgroundSurfaceHover: sand200,
+  backgroundSurfaceActive: sand300,
+  backgroundSurfaceSubtle: sand200,
+  backgroundOverlay: sand600.withValues(alpha: 0.4),
+  backgroundDisabled: sand200,
 
   // Background Primary
-  backgroundBrand: Color.fromRGBO(200, 146, 10, 1),
-  backgroundBrandHover: Color.fromRGBO(168, 120, 8, 1),
-  backgroundBrandActive: Color.fromRGBO(138, 96, 6, 1),
-  backgroundBrandSubtle: Color.fromRGBO(245, 228, 190, 1),
+  backgroundBrand: yellow600,
+  backgroundBrandHover: yellow800,
+  backgroundBrandActive: yellow600,
+  backgroundBrandSubtle: yellow200,
 
   // Background Secondary
   backgroundSecondaryBrand: yellow100,
   backgroundSecondaryBrandHover: yellow200,
   backgroundSecondaryBrandActive: yellow100,
 
-  // Backgorund Tertiary
-  backgroundTertiary: purple500,
-
   // Background Feedback
-  backgroundSuccess: Color.fromRGBO(40, 164, 106, 1),
-  backgroundWarning: Color.fromRGBO(186, 117, 23, 1),
-  backgroundError: Color.fromRGBO(192, 68, 10, 1),
-  backgroundInformation: Color.fromRGBO(46, 84, 112, 1),
+  backgroundSuccess: green100,
+  backgroundWarning: orange100,
+  backgroundError: red100,
+  backgroundInformation: yellow50,
+  backgroundInformationOverlay: sand800,
 
   // Foreground Default
-  foregroundPrimary: Color.fromRGBO(28, 24, 18, 1),
-  foregroundSecondary: Color.fromRGBO(107, 101, 88, 1),
-  foregroundDisabled: Color.fromRGBO(176, 168, 158, 1),
+  foregroundPrimary: sand900,
+  foregroundSecondary: sand700,
+  foregroundDisabled: sand500,
   foregroundOnAction: white,
-  foregroundIconPrimary: Color.fromRGBO(28, 24, 18, 1),
-  foregroundIconSecondary: Color.fromRGBO(187, 143, 6, 1),
-  foregroundIconTertiary: Color.fromRGBO(100, 116, 139, 1),
-  foregroundIconHover: Color.fromRGBO(105, 81, 4, 1),
+  foregroundIconPrimary: sand900,
+  foregroundIconSecondary: yellow600,
+  foregroundIconTertiary: sand500,
+  foregroundIconHover: yellow800,
 
   // Foreground Constant
   // NOTE: Corrected based on swatches, spec labels had typos.
   foregroundConstantWhite: white,
-  foregroundConstantBlack: Color.fromRGBO(28, 24, 18, 1),
-  foregroundConstantBlackSecondary: Color.fromRGBO(44, 39, 32, 1),
+  foregroundConstantBlack: sand900,
+  foregroundConstantBlackSecondary: sand800,
 
   // Foreground Primary (Brand)
-  foregroundBrand: Color.fromRGBO(200, 146, 10, 1),
-  foregroundBrandHover: Color.fromRGBO(168, 120, 8, 1),
-  foregroundBrandLink: Color.fromRGBO(200, 146, 10, 1),
-  foregroundBrandHighlight: Color.fromRGBO(245, 228, 190, 1),
+  foregroundBrand: yellow600,
+  foregroundBrandHover: yellow800,
+  foregroundBrandLink: yellow600,
+  foregroundBrandHighlight: yellow500,
 
   // Foreground Feedback
-  foregroundSuccess: Color.fromRGBO(26, 112, 72, 1),
-  foregroundWarning: Color.fromRGBO(122, 85, 0, 1),
-  foregroundError: Color.fromRGBO(139, 46, 16, 1),
-  foregroundInformation: Color.fromRGBO(28, 61, 90, 1),
+  foregroundSuccess: green600,
+  foregroundWarning: orange600,
+  foregroundError: red600,
+  foregroundInformation: yellow800,
+  foregroundInformationOverlay: sand400,
 
   // Border Default
-  borderPrimary: Color.fromRGBO(208, 201, 188, 1),
+  borderPrimary: sand300,
   borderSecondary: yellow600,
-  borderHover: Color.fromRGBO(200, 146, 10, 1),
-  borderSuccess: Color.fromRGBO(40, 164, 106, 1),
-  borderError: Color.fromRGBO(192, 68, 10, 1),
-  borderWarning: Color.fromRGBO(186, 117, 23, 1),
-  borderInformation: Color.fromRGBO(46, 84, 112, 1),
-  borderDisabled: Color.fromRGBO(224, 217, 204, 1),
+  borderHover: yellow800,
+  borderSuccess: green300,
+  borderError: red200,
+  borderWarning: orange300,
+  borderDisabled: sand300,
+  borderInformation: yellow300,
+  borderInformationOverlay: sand800,
 );
 
 // --- Dark Instance ---
 // This is an assumed dark theme, as no "Nasiko Dark" spec was provided.
 // It logically inverts the light theme roles.
 
-const NasikoColorTheme darkColors = NasikoColorTheme(
+NasikoColorTheme darkColors = NasikoColorTheme(
   // Background Default
   backgroundBase: black,
-  backgroundGroup: neutral900,
-  backgroundSurface: neutral800,
-  backgroundSurfaceHover: neutral700,
-  backgroundSurfaceActive: neutral600,
-  backgroundSurfaceSubtle: neutral700,
-  backgroundOverlay: neutral900,
-  backgroundDisabled: neutral700,
+  backgroundGroup: sand900,
+  backgroundSurface: sand800,
+  backgroundSurfaceHover: sand700,
+  backgroundSurfaceActive: sand600,
+  backgroundSurfaceSubtle: sand700,
+  backgroundOverlay: sand900.withValues(alpha: 0.7),
+  backgroundDisabled: sand700,
 
   // Background Primary
-  backgroundBrand: yellow600, // Brand colors often remain vibrant
-  backgroundBrandHover: yellow400, // Lighter for hover on dark
+  backgroundBrand: yellow600,
+  backgroundBrandHover: yellow400,
   backgroundBrandActive: yellow500,
-  backgroundBrandSubtle: yellow900, // Darker subtle background
+  backgroundBrandSubtle: yellow900,
+
   // Background Secondary
   backgroundSecondaryBrand: yellow900,
   backgroundSecondaryBrandHover: yellow800,
   backgroundSecondaryBrandActive: yellow900,
 
-  // Backgorund Tertiary
-  backgroundTertiary: purple500,
-
   // Background Feedback
   backgroundSuccess: green900,
   backgroundWarning: orange900,
   backgroundError: red900,
-  backgroundInformation: blue900,
+  backgroundInformation: yellow900,
+  backgroundInformationOverlay: sand200.withValues(alpha: 0.5),
 
   // Foreground Default
-  foregroundPrimary: neutral100, // Light text on dark
-  foregroundSecondary: neutral400,
-  foregroundDisabled: neutral600,
-  foregroundOnAction: neutral900, // Dark text on light brand button
-  foregroundIconPrimary: neutral100,
+  foregroundPrimary: sand100,
+  foregroundSecondary: sand400,
+  foregroundDisabled: sand600,
+  foregroundOnAction: sand900,
+  foregroundIconPrimary: sand100,
   foregroundIconSecondary: yellow600,
-  foregroundIconTertiary: neutral400,
+  foregroundIconTertiary: sand400,
   foregroundIconHover: yellow400,
 
   // Foreground Constant
   foregroundConstantWhite: white,
   foregroundConstantBlack: black,
-  foregroundConstantBlackSecondary: neutral900,
+  foregroundConstantBlackSecondary: sand900,
 
   // Foreground Primary (Brand)
-  foregroundBrand: yellow400, // Lighter text for dark background
+  foregroundBrand: yellow400,
   foregroundBrandHover: yellow300,
   foregroundBrandLink: yellow400,
   foregroundBrandHighlight: yellow400,
@@ -585,17 +602,19 @@ const NasikoColorTheme darkColors = NasikoColorTheme(
   foregroundSuccess: green400,
   foregroundWarning: orange400,
   foregroundError: red400,
-  foregroundInformation: blue400,
+  foregroundInformation: yellow300,
+  foregroundInformationOverlay: sand700,
 
   // Border Default
-  borderPrimary: neutral700,
+  borderPrimary: sand700,
   borderSecondary: yellow600,
   borderHover: yellow400,
   borderSuccess: green600,
   borderError: red600,
   borderWarning: orange600,
-  borderInformation: blue600,
-  borderDisabled: neutral700,
+  borderDisabled: sand700,
+  borderInformation: yellow700,
+  borderInformationOverlay: sand200,
 );
 
 // --- BuildContext Extension ---

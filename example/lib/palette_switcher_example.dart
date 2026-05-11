@@ -153,6 +153,8 @@ class _PaletteSwitcherExampleState extends State<PaletteSwitcherExample> {
 
   String _getPaletteName(NasikoColorPalette palette) {
     switch (palette) {
+      case NasikoColorPalette.sand:
+        return 'Sand';
       case NasikoColorPalette.yellow:
         return 'Yellow';
       case NasikoColorPalette.orange:

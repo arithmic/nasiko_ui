@@ -6,17 +6,17 @@ import 'package:flutter/material.dart';
 const Color white = Color(0xFFFFFFFF);
 const Color black = Color(0xFF000000);
 
-// Neutral
-const Color neutral50 = Color(0xFFF8FAFC);
-const Color neutral100 = Color(0xFFF1F5F9);
-const Color neutral200 = Color(0xFFE2E8F0);
-const Color neutral300 = Color(0xFFCBD5E1);
-const Color neutral400 = Color(0xFF94A3B8);
-const Color neutral500 = Color(0xFF64748B);
-const Color neutral600 = Color(0xFF475569);
-const Color neutral700 = Color(0xFF334155);
-const Color neutral800 = Color(0xFF1E293B);
-const Color neutral900 = Color(0xFF0F172A);
+// Sand
+const Color sand50 = Color(0xFFF8FAFC);
+const Color sand100 = Color(0xFFF1F5F9);
+const Color sand200 = Color(0xFFE2E8F0);
+const Color sand300 = Color(0xFFCBD5E1);
+const Color sand400 = Color(0xFF94A3B8);
+const Color sand500 = Color(0xFF64748B);
+const Color sand600 = Color(0xFF475569);
+const Color sand700 = Color(0xFF334155);
+const Color sand800 = Color(0xFF1E293B);
+const Color sand900 = Color(0xFF0F172A);
 
 // Yellow
 const Color yellow50 = Color(0xFFFDF7E6);

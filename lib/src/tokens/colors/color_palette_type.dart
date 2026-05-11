@@ -23,4 +23,7 @@ enum NasikoColorPalette {
 
   /// Green-based palette
   green,
+
+  /// Sand-based palette
+  sand,
 }
