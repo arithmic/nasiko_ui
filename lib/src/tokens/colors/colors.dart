@@ -548,7 +548,7 @@ final NasikoColorTheme lightColors = NasikoColorTheme(
 // This is an assumed dark theme, as no "Nasiko Dark" spec was provided.
 // It logically inverts the light theme roles.
 
-NasikoColorTheme darkColors = NasikoColorTheme(
+final NasikoColorTheme darkColors = NasikoColorTheme(
   // Background Default
   backgroundBase: black,
   backgroundGroup: sand900,
