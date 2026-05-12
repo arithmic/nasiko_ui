@@ -216,104 +216,104 @@ class _SectionState extends State<Section> {
       final bool hasSelectedChild = _hasSelectedChild();
 
       return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // ── Header ────────────────────────────────────────────────────
-            GestureDetector(
-              onTap: _canInteract ? _toggleExpanded : null,
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: Row(
-                  children: [
-                    if (widget.icon != null) ...[
-                      HugeIcon(
-                        icon: widget.icon!,
-                        size: iconSizes.s,
-                        color: widget.isDisabled
-                            ? colors.foregroundDisabled
-                            : hasSelectedChild
-                            ? colors.foregroundPrimary
-                            : colors.foregroundIconTertiary,
-                      ),
-                      SizedBox(width: spacing.s8),
-                    ],
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: spacing.s4),
-                        child: Text(
-                          widget.label,
-                          maxLines: widget.maxLines,
-                          style: typography.bodySecondaryBold.copyWith(
-                            color: widget.isDisabled
-                                ? colors.foregroundDisabled
-                                : colors.foregroundPrimary,
-                          ),
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // ── Header ────────────────────────────────────────────────────
+          GestureDetector(
+            onTap: _canInteract ? _toggleExpanded : null,
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: Row(
+                children: [
+                  if (widget.icon != null) ...[
+                    HugeIcon(
+                      icon: widget.icon!,
+                      size: iconSizes.s,
+                      color: widget.isDisabled
+                          ? colors.foregroundDisabled
+                          : hasSelectedChild
+                          ? colors.foregroundPrimary
+                          : colors.foregroundIconTertiary,
+                    ),
+                    SizedBox(width: spacing.s8),
+                  ],
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: spacing.s4),
+                      child: Text(
+                        widget.label,
+                        maxLines: widget.maxLines,
+                        style: typography.bodySecondaryBold.copyWith(
+                          color: widget.isDisabled
+                              ? colors.foregroundDisabled
+                              : colors.foregroundPrimary,
                         ),
                       ),
                     ),
-                    SizedBox(width: spacing.s8),
-                    AnimatedRotation(
-                      turns: _isExpanded ? 0.5 : 0,
-                      duration: const Duration(milliseconds: 200),
-                      child: Icon(
-                        Icons.keyboard_arrow_down_rounded,
-                        size: iconSizes.s,
-                        color: widget.isDisabled
-                            ? colors.foregroundDisabled
-                            : colors.foregroundIconPrimary,
-                      ),
+                  ),
+                  SizedBox(width: spacing.s8),
+                  AnimatedRotation(
+                    turns: _isExpanded ? 0.5 : 0,
+                    duration: const Duration(milliseconds: 200),
+                    child: Icon(
+                      Icons.keyboard_arrow_down_rounded,
+                      size: iconSizes.s,
+                      color: widget.isDisabled
+                          ? colors.foregroundDisabled
+                          : colors.foregroundIconPrimary,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
+          ),
 
-            // ── Expanded content ──────────────────────────────────────────
-            if (_isExpanded) ...[
-              SizedBox(height: spacing.s8),
-              if (widget.isLoading)
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: spacing.s12,
-                    vertical: spacing.s8,
-                  ),
-                  child: Text(
-                    'Loading...',
-                    style: typography.bodySecondary.copyWith(
-                      color: colors.foregroundSecondary,
-                    ),
-                  ),
-                )
-              else if (widget.children == null || widget.children!.isEmpty)
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: spacing.s12,
-                    vertical: spacing.s8,
-                  ),
-                  child: Text(
-                    widget.emptyMessage ?? '',
-                    style: typography.bodySecondary.copyWith(
-                      color: colors.foregroundSecondary,
-                    ),
-                  ),
-                )
-              else
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: widget.children!.map((child) {
-                    return _SectionChildItem(
-                      item: child,
-                      isSelected: _isChildSelected(child),
-                      onTap: () {
-                        child.onTap?.call();
-                        widget.onChildTap?.call(child.id ?? child.label);
-                      },
-                      isDisabled: widget.isDisabled,
-                    );
-                  }).toList(),
+          // ── Expanded content ──────────────────────────────────────────
+          if (_isExpanded) ...[
+            SizedBox(height: spacing.s8),
+            if (widget.isLoading)
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: spacing.s12,
+                  vertical: spacing.s8,
                 ),
-            ],
+                child: Text(
+                  'Loading...',
+                  style: typography.bodySecondary.copyWith(
+                    color: colors.foregroundSecondary,
+                  ),
+                ),
+              )
+            else if (widget.children == null || widget.children!.isEmpty)
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: spacing.s12,
+                  vertical: spacing.s8,
+                ),
+                child: Text(
+                  widget.emptyMessage ?? '',
+                  style: typography.bodySecondary.copyWith(
+                    color: colors.foregroundSecondary,
+                  ),
+                ),
+              )
+            else
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: widget.children!.map((child) {
+                  return _SectionChildItem(
+                    item: child,
+                    isSelected: _isChildSelected(child),
+                    onTap: () {
+                      child.onTap?.call();
+                      widget.onChildTap?.call(child.id ?? child.label);
+                    },
+                    isDisabled: widget.isDisabled,
+                  );
+                }).toList(),
+              ),
           ],
+        ],
       );
     }
 
