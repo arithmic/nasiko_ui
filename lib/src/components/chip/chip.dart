@@ -27,7 +27,7 @@ class NasikoChip extends StatelessWidget {
     this.variant = NasikoChipVariant.neutral,
     this.size = NasikoChipSize.large,
     this.enabled = true,
-    this.borderColor =const Color.fromRGBO(248, 248, 248, 1),
+    this.borderColor,
   });
 
   /// The text label displayed on the chip.
@@ -56,8 +56,8 @@ class NasikoChip extends StatelessWidget {
   /// When `false`, the chip appears disabled and ignores interactions.
   final bool enabled;
 
-
-  final Color borderColor;
+  /// The color of the chip's border. Defaults to a [NasikoColorTheme.borderPrimary] color.
+  final Color? borderColor;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,7 @@ class NasikoChip extends StatelessWidget {
     final typography = context.typography;
     final iconSizes = context.iconSize;
     final radii = context.radius;
- final borderWidths = context.borderWidth;
+    final borderWidths = context.borderWidth;
     // Determine colors based on variant and enabled state
     final Color backgroundColor;
     final Color hoverColor;
@@ -104,7 +104,10 @@ class NasikoChip extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(radii.r40),
-        border: Border.all(color: borderColor, width: borderWidths.w1)
+        border: Border.all(
+          color: borderColor ?? colors.borderPrimary,
+          width: borderWidths.w1,
+        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
