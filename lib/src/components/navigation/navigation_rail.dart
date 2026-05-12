@@ -33,7 +33,7 @@ class NasikoNavigationRail extends StatelessWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       width: width,
-      padding: EdgeInsets.symmetric(vertical: spacing.s8),
+      padding: EdgeInsets.only(bottom: spacing.s8),
       child: Column(
         children: [
           ...items.map((item) {
