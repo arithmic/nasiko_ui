@@ -244,7 +244,7 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
         ? colors.backgroundBase
         : showYellowBg
         ? colors.backgroundSecondaryBrand
-        : colors.backgroundBase;
+        : colors.backgroundGroup;
 
     final borderColor = widget.disabled
         ? colors.borderDisabled
