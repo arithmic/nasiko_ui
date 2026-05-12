@@ -10,3 +10,4 @@ export 'secondary_button.dart';
 export 'secondary_icon_button.dart';
 export 'secondary_text_button.dart';
 export 'tertiary_button.dart';
+export 'tertiary_icon_button.dart';
