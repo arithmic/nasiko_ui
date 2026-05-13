@@ -7,16 +7,16 @@ const Color white = Color(0xFFFFFFFF);
 const Color black = Color(0xFF000000);
 
 // Sand
-const Color sand50 = Color(0xFFF8FAFC);
-const Color sand100 = Color(0xFFF1F5F9);
-const Color sand200 = Color(0xFFE2E8F0);
-const Color sand300 = Color(0xFFCBD5E1);
-const Color sand400 = Color(0xFF94A3B8);
-const Color sand500 = Color(0xFF64748B);
-const Color sand600 = Color(0xFF475569);
-const Color sand700 = Color(0xFF334155);
-const Color sand800 = Color(0xFF1E293B);
-const Color sand900 = Color(0xFF0F172A);
+const Color sand50 = Color(0xFFF5F2EC);
+const Color sand100 = Color(0xFFEDE7DC);
+const Color sand200 = Color(0xFFE2DAD0);
+const Color sand300 = Color(0xFFD4CCC0);
+const Color sand400 = Color(0xFFC2BAB0);
+const Color sand500 = Color(0xFFA89E94);
+const Color sand600 = Color(0xFF8C8278);
+const Color sand700 = Color(0xFF645C52);
+const Color sand800 = Color(0xFF3A3430);
+const Color sand900 = Color(0xFF242628);
 
 // Yellow
 const Color yellow50 = Color(0xFFFDF7E6);
