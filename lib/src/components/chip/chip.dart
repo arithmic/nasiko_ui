@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
+import 'package:nasiko_ui/src/tokens/types.dart';
 
 /// A chip component that can be actionable (with delete) or non-actionable.
 ///

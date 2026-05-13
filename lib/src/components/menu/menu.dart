@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
+import 'package:nasiko_ui/src/tokens/types.dart';
 
 class NasikoPopupMenuItemData {
   const NasikoPopupMenuItemData({
@@ -141,10 +142,7 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
               right: right,
               child: Material(
                 color: Colors.transparent,
-                child: Theme(
-                  data: themeData,
-                  child: surface,
-                ),
+                child: Theme(data: themeData, child: surface),
               ),
             ),
           ],

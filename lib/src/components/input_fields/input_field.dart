@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
+import 'package:nasiko_ui/src/tokens/types.dart';
 
 /// A standardized input field for the Nasiko Design System.
 ///
@@ -259,5 +260,3 @@ class NasikoInputField extends StatelessWidget {
     );
   }
 }
-
-typedef HugeIconsType = List<List<dynamic>>;

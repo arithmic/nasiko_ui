@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
+import 'package:nasiko_ui/src/tokens/types.dart';
 
 import 'button_layout.dart';
 
@@ -58,12 +59,14 @@ class SecondaryTextButton extends StatelessWidget {
             return colors.foregroundDisabled;
           }
           if (states.contains(WidgetState.hovered)) {
-            return  foregroundColor?? colors.foregroundBrand; // Darker brand color (yellow/800)
+            return foregroundColor ??
+                colors.foregroundBrand; // Darker brand color (yellow/800)
           }
           if (states.contains(WidgetState.focused)) {
-            return  foregroundColor ?? colors.foregroundIconHover;
+            return foregroundColor ?? colors.foregroundIconHover;
           }
-          return foregroundColor ?? colors.foregroundPrimary; // Default brand color (yellow/600)
+          return foregroundColor ??
+              colors.foregroundPrimary; // Default brand color (yellow/600)
         }),
 
         // --- TextStyle (For Text & Underline) ---
