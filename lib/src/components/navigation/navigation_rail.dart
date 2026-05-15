@@ -96,12 +96,13 @@ class _RailItemState extends State<_RailItem> {
     final iconSizes = context.iconSize;
     final borderWidths = context.borderWidth;
     final typography = context.typography;
+        final isDisabled = widget.item.isDisabled;
 
     final bgColor = widget.isSelected
         ? colors.backgroundBase
         : Colors.transparent;
 
-    final border = (_hovered || widget.isSelected)
+    final border = !isDisabled && (_hovered || widget.isSelected)
         ? colors.borderSecondary
         : Colors.transparent;
 
@@ -126,8 +127,8 @@ class _RailItemState extends State<_RailItem> {
               HugeIcon(
                 icon: widget.item.icon,
                 size: iconSizes.s,
-                color: widget.item.isDisabled
-                    ? Color(0xFFA89E94)
+                color: isDisabled
+                    ? colors.foregroundDisabled
                     : colors.foregroundIconPrimary,
               ),
               if (widget.isExpanded) ...[
@@ -135,15 +136,12 @@ class _RailItemState extends State<_RailItem> {
                 Expanded(
                   child: Text(
                     widget.item.label,
-                    style:
-                        (widget.isSelected
-                                ? typography.buttonSecondary
-                                : typography.bodySecondary)
-                            .copyWith(
-                              color: widget.item.isDisabled
-                                  ? colors.foregroundDisabled
-                                  : null,
-                            ),
+                    style: (widget.isSelected
+                            ? typography.buttonSecondary
+                            : typography.bodySecondary)
+                        .copyWith(
+                      color: isDisabled ? colors.foregroundDisabled : null,
+                    ),
                   ),
                 ),
               ],
