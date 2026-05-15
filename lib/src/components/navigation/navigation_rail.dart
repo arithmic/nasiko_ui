@@ -126,16 +126,24 @@ class _RailItemState extends State<_RailItem> {
               HugeIcon(
                 icon: widget.item.icon,
                 size: iconSizes.s,
-                color: colors.foregroundIconPrimary,
+                color: widget.item.isDisabled
+                    ? Color(0xFFA89E94)
+                    : colors.foregroundIconPrimary,
               ),
               if (widget.isExpanded) ...[
                 SizedBox(width: spacing.s8),
                 Expanded(
                   child: Text(
                     widget.item.label,
-                    style: widget.isSelected
-                        ? typography.buttonSecondary
-                        : typography.bodySecondary,
+                    style:
+                        (widget.isSelected
+                                ? typography.buttonSecondary
+                                : typography.bodySecondary)
+                            .copyWith(
+                              color: widget.item.isDisabled
+                                  ? colors.foregroundDisabled
+                                  : null,
+                            ),
                   ),
                 ),
               ],
