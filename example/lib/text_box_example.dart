@@ -38,13 +38,13 @@ class _TextBoxExampleState extends State<TextBoxExample> {
           hintText: 'Let orchestrator find the best agents for your work...',
           isOrchestrator: false,
           onSend: () {
-            print('Normal Send: ${_normalController.text}');
+            debugPrint('Normal Send: ${_normalController.text}');
           },
           onAttachmentTap: () {
-            print('Normal Attachment tapped');
+            debugPrint('Normal Attachment tapped');
           },
           onChanged: (value) {
-            print('Normal Text changed: $value');
+            debugPrint('Normal Text changed: $value');
           },
         ),
 
@@ -62,13 +62,13 @@ class _TextBoxExampleState extends State<TextBoxExample> {
           hintText: 'Let orchestrator find the best agents for your work...',
           isOrchestrator: true,
           onSend: () {
-            print('Orchestrator Send: ${_orchestratorController.text}');
+            debugPrint('Orchestrator Send: ${_orchestratorController.text}');
           },
           onAttachmentTap: () {
-            print('Orchestrator Attachment tapped');
+            debugPrint('Orchestrator Attachment tapped');
           },
           onChanged: (value) {
-            print('Orchestrator Text changed: $value');
+            debugPrint('Orchestrator Text changed: $value');
           },
         ),
 
@@ -98,17 +98,17 @@ class _TextBoxExampleState extends State<TextBoxExample> {
           hintText: 'Let orchestrator find the best agents for your work...',
           isOrchestrator: false,
           onSend: () {
-            print('Normal Send: ${_normalController.text}');
+            debugPrint('Normal Send: ${_normalController.text}');
           },
           onAttachmentTap: () {
-            print('Normal Attachment tapped');
+            debugPrint('Normal Attachment tapped');
           },
           onChanged: (value) {
-            print('Normal Text changed: $value');
+            debugPrint('Normal Text changed: $value');
           },
           attachments: ["Attachment1", "Attachment2"],
           onRemoveAttachment: (index) {
-            print('Deleted $index');
+            debugPrint('Deleted $index');
           },
         ),
       ],

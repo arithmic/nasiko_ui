@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
-import 'package:nasiko_ui/src/tokens/types.dart';
 
 /// Layout variant for the modal
 enum NasikoModalVariant { horizontal, vertical }
