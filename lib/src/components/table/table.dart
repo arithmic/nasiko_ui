@@ -94,7 +94,7 @@ class _NasikoTableState extends State<NasikoTable> {
 
     return Container(
       decoration: BoxDecoration(
-        color: Color.fromRGBO(248, 248, 248, 1),
+        color:  colors.backgroundSurface,
         borderRadius: BorderRadius.circular(radii.r12),
         border: Border.all(
           color: colors.borderPrimary,
@@ -143,7 +143,7 @@ class _NasikoTableState extends State<NasikoTable> {
     final iconSizes = context.iconSize;
 
     return Container(
-      color: Color.fromRGBO(248, 248, 248, 1),
+      color: colors.backgroundGroup,
       child: Column(
         children: [
           Padding(
@@ -216,9 +216,9 @@ class _NasikoTableRowState extends State<_NasikoTableRow> {
   @override
   Widget build(BuildContext context) {
     final spacing = context.spacing;
-
+    final colors = context.colors;
     final Color backgroundColor = _isHovering
-        ? Color.fromRGBO(240, 240, 240, 1)
+        ? colors.backgroundSurfaceHover
         : Colors.transparent;
 
     return MouseRegion(

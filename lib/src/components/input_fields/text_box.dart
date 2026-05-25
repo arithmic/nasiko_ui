@@ -138,8 +138,8 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
         ),
         decoration: BoxDecoration(
           color: widget.enabled
-              ? Color.fromRGBO(248, 248, 248, 1)
-              : Color.fromRGBO(248, 248, 248, 1).withValues(alpha: 0.5),
+            ? colors.backgroundGroup
+              : colors.backgroundGroup.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(radii.r12),
           border: Border.all(color: borderColor, width: borderWidths.w1),
         ),
