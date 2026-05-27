@@ -30,6 +30,7 @@ class TertiaryIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final radii = context.radius;
+    final borderWidths = context.borderWidth;
     final layout = iconButtonLayout(context, size);
     final borderRadius = radii.r10;
 
@@ -53,20 +54,40 @@ class TertiaryIconButton extends StatelessWidget {
         if (states.contains(WidgetState.disabled)) {
           return colors.foregroundDisabled;
         }
-        if (states.contains(WidgetState.hovered) ||
-            states.contains(WidgetState.pressed)) {
+        if (states.contains(WidgetState.pressed)) {
           return colors.foregroundIconHover;
         }
         return colors.foregroundIconPrimary;
       }),
 
-      // --- Shape ---
-      shape: WidgetStateProperty.all(
-        RoundedRectangleBorder(
+      // --- Shape & Border ---
+      shape: WidgetStateProperty.resolveWith<OutlinedBorder>((states) {
+        BorderSide borderSide;
+
+        if (states.contains(WidgetState.disabled)) {
+          borderSide = BorderSide(
+            color: colors.borderDisabled,
+            width: borderWidths.w1,
+          );
+        } else if (states.contains(WidgetState.hovered)) {
+          borderSide = BorderSide(
+            color: colors.borderHover,
+            width: borderWidths.w1,
+          );
+        } else if (states.contains(WidgetState.focused)) {
+          borderSide = BorderSide(
+            color: colors.borderSecondary,
+            width: borderWidths.w2,
+          );
+        } else {
+          borderSide = BorderSide.none;
+        }
+
+        return RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(borderRadius),
-          side: BorderSide.none,
-        ),
-      ),
+          side: borderSide,
+        );
+      }),
 
       overlayColor: WidgetStatePropertyAll(Colors.transparent),
     );

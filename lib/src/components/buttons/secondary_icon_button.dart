@@ -54,8 +54,7 @@ class SecondaryIconButton extends StatelessWidget {
         if (states.contains(WidgetState.disabled)) {
           return colors.foregroundDisabled;
         }
-        if (states.contains(WidgetState.hovered) ||
-            states.contains(WidgetState.pressed)) {
+        if (states.contains(WidgetState.pressed)) {
           return colors.foregroundIconHover;
         }
         return colors.foregroundIconPrimary;
