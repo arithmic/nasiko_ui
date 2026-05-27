@@ -2403,6 +2403,12 @@ class _ChipExampleState extends State<_ChipExample> {
               size: NasikoChipSize.large,
               enabled: false,
             ),
+            NasikoChip(
+              label: 'Rounded',
+              leadingIcon: HugeIcons.strokeRoundedCalendar03,
+              size: NasikoChipSize.large,
+              shape: NasikoChipShape.rounded,
+            ),
           ],
         ),
         SizedBox(height: context.spacing.s24),
