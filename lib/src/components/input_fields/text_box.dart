@@ -124,9 +124,9 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
     final radii = context.radius;
     final borderWidths = context.borderWidth;
 
-    final borderColor = widget.isOrchestrator
-        ? (_isFocused ? colors.borderPrimary : colors.borderSecondary)
-        : (_isFocused ? colors.borderSecondary : colors.borderPrimary);
+    final borderColor = _isFocused
+        ? colors.borderSecondary
+        : colors.borderPrimary;
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
