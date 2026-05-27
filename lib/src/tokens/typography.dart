@@ -52,6 +52,26 @@ class NasikoTypography extends ThemeExtension<NasikoTypography> {
   // Code
   final TextStyle code;
 
+  NasikoTypography withColor(Color color) {
+    return copyWith(
+      titlePrimary: titlePrimary.copyWith(color: color),
+      titleSecondary: titleSecondary.copyWith(color: color),
+      buttonPrimary: buttonPrimary.copyWith(color: color),
+      buttonSecondary: buttonSecondary.copyWith(color: color),
+      buttonPrimaryBold: buttonPrimaryBold.copyWith(color: color),
+      buttonSecondaryBold: buttonSecondaryBold.copyWith(color: color),
+      bodyPrimary: bodyPrimary.copyWith(color: color),
+      bodyPrimaryBold: bodyPrimaryBold.copyWith(color: color),
+      bodySecondary: bodySecondary.copyWith(color: color),
+      bodySecondaryBold: bodySecondaryBold.copyWith(color: color),
+      bodyTertiary: bodyTertiary.copyWith(color: color),
+      bodyTertiaryBold: bodyTertiaryBold.copyWith(color: color),
+      linkPrimary: linkPrimary.copyWith(color: color, decorationColor: color),
+      caption: caption.copyWith(color: color),
+      code: code.copyWith(color: color),
+    );
+  }
+
   @override
   NasikoTypography copyWith({
     // Titles
@@ -82,7 +102,7 @@ class NasikoTypography extends ThemeExtension<NasikoTypography> {
       buttonPrimary: buttonPrimary ?? this.buttonPrimary,
       buttonSecondary: buttonSecondary ?? this.buttonSecondary,
       buttonPrimaryBold: buttonPrimaryBold ?? this.buttonPrimaryBold,
-      buttonSecondaryBold:  buttonSecondaryBold ?? this.buttonSecondaryBold,
+      buttonSecondaryBold: buttonSecondaryBold ?? this.buttonSecondaryBold,
       bodyPrimary: bodyPrimary ?? this.bodyPrimary,
       bodyPrimaryBold: bodyPrimaryBold ?? this.bodyPrimaryBold,
       bodySecondary: bodySecondary ?? this.bodySecondary,
@@ -109,8 +129,12 @@ class NasikoTypography extends ThemeExtension<NasikoTypography> {
         other.buttonSecondary,
         t,
       )!,
-      buttonPrimaryBold: TextStyle.lerp(buttonPrimaryBold, other.buttonPrimaryBold, t)!,
-          buttonSecondaryBold: TextStyle.lerp(
+      buttonPrimaryBold: TextStyle.lerp(
+        buttonPrimaryBold,
+        other.buttonPrimaryBold,
+        t,
+      )!,
+      buttonSecondaryBold: TextStyle.lerp(
         buttonSecondaryBold,
         other.buttonSecondaryBold,
         t,
@@ -185,7 +209,8 @@ TextStyle get _baseButtonPrimary => TextStyle(
   letterSpacing: 0.16,
 );
 
-TextStyle get _baseButtonPrimaryBold =>  _baseButtonPrimary.copyWith(fontWeight: FontWeight.w700);
+TextStyle get _baseButtonPrimaryBold =>
+    _baseButtonPrimary.copyWith(fontWeight: FontWeight.w700);
 
 TextStyle get _baseButtonSecondary => TextStyle(
   fontFamily: _interFontFamily,
@@ -196,8 +221,8 @@ TextStyle get _baseButtonSecondary => TextStyle(
   letterSpacing: 0.16,
 );
 
-TextStyle get _baseButtonSecondaryBold =>  _baseButtonSecondary.copyWith(fontWeight: FontWeight.w700);
-
+TextStyle get _baseButtonSecondaryBold =>
+    _baseButtonSecondary.copyWith(fontWeight: FontWeight.w700);
 
 TextStyle get _baseBodyPrimary => TextStyle(
   fontFamily: _interFontFamily,
@@ -271,7 +296,7 @@ NasikoTypography get defaultNasikoTypography => NasikoTypography(
   buttonPrimary: _baseButtonPrimary,
   buttonSecondary: _baseButtonSecondary,
   buttonPrimaryBold: _baseButtonPrimaryBold,
-  buttonSecondaryBold : _baseButtonSecondaryBold,
+  buttonSecondaryBold: _baseButtonSecondaryBold,
   // Body Text
   bodyPrimary: _baseBodyPrimary,
   bodyPrimaryBold: _baseBodyPrimaryBold,
@@ -286,3 +311,7 @@ NasikoTypography get defaultNasikoTypography => NasikoTypography(
   // Code
   code: _baseCode,
 );
+
+NasikoTypography defaultNasikoTypographyWithColor(Color color) {
+  return defaultNasikoTypography.withColor(color);
+}
