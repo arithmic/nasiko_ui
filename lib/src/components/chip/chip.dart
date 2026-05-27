@@ -17,6 +17,10 @@ import 'package:nasiko_ui/nasiko_ui.dart';
 /// There are two size variants:
 /// - [NasikoChipSize.large] - Uses bodySecondary typography with standard padding
 /// - [NasikoChipSize.small] - Uses bodyTertiary typography with compact padding
+///
+/// There are two shape variants:
+/// - [NasikoChipShape.rectangle] - Subtly rounded rectangular chip
+/// - [NasikoChipShape.rounded] - Rounded chip with 32px border radius
 class NasikoChip extends StatelessWidget {
   const NasikoChip({
     super.key,
@@ -26,6 +30,7 @@ class NasikoChip extends StatelessWidget {
     this.onDelete,
     this.variant = NasikoChipVariant.neutral,
     this.size = NasikoChipSize.large,
+    this.shape = NasikoChipShape.rectangle,
     this.enabled = true,
     this.borderColor,
   });
@@ -51,6 +56,10 @@ class NasikoChip extends StatelessWidget {
   /// The size variant of the chip.
   /// Defaults to [NasikoChipSize.large].
   final NasikoChipSize size;
+
+  /// The shape variant of the chip.
+  /// Defaults to [NasikoChipShape.rectangle].
+  final NasikoChipShape shape;
 
   /// Whether the chip is enabled.
   /// When `false`, the chip appears disabled and ignores interactions.
@@ -80,8 +89,8 @@ class NasikoChip extends StatelessWidget {
     } else {
       switch (variant) {
         case NasikoChipVariant.neutral:
-          backgroundColor = colors.backgroundBase;
-          hoverColor = colors.backgroundSurface;
+          backgroundColor = colors.backgroundSurfaceHover;
+          hoverColor = colors.backgroundSurfaceHover;
           pressedColor = colors.backgroundSurfaceActive;
           foregroundColor = colors.foregroundPrimary;
           break;
@@ -95,15 +104,18 @@ class NasikoChip extends StatelessWidget {
     }
 
     final isActionable = onTap != null || onDelete != null;
+    final borderRadius = BorderRadius.circular(
+      shape == NasikoChipShape.rounded ? radii.r40 : radii.r8,
+    );
 
     Widget chipContent = Container(
       padding: EdgeInsets.symmetric(
-        horizontal: size == NasikoChipSize.large ? spacing.s12 : spacing.s8,
-        vertical: size == NasikoChipSize.large ? spacing.s8 : spacing.s4,
+        horizontal: spacing.s12,
+        vertical: spacing.s8,
       ),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(radii.r40),
+        borderRadius: borderRadius,
         border: Border.all(
           color: borderColor ?? colors.borderPrimary,
           width: borderWidths.w1,
@@ -122,12 +134,9 @@ class NasikoChip extends StatelessWidget {
             SizedBox(width: spacing.s4),
           ],
           if (size == NasikoChipSize.small)
-            Padding(
-              padding: EdgeInsets.only(top: spacing.s4, bottom: spacing.s4),
-              child: Text(
-                label,
-                style: typography.bodyTertiary.copyWith(color: foregroundColor),
-              ),
+            Text(
+              label,
+              style: typography.bodyTertiary.copyWith(color: foregroundColor),
             )
           else
             // Label
@@ -160,6 +169,7 @@ class NasikoChip extends StatelessWidget {
         hoverColor: hoverColor,
         pressedColor: pressedColor,
         size: size,
+        borderRadius: borderRadius,
         child: chipContent,
       );
     }
@@ -176,6 +186,7 @@ class _InteractiveChip extends StatefulWidget {
     required this.hoverColor,
     required this.pressedColor,
     required this.size,
+    required this.borderRadius,
     this.onTap,
   });
 
@@ -185,6 +196,7 @@ class _InteractiveChip extends StatefulWidget {
   final Color hoverColor;
   final Color pressedColor;
   final NasikoChipSize size;
+  final BorderRadius borderRadius;
 
   @override
   State<_InteractiveChip> createState() => _InteractiveChipState();
@@ -217,7 +229,7 @@ class _InteractiveChipState extends State<_InteractiveChip> {
           duration: const Duration(milliseconds: 150),
           decoration: BoxDecoration(
             color: _currentColor,
-            borderRadius: BorderRadius.circular(context.radius.r8),
+            borderRadius: widget.borderRadius,
           ),
           child: widget.child,
         ),

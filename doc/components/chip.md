@@ -9,6 +9,7 @@ Chips are compact elements that represent an input, attribute, or action. They c
 | `NasikoChip` | Individual chip element |
 | `NasikoChipGroup` | Horizontal group of chips |
 | `NasikoChipVariant` | Enum for chip visual variants |
+| `NasikoChipShape` | Enum for chip shape variants |
 
 ---
 
@@ -23,6 +24,7 @@ Chips are compact elements that represent an input, attribute, or action. They c
 | `onTap` | `VoidCallback?` | `null` | Callback when chip is tapped |
 | `onDelete` | `VoidCallback?` | `null` | Callback for delete action. Shows remove icon when set |
 | `variant` | `NasikoChipVariant` | `neutral` | Visual style variant |
+| `shape` | `NasikoChipShape` | `rectangle` | Shape variant |
 | `enabled` | `bool` | `true` | Whether the chip is enabled |
 
 ### Variants
@@ -31,6 +33,13 @@ Chips are compact elements that represent an input, attribute, or action. They c
 |---------|-------------|
 | `NasikoChipVariant.neutral` | Gray background - default/unselected state |
 | `NasikoChipVariant.brand` | Yellow/brand background - selected state |
+
+### Shapes
+
+| Shape | Description |
+|-------|-------------|
+| `NasikoChipShape.rectangle` | Rectangular chip with subtly rounded corners |
+| `NasikoChipShape.rounded` | Rounded chip with 32px border radius |
 
 ### States
 
@@ -62,6 +71,13 @@ NasikoChip(
   variant: NasikoChipVariant.brand,
   onTap: () => print('Chip tapped'),
   onDelete: () => print('Delete pressed'),
+)
+
+// Rounded chip
+NasikoChip(
+  label: '2/23/2024, 4:30PM',
+  leadingIcon: Icons.calendar_today,
+  shape: NasikoChipShape.rounded,
 )
 
 // Disabled chip

@@ -527,6 +527,7 @@ NasikoChip(
 | `onTap` | `VoidCallback?` | `null` | Callback when chip is tapped |
 | `onDelete` | `VoidCallback?` | `null` | Callback for delete action (shows delete icon) |
 | `variant` | `NasikoChipVariant` | `neutral` | Visual style variant |
+| `shape` | `NasikoChipShape` | `rectangle` | Shape variant |
 | `enabled` | `bool` | `true` | Whether chip is interactive |
 
 #### NasikoChipVariant

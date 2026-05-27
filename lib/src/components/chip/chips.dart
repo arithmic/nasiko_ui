@@ -5,5 +5,6 @@ library;
 
 export 'chip.dart';
 export 'chip_group.dart';
+export 'chip_shape.dart';
 export 'chip_size.dart';
 export 'chip_variant.dart';
