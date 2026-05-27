@@ -1280,7 +1280,7 @@ class ExampleHomePage extends StatelessWidget {
         // --- Horizontal Banner ---
         NasikoBanner(
           title: 'Add Agent',
-          bannerIcon: bannerImage,
+          bannerIconImage: bannerImage,
           content: content,
           onClose: () {
             debugPrint('Horizontal Banner closed');
@@ -1298,7 +1298,7 @@ class ExampleHomePage extends StatelessWidget {
         // --- Vertical Banner ---
         NasikoBanner(
           title: 'Add Agent',
-          bannerIcon: bannerImage,
+          bannerIconImage: bannerImage,
           content: content,
           bannerType: NasikoBannerType.vertical,
           onClose: () {

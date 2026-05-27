@@ -1,6 +1,7 @@
 // lib/src/components/banner/nasiko_banner.dart
 
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart'; // Import your main barrel file
 
 /// Defines the layout orientation of the NasikoBanner.
@@ -19,16 +20,23 @@ class NasikoBanner extends StatelessWidget {
     required this.title,
     required this.content,
     required this.action,
-    this.bannerIcon,
+    this.bannerIconImage,
+    this.bannerIconData,
     this.bannerType = NasikoBannerType.horizontal,
     this.onClose,
-  });
+  }) : assert(
+         bannerIconImage == null || bannerIconData == null,
+         'Provide either bannerIconImage or bannerIconData, not both.',
+       );
 
   /// The main title of the banner.
   final String title;
 
   /// The icon to display next to the title (use AssetImage or NetworkImage).
-  final ImageProvider? bannerIcon;
+  final ImageProvider? bannerIconImage;
+
+  /// The HugeIcon to display next to the title. Takes precedence over [bannerIconImage].
+  final HugeIconsType? bannerIconData;
 
   /// The descriptive text.
   final String content;
@@ -77,12 +85,8 @@ class NasikoBanner extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Icon
-                if (bannerIcon != null) ...[
-                  Image(
-                    image: bannerIcon!,
-                    width: 32, // Fixed size
-                    height: 32,
-                  ),
+                if (bannerIconImage != null || bannerIconData != null) ...[
+                  _buildIcon(context, 24),
                   SizedBox(width: spacing.s12),
                 ],
                 // Title & Description
@@ -142,8 +146,8 @@ class NasikoBanner extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Icon
-              if (bannerIcon != null) ...[
-                Image(image: bannerIcon!, width: 32, height: 32),
+              if (bannerIconImage != null || bannerIconData != null) ...[
+                _buildIcon(context, 32),
                 SizedBox(width: spacing.s12),
               ],
               // Title
@@ -167,6 +171,17 @@ class NasikoBanner extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _buildIcon(BuildContext context, double size) {
+    if (bannerIconData != null) {
+      return HugeIcon(
+        icon: bannerIconData!,
+        size: size,
+        color: context.colors.foregroundPrimary,
+      );
+    }
+    return Image(image: bannerIconImage!, width: size, height: size);
   }
 
   // --- Shared Title Widget ---
