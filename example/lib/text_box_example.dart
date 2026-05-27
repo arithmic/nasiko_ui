@@ -107,6 +107,7 @@ class _TextBoxExampleState extends State<TextBoxExample> {
             debugPrint('Normal Text changed: $value');
           },
           attachments: ["Attachment1", "Attachment2"],
+          estimatedTokens: 273,
           onRemoveAttachment: (index) {
             debugPrint('Deleted $index');
           },
