@@ -1006,6 +1006,11 @@ class ExampleHomePage extends StatelessWidget {
           spacing: context.spacing.s12,
           runSpacing: context.spacing.s12,
           children: [
+            DestructiveIconButton(
+              icon: HugeIcons.strokeRoundedDelete02,
+              size: NasikoButtonSize.small,
+              onPressed: () {},
+            ),
             DestructiveButton(
               leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
               size: NasikoButtonSize.small,

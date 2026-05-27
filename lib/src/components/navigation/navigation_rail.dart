@@ -96,14 +96,15 @@ class _RailItemState extends State<_RailItem> {
     final iconSizes = context.iconSize;
     final borderWidths = context.borderWidth;
     final typography = context.typography;
+    final isDisabled = widget.item.isDisabled;
 
     final bgColor = widget.isSelected
-        ? colors.backgroundBase
+        ? colors.backgroundSecondaryBrand
         : Colors.transparent;
 
-    final border = (_hovered || widget.isSelected)
+    final border = !isDisabled && (_hovered || widget.isSelected)
         ? colors.borderSecondary
-        : Colors.transparent;
+        : colors.borderPrimary;
 
     final content = MouseRegion(
       onEnter: (_) => setState(() => _hovered = true),
@@ -124,18 +125,28 @@ class _RailItemState extends State<_RailItem> {
           child: Row(
             children: [
               HugeIcon(
+                strokeWidth: widget.isExpanded || isDisabled ? 1.5 : 1.8,
                 icon: widget.item.icon,
                 size: iconSizes.s,
-                color: colors.foregroundIconPrimary,
+                color: isDisabled
+                    ? colors.foregroundDisabled
+                    : widget.isSelected ? colors.foregroundPrimary : colors.foregroundIconPrimary,
               ),
               if (widget.isExpanded) ...[
                 SizedBox(width: spacing.s8),
                 Expanded(
                   child: Text(
                     widget.item.label,
-                    style: widget.isSelected
-                        ? typography.buttonSecondary
-                        : typography.bodySecondary,
+                    style:
+                        (widget.isSelected
+                                ? typography.buttonSecondary
+                                : typography.bodySecondary)
+                            .copyWith(
+                              fontWeight: widget.isSelected ? FontWeight.w500: FontWeight.w400,
+                              color: isDisabled
+                                  ? colors.foregroundDisabled
+                                  : colors.foregroundPrimary,
+                            ),
                   ),
                 ),
               ],

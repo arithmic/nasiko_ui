@@ -429,8 +429,8 @@ class _SectionChildItemState extends State<_SectionChildItem> {
       backgroundColor = colors.backgroundSurface;
       borderColor = colors.borderDisabled;
     } else if (widget.isSelected) {
-      backgroundColor = colors.backgroundBase;
-      borderColor = colors.foregroundBrand;
+      backgroundColor = colors.backgroundSecondaryBrand;
+      borderColor = colors.borderPrimary;
     } else if (_isHovered) {
       backgroundColor = Colors.transparent;
       borderColor = colors.borderSecondary;
@@ -481,7 +481,7 @@ class _SectionChildItemState extends State<_SectionChildItem> {
                           ? TextOverflow.ellipsis
                           : null,
                       style: widget.isSelected
-                          ? typography.bodySecondaryBold.copyWith(
+                          ? typography.buttonSecondary.copyWith(
                               color: widget.isDisabled
                                   ? colors.foregroundDisabled
                                   : colors.foregroundPrimary,

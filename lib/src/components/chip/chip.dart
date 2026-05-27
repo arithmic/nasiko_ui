@@ -92,13 +92,13 @@ class NasikoChip extends StatelessWidget {
           backgroundColor = colors.backgroundSurfaceHover;
           hoverColor = colors.backgroundSurfaceHover;
           pressedColor = colors.backgroundSurfaceActive;
-          foregroundColor = colors.foregroundPrimary;
+          foregroundColor = colors.foregroundSecondary;
           break;
         case NasikoChipVariant.brand:
           backgroundColor = colors.backgroundSecondaryBrand;
           hoverColor = colors.backgroundSecondaryBrandHover;
           pressedColor = colors.backgroundSecondaryBrandActive;
-          foregroundColor = colors.foregroundPrimary;
+          foregroundColor = colors.foregroundSecondary;
           break;
       }
     }
@@ -134,15 +134,24 @@ class NasikoChip extends StatelessWidget {
             SizedBox(width: spacing.s4),
           ],
           if (size == NasikoChipSize.small)
-            Text(
-              label,
-              style: typography.bodyTertiary.copyWith(color: foregroundColor),
+            Padding(
+              padding: EdgeInsets.only(top: spacing.s4, bottom: spacing.s4),
+              child: Text(
+                label,
+                style: typography.code.copyWith(
+                  color: foregroundColor,
+                  fontSize: 12.sp.clamp(10, 14),
+                ),
+              ),
             )
           else
             // Label
             Text(
               label,
-              style: typography.bodySecondary.copyWith(color: foregroundColor),
+              style: typography.code.copyWith(
+                color: foregroundColor,
+                fontSize: 12.sp.clamp(10, 14),
+              ),
             ),
 
           // Delete Icon (only for actionable chips)
