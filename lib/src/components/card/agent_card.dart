@@ -576,8 +576,8 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
 
     final style = context.typography.bodyTertiary;
     final gap = context.spacing.s8;
-    // Small chip: s8 horizontal padding on each side + 1px border on each side.
-    final chipHPad = context.spacing.s8 * 2 + 2.0;
+    // Small chip: s12 horizontal padding on each side + 1px border on each side.
+    final chipHPad = context.spacing.s12 * 2 + 2.0;
 
     double textWidth(String text) {
       final tp = TextPainter(
