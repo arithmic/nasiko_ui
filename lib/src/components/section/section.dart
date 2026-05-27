@@ -406,6 +406,7 @@ class _SectionChildItem extends StatefulWidget {
 
 class _SectionChildItemState extends State<_SectionChildItem> {
   bool _isHovered = false;
+  bool _isMenuOpen = false;
 
   /// Guards against the row's onTap firing when the user clicks the popup menu
   /// trigger, since pointer-down on the menu button precedes the tap event.
@@ -440,7 +441,7 @@ class _SectionChildItemState extends State<_SectionChildItem> {
     }
 
     final showTrailing =
-        _hasMenu && (_isHovered || widget.isSelected) && _canInteract;
+        _hasMenu && (_isHovered || _isMenuOpen) && _canInteract;
 
     return MouseRegion(
       cursor: _canInteract
@@ -526,9 +527,15 @@ class _SectionChildItemState extends State<_SectionChildItem> {
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _MenuButton extends StatelessWidget {
-  const _MenuButton({required this.actions});
+  const _MenuButton({
+    required this.actions,
+    this.onMenuOpened,
+    this.onMenuClosed,
+  });
 
   final List<SectionItemAction> actions;
+  final VoidCallback? onMenuOpened;
+  final VoidCallback? onMenuClosed;
 
   @override
   Widget build(BuildContext context) {
@@ -547,7 +554,12 @@ class _MenuButton extends StatelessWidget {
       color: colors.backgroundBase,
       elevation: 4,
       position: PopupMenuPosition.under,
-      onSelected: (index) => actions[index].onTap(),
+      onOpened: onMenuOpened,
+      onCanceled: onMenuClosed,
+      onSelected: (index) {
+        onMenuClosed?.call();
+        actions[index].onTap();
+      },
       itemBuilder: (_) => [
         for (int i = 0; i < actions.length; i++)
           PopupMenuItem<int>(
