@@ -5,4 +5,7 @@ enum NasikoChipVariant {
 
   /// Brand colored chip with yellow background - for selected state.
   brand,
+
+  /// Base chip with backgroundBase color - for use with rounded shape.
+  base,
 }

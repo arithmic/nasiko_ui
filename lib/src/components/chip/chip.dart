@@ -29,7 +29,7 @@ class NasikoChip extends StatelessWidget {
     this.onTap,
     this.onDelete,
     this.variant = NasikoChipVariant.neutral,
-    this.size = NasikoChipSize.large,
+    this.size = NasikoChipSize.small,
     this.shape = NasikoChipShape.rectangle,
     this.enabled = true,
     this.borderColor,
@@ -38,7 +38,7 @@ class NasikoChip extends StatelessWidget {
   /// The text label displayed on the chip.
   final String label;
 
-  /// An optional icon to display before the label.
+  /// An optional icon to display before the label.a
   final HugeIconsType? leadingIcon;
 
   /// Callback when the chip is tapped.
@@ -98,6 +98,12 @@ class NasikoChip extends StatelessWidget {
           backgroundColor = colors.backgroundSecondaryBrand;
           hoverColor = colors.backgroundSecondaryBrandHover;
           pressedColor = colors.backgroundSecondaryBrandActive;
+          foregroundColor = colors.foregroundSecondary;
+          break;
+        case NasikoChipVariant.base:
+          backgroundColor = colors.backgroundBase;
+          hoverColor = colors.backgroundSurfaceHover;
+          pressedColor = colors.backgroundSurfaceActive;
           foregroundColor = colors.foregroundSecondary;
           break;
       }
