@@ -142,11 +142,9 @@ class NasikoChip extends StatelessWidget {
           ],
           Text(
             label,
-            style: typography.code.copyWith(
-              color: foregroundColor,
-              fontSize: 12.sp.clamp(10, 14),
-              height: 1.0,
-            ),
+            style: size == NasikoChipSize.small
+                ? typography.bodyTertiary.copyWith(height: 1.0)
+                : typography.bodySecondary.copyWith(height: 1.0),
           ),
 
           // Delete Icon (only for actionable chips)
