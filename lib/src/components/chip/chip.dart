@@ -124,6 +124,7 @@ class NasikoChip extends StatelessWidget {
         borderRadius: borderRadius,
         border: Border.all(
           color: borderColor ?? colors.borderPrimary,
+          strokeAlign: BorderSide.strokeAlignOutside,
           width: borderWidths.w1,
         ),
       ),
