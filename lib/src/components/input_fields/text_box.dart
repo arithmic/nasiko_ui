@@ -24,6 +24,7 @@ class NasikoTextBox extends StatefulWidget {
     this.focusNode,
     this.estimatedTokens,
     this.estimatedTokensTooltip = 'Estimated tokens usage',
+    this.attachmentPreviewBuilder,
   });
 
   final TextEditingController? controller;
@@ -43,6 +44,10 @@ class NasikoTextBox extends StatefulWidget {
   final FocusNode? focusNode;
   final int? estimatedTokens;
   final String estimatedTokensTooltip;
+
+  /// Optional builder to provide a preview widget shown on hover for each attachment.
+  /// Called with [index] and [filename]; return null to show no preview.
+  final Widget? Function(int index, String filename)? attachmentPreviewBuilder;
 
   @override
   State<NasikoTextBox> createState() => _NasikoTextBoxState();
@@ -236,6 +241,8 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
                                     widget.onRemoveAttachment != null
                                 ? () => widget.onRemoveAttachment!(index)
                                 : null,
+                            preview: widget.attachmentPreviewBuilder
+                                ?.call(index, file),
                           );
                         }),
                       ],
@@ -300,16 +307,55 @@ class _EstimatedTokensPill extends StatelessWidget {
   }
 }
 
-class _TextBoxAttachmentChip extends StatelessWidget {
+class _TextBoxAttachmentChip extends StatefulWidget {
   const _TextBoxAttachmentChip({
     required this.label,
     required this.leadingIcon,
     this.onDelete,
+    this.preview,
   });
 
   final String label;
   final HugeIconsType leadingIcon;
   final VoidCallback? onDelete;
+  final Widget? preview;
+
+  @override
+  State<_TextBoxAttachmentChip> createState() => _TextBoxAttachmentChipState();
+}
+
+class _TextBoxAttachmentChipState extends State<_TextBoxAttachmentChip> {
+  final _layerLink = LayerLink();
+  OverlayEntry? _overlayEntry;
+
+  void _showPreview() {
+    if (widget.preview == null) return;
+    _removeOverlay();
+    _overlayEntry = OverlayEntry(
+      builder: (_) => CompositedTransformFollower(
+        link: _layerLink,
+        targetAnchor: Alignment.topCenter,
+        followerAnchor: Alignment.bottomCenter,
+        offset: const Offset(0, -8),
+        child: Align(
+          alignment: Alignment.topLeft,
+          child: _AttachmentPreviewPopup(child: widget.preview!),
+        ),
+      ),
+    );
+    Overlay.of(context).insert(_overlayEntry!);
+  }
+
+  void _removeOverlay() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+  }
+
+  @override
+  void dispose() {
+    _removeOverlay();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -320,53 +366,95 @@ class _TextBoxAttachmentChip extends StatelessWidget {
     final radii = context.radius;
     final borderWidths = context.borderWidth;
 
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 440),
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: spacing.s12,
-          vertical: spacing.s8,
-        ),
-        decoration: BoxDecoration(
-          color: colors.backgroundBase,
-          borderRadius: BorderRadius.circular(radii.r8),
-          border: Border.all(
-            color: colors.borderPrimary,
-            width: borderWidths.w1,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            HugeIcon(
-              icon: leadingIcon,
-              size: iconSizes.s,
-              color: colors.foregroundIconPrimary,
+    return CompositedTransformTarget(
+      link: _layerLink,
+      child: MouseRegion(
+        onEnter: (_) => _showPreview(),
+        onExit: (_) => _removeOverlay(),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 440),
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: spacing.s12,
+              vertical: spacing.s8,
             ),
-            SizedBox(width: spacing.s2),
-            Flexible(
-              child: Text(
-                label.length > 20 ? '${label.substring(0, 20)}...' : label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: typography.buttonSecondary.copyWith(
-                  color: colors.foregroundPrimary,
-                ),
+            decoration: BoxDecoration(
+              color: colors.backgroundBase,
+              borderRadius: BorderRadius.circular(radii.r8),
+              border: Border.all(
+                color: colors.borderPrimary,
+                width: borderWidths.w1,
               ),
             ),
-            if (onDelete != null) ...[
-              SizedBox(width: spacing.s8),
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: onDelete,
-                child: HugeIcon(
-                  icon: HugeIcons.strokeRoundedCancel01,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                HugeIcon(
+                  icon: widget.leadingIcon,
                   size: iconSizes.s,
                   color: colors.foregroundIconPrimary,
                 ),
-              ),
-            ],
+                SizedBox(width: spacing.s2),
+                Flexible(
+                  child: Text(
+                    widget.label.length > 20
+                        ? '${widget.label.substring(0, 20)}...'
+                        : widget.label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: typography.buttonSecondary.copyWith(
+                      color: colors.foregroundPrimary,
+                    ),
+                  ),
+                ),
+                if (widget.onDelete != null) ...[
+                  SizedBox(width: spacing.s8),
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: widget.onDelete,
+                    child: HugeIcon(
+                      icon: HugeIcons.strokeRoundedCancel01,
+                      size: iconSizes.s,
+                      color: colors.foregroundIconPrimary,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _AttachmentPreviewPopup extends StatelessWidget {
+  const _AttachmentPreviewPopup({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: Container(
+        width: 240,
+        height: 160,
+        decoration: BoxDecoration(
+          color: const Color(0xFF1A1A1A),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.20),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
+            ),
           ],
+        ),
+        padding: const EdgeInsets.all(8),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(6),
+          child: child,
         ),
       ),
     );
