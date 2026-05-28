@@ -87,6 +87,7 @@ class Section extends StatefulWidget {
     this.selectedChild,
     this.selectedChildId,
     this.isSelected = false,
+    this.isCollapsible = true,
     this.onTap,
     this.onChildTap,
     this.backgroundColor,
@@ -118,6 +119,9 @@ class Section extends StatefulWidget {
 
   /// Whether this section is currently selected (non-expandable sections only).
   final bool isSelected;
+
+  /// When false the section is always expanded and the toggle chevron is hidden.
+  final bool isCollapsible;
 
   /// Callback when section header is tapped (non-expandable sections only).
   final VoidCallback? onTap;
@@ -162,7 +166,7 @@ class _SectionState extends State<Section> {
   @override
   void initState() {
     super.initState();
-    _isExpanded = _hasSelectedChild();
+    _isExpanded = !widget.isCollapsible || _hasSelectedChild();
   }
 
   @override
@@ -197,6 +201,7 @@ class _SectionState extends State<Section> {
   void _toggleExpanded() {
     if (!_canInteract) return;
     if (widget.isExpandable) {
+      if (!widget.isCollapsible) return;
       setState(() => _isExpanded = !_isExpanded);
     } else if (widget.onTap != null) {
       widget.onTap!();
@@ -251,18 +256,20 @@ class _SectionState extends State<Section> {
                       ),
                     ),
                   ),
-                  SizedBox(width: spacing.s8),
-                  AnimatedRotation(
-                    turns: _isExpanded ? 0.5 : 0,
-                    duration: const Duration(milliseconds: 200),
-                    child: Icon(
-                      Icons.keyboard_arrow_down_rounded,
-                      size: iconSizes.s,
-                      color: widget.isDisabled
-                          ? colors.foregroundDisabled
-                          : colors.foregroundIconPrimary,
+                  if (widget.isCollapsible) ...[
+                    SizedBox(width: spacing.s8),
+                    AnimatedRotation(
+                      turns: _isExpanded ? 0.5 : 0,
+                      duration: const Duration(milliseconds: 200),
+                      child: Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        size: iconSizes.s,
+                        color: widget.isDisabled
+                            ? colors.foregroundDisabled
+                            : colors.foregroundIconPrimary,
+                      ),
                     ),
-                  ),
+                  ],
                 ],
               ),
             ),
@@ -440,8 +447,7 @@ class _SectionChildItemState extends State<_SectionChildItem> {
       borderColor = Colors.transparent;
     }
 
-    final showTrailing =
-        _hasMenu && (_isHovered || _isMenuOpen) && _canInteract;
+    final showTrailing = _hasMenu && _canInteract;
 
     return MouseRegion(
       cursor: _canInteract
@@ -495,12 +501,21 @@ class _SectionChildItemState extends State<_SectionChildItem> {
                     ),
                   ),
                   if (showTrailing)
-                    Listener(
-                      behavior: HitTestBehavior.opaque,
-                      onPointerDown: (_) => _isMenuPointerDown = true,
-                      onPointerUp: (_) => _isMenuPointerDown = false,
-                      onPointerCancel: (_) => _isMenuPointerDown = false,
-                      child: _MenuButton(actions: widget.item.menuActions!),
+                    Opacity(
+                      opacity: (_isHovered || _isMenuOpen) ? 1.0 : 0.0,
+                      child: Listener(
+                        behavior: HitTestBehavior.opaque,
+                        onPointerDown: (_) => _isMenuPointerDown = true,
+                        onPointerUp: (_) => _isMenuPointerDown = false,
+                        onPointerCancel: (_) => _isMenuPointerDown = false,
+                        child: _MenuButton(
+                          actions: widget.item.menuActions!,
+                          onMenuOpened: () =>
+                              setState(() => _isMenuOpen = true),
+                          onMenuClosed: () =>
+                              setState(() => _isMenuOpen = false),
+                        ),
+                      ),
                     ),
                 ],
               ),

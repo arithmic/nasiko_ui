@@ -26,6 +26,7 @@ class NasikoNavigationPanel extends StatelessWidget {
           return Section(
             label: section.title.toUpperCase(),
             icon: section.icon,
+            isCollapsible: section.isCollapsible,
             children: section.children.isNotEmpty
                 ? section.children
                       .map(
@@ -34,6 +35,8 @@ class NasikoNavigationPanel extends StatelessWidget {
                           label: item.label,
                           subtitle: item.subtitle,
                           onTap: item.onTap,
+                          menuActions: item.menuActions,
+                          maxLines: item.maxLines,
                         ),
                       )
                       .toList()
