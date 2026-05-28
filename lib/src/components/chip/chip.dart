@@ -92,19 +92,19 @@ class NasikoChip extends StatelessWidget {
           backgroundColor = colors.backgroundSurfaceHover;
           hoverColor = colors.backgroundSurfaceHover;
           pressedColor = colors.backgroundSurfaceActive;
-          foregroundColor = colors.foregroundSecondary;
+          foregroundColor = colors.foregroundPrimary;
           break;
         case NasikoChipVariant.brand:
           backgroundColor = colors.backgroundSecondaryBrand;
           hoverColor = colors.backgroundSecondaryBrandHover;
           pressedColor = colors.backgroundSecondaryBrandActive;
-          foregroundColor = colors.foregroundSecondary;
+          foregroundColor = colors.foregroundPrimary;
           break;
         case NasikoChipVariant.base:
           backgroundColor = colors.backgroundBase;
           hoverColor = colors.backgroundSurfaceHover;
           pressedColor = colors.backgroundSurfaceActive;
-          foregroundColor = colors.foregroundSecondary;
+          foregroundColor = colors.foregroundPrimary;
           break;
       }
     }
