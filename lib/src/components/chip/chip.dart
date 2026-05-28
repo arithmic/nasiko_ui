@@ -144,6 +144,7 @@ class NasikoChip extends StatelessWidget {
             style: typography.code.copyWith(
               color: foregroundColor,
               fontSize: 12.sp.clamp(10, 14),
+              height: 1.0,
             ),
           ),
 
