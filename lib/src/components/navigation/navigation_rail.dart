@@ -130,7 +130,9 @@ class _RailItemState extends State<_RailItem> {
                 size: iconSizes.s,
                 color: isDisabled
                     ? colors.foregroundDisabled
-                    : widget.isSelected ? colors.foregroundPrimary : colors.foregroundIconPrimary,
+                    : widget.isSelected
+                    ? colors.foregroundPrimary
+                    : colors.foregroundIconPrimary,
               ),
               if (widget.isExpanded) ...[
                 SizedBox(width: spacing.s8),
@@ -142,7 +144,9 @@ class _RailItemState extends State<_RailItem> {
                                 ? typography.buttonSecondary
                                 : typography.bodySecondary)
                             .copyWith(
-                              fontWeight: widget.isSelected ? FontWeight.w500: FontWeight.w400,
+                              fontWeight: widget.isSelected
+                                  ? FontWeight.w500
+                                  : FontWeight.w400,
                               color: isDisabled
                                   ? colors.foregroundDisabled
                                   : colors.foregroundPrimary,
