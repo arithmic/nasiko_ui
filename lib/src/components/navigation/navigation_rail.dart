@@ -102,7 +102,7 @@ class _RailItemState extends State<_RailItem> {
         ? colors.backgroundSecondaryBrand
         : Colors.transparent;
 
-    final border = !isDisabled && (_hovered || widget.isSelected)
+    final border = !isDisabled && _hovered 
         ? colors.borderSecondary
         : colors.borderPrimary;
 

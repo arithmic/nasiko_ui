@@ -8,4 +8,8 @@ enum NasikoChipVariant {
 
   /// Base chip with backgroundBase color - for use with rounded shape.
   base,
+
+  /// Base chip with yellow50 color - for use as tags.
+
+  tag,
 }

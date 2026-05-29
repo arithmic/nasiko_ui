@@ -62,13 +62,13 @@ class DestructiveButton extends StatelessWidget {
           return colors.backgroundDisabled;
         }
         if (states.contains(WidgetState.hovered)) {
-          return const Color(0xFFB91C1C); // red700 for hover
+          return colors.foregroundError; // red700 for hover
         }
-        if (states.contains(WidgetState.pressed)) {
-          return const Color(0xFFDC2626); // red600
+        if (states.contains(WidgetState.focused)) {
+          return colors.backgroundError; // red600
         }
         // Default state
-        return colors.foregroundError;
+        return colors.backgroundBase;
       }),
 
       // --- Foreground Color (Handles Default, Disabled) ---
@@ -76,14 +76,26 @@ class DestructiveButton extends StatelessWidget {
         if (states.contains(WidgetState.disabled)) {
           return colors.foregroundDisabled;
         }
+        if (states.contains(WidgetState.hovered)) {
+          return colors.foregroundOnAction; // red700 for hover
+        }
+        if (states.contains(WidgetState.focused)) {
+          return colors.foregroundError; // red600
+        }
         // Default, Hover, Focus, Pressed
-        return colors.foregroundOnAction;
+        return colors.foregroundError;
       }),
 
       // --- Shape & Focus Ring ---
       shape: WidgetStateProperty.resolveWith<OutlinedBorder>((states) {
-        BorderSide borderSide = BorderSide.none;
-
+        BorderSide borderSide = BorderSide(
+          color: colors.borderError,
+          width: context.borderWidth.w1,
+          strokeAlign: BorderSide.strokeAlignOutside,
+        );
+        if (states.contains(WidgetState.disabled)) {
+          borderSide = BorderSide.none;
+        }
         if (states.contains(WidgetState.focused)) {
           borderSide = BorderSide(
             color: colors.borderError,

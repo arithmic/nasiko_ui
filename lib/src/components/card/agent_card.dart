@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
@@ -57,6 +58,9 @@ class NasikoAgentCard extends StatefulWidget {
     this.errorDetails,
     this.onRetry,
     this.onDelete,
+    this.settingUpTitle,
+    this.settingUpBody,
+    this.settingUpProgressListenable,
   });
 
   /// The agent's name.
@@ -133,6 +137,18 @@ class NasikoAgentCard extends StatefulWidget {
   /// Callback for the delete icon button in the error header.
   final VoidCallback? onDelete;
 
+  /// Bold headline shown at the top of the setting-up body.
+  /// Only rendered when [variant] is [NasikoAgentCardVariant.settingUp]
+  /// AND any of the setting-up props are provided.
+  final String? settingUpTitle;
+
+  /// Status description for the setting-up body.
+  final String? settingUpBody;
+
+  /// Drives the determinate progress bar that replaces the description
+  /// slot for setting-up cards. When null the bar renders indeterminate.
+  final ValueListenable<double>? settingUpProgressListenable;
+
   @override
   State<NasikoAgentCard> createState() => _NasikoAgentCardState();
 }
@@ -148,6 +164,14 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
       widget.menuActions != null && widget.menuActions!.isNotEmpty;
 
   bool get _isError => widget.variant == NasikoAgentCardVariant.error;
+
+  /// Setting-up cards render the dedicated progress body when the consumer
+  /// supplies any of the setting-up props.
+  bool get _hasSettingUpBody =>
+      widget.variant == NasikoAgentCardVariant.settingUp &&
+      (widget.settingUpTitle != null ||
+          widget.settingUpBody != null ||
+          widget.settingUpProgressListenable != null);
 
   @override
   void dispose() {
@@ -226,9 +250,10 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
     final iconSizes = context.iconSize;
     final borderWidths = context.borderWidth;
 
-    final canShowHoverBg = !widget.disabled && !_isError;
-    final showHover = _isHovered && canShowHoverBg;
-    final showYellowBg = canShowHoverBg && (showHover || widget.selected);
+    final canInteract = !widget.disabled && !_isError;
+    final showHover = _isHovered && canInteract;
+    final showSelected = widget.selected && canInteract;
+    final showElevation = showHover || showSelected;
 
     // Left accent bar colour — null means no accent bar.
     final Color? accentColor = widget.disabled
@@ -242,15 +267,27 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
 
     final bgColor = widget.disabled || widget.errorDetails != null
         ? colors.backgroundBase
-        : showYellowBg
-        ? colors.backgroundSecondaryBrand
         : colors.backgroundBase;
 
+    // Selected keeps the standard border. Setting-up always shows the
+    // primary border. Disabled/error keep their dedicated colours.
     final borderColor = widget.disabled || widget.errorDetails != null
         ? colors.borderDisabled
-        : showYellowBg
-        ? colors.borderSecondary
-        : colors.borderPrimary;
+        : showHover && !showSelected
+        ? colors.borderPrimary
+        : _hasSettingUpBody
+        ? colors.borderPrimary
+        : showSelected ? colors.borderSecondary : colors.borderPrimary;
+
+    // Setting-up cards render a subtle white → #F5F2EC gradient instead of
+    // the flat background colour.
+    final Gradient? settingUpGradient = _hasSettingUpBody
+        ? const LinearGradient(
+            begin: Alignment(1.00, 0.50),
+            end: Alignment(0.00, 0.50),
+            colors: [Color(0xFFFFFFFF), Color(0xFFF5F2EC)],
+          )
+        : null;
 
     final descriptionStyle = typography.bodyTertiary.copyWith(
       color: widget.disabled
@@ -288,18 +325,19 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
               Container(
                 padding: EdgeInsets.all(spacing.s20),
                 decoration: BoxDecoration(
-                  color: bgColor,
+                  color: settingUpGradient == null ? bgColor : null,
+                  gradient: settingUpGradient,
                   borderRadius: BorderRadius.circular(radii.r8),
                   border: Border.all(color: borderColor),
-                  boxShadow: showYellowBg
-                      ? [
+                  boxShadow: showElevation
+                      ? const [
                           BoxShadow(
-                            color: colors.backgroundSecondaryBrand,
-                            blurRadius: 4,
-                            offset: const Offset(0, 4),
+                            color: Color(0x40BB8F06),
+                            blurRadius: 12,
+                            offset: Offset(0, 4),
                           ),
                         ]
-                      : [],
+                      : const [],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -313,7 +351,21 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
                         iconSizes,
                       ),
                     ),
-                    if (!_isError) ...[
+                    if (_isError) ...[
+                      _buildErrorBody(
+                        colors,
+                        spacing,
+                        typography,
+                        descriptionReservedHeight,
+                      ),
+                    ] else if (_hasSettingUpBody) ...[
+                      _buildSettingUpBody(
+                        colors,
+                        spacing,
+                        typography,
+                        descriptionReservedHeight,
+                      ),
+                    ] else ...[
                       if (widget.subtitle != null &&
                           widget.subtitle!.isNotEmpty) ...[
                         SizedBox(height: spacing.s16),
@@ -332,7 +384,7 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
                       if (widget.tags.isNotEmpty) ...[
                         SizedBox(height: spacing.s16),
                         _buildTags(
-                          showYellowBg,
+                          false,
                           widget.disabled || widget.errorDetails != null,
                         ),
                       ],
@@ -377,13 +429,6 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
                           ),
                         ),
                       ],
-                    ] else ...[
-                      _buildErrorBody(
-                        colors,
-                        spacing,
-                        typography,
-                        descriptionReservedHeight,
-                      ),
                     ],
                   ],
                 ),
@@ -432,6 +477,8 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
                 ? colors.foregroundDisabled
                 : _isError
                 ? colors.foregroundError
+                : _hasSettingUpBody
+                ? colors.backgroundBrand
                 : (widget.leadingIconColor ?? colors.foregroundPrimary),
           ),
           SizedBox(width: spacing.s8),
@@ -480,7 +527,7 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
               onPressed: widget.onDelete!,
               size: NasikoButtonSize.small,
             ),
-        ] else if (widget.showMore) ...[
+        ] else if (widget.showMore && !_hasSettingUpBody) ...[
           (_hasMenu && !widget.disabled && widget.errorDetails == null)
               ? Listener(
                   behavior: HitTestBehavior.opaque,
@@ -561,6 +608,73 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
             ),
           ),
         ],
+      ],
+    );
+  }
+
+  // ── Setting-up body ─────────────────────────────────────────────────────────
+
+  Widget _buildSettingUpBody(
+    NasikoColorTheme colors,
+    NasikoSpacingTheme spacing,
+    NasikoTypography typography,
+    double descriptionReservedHeight,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: spacing.s16),
+        if (widget.settingUpTitle != null)
+          Text(
+            widget.settingUpTitle!,
+            style: typography.bodySecondaryBold.copyWith(
+              color: colors.backgroundBrand,
+            ),
+          ),
+        SizedBox(height: spacing.s8),
+        // Status body shown in a reserved 2-line area to match the
+        // description slot height in normal cards.
+        SizedBox(
+          height: descriptionReservedHeight,
+          child: widget.settingUpBody != null
+              ? Text(
+                  widget.settingUpBody!,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: typography.bodyTertiary.copyWith(
+                    color: colors.foregroundSecondary,
+                  ),
+                )
+              : const SizedBox.shrink(),
+        ),
+        SizedBox(height: spacing.s8),
+        // Progress bar — sits in place of the "Know more" link from the
+        // error variant. Repaints from [settingUpProgressListenable]
+        // without rebuilding the card.
+        ClipRRect(
+          borderRadius: BorderRadius.circular(999),
+          child: widget.settingUpProgressListenable == null
+              ? LinearProgressIndicator(
+                  minHeight: 4,
+                  backgroundColor: colors.foregroundDisabled.withValues(
+                    alpha: 0.3,
+                  ),
+                  color: colors.foregroundPrimary,
+                )
+              : ValueListenableBuilder<double>(
+                  valueListenable: widget.settingUpProgressListenable!,
+                  builder: (context, value, _) {
+                    return LinearProgressIndicator(
+                      minHeight: 4,
+                      value: value.clamp(0.0, 1.0),
+                      backgroundColor: colors.foregroundDisabled.withValues(
+                        alpha: 0.3,
+                      ),
+                      color: colors.foregroundPrimary,
+                    );
+                  },
+                ),
+        ),
       ],
     );
   }

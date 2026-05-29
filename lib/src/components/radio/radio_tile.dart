@@ -53,7 +53,7 @@ class NasikoRadioTile<T> extends StatelessWidget {
               label,
               style: typography.bodyPrimary.copyWith(
                 color: contentColor,
-                fontSize: 20.sp,
+                fontSize: 16.sp,
               ),
             ),
           ],

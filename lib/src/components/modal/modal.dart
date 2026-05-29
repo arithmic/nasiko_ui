@@ -167,8 +167,7 @@ class NasikoModal extends StatelessWidget {
 
     final isVertical = buttonLayout == NasikoModalVariant.vertical;
     final screenWidth = MediaQuery.of(context).size.width;
-    final effectiveMaxWidth =
-        maxWidth ?? (isVertical ? 300.0 : screenWidth * 0.5);
+  
 
     // Use a Dialog for standard modal behavior and default barrier
     return Dialog(
@@ -177,7 +176,7 @@ class NasikoModal extends StatelessWidget {
         borderRadius: BorderRadius.circular(radii.r8),
       ),
       child: Container(
-        constraints: BoxConstraints(maxWidth: effectiveMaxWidth),
+        constraints: BoxConstraints(maxWidth: 680),
         padding: EdgeInsets.all(spacing.s24),
         child: Column(
           mainAxisSize: MainAxisSize.min,

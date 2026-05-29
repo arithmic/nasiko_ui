@@ -106,6 +106,12 @@ class NasikoChip extends StatelessWidget {
           pressedColor = colors.backgroundSurfaceActive;
           foregroundColor = colors.foregroundPrimary;
           break;
+        case NasikoChipVariant.tag:
+          backgroundColor = colors.backgroundInformation.withValues(alpha: 0.64);
+          hoverColor = colors.backgroundInformation.withValues(alpha: 0.64);
+          pressedColor = colors.backgroundSurfaceActive;
+          foregroundColor = colors.foregroundPrimary;
+          break;
       }
     }
 
@@ -123,7 +129,7 @@ class NasikoChip extends StatelessWidget {
         color: backgroundColor,
         borderRadius: borderRadius,
         border: Border.all(
-          color: borderColor ?? colors.borderPrimary,
+          color:variant == NasikoChipVariant.tag ? Colors.transparent : borderColor ?? colors.borderPrimary,
           strokeAlign: BorderSide.strokeAlignOutside,
           width: borderWidths.w1,
         ),
