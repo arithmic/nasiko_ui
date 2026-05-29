@@ -22,6 +22,9 @@ class NasikoTextBox extends StatefulWidget {
     this.onRemoveAttachment,
     this.isLoading = false,
     this.focusNode,
+    this.estimatedTokens,
+    this.estimatedTokensTooltip = 'Estimated tokens usage',
+    this.attachmentPreviewBuilder,
   });
 
   final TextEditingController? controller;
@@ -39,6 +42,12 @@ class NasikoTextBox extends StatefulWidget {
   final void Function(int index)? onRemoveAttachment;
   final bool isLoading;
   final FocusNode? focusNode;
+  final int? estimatedTokens;
+  final String estimatedTokensTooltip;
+
+  /// Optional builder to provide a preview widget shown on hover for each attachment.
+  /// Called with [index] and [filename]; return null to show no preview.
+  final Widget? Function(int index, String filename)? attachmentPreviewBuilder;
 
   @override
   State<NasikoTextBox> createState() => _NasikoTextBoxState();
@@ -120,9 +129,9 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
     final radii = context.radius;
     final borderWidths = context.borderWidth;
 
-    final borderColor = widget.isOrchestrator
+    final borderColor = _isFocused
         ? colors.borderSecondary
-        : (_isFocused ? colors.borderSecondary : colors.borderPrimary);
+        : colors.borderPrimary;
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -137,103 +146,315 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
           vertical: spacing.s12,
         ),
         decoration: BoxDecoration(
-          color: widget.enabled
-              ? colors.backgroundGroup
-              : colors.backgroundGroup.withValues(alpha: 0.5),
+          color: colors.backgroundBase,
           borderRadius: BorderRadius.circular(radii.r12),
           border: Border.all(color: borderColor, width: borderWidths.w1),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (widget.attachments.isNotEmpty) ...[
-              Container(
-                width: double.infinity,
-                margin: EdgeInsets.only(bottom: spacing.s16),
-                child: Wrap(
-                  spacing: spacing.s8,
-                  runSpacing: spacing.s8,
-                  children: widget.attachments.asMap().entries.map((entry) {
-                    final index = entry.key;
-                    final file = entry.value;
-                    return NasikoChip(
-                      label: file,
-                      onDelete:
-                          widget.enabled && widget.onRemoveAttachment != null
-                          ? () => widget.onRemoveAttachment!(index)
-                          : null,
-                    );
-                  }).toList(),
-                ),
-              ),
-              SizedBox(height: spacing.s12),
-            ],
-            Focus(
-              onKeyEvent: (node, event) {
-                if (event is KeyDownEvent &&
-                    event.logicalKey == LogicalKeyboardKey.enter) {
-                  final isShiftPressed =
-                      HardwareKeyboard.instance.logicalKeysPressed.contains(
-                        LogicalKeyboardKey.shiftLeft,
-                      ) ||
-                      HardwareKeyboard.instance.logicalKeysPressed.contains(
-                        LogicalKeyboardKey.shiftRight,
-                      );
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Focus(
+                    onKeyEvent: (node, event) {
+                      if (event is KeyDownEvent &&
+                          event.logicalKey == LogicalKeyboardKey.enter) {
+                        final isShiftPressed =
+                            HardwareKeyboard.instance.logicalKeysPressed
+                                .contains(LogicalKeyboardKey.shiftLeft) ||
+                            HardwareKeyboard.instance.logicalKeysPressed
+                                .contains(LogicalKeyboardKey.shiftRight);
 
-                  if (isShiftPressed) {
-                    return KeyEventResult.ignored;
-                  }
+                        if (isShiftPressed) {
+                          return KeyEventResult.ignored;
+                        }
 
-                  widget.onSend?.call();
-                  return KeyEventResult.handled;
-                }
+                        widget.onSend?.call();
+                        return KeyEventResult.handled;
+                      }
 
-                return KeyEventResult.ignored;
-              },
-              child: TextField(
-                controller: _controller,
-                focusNode: _focusNode,
-                minLines: widget.minLines,
-                maxLines: widget.maxLines,
-                textInputAction: TextInputAction.newline,
-                enabled: widget.enabled,
-                style: typography.bodyPrimary.copyWith(
-                  color: colors.foregroundPrimary,
-                ),
-                onChanged: widget.onChanged,
-                decoration: InputDecoration(
-                  hintText: widget.hintText,
-                  hintStyle: typography.bodyPrimary.copyWith(
-                    color: colors.foregroundSecondary,
+                      return KeyEventResult.ignored;
+                    },
+                    child: TextField(
+                      controller: _controller,
+                      focusNode: _focusNode,
+                      minLines: widget.minLines,
+                      maxLines: widget.maxLines,
+                      textInputAction: TextInputAction.newline,
+                      enabled: widget.enabled,
+                      style: typography.bodyPrimary.copyWith(
+                        color: colors.foregroundPrimary,
+                      ),
+                      onChanged: widget.onChanged,
+                      decoration: InputDecoration(
+                        hintText: widget.hintText,
+                        hintStyle: typography.bodyPrimary.copyWith(
+                          color: colors.foregroundSecondary,
+                        ),
+                        border: InputBorder.none,
+                        isDense: true,
+                        contentPadding: EdgeInsets.zero,
+                      ),
+                    ),
                   ),
-                  border: InputBorder.none,
-                  isDense: true,
-                  contentPadding: EdgeInsets.zero,
                 ),
-              ),
+                if (widget.estimatedTokens != null) ...[
+                  SizedBox(width: spacing.s12),
+                  _EstimatedTokensPill(
+                    tokens: widget.estimatedTokens!,
+                    tooltip: widget.estimatedTokensTooltip,
+                  ),
+                ],
+              ],
             ),
-            if (widget.showAttachmentButton || widget.showSendButton) ...[
+            if (widget.showAttachmentButton ||
+                widget.attachments.isNotEmpty ||
+                widget.showSendButton) ...[
               SizedBox(height: spacing.s12),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  if (widget.showAttachmentButton)
-                    SecondaryIconButton(
-                      icon: HugeIcons.strokeRoundedAttachment01,
-                      onPressed: widget.enabled ? widget.onAttachmentTap : null,
-                      size: NasikoButtonSize.small,
+                  Expanded(
+                    child: Wrap(
+                      spacing: spacing.s8,
+                      runSpacing: spacing.s8,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        if (widget.showAttachmentButton)
+                          SecondaryIconButton(
+                            icon: HugeIcons.strokeRoundedAttachment01,
+                            onPressed: widget.enabled
+                                ? widget.onAttachmentTap
+                                : null,
+                            size: NasikoButtonSize.small,
+                          ),
+                        ...widget.attachments.asMap().entries.map((entry) {
+                          final index = entry.key;
+                          final file = entry.value;
+                          return _TextBoxAttachmentChip(
+                            label: file,
+                            leadingIcon: _attachmentIconFor(file),
+                            onDelete:
+                                widget.enabled &&
+                                    widget.onRemoveAttachment != null
+                                ? () => widget.onRemoveAttachment!(index)
+                                : null,
+                            preview: widget.attachmentPreviewBuilder
+                                ?.call(index, file),
+                          );
+                        }),
+                      ],
                     ),
-                  const Spacer(),
-                  if (widget.showSendButton)
+                  ),
+                  if (widget.showSendButton) ...[
+                    SizedBox(width: spacing.s12),
                     PrimaryIconButton(
                       icon: HugeIcons.strokeRoundedSent,
                       onPressed: widget.enabled ? widget.onSend : null,
                       size: NasikoButtonSize.medium,
                       isLoading: widget.isLoading,
                     ),
+                  ],
                 ],
               ),
             ],
           ],
+        ),
+      ),
+    );
+  }
+
+  HugeIconsType _attachmentIconFor(String fileName) {
+    final lowerFileName = fileName.toLowerCase();
+
+    if (lowerFileName.endsWith('.pdf')) {
+      return HugeIcons.strokeRoundedPdf02;
+    }
+
+    if (lowerFileName.endsWith('.jpg') ||
+        lowerFileName.endsWith('.jpeg') ||
+        lowerFileName.endsWith('.png') ||
+        lowerFileName.endsWith('.gif') ||
+        lowerFileName.endsWith('.webp')) {
+      return HugeIcons.strokeRoundedImage02;
+    }
+
+    return HugeIcons.strokeRoundedFile02;
+  }
+}
+
+class _EstimatedTokensPill extends StatelessWidget {
+  const _EstimatedTokensPill({required this.tokens, required this.tooltip});
+
+  final int tokens;
+  final String tooltip;
+
+  @override
+  Widget build(BuildContext context) {
+    return NasikoTooltip(
+      message: tooltip,
+      preferBelow: false,
+      child: NasikoChip(
+        enabled: true,
+        shape: NasikoChipShape.rounded,
+        size: NasikoChipSize.small,
+        label: '$tokens',
+        leadingIcon: HugeIcons.strokeRoundedCoins02,
+      ),
+    );
+  }
+}
+
+class _TextBoxAttachmentChip extends StatefulWidget {
+  const _TextBoxAttachmentChip({
+    required this.label,
+    required this.leadingIcon,
+    this.onDelete,
+    this.preview,
+  });
+
+  final String label;
+  final HugeIconsType leadingIcon;
+  final VoidCallback? onDelete;
+  final Widget? preview;
+
+  @override
+  State<_TextBoxAttachmentChip> createState() => _TextBoxAttachmentChipState();
+}
+
+class _TextBoxAttachmentChipState extends State<_TextBoxAttachmentChip> {
+  final _layerLink = LayerLink();
+  OverlayEntry? _overlayEntry;
+
+  void _showPreview() {
+    if (widget.preview == null) return;
+    _removeOverlay();
+    _overlayEntry = OverlayEntry(
+      builder: (_) => CompositedTransformFollower(
+        link: _layerLink,
+        targetAnchor: Alignment.topCenter,
+        followerAnchor: Alignment.bottomCenter,
+        offset: const Offset(0, -8),
+        child: Align(
+          alignment: Alignment.topLeft,
+          child: _AttachmentPreviewPopup(child: widget.preview!),
+        ),
+      ),
+    );
+    Overlay.of(context).insert(_overlayEntry!);
+  }
+
+  void _removeOverlay() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+  }
+
+  @override
+  void dispose() {
+    _removeOverlay();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final spacing = context.spacing;
+    final typography = context.typography;
+    final iconSizes = context.iconSize;
+    final radii = context.radius;
+    final borderWidths = context.borderWidth;
+
+    return CompositedTransformTarget(
+      link: _layerLink,
+      child: MouseRegion(
+        onEnter: (_) => _showPreview(),
+        onExit: (_) => _removeOverlay(),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 440),
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: spacing.s12,
+              vertical: spacing.s8,
+            ),
+            decoration: BoxDecoration(
+              color: colors.backgroundBase,
+              borderRadius: BorderRadius.circular(radii.r8),
+              border: Border.all(
+                color: colors.borderPrimary,
+                width: borderWidths.w1,
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                HugeIcon(
+                  icon: widget.leadingIcon,
+                  size: iconSizes.s,
+                  color: colors.foregroundIconPrimary,
+                ),
+                SizedBox(width: spacing.s2),
+                Flexible(
+                  child: Text(
+                    widget.label.length > 20
+                        ? '${widget.label.substring(0, 20)}...'
+                        : widget.label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: typography.buttonSecondary.copyWith(
+                      color: colors.foregroundPrimary,
+                    ),
+                  ),
+                ),
+                if (widget.onDelete != null) ...[
+                  SizedBox(width: spacing.s8),
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: widget.onDelete,
+                    child: HugeIcon(
+                      icon: HugeIcons.strokeRoundedCancel01,
+                      size: iconSizes.s,
+                      color: colors.foregroundIconPrimary,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _AttachmentPreviewPopup extends StatelessWidget {
+  const _AttachmentPreviewPopup({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: Container(
+        width: 240,
+        height: 160,
+        decoration: BoxDecoration(
+          color: const Color(0xFF1A1A1A),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.20),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.all(8),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(6),
+          child: child,
         ),
       ),
     );

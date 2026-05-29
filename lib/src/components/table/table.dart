@@ -94,7 +94,7 @@ class _NasikoTableState extends State<NasikoTable> {
 
     return Container(
       decoration: BoxDecoration(
-        color: colors.backgroundSurface,
+        color:  colors.backgroundSurface,
         borderRadius: BorderRadius.circular(radii.r12),
         border: Border.all(
           color: colors.borderPrimary,
@@ -215,9 +215,8 @@ class _NasikoTableRowState extends State<_NasikoTableRow> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
     final spacing = context.spacing;
-
+    final colors = context.colors;
     final Color backgroundColor = _isHovering
         ? colors.backgroundSurfaceHover
         : Colors.transparent;

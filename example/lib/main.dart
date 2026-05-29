@@ -1006,6 +1006,11 @@ class ExampleHomePage extends StatelessWidget {
           spacing: context.spacing.s12,
           runSpacing: context.spacing.s12,
           children: [
+            DestructiveIconButton(
+              icon: HugeIcons.strokeRoundedDelete02,
+              size: NasikoButtonSize.small,
+              onPressed: () {},
+            ),
             DestructiveButton(
               leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
               size: NasikoButtonSize.small,
@@ -1280,7 +1285,7 @@ class ExampleHomePage extends StatelessWidget {
         // --- Horizontal Banner ---
         NasikoBanner(
           title: 'Add Agent',
-          bannerIcon: bannerImage,
+          bannerIconImage: bannerImage,
           content: content,
           onClose: () {
             debugPrint('Horizontal Banner closed');
@@ -1298,7 +1303,7 @@ class ExampleHomePage extends StatelessWidget {
         // --- Vertical Banner ---
         NasikoBanner(
           title: 'Add Agent',
-          bannerIcon: bannerImage,
+          bannerIconImage: bannerImage,
           content: content,
           bannerType: NasikoBannerType.vertical,
           onClose: () {
@@ -1896,34 +1901,63 @@ class _TabBarExampleState extends State<_TabBarExample>
   }
 }
 
-class _MenuExample extends StatelessWidget {
+class _MenuExample extends StatefulWidget {
   const _MenuExample();
 
   @override
-  Widget build(BuildContext context) {
-    final menuItems = [
-      NasikoPopupMenuItemData(
-        label: 'Rollback',
-        icon: HugeIcons.strokeRoundedRotateClockwise,
-      ),
-      NasikoPopupMenuItemData(
-        label: 'Delete version',
-        icon: HugeIcons.strokeRoundedDelete02,
-        isDestructive: true,
-      ),
-    ];
+  State<_MenuExample> createState() => _MenuExampleState();
+}
 
+class _MenuExampleState extends State<_MenuExample> {
+  // This list can be as long as you want
+  final List<NasikoPopupMenuItemData> _menuItems = [
+    NasikoPopupMenuItemData(
+      label: 'Label 1',
+      icon: HugeIcons.strokeRoundedCheckmarkCircle01,
+    ),
+    NasikoPopupMenuItemData(
+      label: 'Label 2',
+      icon: HugeIcons.strokeRoundedCheckmarkCircle01,
+    ),
+    NasikoPopupMenuItemData(
+      label: 'Label 3',
+      icon: HugeIcons.strokeRoundedCheckmarkCircle01,
+    ),
+    NasikoPopupMenuItemData(
+      label: 'Label 4',
+      icon: HugeIcons.strokeRoundedCheckmarkCircle01,
+    ),
+    NasikoPopupMenuItemData(
+      label: 'Label 5',
+      icon: HugeIcons.strokeRoundedCheckmarkCircle01,
+    ),
+    NasikoPopupMenuItemData(
+      label: 'Label 6',
+      icon: HugeIcons.strokeRoundedCheckmarkCircle01,
+    ),
+    NasikoPopupMenuItemData(
+      label: 'Label 7',
+      icon: HugeIcons.strokeRoundedCheckmarkCircle01,
+    ),
+    NasikoPopupMenuItemData(
+      label: 'Label 8',
+      icon: HugeIcons.strokeRoundedCheckmarkCircle01,
+    ),
+  ];
+
+  int _selectedIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
     return NasikoPopupMenu(
-      width: 200.w,
-      items: menuItems,
+      items: _menuItems,
       onItemSelected: (index) {
-        final actionLabel = menuItems[index].label;
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(SnackBar(content: Text('$actionLabel tapped')));
+        setState(() {
+          _selectedIndex = index;
+        });
       },
       child: SecondaryButton(
-        label: 'Open menu',
+        label: _menuItems[_selectedIndex].label,
         size: NasikoButtonSize.medium,
         trailingIcon: HugeIcons.strokeRoundedArrowDown01,
         onPressed: () {},
@@ -2202,7 +2236,10 @@ class _SectionExampleState extends State<_SectionExample> {
       decoration: BoxDecoration(
         color: context.colors.backgroundBase,
         borderRadius: BorderRadius.circular(context.radius.r8),
-        border: Border.all(color: context.colors.borderPrimary),
+        border: Border.all(
+          color: context.colors.borderPrimary,
+          width: context.borderWidth.w1,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -2370,6 +2407,12 @@ class _ChipExampleState extends State<_ChipExample> {
               leadingIcon: HugeIcons.strokeRoundedUnavailable,
               size: NasikoChipSize.large,
               enabled: false,
+            ),
+            NasikoChip(
+              label: 'Rounded',
+              leadingIcon: HugeIcons.strokeRoundedCalendar03,
+              size: NasikoChipSize.large,
+              shape: NasikoChipShape.rounded,
             ),
           ],
         ),
