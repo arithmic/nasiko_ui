@@ -141,10 +141,7 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
               right: right,
               child: Material(
                 color: Colors.transparent,
-                child: Theme(
-                  data: themeData,
-                  child: surface,
-                ),
+                child: Theme(data: themeData, child: surface),
               ),
             ),
           ],
@@ -375,7 +372,7 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
           child: Container(
             decoration: BoxDecoration(
               color: isHighlighted
-                  ? const Color(0xFF6D737A)
+                  ? colors.foregroundSecondary
                   : Colors.transparent,
               borderRadius: BorderRadius.circular(radii.r8),
             ),

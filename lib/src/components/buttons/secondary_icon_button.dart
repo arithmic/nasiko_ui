@@ -7,7 +7,7 @@ import 'button_layout.dart';
 /// A secondary icon button for Nasiko UI.
 ///
 /// This is a medium-emphasis icon-only button with outline style.
-/// Supports two sizes: large and small.
+/// Supports three sizes: large, medium and small.
 class SecondaryIconButton extends StatelessWidget {
   const SecondaryIconButton({
     super.key,
@@ -54,8 +54,7 @@ class SecondaryIconButton extends StatelessWidget {
         if (states.contains(WidgetState.disabled)) {
           return colors.foregroundDisabled;
         }
-        if (states.contains(WidgetState.hovered) ||
-            states.contains(WidgetState.pressed)) {
+        if (states.contains(WidgetState.pressed)) {
           return colors.foregroundIconHover;
         }
         return colors.foregroundIconPrimary;

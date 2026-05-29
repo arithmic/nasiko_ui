@@ -179,9 +179,9 @@ class NasikoInputField extends StatelessWidget {
 
             filled: true,
             fillColor: isReadOnly!
-                ? Color.fromRGBO(237, 237, 237, 1)
-                : Color.fromRGBO(248, 248, 248, 1),
-            hoverColor: Color.fromRGBO(240, 240, 240, 1),
+                  ? colors.backgroundDisabled
+                : colors.backgroundGroup,
+            hoverColor: colors.backgroundSurface,
             contentPadding: contentPadding,
 
             border: defaultBorder,
@@ -259,5 +259,3 @@ class NasikoInputField extends StatelessWidget {
     );
   }
 }
-
-typedef HugeIconsType = List<List<dynamic>>;

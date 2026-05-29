@@ -21,70 +21,70 @@ class NasikoColorThemeFactory {
     return NasikoColorTheme(
       // Background Default
       backgroundBase: white,
-      backgroundGroup: Color.fromRGBO(224, 217, 204, 1),
-      backgroundSurface: neutral100,
-      backgroundSurfaceHover: Color.fromRGBO(245, 240, 232, 1),
-      backgroundSurfaceActive: Color.fromRGBO(255, 253, 247, 1),
-      backgroundSurfaceSubtle: Color.fromRGBO(240, 235, 224, 1),
-      backgroundOverlay: Color.fromRGBO(28, 24, 18, .45),
-      backgroundDisabled: Color.fromRGBO(237, 232, 224, 1),
+      backgroundGroup: sand50,
+      backgroundSurface: sand100,
+      backgroundSurfaceHover: sand200,
+      backgroundSurfaceActive: sand300,
+      backgroundSurfaceSubtle: sand200,
+      backgroundOverlay: sand600.withValues(alpha: 0.4),
+      backgroundDisabled: sand200,
 
       // Background Primary
-      backgroundBrand: Color.fromRGBO(200, 146, 10, 1),
-      backgroundBrandHover: Color.fromRGBO(168, 120, 8, 1),
-      backgroundBrandActive: Color.fromRGBO(138, 96, 6, 1),
-      backgroundBrandSubtle: Color.fromRGBO(245, 228, 190, 1),
+      backgroundBrand: brandColors.primary,
+      backgroundBrandHover: brandColors.primaryDark,
+      backgroundBrandActive: brandColors.primary,
+      backgroundBrandSubtle: brandColors.primaryLight,
 
-      // Background Secondary - uses selected palette
+      // Background Secondary
       backgroundSecondaryBrand: brandColors.primaryLightest,
       backgroundSecondaryBrandHover: brandColors.primaryLight,
       backgroundSecondaryBrandActive: brandColors.primaryLightest,
 
-      // Background Tertiary
-      backgroundTertiary: purple500,
-
       // Background Feedback
-      backgroundSuccess: Color.fromRGBO(40, 164, 106, 1),
-      backgroundWarning: Color.fromRGBO(186, 117, 23, 1),
-      backgroundError: Color.fromRGBO(192, 68, 10, 1),
-      backgroundInformation: Color.fromRGBO(46, 84, 112, 1),
+      backgroundSuccess: green100,
+      backgroundWarning: orange100,
+      backgroundError: red100,
+      backgroundInformation: brandColors.primaryLightest50,
+      backgroundInformationOverlay: sand800,
 
       // Foreground Default
-      foregroundPrimary: Color.fromRGBO(28, 24, 18, 1),
-      foregroundSecondary: Color.fromRGBO(107, 101, 88, 1),
-      foregroundDisabled: Color.fromRGBO(176, 168, 158, 1),
+      foregroundPrimary: sand900,
+      foregroundSecondary: sand700,
+      foregroundDisabled: sand500,
       foregroundOnAction: white,
-      foregroundIconPrimary: Color.fromRGBO(28, 24, 18, 1),
-      foregroundIconSecondary: Color.fromRGBO(187, 143, 6, 1),
-      foregroundIconTertiary: Color.fromRGBO(100, 116, 139, 1),
-      foregroundIconHover: Color.fromRGBO(105, 81, 4, 1),
+      foregroundIconPrimary: sand900,
+      foregroundIconSecondary: brandColors.primary,
+      foregroundIconTertiary: sand500,
+      foregroundIconHover: brandColors.primaryDark,
 
       // Foreground Constant
       foregroundConstantWhite: white,
-      foregroundConstantBlack: Color.fromRGBO(28, 24, 18, 1),
-      foregroundConstantBlackSecondary: Color.fromRGBO(44, 39, 32, 1),
+      foregroundConstantBlack: sand900,
+      foregroundConstantBlackSecondary: sand800,
 
       // Foreground Primary (Brand)
-      foregroundBrand: Color.fromRGBO(200, 146, 10, 1),
-      foregroundBrandHover: Color.fromRGBO(168, 120, 8, 1),
-      foregroundBrandLink: Color.fromRGBO(200, 146, 10, 1),
-      foregroundBrandHighlight: Color.fromRGBO(245, 228, 190, 1),
+      foregroundBrand: brandColors.primary,
+      foregroundBrandHover: brandColors.primaryDark,
+      foregroundBrandLink: brandColors.primary,
+      foregroundBrandHighlight: brandColors.primaryMedium,
 
       // Foreground Feedback
-      foregroundSuccess: Color.fromRGBO(26, 112, 72, 1),
-      foregroundWarning: Color.fromRGBO(122, 85, 0, 1),
-      foregroundError: Color.fromRGBO(139, 46, 16, 1),
-      foregroundInformation: Color.fromRGBO(28, 61, 90, 1),
+      foregroundSuccess: green600,
+      foregroundWarning: orange600,
+      foregroundError: red600,
+      foregroundInformation: brandColors.primaryDark,
+      foregroundInformationOverlay: sand400,
 
       // Border Default
-      borderPrimary: Color.fromRGBO(208, 201, 188, 1),
-      borderSecondary: yellow600,
-      borderHover: Color.fromRGBO(200, 146, 10, 1),
-      borderSuccess: Color.fromRGBO(40, 164, 106, 1),
-      borderError: Color.fromRGBO(192, 68, 10, 1),
-      borderWarning: Color.fromRGBO(186, 117, 23, 1),
-      borderInformation: Color.fromRGBO(46, 84, 112, 1),
-      borderDisabled: Color.fromRGBO(224, 217, 204, 1),
+      borderPrimary: sand300,
+      borderSecondary: brandColors.primary,
+      borderHover: brandColors.primaryDark,
+      borderSuccess: green300,
+      borderError: red200,
+      borderWarning: orange300,
+      borderDisabled: sand300,
+      borderInformation: brandColors.primaryHover,
+      borderInformationOverlay: sand800,
     );
   }
 
@@ -100,157 +100,204 @@ class NasikoColorThemeFactory {
     return NasikoColorTheme(
       // Background Default
       backgroundBase: black,
-      backgroundGroup: neutral900,
-      backgroundSurface: neutral800,
-      backgroundSurfaceHover: neutral700,
-      backgroundSurfaceActive: neutral600,
-      backgroundSurfaceSubtle: neutral700,
-      backgroundOverlay: neutral900,
-      backgroundDisabled: neutral700,
+      backgroundGroup: sand900,
+      backgroundSurface: sand800,
+      backgroundSurfaceHover: sand700,
+      backgroundSurfaceActive: sand600,
+      backgroundSurfaceSubtle: sand700,
+      backgroundOverlay: sand900.withValues(alpha: 0.7),
+      backgroundDisabled: sand700,
 
-      // Background Primary - uses selected palette
+      // Background Primary
       backgroundBrand: brandColors.primary,
-      backgroundBrandHover: brandColors.primaryLightest,
+      backgroundBrandHover: brandColors.primaryAccent,
       backgroundBrandActive: brandColors.primaryMedium,
       backgroundBrandSubtle: brandColors.primaryDarkest,
 
-      // Background Secondary - uses selected palette
+      // Background Secondary
       backgroundSecondaryBrand: brandColors.primaryDarkest,
       backgroundSecondaryBrandHover: brandColors.primaryDark,
       backgroundSecondaryBrandActive: brandColors.primaryDarkest,
-
-      // Background Tertiary
-      backgroundTertiary: purple500,
 
       // Background Feedback
       backgroundSuccess: green900,
       backgroundWarning: orange900,
       backgroundError: red900,
-      backgroundInformation: blue900,
+      backgroundInformation: brandColors.primaryDarkest,
+      backgroundInformationOverlay: sand200.withValues(alpha: 0.5),
 
       // Foreground Default
-      foregroundPrimary: neutral100,
-      foregroundSecondary: neutral400,
-      foregroundDisabled: neutral600,
-      foregroundOnAction: neutral900,
-      foregroundIconPrimary: neutral100,
+      foregroundPrimary: sand100,
+      foregroundSecondary: sand400,
+      foregroundDisabled: sand600,
+      foregroundOnAction: sand900,
+      foregroundIconPrimary: sand100,
       foregroundIconSecondary: brandColors.primary,
-      foregroundIconTertiary: neutral400,
-      foregroundIconHover: brandColors.primaryLightest,
+      foregroundIconTertiary: sand400,
+      foregroundIconHover: brandColors.primaryAccent,
 
       // Foreground Constant
       foregroundConstantWhite: white,
       foregroundConstantBlack: black,
-      foregroundConstantBlackSecondary: neutral900,
+      foregroundConstantBlackSecondary: sand900,
 
-      // Foreground Primary (Brand) - uses selected palette
-      foregroundBrand: brandColors.primaryLightest,
-      foregroundBrandHover: brandColors.primaryLight,
-      foregroundBrandLink: brandColors.primaryLightest,
-      foregroundBrandHighlight: brandColors.primaryLightest,
+      // Foreground Primary (Brand)
+      foregroundBrand: brandColors.primaryAccent,
+      foregroundBrandHover: brandColors.primaryHover,
+      foregroundBrandLink: brandColors.primaryAccent,
+      foregroundBrandHighlight: brandColors.primaryAccent,
 
       // Foreground Feedback
       foregroundSuccess: green400,
       foregroundWarning: orange400,
       foregroundError: red400,
-      foregroundInformation: blue400,
+      foregroundInformation: brandColors.primaryHover,
+      foregroundInformationOverlay: sand700,
 
       // Border Default
-      borderPrimary: neutral700,
+      borderPrimary: sand700,
       borderSecondary: brandColors.primary,
-      borderHover: brandColors.primaryLightest,
+      borderHover: brandColors.primaryAccent,
       borderSuccess: green600,
       borderError: red600,
       borderWarning: orange600,
-      borderInformation: blue600,
-      borderDisabled: neutral700,
+      borderDisabled: sand700,
+      borderInformation: brandColors.primaryDarkAccent,
+      borderInformationOverlay: sand200,
     );
   }
 
-  /// Helper method to get the color mappings for a specific palette.
   static _BrandColors _getBrandColors(NasikoColorPalette palette) {
     switch (palette) {
       case NasikoColorPalette.yellow:
         return _BrandColors(
+          primaryLightest50: yellow50,
           primaryLightest: yellow100,
           primaryLight: yellow200,
+          primaryHover: yellow300,
+          primaryAccent: yellow400,
           primaryMedium: yellow500,
           primary: yellow600,
+          primaryDarkAccent: yellow700,
           primaryDark: yellow800,
           primaryDarkest: yellow900,
         );
       case NasikoColorPalette.orange:
         return _BrandColors(
+          primaryLightest50: orange50,
           primaryLightest: orange100,
           primaryLight: orange200,
+          primaryHover: orange300,
+          primaryAccent: orange400,
           primaryMedium: orange500,
           primary: orange600,
+          primaryDarkAccent: orange700,
           primaryDark: orange800,
           primaryDarkest: orange900,
         );
       case NasikoColorPalette.red:
         return _BrandColors(
+          primaryLightest50: red50,
           primaryLightest: red100,
           primaryLight: red200,
+          primaryHover: red300,
+          primaryAccent: red400,
           primaryMedium: red500,
           primary: red600,
+          primaryDarkAccent: red700,
           primaryDark: red800,
           primaryDarkest: red900,
         );
       case NasikoColorPalette.purple:
         return _BrandColors(
+          primaryLightest50: purple50,
           primaryLightest: purple100,
           primaryLight: purple200,
+          primaryHover: purple300,
+          primaryAccent: purple400,
           primaryMedium: purple500,
           primary: purple600,
+          primaryDarkAccent: purple700,
           primaryDark: purple800,
           primaryDarkest: purple900,
         );
       case NasikoColorPalette.blue:
         return _BrandColors(
+          primaryLightest50: blue50,
           primaryLightest: blue100,
           primaryLight: blue200,
+          primaryHover: blue300,
+          primaryAccent: blue400,
           primaryMedium: blue500,
           primary: blue600,
+          primaryDarkAccent: blue700,
           primaryDark: blue800,
           primaryDarkest: blue900,
         );
       case NasikoColorPalette.teal:
         return _BrandColors(
+          primaryLightest50: teal50,
           primaryLightest: teal100,
           primaryLight: teal200,
+          primaryHover: teal300,
+          primaryAccent: teal400,
           primaryMedium: teal500,
           primary: teal600,
+          primaryDarkAccent: teal700,
           primaryDark: teal800,
           primaryDarkest: teal900,
         );
       case NasikoColorPalette.green:
         return _BrandColors(
+          primaryLightest50: green50,
           primaryLightest: green100,
           primaryLight: green200,
+          primaryHover: green300,
+          primaryAccent: green400,
           primaryMedium: green500,
           primary: green600,
+          primaryDarkAccent: green700,
           primaryDark: green800,
           primaryDarkest: green900,
+        );
+      case NasikoColorPalette.sand:
+        return _BrandColors(
+          primaryLightest50: sand50,
+          primaryLightest: sand100,
+          primaryLight: sand200,
+          primaryHover: sand300,
+          primaryAccent: sand400,
+          primaryMedium: sand500,
+          primary: sand600,
+          primaryDarkAccent: sand700,
+          primaryDark: sand800,
+          primaryDarkest: sand900,
         );
     }
   }
 }
 
-/// Internal helper class to hold brand color mappings
 class _BrandColors {
-  final Color primaryLightest; // 100
-  final Color primaryLight; // 200
-  final Color primaryMedium; // 500
-  final Color primary; // 600
-  final Color primaryDark; // 800
-  final Color primaryDarkest; // 900
+  final Color primaryLightest50; // 50
+  final Color primaryLightest;   // 100
+  final Color primaryLight;      // 200
+  final Color primaryHover;      // 300
+  final Color primaryAccent;     // 400
+  final Color primaryMedium;     // 500
+  final Color primary;           // 600
+  final Color primaryDarkAccent; // 700
+  final Color primaryDark;       // 800
+  final Color primaryDarkest;    // 900
 
   _BrandColors({
+    required this.primaryLightest50,
     required this.primaryLightest,
     required this.primaryLight,
+    required this.primaryHover,
+    required this.primaryAccent,
     required this.primaryMedium,
     required this.primary,
+    required this.primaryDarkAccent,
     required this.primaryDark,
     required this.primaryDarkest,
   });

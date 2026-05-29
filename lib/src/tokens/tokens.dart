@@ -5,4 +5,5 @@ export 'colors/colors.dart';
 export 'icon_size.dart';
 export 'radius.dart';
 export 'spacing.dart';
+export 'types.dart';
 export 'typography.dart';

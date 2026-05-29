@@ -46,16 +46,15 @@ class NasikoRadioTile<T> extends StatelessWidget {
             ),
             SizedBox(width: spacing.s8),
             if (icon != null) ...[
-              HugeIcon(
-                icon: icon!,
-                size: iconSizes.s,
-                color: contentColor,
-              ),
+              HugeIcon(icon: icon!, size: iconSizes.s, color: contentColor),
               SizedBox(width: spacing.s8),
             ],
             Text(
               label,
-              style: typography.bodyPrimary.copyWith(color: contentColor, fontSize: 20.sp),
+              style: typography.bodyPrimary.copyWith(
+                color: contentColor,
+                fontSize: 20.sp,
+              ),
             ),
           ],
         ),

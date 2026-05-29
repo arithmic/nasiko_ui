@@ -136,7 +136,7 @@ class _NasikoCardState extends State<NasikoCard> {
         padding: EdgeInsets.symmetric(vertical: spacing.s20),
         decoration: BoxDecoration(
           color: widget.enabled
-              ? Color.fromRGBO(248, 248, 248, 1)
+              ? colors.backgroundGroup
               : colors.foregroundConstantWhite,
           borderRadius: BorderRadius.circular(radii.r12),
           border: Border.all(

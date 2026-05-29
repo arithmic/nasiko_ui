@@ -527,6 +527,7 @@ NasikoChip(
 | `onTap` | `VoidCallback?` | `null` | Callback when chip is tapped |
 | `onDelete` | `VoidCallback?` | `null` | Callback for delete action (shows delete icon) |
 | `variant` | `NasikoChipVariant` | `neutral` | Visual style variant |
+| `shape` | `NasikoChipShape` | `rectangle` | Shape variant |
 | `enabled` | `bool` | `true` | Whether chip is interactive |
 
 #### NasikoChipVariant
@@ -724,15 +725,14 @@ NasikoListItem(
 
 ## Menu
 
-A scrollable menu for navigation or selection.
+A scrollable menu for actions.
 
 \`\`\`dart
 NasikoMenu(
   title: 'Categories',
   titleIcon: Icons.category,
   items: ['Electronics', 'Clothing', 'Books', 'Home'],
-  selectedIndex: 0,
-  onItemSelected: (index) => print('Selected: $index'),
+  onItemSelected: (index) => print('Action: $index'),
   height: 300.0,
 )
 \`\`\`
@@ -743,8 +743,7 @@ NasikoMenu(
 |----------|------|---------|-------------|
 | `title` | `String` | **required** | Menu title |
 | `items` | `List<String>` | **required** | Menu item labels |
-| `selectedIndex` | `int` | **required** | Currently selected index |
-| `onItemSelected` | `ValueChanged<int>` | **required** | Selection callback |
+| `onItemSelected` | `ValueChanged<int>` | **required** | Action callback for tapped item |
 | `titleIcon` | `IconData?` | `null` | Icon next to title |
 | `height` | `double` | `300.0` | Menu container height |
 

@@ -1,4 +1,4 @@
-import 'package:nasiko_ui/nasiko_ui.dart';
+import 'package:nasiko_ui/src/tokens/types.dart';
 
 class NasikoNavigationRailItem {
   const NasikoNavigationRailItem({

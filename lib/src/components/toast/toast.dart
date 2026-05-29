@@ -35,23 +35,23 @@ class NasikoToast extends StatelessWidget {
     switch (type) {
       case NasikoToastType.success:
         backgroundColor = colors.backgroundSuccess;
-        foregroundColor = colors.foregroundConstantWhite;
-        iconColor = colors.foregroundConstantWhite;
+        foregroundColor = colors.foregroundSuccess;
+        iconColor = colors.foregroundSuccess;
         break;
       case NasikoToastType.error:
         backgroundColor = colors.backgroundError;
-        foregroundColor = colors.foregroundConstantWhite;
-        iconColor = colors.foregroundConstantWhite;
+        foregroundColor = colors.foregroundError;
+        iconColor = colors.foregroundError;
         break;
       case NasikoToastType.warning:
         backgroundColor = colors.backgroundWarning;
-        foregroundColor = colors.foregroundConstantWhite;
-        iconColor = colors.foregroundConstantWhite;
+        foregroundColor = colors.foregroundWarning;
+        iconColor = colors.foregroundWarning;
         break;
       case NasikoToastType.info:
         backgroundColor = colors.backgroundInformation;
-        foregroundColor = colors.foregroundConstantWhite;
-        iconColor = colors.foregroundConstantWhite;
+        foregroundColor = colors.foregroundInformation;
+        iconColor = colors.foregroundInformation;
         break;
     }
 

@@ -1006,6 +1006,11 @@ class ExampleHomePage extends StatelessWidget {
           spacing: context.spacing.s12,
           runSpacing: context.spacing.s12,
           children: [
+            DestructiveIconButton(
+              icon: HugeIcons.strokeRoundedDelete02,
+              size: NasikoButtonSize.small,
+              onPressed: () {},
+            ),
             DestructiveButton(
               leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
               size: NasikoButtonSize.small,
@@ -1280,7 +1285,7 @@ class ExampleHomePage extends StatelessWidget {
         // --- Horizontal Banner ---
         NasikoBanner(
           title: 'Add Agent',
-          bannerIcon: bannerImage,
+          bannerIconImage: bannerImage,
           content: content,
           onClose: () {
             debugPrint('Horizontal Banner closed');
@@ -1298,7 +1303,7 @@ class ExampleHomePage extends StatelessWidget {
         // --- Vertical Banner ---
         NasikoBanner(
           title: 'Add Agent',
-          bannerIcon: bannerImage,
+          bannerIconImage: bannerImage,
           content: content,
           bannerType: NasikoBannerType.vertical,
           onClose: () {
@@ -2402,6 +2407,12 @@ class _ChipExampleState extends State<_ChipExample> {
               leadingIcon: HugeIcons.strokeRoundedUnavailable,
               size: NasikoChipSize.large,
               enabled: false,
+            ),
+            NasikoChip(
+              label: 'Rounded',
+              leadingIcon: HugeIcons.strokeRoundedCalendar03,
+              size: NasikoChipSize.large,
+              shape: NasikoChipShape.rounded,
             ),
           ],
         ),

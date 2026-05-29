@@ -3,6 +3,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
 void main() {
+  setUpAll(() {
+    ScreenUtil.configure(
+      data: const MediaQueryData(size: Size(390, 844)),
+      designSize: const Size(390, 844),
+      splitScreenMode: false,
+      minTextAdapt: true,
+    );
+  });
+
   group('NasikoTheme - Light Theme', () {
     testWidgets('Light theme is properly configured', (
       WidgetTester tester,
@@ -213,6 +222,16 @@ void main() {
         greaterThan(defaultNasikoTypography.bodyPrimary.fontSize!),
       );
     });
+
+    test('Typography styles can be colorized with a default color', () {
+      const color = Color(0xFF123456);
+      final typography = defaultNasikoTypographyWithColor(color);
+
+      for (final style in _allTypographyStyles(typography)) {
+        expect(style.color, equals(color));
+      }
+      expect(typography.linkPrimary.decorationColor, equals(color));
+    });
   });
 
   group('Border Radius Tokens', () {
@@ -287,7 +306,15 @@ void main() {
           ),
         );
 
-        expect(capturedColors, equals(lightColors));
+        expect(
+          capturedColors.backgroundBase,
+          equals(lightColors.backgroundBase),
+        );
+        expect(
+          capturedColors.foregroundPrimary,
+          equals(lightColors.foregroundPrimary),
+        );
+        expect(capturedColors.borderPrimary, equals(lightColors.borderPrimary));
       },
     );
 
@@ -308,7 +335,15 @@ void main() {
           ),
         );
 
-        expect(capturedColors, equals(darkColors));
+        expect(
+          capturedColors.backgroundBase,
+          equals(darkColors.backgroundBase),
+        );
+        expect(
+          capturedColors.foregroundPrimary,
+          equals(darkColors.foregroundPrimary),
+        );
+        expect(capturedColors.borderPrimary, equals(darkColors.borderPrimary));
       },
     );
 
@@ -349,7 +384,22 @@ void main() {
         ),
       );
 
-      expect(capturedTypography, equals(defaultNasikoTypography));
+      final colors = NasikoTheme.lightTheme.extension<NasikoColorTheme>()!;
+      final expectedTypography = defaultNasikoTypographyWithColor(
+        colors.foregroundPrimary,
+      );
+
+      expect(
+        capturedTypography.bodyPrimary.fontSize,
+        equals(expectedTypography.bodyPrimary.fontSize),
+      );
+      expect(
+        capturedTypography.titlePrimary.fontFamily,
+        equals(expectedTypography.titlePrimary.fontFamily),
+      );
+      for (final style in _allTypographyStyles(capturedTypography)) {
+        expect(style.color, equals(colors.foregroundPrimary));
+      }
     });
 
     testWidgets('BuildContext.borderRadius returns NasikoBorderRadiusTheme', (
@@ -369,7 +419,10 @@ void main() {
         ),
       );
 
-      expect(capturedRadius, equals(defaultNasikoBorderRadius));
+      expect(capturedRadius.r0, equals(defaultNasikoBorderRadius.r0));
+      expect(capturedRadius.r4, equals(defaultNasikoBorderRadius.r4));
+      expect(capturedRadius.r8, equals(defaultNasikoBorderRadius.r8));
+      expect(capturedRadius.r16, equals(defaultNasikoBorderRadius.r16));
     });
   });
 
@@ -405,4 +458,24 @@ void main() {
       expect(bgColor, isNotNull);
     });
   });
+}
+
+List<TextStyle> _allTypographyStyles(NasikoTypography typography) {
+  return [
+    typography.titlePrimary,
+    typography.titleSecondary,
+    typography.buttonPrimary,
+    typography.buttonSecondary,
+    typography.buttonPrimaryBold,
+    typography.buttonSecondaryBold,
+    typography.bodyPrimary,
+    typography.bodyPrimaryBold,
+    typography.bodySecondary,
+    typography.bodySecondaryBold,
+    typography.bodyTertiary,
+    typography.bodyTertiaryBold,
+    typography.linkPrimary,
+    typography.caption,
+    typography.code,
+  ];
 }

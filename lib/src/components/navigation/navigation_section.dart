@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nasiko_ui/src/components/section/section.dart';
 
 class NasikoNavigationSection {
   const NasikoNavigationSection({
@@ -26,10 +27,14 @@ class NasikoNavigationItem {
     required this.label,
     this.subtitle,
     this.onTap,
+    this.menuActions,
+    this.maxLines,
   });
 
   final String id;
   final String label;
   final String? subtitle;
   final void Function()? onTap;
+  final List<SectionItemAction>? menuActions;
+  final int? maxLines;
 }

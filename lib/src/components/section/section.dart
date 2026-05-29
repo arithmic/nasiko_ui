@@ -87,6 +87,7 @@ class Section extends StatefulWidget {
     this.selectedChild,
     this.selectedChildId,
     this.isSelected = false,
+    this.isCollapsible = true,
     this.onTap,
     this.onChildTap,
     this.backgroundColor,
@@ -118,6 +119,9 @@ class Section extends StatefulWidget {
 
   /// Whether this section is currently selected (non-expandable sections only).
   final bool isSelected;
+
+  /// When false the section is always expanded and the toggle chevron is hidden.
+  final bool isCollapsible;
 
   /// Callback when section header is tapped (non-expandable sections only).
   final VoidCallback? onTap;
@@ -162,7 +166,7 @@ class _SectionState extends State<Section> {
   @override
   void initState() {
     super.initState();
-    _isExpanded = _hasSelectedChild();
+    _isExpanded = !widget.isCollapsible || _hasSelectedChild();
   }
 
   @override
@@ -197,6 +201,7 @@ class _SectionState extends State<Section> {
   void _toggleExpanded() {
     if (!_canInteract) return;
     if (widget.isExpandable) {
+      if (!widget.isCollapsible) return;
       setState(() => _isExpanded = !_isExpanded);
     } else if (widget.onTap != null) {
       widget.onTap!();
@@ -216,41 +221,42 @@ class _SectionState extends State<Section> {
       final bool hasSelectedChild = _hasSelectedChild();
 
       return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // ── Header ────────────────────────────────────────────────────
-            GestureDetector(
-              onTap: _canInteract ? _toggleExpanded : null,
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: Row(
-                  children: [
-                    if (widget.icon != null) ...[
-                      HugeIcon(
-                        icon: widget.icon!,
-                        size: iconSizes.s,
-                        color: widget.isDisabled
-                            ? colors.foregroundDisabled
-                            : hasSelectedChild
-                            ? colors.foregroundPrimary
-                            : colors.foregroundIconTertiary,
-                      ),
-                      SizedBox(width: spacing.s8),
-                    ],
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: spacing.s4),
-                        child: Text(
-                          widget.label,
-                          maxLines: widget.maxLines,
-                          style: typography.bodySecondaryBold.copyWith(
-                            color: widget.isDisabled
-                                ? colors.foregroundDisabled
-                                : colors.foregroundPrimary,
-                          ),
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // ── Header ────────────────────────────────────────────────────
+          GestureDetector(
+            onTap: _canInteract ? _toggleExpanded : null,
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: Row(
+                children: [
+                  if (widget.icon != null) ...[
+                    HugeIcon(
+                      icon: widget.icon!,
+                      size: iconSizes.s,
+                      color: widget.isDisabled
+                          ? colors.foregroundDisabled
+                          : hasSelectedChild
+                          ? colors.foregroundPrimary
+                          : colors.foregroundIconTertiary,
+                    ),
+                    SizedBox(width: spacing.s8),
+                  ],
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: spacing.s4),
+                      child: Text(
+                        widget.label,
+                        maxLines: widget.maxLines,
+                        style: typography.bodySecondaryBold.copyWith(
+                          color: widget.isDisabled
+                              ? colors.foregroundDisabled
+                              : colors.foregroundPrimary,
                         ),
                       ),
                     ),
+                  ),
+                  if (widget.isCollapsible) ...[
                     SizedBox(width: spacing.s8),
                     AnimatedRotation(
                       turns: _isExpanded ? 0.5 : 0,
@@ -264,56 +270,57 @@ class _SectionState extends State<Section> {
                       ),
                     ),
                   ],
-                ),
+                ],
               ),
             ),
+          ),
 
-            // ── Expanded content ──────────────────────────────────────────
-            if (_isExpanded) ...[
-              SizedBox(height: spacing.s8),
-              if (widget.isLoading)
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: spacing.s12,
-                    vertical: spacing.s8,
-                  ),
-                  child: Text(
-                    'Loading...',
-                    style: typography.bodySecondary.copyWith(
-                      color: colors.foregroundSecondary,
-                    ),
-                  ),
-                )
-              else if (widget.children == null || widget.children!.isEmpty)
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: spacing.s12,
-                    vertical: spacing.s8,
-                  ),
-                  child: Text(
-                    widget.emptyMessage ?? '',
-                    style: typography.bodySecondary.copyWith(
-                      color: colors.foregroundSecondary,
-                    ),
-                  ),
-                )
-              else
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: widget.children!.map((child) {
-                    return _SectionChildItem(
-                      item: child,
-                      isSelected: _isChildSelected(child),
-                      onTap: () {
-                        child.onTap?.call();
-                        widget.onChildTap?.call(child.id ?? child.label);
-                      },
-                      isDisabled: widget.isDisabled,
-                    );
-                  }).toList(),
+          // ── Expanded content ──────────────────────────────────────────
+          if (_isExpanded) ...[
+            SizedBox(height: spacing.s8),
+            if (widget.isLoading)
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: spacing.s12,
+                  vertical: spacing.s8,
                 ),
-            ],
+                child: Text(
+                  'Loading...',
+                  style: typography.bodySecondary.copyWith(
+                    color: colors.foregroundSecondary,
+                  ),
+                ),
+              )
+            else if (widget.children == null || widget.children!.isEmpty)
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: spacing.s12,
+                  vertical: spacing.s8,
+                ),
+                child: Text(
+                  widget.emptyMessage ?? '',
+                  style: typography.bodySecondary.copyWith(
+                    color: colors.foregroundSecondary,
+                  ),
+                ),
+              )
+            else
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: widget.children!.map((child) {
+                  return _SectionChildItem(
+                    item: child,
+                    isSelected: _isChildSelected(child),
+                    onTap: () {
+                      child.onTap?.call();
+                      widget.onChildTap?.call(child.id ?? child.label);
+                    },
+                    isDisabled: widget.isDisabled,
+                  );
+                }).toList(),
+              ),
           ],
+        ],
       );
     }
 
@@ -406,6 +413,7 @@ class _SectionChildItem extends StatefulWidget {
 
 class _SectionChildItemState extends State<_SectionChildItem> {
   bool _isHovered = false;
+  bool _isMenuOpen = false;
 
   /// Guards against the row's onTap firing when the user clicks the popup menu
   /// trigger, since pointer-down on the menu button precedes the tap event.
@@ -429,8 +437,8 @@ class _SectionChildItemState extends State<_SectionChildItem> {
       backgroundColor = colors.backgroundSurface;
       borderColor = colors.borderDisabled;
     } else if (widget.isSelected) {
-      backgroundColor = colors.backgroundBase;
-      borderColor = colors.foregroundBrand;
+      backgroundColor = colors.backgroundSecondaryBrand;
+      borderColor = colors.borderPrimary;
     } else if (_isHovered) {
       backgroundColor = Colors.transparent;
       borderColor = colors.borderSecondary;
@@ -439,8 +447,7 @@ class _SectionChildItemState extends State<_SectionChildItem> {
       borderColor = Colors.transparent;
     }
 
-    final showTrailing =
-        _hasMenu && (_isHovered || widget.isSelected) && _canInteract;
+    final showTrailing = _hasMenu && _canInteract;
 
     return MouseRegion(
       cursor: _canInteract
@@ -481,7 +488,7 @@ class _SectionChildItemState extends State<_SectionChildItem> {
                           ? TextOverflow.ellipsis
                           : null,
                       style: widget.isSelected
-                          ? typography.bodySecondaryBold.copyWith(
+                          ? typography.buttonSecondary.copyWith(
                               color: widget.isDisabled
                                   ? colors.foregroundDisabled
                                   : colors.foregroundPrimary,
@@ -494,12 +501,21 @@ class _SectionChildItemState extends State<_SectionChildItem> {
                     ),
                   ),
                   if (showTrailing)
-                    Listener(
-                      behavior: HitTestBehavior.opaque,
-                      onPointerDown: (_) => _isMenuPointerDown = true,
-                      onPointerUp: (_) => _isMenuPointerDown = false,
-                      onPointerCancel: (_) => _isMenuPointerDown = false,
-                      child: _MenuButton(actions: widget.item.menuActions!),
+                    Opacity(
+                      opacity: (_isHovered || _isMenuOpen) ? 1.0 : 0.0,
+                      child: Listener(
+                        behavior: HitTestBehavior.opaque,
+                        onPointerDown: (_) => _isMenuPointerDown = true,
+                        onPointerUp: (_) => _isMenuPointerDown = false,
+                        onPointerCancel: (_) => _isMenuPointerDown = false,
+                        child: _MenuButton(
+                          actions: widget.item.menuActions!,
+                          onMenuOpened: () =>
+                              setState(() => _isMenuOpen = true),
+                          onMenuClosed: () =>
+                              setState(() => _isMenuOpen = false),
+                        ),
+                      ),
                     ),
                 ],
               ),
@@ -526,9 +542,15 @@ class _SectionChildItemState extends State<_SectionChildItem> {
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _MenuButton extends StatelessWidget {
-  const _MenuButton({required this.actions});
+  const _MenuButton({
+    required this.actions,
+    this.onMenuOpened,
+    this.onMenuClosed,
+  });
 
   final List<SectionItemAction> actions;
+  final VoidCallback? onMenuOpened;
+  final VoidCallback? onMenuClosed;
 
   @override
   Widget build(BuildContext context) {
@@ -547,7 +569,12 @@ class _MenuButton extends StatelessWidget {
       color: colors.backgroundBase,
       elevation: 4,
       position: PopupMenuPosition.under,
-      onSelected: (index) => actions[index].onTap(),
+      onOpened: onMenuOpened,
+      onCanceled: onMenuClosed,
+      onSelected: (index) {
+        onMenuClosed?.call();
+        actions[index].onTap();
+      },
       itemBuilder: (_) => [
         for (int i = 0; i < actions.length; i++)
           PopupMenuItem<int>(

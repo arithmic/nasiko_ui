@@ -4,17 +4,16 @@ import 'package:nasiko_ui/nasiko_ui.dart';
 
 import 'button_layout.dart';
 
-/// A primary icon button for Nasiko UI.
+/// A destructive icon button for Nasiko UI.
 ///
-/// This is a high-emphasis icon-only button with brand color fill.
+/// This is a medium-emphasis icon-only button with outline style.
 /// Supports three sizes: large, medium and small.
-class PrimaryIconButton extends StatelessWidget {
-  const PrimaryIconButton({
+class DestructiveIconButton extends StatelessWidget {
+  const DestructiveIconButton({
     super.key,
     required this.onPressed,
     required this.icon,
     this.size = NasikoButtonSize.medium,
-    this.isLoading,
   });
 
   /// The callback that is called when the button is tapped.
@@ -27,14 +26,13 @@ class PrimaryIconButton extends StatelessWidget {
   /// The size of the button. Defaults to [NasikoButtonSize.medium].
   final NasikoButtonSize size;
 
-  final bool? isLoading;
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
     final radii = context.radius;
     final borderWidths = context.borderWidth;
     final layout = iconButtonLayout(context, size);
-    final borderRadius = radii.r8;
+    final borderRadius = radii.r10;
 
     final style = ButtonStyle(
       padding: WidgetStateProperty.all(layout.padding),
@@ -46,12 +44,9 @@ class PrimaryIconButton extends StatelessWidget {
       // --- Background Color ---
       backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
         if (states.contains(WidgetState.disabled)) {
-          return colors.backgroundDisabled;
+          return colors.backgroundError;
         }
-        if (states.contains(WidgetState.hovered)) {
-          return colors.backgroundSecondaryBrandHover;
-        }
-        return colors.backgroundSecondaryBrand;
+        return Colors.transparent;
       }),
 
       // --- Foreground Color (Icon) ---
@@ -59,12 +54,16 @@ class PrimaryIconButton extends StatelessWidget {
         if (states.contains(WidgetState.disabled)) {
           return colors.foregroundDisabled;
         }
-        return colors.foregroundIconPrimary;
+        if (states.contains(WidgetState.hovered) ||
+            states.contains(WidgetState.pressed)) {
+          return colors.foregroundError;
+        }
+        return colors.foregroundError;
       }),
 
-      // --- Shape & Focus Ring ---
+      // --- Shape & Border ---
       shape: WidgetStateProperty.resolveWith<OutlinedBorder>((states) {
-        BorderSide borderSide = BorderSide.none;
+        BorderSide borderSide;
 
         if (states.contains(WidgetState.disabled)) {
           borderSide = BorderSide(
@@ -73,17 +72,17 @@ class PrimaryIconButton extends StatelessWidget {
           );
         } else if (states.contains(WidgetState.hovered)) {
           borderSide = BorderSide(
-            color: colors.borderHover,
+            color: const Color(0xFFB91C1C),
             width: borderWidths.w1,
           );
         } else if (states.contains(WidgetState.focused)) {
           borderSide = BorderSide(
-            color: colors.borderSecondary,
+            color: colors.borderError,
             width: borderWidths.w2,
           );
         } else {
           borderSide = BorderSide(
-            color: colors.borderSecondary,
+            color: colors.borderError,
             width: borderWidths.w1,
           );
         }
@@ -100,13 +99,7 @@ class PrimaryIconButton extends StatelessWidget {
     return IconButton(
       onPressed: onPressed,
       style: style,
-      icon: (isLoading ?? false)
-          ? SizedBox(
-              width: layout.iconSize,
-              height: layout.iconSize,
-              child: CircularProgressIndicator(strokeWidth: borderWidths.w2),
-            )
-          : HugeIcon(icon: icon, size: layout.iconSize),
+      icon: HugeIcon(icon: icon, size: layout.iconSize),
     );
   }
 }
