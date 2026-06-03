@@ -9,9 +9,9 @@ class NasikoTabItem {
   final String label;
 
   /// Only Hugeicons library's icon is called
-  final HugeIcon icon;
+  final HugeIcon? icon;
 
-  const NasikoTabItem({required this.label, required this.icon});
+  const NasikoTabItem({required this.label, this.icon});
 }
 
 /// A horizontal, scrollable tab bar for the Nasiko Design System.
@@ -86,8 +86,10 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                item.icon,
-                SizedBox(width: spacing.s8),
+                if (item.icon != null) ...[
+                  item.icon!,
+                  SizedBox(width: spacing.s8),
+                ],
                 Text(item.label),
               ],
             ),
