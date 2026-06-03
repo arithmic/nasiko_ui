@@ -153,6 +153,12 @@ class ExampleHomePage extends StatelessWidget {
             SizedBox(height: context.spacing.s28),
             _buildSection(
               context,
+              title: 'Tertiary Icon Buttons',
+              child: _buildTertiaryIconButtonsExample(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
               title: 'Destructive Buttons',
               child: _buildDestructiveButtonsExample(context),
             ),
@@ -998,6 +1004,70 @@ class ExampleHomePage extends StatelessWidget {
     );
   }
 
+  Widget _buildTertiaryIconButtonsExample(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Large', style: context.typography.bodyPrimaryBold),
+        SizedBox(height: context.spacing.s12),
+        Wrap(
+          spacing: context.spacing.s12,
+          runSpacing: context.spacing.s12,
+          children: [
+            TertiaryIconButton(
+              icon: HugeIcons.strokeRoundedStar,
+              onPressed: () {},
+              size: NasikoButtonSize.large,
+            ),
+            TertiaryIconButton(
+              icon: HugeIcons.strokeRoundedStar,
+              onPressed: null,
+              size: NasikoButtonSize.large,
+            ),
+          ],
+        ),
+        SizedBox(height: context.spacing.s20),
+        Text('Medium', style: context.typography.bodyPrimaryBold),
+        SizedBox(height: context.spacing.s12),
+        Wrap(
+          spacing: context.spacing.s12,
+          runSpacing: context.spacing.s12,
+          children: [
+            TertiaryIconButton(
+              icon: HugeIcons.strokeRoundedStar,
+              onPressed: () {},
+              size: NasikoButtonSize.medium,
+            ),
+            TertiaryIconButton(
+              icon: HugeIcons.strokeRoundedStar,
+              onPressed: null,
+              size: NasikoButtonSize.medium,
+            ),
+          ],
+        ),
+        SizedBox(height: context.spacing.s20),
+        Text('Small', style: context.typography.bodyPrimaryBold),
+        SizedBox(height: context.spacing.s12),
+        Wrap(
+          spacing: context.spacing.s12,
+          runSpacing: context.spacing.s12,
+          children: [
+            TertiaryIconButton(
+              icon: HugeIcons.strokeRoundedStar,
+              onPressed: () {},
+              size: NasikoButtonSize.small,
+            ),
+            TertiaryIconButton(
+              icon: HugeIcons.strokeRoundedStar,
+              onPressed: null,
+              size: NasikoButtonSize.small,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
   Widget _buildDestructiveButtonsExample(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1087,9 +1157,8 @@ class ExampleHomePage extends StatelessWidget {
         ),
         SizedBox(width: context.spacing.s16),
         Expanded(
-          child: NasikoCard(
+          child: NasikoAgentCard(
             title: 'Document Expert',
-            titleIcon: HugeIcons.strokeRoundedDocumentCode,
             tags: [
               'document analysis',
               'chat',
@@ -1103,7 +1172,17 @@ class ExampleHomePage extends StatelessWidget {
             ],
             description:
                 'A helpful assistant that answers user questions based on the provided document. It supports file uploads for document processing and maintains a chat history for each session.',
-            secondaryButtonLabel: 'Learn More',
+            onTap: () {},
+            menuActions: [
+              NasikoPopupMenuItemData(
+                label: 'Edit',
+                icon: HugeIcons.strokeRoundedEdit01,
+              ),
+              NasikoPopupMenuItemData(
+                label: 'Delete',
+                icon: HugeIcons.strokeRoundedDelete02,
+              ),
+            ],
           ),
         ),
         SizedBox(width: context.spacing.s16),

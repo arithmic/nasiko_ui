@@ -14,6 +14,7 @@ class TertiaryIconButton extends StatelessWidget {
     required this.onPressed,
     required this.icon,
     this.size = NasikoButtonSize.medium,
+    this.statesController,
   });
 
   /// The callback that is called when the button is tapped.
@@ -26,13 +27,18 @@ class TertiaryIconButton extends StatelessWidget {
   /// The size of the button. Defaults to [NasikoButtonSize.medium].
   final NasikoButtonSize size;
 
+  /// Optional external controller for driving widget states (e.g. hover,
+  /// pressed) from outside the button — used when [AbsorbPointer] or similar
+  /// blocks pointer events from reaching the button directly.
+  final WidgetStatesController? statesController;
+
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
     final radii = context.radius;
     final borderWidths = context.borderWidth;
     final layout = iconButtonLayout(context, size);
-    final borderRadius = radii.r10;
+    final borderRadius = radii.r8;
 
     final style = ButtonStyle(
       padding: WidgetStateProperty.all(layout.padding),
@@ -46,6 +52,9 @@ class TertiaryIconButton extends StatelessWidget {
         if (states.contains(WidgetState.disabled)) {
           return colors.backgroundDisabled;
         }
+        if (states.contains(WidgetState.pressed)) {
+          return colors.backgroundSecondaryBrand;
+        }
         return Colors.transparent;
       }),
 
@@ -55,9 +64,9 @@ class TertiaryIconButton extends StatelessWidget {
           return colors.foregroundDisabled;
         }
         if (states.contains(WidgetState.pressed)) {
-          return colors.foregroundIconHover;
+          return colors.foregroundIconSecondary;
         }
-        return colors.foregroundIconPrimary;
+        return colors.foregroundIconTertiary;
       }),
 
       // --- Shape & Border ---
@@ -69,18 +78,22 @@ class TertiaryIconButton extends StatelessWidget {
             color: colors.borderDisabled,
             width: borderWidths.w1,
           );
-        } else if (states.contains(WidgetState.hovered)) {
+        } else if (states.contains(WidgetState.pressed)) {
           borderSide = BorderSide(
-            color: colors.borderHover,
+            color: Colors.transparent,
             width: borderWidths.w1,
           );
-        } else if (states.contains(WidgetState.focused)) {
+        } else if (states.contains(WidgetState.hovered) ||
+            states.contains(WidgetState.focused)) {
           borderSide = BorderSide(
-            color: colors.borderSecondary,
-            width: borderWidths.w2,
+            color: colors.borderPrimary,
+            width: borderWidths.w1,
           );
         } else {
-          borderSide = BorderSide.none;
+          borderSide = BorderSide(
+            color: Colors.transparent,
+            width: borderWidths.w1,
+          );
         }
 
         return RoundedRectangleBorder(
@@ -95,6 +108,7 @@ class TertiaryIconButton extends StatelessWidget {
     return IconButton(
       onPressed: onPressed,
       style: style,
+      statesController: statesController,
       icon: HugeIcon(icon: icon, size: layout.iconSize),
     );
   }
