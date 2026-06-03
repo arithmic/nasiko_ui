@@ -166,8 +166,6 @@ class NasikoModal extends StatelessWidget {
     final radii = context.radius;
 
     final isVertical = buttonLayout == NasikoModalVariant.vertical;
-    final screenWidth = MediaQuery.of(context).size.width;
-  
 
     // Use a Dialog for standard modal behavior and default barrier
     return Dialog(

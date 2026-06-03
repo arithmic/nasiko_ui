@@ -31,8 +31,7 @@ enum NasikoAgentCardVariant {
 /// - [NasikoAgentCardVariant.settingUp] — yellow accent.
 /// - [NasikoAgentCardVariant.active] — green accent.
 /// - [NasikoAgentCardVariant.error] — red accent; supply [errorBody],
-///   [errorDetails], [onRetry], and [onDelete]. Title is always
-///   "Agent upload failed!".
+///   [errorDetails], [onRetry], and [onDelete].
 class NasikoAgentCard extends StatefulWidget {
   const NasikoAgentCard({
     super.key,
@@ -103,7 +102,7 @@ class NasikoAgentCard extends StatefulWidget {
   /// suppressed.
   final bool disabled;
 
-  /// When `true`, the card shows the hover background persistently unless
+  /// When `true`, the card shows the selected elevation persistently unless
   /// disabled or rendered as an error card.
   final bool selected;
 
@@ -160,18 +159,24 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
   OverlayEntry? _errorDetailsOverlay;
   final LayerLink _knowMoreLayerLink = LayerLink();
 
-  bool get _hasMenu =>
-      widget.menuActions != null && widget.menuActions!.isNotEmpty;
+  // ── Computed state ─────────────────────────────────────────────────────────
 
   bool get _isError => widget.variant == NasikoAgentCardVariant.error;
 
-  /// Setting-up cards render the dedicated progress body when the consumer
-  /// supplies any of the setting-up props.
+  bool get _hasMenu => widget.menuActions?.isNotEmpty == true;
+
+  bool get _hasErrorDetails => widget.errorDetails != null;
+
+  /// Muted appearance: disabled or carrying error-details overlay content.
+  bool get _isMuted => widget.disabled || _hasErrorDetails;
+
   bool get _hasSettingUpBody =>
       widget.variant == NasikoAgentCardVariant.settingUp &&
       (widget.settingUpTitle != null ||
           widget.settingUpBody != null ||
           widget.settingUpProgressListenable != null);
+
+  // ── Lifecycle ──────────────────────────────────────────────────────────────
 
   @override
   void dispose() {
@@ -179,10 +184,10 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
     super.dispose();
   }
 
-  // ── Error-details click overlay ──────────────────────────────────────────────
+  // ── Error-details overlay ──────────────────────────────────────────────────
 
   void _showErrorDetails() {
-    if (_errorDetailsOverlay != null || widget.errorDetails == null) return;
+    if (_errorDetailsOverlay != null || !_hasErrorDetails) return;
 
     final colors = context.colors;
     final spacing = context.spacing;
@@ -192,7 +197,6 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
     _errorDetailsOverlay = OverlayEntry(
       builder: (ctx) => Stack(
         children: [
-          // Full-screen barrier — tap anywhere outside to dismiss.
           Positioned.fill(
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
@@ -200,7 +204,6 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
               child: const ColoredBox(color: Colors.transparent),
             ),
           ),
-          // Follows "Know more" exactly — no manual coordinate math.
           CompositedTransformFollower(
             link: _knowMoreLayerLink,
             showWhenUnlinked: false,
@@ -239,23 +242,23 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
     _errorDetailsOverlay = null;
   }
 
-  // ── Build ────────────────────────────────────────────────────────────────────
+  // ── Build ──────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
     final spacing = context.spacing;
     final radii = context.radius;
-    final typography = context.typography;
-    final iconSizes = context.iconSize;
     final borderWidths = context.borderWidth;
 
-    final canInteract = !widget.disabled && !_isError;
-    final showHover = _isHovered && canInteract;
-    final showSelected = widget.selected && canInteract;
-    final showElevation = showHover || showSelected;
+    // Interaction state
+    final bool canHover = widget.onTap != null && !widget.disabled && !_isError;
+    final bool canSelect = !widget.disabled && !_isError;
+    final bool showHover = _isHovered && canHover;
+    final bool showSelected = widget.selected && canSelect;
+    final bool showElevation = showHover || showSelected;
 
-    // Left accent bar colour — null means no accent bar.
+    // Accent bar colour — null suppresses the bar entirely.
     final Color? accentColor = widget.disabled
         ? null
         : switch (widget.variant) {
@@ -265,22 +268,14 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
             NasikoAgentCardVariant.error => colors.foregroundError,
           };
 
-    final bgColor = widget.disabled || widget.errorDetails != null
-        ? colors.backgroundBase
-        : colors.backgroundBase;
-
-    // Selected keeps the standard border. Setting-up always shows the
-    // primary border. Disabled/error keep their dedicated colours.
-    final borderColor = widget.disabled || widget.errorDetails != null
+    final borderColor = _isMuted
         ? colors.borderDisabled
-        : showHover && !showSelected
-        ? colors.borderPrimary
         : _hasSettingUpBody
         ? colors.borderPrimary
-        : showSelected ? colors.borderSecondary : colors.borderPrimary;
+        : (showHover || showSelected)
+        ? colors.borderSecondary
+        : colors.borderPrimary;
 
-    // Setting-up cards render a subtle white → #F5F2EC gradient instead of
-    // the flat background colour.
     final Gradient? settingUpGradient = _hasSettingUpBody
         ? const LinearGradient(
             begin: Alignment(1.00, 0.50),
@@ -289,43 +284,28 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
           )
         : null;
 
-    final descriptionStyle = typography.bodyTertiary.copyWith(
-      color: widget.disabled
-          ? colors.foregroundDisabled
-          : colors.foregroundSecondary,
-    );
-    final descriptionReservedHeight =
-        (descriptionStyle.height ?? 1.2) * descriptionStyle.fontSize! * 2;
-
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: widget.maxWidth),
       child: MouseRegion(
-        cursor:
-            widget.onTap != null &&
-                !widget.disabled &&
-                widget.errorDetails != null
-            ? SystemMouseCursors.click
-            : SystemMouseCursors.basic,
+        cursor: canHover ? SystemMouseCursors.click : SystemMouseCursors.basic,
         onEnter: (_) => setState(() => _isHovered = true),
         onExit: (_) => setState(() => _isHovered = false),
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
-          onTap:
-              (widget.onTap == null ||
-                  widget.disabled ||
-                  widget.errorDetails != null)
-              ? null
-              : () {
-                  if (_isMenuPointerDown) return;
-                  widget.onTap!();
-                },
+          onTap: canHover
+              ? () {
+                  if (!_isMenuPointerDown) widget.onTap!();
+                }
+              : null,
           child: Stack(
             children: [
-              // ── Card body ──────────────────────────────────────────────
-              Container(
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 150),
                 padding: EdgeInsets.all(spacing.s20),
                 decoration: BoxDecoration(
-                  color: settingUpGradient == null ? bgColor : null,
+                  color: settingUpGradient == null
+                      ? colors.backgroundBase
+                      : null,
                   gradient: settingUpGradient,
                   borderRadius: BorderRadius.circular(radii.r8),
                   border: Border.all(color: borderColor),
@@ -342,99 +322,16 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: spacing.s36,
-                      child: _buildHeader(
-                        colors,
-                        spacing,
-                        typography,
-                        iconSizes,
-                      ),
-                    ),
-                    if (_isError) ...[
-                      _buildErrorBody(
-                        colors,
-                        spacing,
-                        typography,
-                        descriptionReservedHeight,
-                      ),
-                    ] else if (_hasSettingUpBody) ...[
-                      _buildSettingUpBody(
-                        colors,
-                        spacing,
-                        typography,
-                        descriptionReservedHeight,
-                      ),
-                    ] else ...[
-                      if (widget.subtitle != null &&
-                          widget.subtitle!.isNotEmpty) ...[
-                        SizedBox(height: spacing.s16),
-                        Text(
-                          widget.subtitle!,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: typography.bodyTertiaryBold.copyWith(
-                            color:
-                                widget.disabled || widget.errorDetails != null
-                                ? colors.foregroundDisabled
-                                : colors.foregroundPrimary,
-                          ),
-                        ),
-                      ],
-                      if (widget.tags.isNotEmpty) ...[
-                        SizedBox(height: spacing.s16),
-                        _buildTags(
-                          false,
-                          widget.disabled || widget.errorDetails != null,
-                        ),
-                      ],
-                      if (widget.description != null) ...[
-                        SizedBox(height: spacing.s12),
-                        SizedBox(
-                          height: descriptionReservedHeight,
-                          child: Text(
-                            widget.description!,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: descriptionStyle,
-                          ),
-                        ),
-                      ],
-                      if (widget.author != null &&
-                          widget.author!.isNotEmpty) ...[
-                        SizedBox(height: spacing.s12),
-                        RichText(
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          text: TextSpan(
-                            style: typography.bodyTertiary.copyWith(
-                              color:
-                                  widget.disabled || widget.errorDetails != null
-                                  ? colors.foregroundDisabled
-                                  : colors.foregroundSecondary,
-                            ),
-                            children: [
-                              const TextSpan(text: 'Author : '),
-                              TextSpan(
-                                text: widget.author!,
-                                style: typography.bodyTertiaryBold.copyWith(
-                                  color:
-                                      widget.disabled ||
-                                          widget.errorDetails != null
-                                      ? colors.foregroundDisabled
-                                      : colors.foregroundSecondary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ],
+                    SizedBox(height: spacing.s36, child: _buildHeader(context)),
+                    if (_isError)
+                      _buildErrorBody(context)
+                    else if (_hasSettingUpBody)
+                      _buildSettingUpBody(context)
+                    else
+                      _buildNormalBody(context),
                   ],
                 ),
               ),
-
-              // ── Left accent bar ────────────────────────────────────────
               if (accentColor != null)
                 Positioned(
                   left: 0,
@@ -458,14 +355,14 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
     );
   }
 
-  // ── Header ──────────────────────────────────────────────────────────────────
+  // ── Header ─────────────────────────────────────────────────────────────────
 
-  Widget _buildHeader(
-    NasikoColorTheme colors,
-    NasikoSpacingTheme spacing,
-    NasikoTypography typography,
-    NasikoIconSizeTheme iconSizes,
-  ) {
+  Widget _buildHeader(BuildContext context) {
+    final colors = context.colors;
+    final spacing = context.spacing;
+    final typography = context.typography;
+    final iconSizes = context.iconSize;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -491,8 +388,7 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
               Text(
                 widget.title,
                 style: typography.bodyPrimaryBold.copyWith(
-                  color:
-                      widget.disabled || _isError || widget.errorDetails != null
+                  color: (_isMuted || _isError)
                       ? colors.foregroundDisabled
                       : colors.foregroundPrimary,
                 ),
@@ -503,7 +399,7 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
                 Text(
                   widget.version!,
                   style: typography.bodyTertiary.copyWith(
-                    color: widget.disabled || widget.errorDetails != null
+                    color: _isMuted
                         ? colors.foregroundDisabled
                         : colors.foregroundPrimary,
                   ),
@@ -511,8 +407,20 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
             ],
           ),
         ),
-        // Error variant: retry + delete replace the 3-dot menu.
-        if (_isError) ...[
+        _buildHeaderActions(context),
+      ],
+    );
+  }
+
+  Widget _buildHeaderActions(BuildContext context) {
+    final colors = context.colors;
+    final spacing = context.spacing;
+    final iconSizes = context.iconSize;
+
+    if (_isError) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
           if (widget.onRetry != null)
             PrimaryIconButton(
               icon: HugeIcons.strokeRoundedReload,
@@ -527,39 +435,115 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
               onPressed: widget.onDelete!,
               size: NasikoButtonSize.small,
             ),
-        ] else if (widget.showMore && !_hasSettingUpBody) ...[
-          (_hasMenu && !widget.disabled && widget.errorDetails == null)
-              ? Listener(
-                  behavior: HitTestBehavior.opaque,
-                  onPointerDown: (_) => _isMenuPointerDown = true,
-                  onPointerUp: (_) => _isMenuPointerDown = false,
-                  onPointerCancel: (_) => _isMenuPointerDown = false,
-                  child: _AgentCardMenuButton(
-                    actions: widget.menuActions!,
-                    onItemSelected: widget.onMenuActionSelected,
-                  ),
-                )
-              : Padding(
-                  padding: EdgeInsets.all(spacing.s2),
-                  child: HugeIcon(
-                    icon: HugeIcons.strokeRoundedMoreVertical,
-                    size: iconSizes.m,
-                    color: colors.foregroundDisabled,
+        ],
+      );
+    }
+
+    if (!widget.showMore || !_hasMenu || _hasSettingUpBody) {
+      return const SizedBox.shrink();
+    }
+
+    if (!_isMuted) {
+      return Listener(
+        behavior: HitTestBehavior.opaque,
+        onPointerDown: (_) => _isMenuPointerDown = true,
+        onPointerUp: (_) => _isMenuPointerDown = false,
+        onPointerCancel: (_) => _isMenuPointerDown = false,
+        child: _AgentCardMenuButton(
+          actions: widget.menuActions!,
+          onItemSelected: widget.onMenuActionSelected,
+        ),
+      );
+    }
+
+    return HugeIcon(
+      icon: HugeIcons.strokeRoundedMoreVertical,
+      size: iconSizes.m,
+      color: colors.foregroundDisabled,
+    );
+  }
+
+  // ── Normal body ────────────────────────────────────────────────────────────
+
+  Widget _buildNormalBody(BuildContext context) {
+    final colors = context.colors;
+    final spacing = context.spacing;
+    final typography = context.typography;
+
+    final contentColor = _isMuted
+        ? colors.foregroundDisabled
+        : colors.foregroundPrimary;
+    final subtleColor = _isMuted
+        ? colors.foregroundDisabled
+        : colors.foregroundSecondary;
+    final descriptionStyle = typography.bodyTertiary.copyWith(
+      color: subtleColor,
+    );
+    final descriptionHeight =
+        (descriptionStyle.height ?? 1.2) * descriptionStyle.fontSize! * 2;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (widget.subtitle?.isNotEmpty == true) ...[
+          SizedBox(height: spacing.s16),
+          Text(
+            widget.subtitle!,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: typography.bodyTertiaryBold.copyWith(color: contentColor),
+          ),
+        ],
+        if (widget.tags.isNotEmpty) ...[
+          SizedBox(height: spacing.s16),
+          _buildTags(_isMuted),
+        ],
+        if (widget.description != null) ...[
+          SizedBox(height: spacing.s12),
+          SizedBox(
+            height: descriptionHeight,
+            child: Text(
+              widget.description!,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: descriptionStyle,
+            ),
+          ),
+        ],
+        if (widget.author?.isNotEmpty == true) ...[
+          SizedBox(height: spacing.s12),
+          RichText(
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            text: TextSpan(
+              style: typography.bodyTertiary.copyWith(color: subtleColor),
+              children: [
+                const TextSpan(text: 'Author : '),
+                TextSpan(
+                  text: widget.author!,
+                  style: typography.bodyTertiaryBold.copyWith(
+                    color: subtleColor,
                   ),
                 ),
+              ],
+            ),
+          ),
         ],
       ],
     );
   }
 
-  // ── Error body ──────────────────────────────────────────────────────────────
+  // ── Error body ─────────────────────────────────────────────────────────────
 
-  Widget _buildErrorBody(
-    NasikoColorTheme colors,
-    NasikoSpacingTheme spacing,
-    NasikoTypography typography,
-    double descriptionReservedHeight,
-  ) {
+  Widget _buildErrorBody(BuildContext context) {
+    final colors = context.colors;
+    final spacing = context.spacing;
+    final typography = context.typography;
+
+    final descriptionStyle = typography.bodyTertiary;
+    final descriptionHeight =
+        (descriptionStyle.height ?? 1.2) * descriptionStyle.fontSize! * 2;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -572,25 +556,17 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
             ),
           ),
         SizedBox(height: spacing.s8),
-        // API status_message shown in a reserved 2-line area (matches
-        // the description slot height in normal cards for visual height parity).
         SizedBox(
-          height: descriptionReservedHeight,
-          child: widget.errorBody != null
-              ? Text(
-                  widget.errorBody!,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: typography.bodyTertiary,
-                )
-              : Text(
-                  "We couldn't start this agent due to a configuration issue.",
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: typography.bodyTertiary,
-                ),
+          height: descriptionHeight,
+          child: Text(
+            widget.errorBody ??
+                "We couldn't start this agent due to a configuration issue.",
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: descriptionStyle,
+          ),
         ),
-        if (widget.errorDetails != null) ...[
+        if (_hasErrorDetails)
           CompositedTransformTarget(
             link: _knowMoreLayerLink,
             child: GestureDetector(
@@ -607,19 +583,23 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
               ),
             ),
           ),
-        ],
       ],
     );
   }
 
-  // ── Setting-up body ─────────────────────────────────────────────────────────
+  // ── Setting-up body ────────────────────────────────────────────────────────
 
-  Widget _buildSettingUpBody(
-    NasikoColorTheme colors,
-    NasikoSpacingTheme spacing,
-    NasikoTypography typography,
-    double descriptionReservedHeight,
-  ) {
+  Widget _buildSettingUpBody(BuildContext context) {
+    final colors = context.colors;
+    final spacing = context.spacing;
+    final typography = context.typography;
+
+    final descriptionStyle = typography.bodyTertiary.copyWith(
+      color: colors.foregroundSecondary,
+    );
+    final descriptionHeight =
+        (descriptionStyle.height ?? 1.2) * descriptionStyle.fontSize! * 2;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -632,25 +612,18 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
             ),
           ),
         SizedBox(height: spacing.s8),
-        // Status body shown in a reserved 2-line area to match the
-        // description slot height in normal cards.
         SizedBox(
-          height: descriptionReservedHeight,
+          height: descriptionHeight,
           child: widget.settingUpBody != null
               ? Text(
                   widget.settingUpBody!,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: typography.bodyTertiary.copyWith(
-                    color: colors.foregroundSecondary,
-                  ),
+                  style: descriptionStyle,
                 )
               : const SizedBox.shrink(),
         ),
         SizedBox(height: spacing.s8),
-        // Progress bar — sits in place of the "Know more" link from the
-        // error variant. Repaints from [settingUpProgressListenable]
-        // without rebuilding the card.
         ClipRRect(
           borderRadius: BorderRadius.circular(999),
           child: widget.settingUpProgressListenable == null
@@ -663,34 +636,28 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
                 )
               : ValueListenableBuilder<double>(
                   valueListenable: widget.settingUpProgressListenable!,
-                  builder: (context, value, _) {
-                    return LinearProgressIndicator(
-                      minHeight: 4,
-                      value: value.clamp(0.0, 1.0),
-                      backgroundColor: colors.foregroundDisabled.withValues(
-                        alpha: 0.3,
-                      ),
-                      color: colors.foregroundPrimary,
-                    );
-                  },
+                  builder: (context, value, _) => LinearProgressIndicator(
+                    minHeight: 4,
+                    value: value.clamp(0.0, 1.0),
+                    backgroundColor: colors.foregroundDisabled.withValues(
+                      alpha: 0.3,
+                    ),
+                    color: colors.foregroundPrimary,
+                  ),
                 ),
         ),
       ],
     );
   }
 
-  // ── Tags ────────────────────────────────────────────────────────────────────
+  // ── Tags ───────────────────────────────────────────────────────────────────
 
-  /// Measures how many tags from [widget.tags] fit in [availableWidth] as a
-  /// single row, accounting for the "+N" overflow chip that must also fit when
-  /// not all tags are shown.
   List<String> _fittingTags(double availableWidth) {
     final tags = widget.tags;
     if (tags.isEmpty) return [];
 
     final style = context.typography.bodyTertiary;
     final gap = context.spacing.s8;
-    // Small chip: s12 horizontal padding on each side + 1px border on each side.
     final chipHPad = context.spacing.s12 * 2 + 2.0;
 
     double textWidth(String text) {
@@ -705,25 +672,20 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
         .map((t) => chipHPad + textWidth(t.toUpperCase()))
         .toList();
 
-    // Try fitting count tags (most → fewest). When count < total, a "+N" chip
-    // must also fit on the same row.
     for (int count = tags.length; count >= 0; count--) {
       double total = chipWidths.take(count).fold(0.0, (a, b) => a + b);
       if (count > 1) total += gap * (count - 1);
-
       if (count < tags.length) {
         final overflowLabel = '+${tags.length - count}';
-        final overflowWidth = chipHPad + textWidth(overflowLabel);
-        total += (count > 0 ? gap : 0) + overflowWidth;
+        total += (count > 0 ? gap : 0) + chipHPad + textWidth(overflowLabel);
       }
-
       if (total <= availableWidth) return tags.sublist(0, count);
     }
 
     return [];
   }
 
-  Widget _buildTags(bool accent, bool disabled) {
+  Widget _buildTags(bool disabled) {
     final colors = context.colors;
     final spacing = context.spacing;
 
@@ -743,9 +705,7 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
                 variant: NasikoChipVariant.base,
                 shape: NasikoChipShape.rounded,
                 enabled: !disabled,
-                borderColor: accent
-                    ? colors.borderSecondary
-                    : colors.borderPrimary,
+                borderColor: colors.borderPrimary,
               ),
             ],
             if (overflowCount > 0) ...[
@@ -762,9 +722,7 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
                   variant: NasikoChipVariant.base,
                   shape: NasikoChipShape.rounded,
                   enabled: !disabled,
-                  borderColor: accent
-                      ? colors.borderSecondary
-                      : colors.borderPrimary,
+                  borderColor: colors.borderPrimary,
                 ),
               ),
             ],
@@ -775,26 +733,57 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
   }
 }
 
-// ── Menu button ──────────────────────────────────────────────────────────────
+// ── Menu button ────────────────────────────────────────────────────────────────
 
-/// Three-dot popover trigger rendered at the end of a [NasikoAgentCard]
-/// header.
-class _AgentCardMenuButton extends StatelessWidget {
+/// Three-dot popover trigger rendered at the end of a [NasikoAgentCard] header.
+///
+/// [NasikoPopupMenu] wraps its child in [AbsorbPointer], which blocks all
+/// pointer events from reaching the [TertiaryIconButton]. A [MouseRegion] +
+/// [Listener] placed above the [AbsorbPointer] track hover and pressed state
+/// and forward them into the button via an external [WidgetStatesController].
+class _AgentCardMenuButton extends StatefulWidget {
   const _AgentCardMenuButton({required this.actions, this.onItemSelected});
 
   final List<NasikoPopupMenuItemData> actions;
   final ValueChanged<int>? onItemSelected;
 
   @override
+  State<_AgentCardMenuButton> createState() => _AgentCardMenuButtonState();
+}
+
+class _AgentCardMenuButtonState extends State<_AgentCardMenuButton> {
+  final WidgetStatesController _statesController = WidgetStatesController();
+
+  @override
+  void dispose() {
+    _statesController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return NasikoPopupMenu(
-      width: 160,
-      items: actions,
-      onItemSelected: (index) => onItemSelected?.call(index),
-      child: TertiaryIconButton(
-        icon: HugeIcons.strokeRoundedMoreVertical,
-        onPressed: () {},
-        size: NasikoButtonSize.small,
+    return MouseRegion(
+      onEnter: (_) => _statesController.update(WidgetState.hovered, true),
+      onExit: (_) => _statesController.update(WidgetState.hovered, false),
+      child: Listener(
+        behavior: HitTestBehavior.translucent,
+        onPointerDown: (_) =>
+            _statesController.update(WidgetState.pressed, true),
+        onPointerUp: (_) =>
+            _statesController.update(WidgetState.pressed, false),
+        onPointerCancel: (_) =>
+            _statesController.update(WidgetState.pressed, false),
+        child: NasikoPopupMenu(
+          width: 160,
+          items: widget.actions,
+          onItemSelected: (index) => widget.onItemSelected?.call(index),
+          child: TertiaryIconButton(
+            icon: HugeIcons.strokeRoundedMoreVertical,
+            onPressed: () {},
+            size: NasikoButtonSize.small,
+            statesController: _statesController,
+          ),
+        ),
       ),
     );
   }
