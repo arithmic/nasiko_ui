@@ -23,7 +23,7 @@ class _PaletteSwitcherExampleState extends State<PaletteSwitcherExample> {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(1728, 1117),
+      designSize: const Size(1512, 1024),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {

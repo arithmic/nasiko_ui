@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
+import 'scale.dart';
 
 extension NasikoSpacingResolved on NasikoSpacingTheme {
   // Vertical
   double get s2h => s2.h;
   double get s4h => s4.h;
+  double get s5h => s5.h;
+  double get s6h => s6.h;
+  double get s7h => s7.h;
   double get s8h => s8.h;
   double get s12h => s12.h;
   double get s16h => s16.h;
@@ -19,6 +23,9 @@ extension NasikoSpacingResolved on NasikoSpacingTheme {
   // Horizontal
   double get s2w => s2.w;
   double get s4w => s4.w;
+  double get s5w => s5.w;
+  double get s6w => s6.w;
+  double get s7w => s7.w;
   double get s8w => s8.w;
   double get s12w => s12.w;
   double get s16w => s16.w;
@@ -33,6 +40,9 @@ extension NasikoSpacingResolved on NasikoSpacingTheme {
   // Uniform
   double get s2r => s2.r;
   double get s4r => s4.r;
+  double get s5r => s5.r;
+  double get s6r => s6.r;
+  double get s7r => s7.r;
   double get s8r => s8.r;
   double get s12r => s12.r;
   double get s16r => s16.r;
@@ -51,6 +61,9 @@ class NasikoSpacingTheme extends ThemeExtension<NasikoSpacingTheme> {
     required this.s0,
     required this.s2,
     required this.s4,
+    required this.s5,
+    required this.s6,
+    required this.s7,
     required this.s8,
     required this.s12,
     required this.s16,
@@ -66,6 +79,9 @@ class NasikoSpacingTheme extends ThemeExtension<NasikoSpacingTheme> {
   final double s0;
   final double s2;
   final double s4;
+  final double s5;
+  final double s6;
+  final double s7;
   final double s8;
   final double s12;
   final double s16;
@@ -82,6 +98,9 @@ class NasikoSpacingTheme extends ThemeExtension<NasikoSpacingTheme> {
     double? s0,
     double? s2,
     double? s4,
+    double? s5,
+    double? s6,
+    double? s7,
     double? s8,
     double? s12,
     double? s16,
@@ -97,6 +116,9 @@ class NasikoSpacingTheme extends ThemeExtension<NasikoSpacingTheme> {
       s0: s0 ?? this.s0,
       s2: s2 ?? this.s2,
       s4: s4 ?? this.s4,
+      s5: s5 ?? this.s5,
+      s6: s6 ?? this.s6,
+      s7: s7 ?? this.s7,
       s8: s8 ?? this.s8,
       s12: s12 ?? this.s12,
       s16: s16 ?? this.s16,
@@ -125,6 +147,9 @@ class NasikoSpacingTheme extends ThemeExtension<NasikoSpacingTheme> {
       s0: lerpDouble(s0, other.s0, t),
       s2: lerpDouble(s2, other.s2, t),
       s4: lerpDouble(s4, other.s4, t),
+      s5: lerpDouble(s5, other.s5, t),
+      s6: lerpDouble(s6, other.s6, t),
+      s7: lerpDouble(s7, other.s7, t),
       s8: lerpDouble(s8, other.s8, t),
       s12: lerpDouble(s12, other.s12, t),
       s16: lerpDouble(s16, other.s16, t),
@@ -142,19 +167,22 @@ class NasikoSpacingTheme extends ThemeExtension<NasikoSpacingTheme> {
 // --- Default Spacing Instance ---
 // This is the single source of truth for your spacing values
 const NasikoSpacingTheme defaultNasikoSpacing = NasikoSpacingTheme(
-  s0: 0.0,
-  s2: 2.0,
-  s4: 4.0,
-  s8: 8.0,
-  s12: 12.0,
-  s16: 16.0,
-  s20: 20.0,
-  s24: 24.0,
-  s28: 28.0,
-  s36: 36.0,
-  s48: 48.0,
-  s64: 64.0,
-  s80: 80.0,
+  s0: scale0,
+  s2: scale2,
+  s4: scale4,
+  s5: scale5,
+  s6: scale6,
+  s7: scale7,
+  s8: scale8,
+  s12: scale12,
+  s16: scale16,
+  s20: scale20,
+  s24: scale24,
+  s28: scale28,
+  s36: scale36,
+  s48: scale48,
+  s64: scale64,
+  s80: scale80,
 );
 
 // --- BuildContext Extension ---

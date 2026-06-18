@@ -2,6 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
+/// Pumps a widget built by [build] under a ScreenUtilInit so flutter_screenutil's
+/// `.sp`/`.r` resolve. [build] runs inside the ScreenUtilInit builder, after
+/// ScreenUtil is initialized — important because NasikoTheme builds typography
+/// (which calls `.sp`) eagerly. Mirrors the example app's setup.
+Future<void> _pumpWithScreenUtil(WidgetTester tester, WidgetBuilder build) {
+  return tester.pumpWidget(
+    ScreenUtilInit(
+      designSize: const Size(1728, 1117),
+      builder: (context, _) => build(context),
+    ),
+  );
+}
+
 void main() {
   setUpAll(() {
     ScreenUtil.configure(
@@ -45,7 +58,7 @@ void main() {
     test('Light theme extensions are registered', () {
       final theme = NasikoTheme.lightTheme;
       expect(theme.extensions, isNotNull);
-      expect(theme.extensions.length, equals(6));
+      expect(theme.extensions.length, equals(7));
     });
   });
 
@@ -82,7 +95,7 @@ void main() {
     test('Dark theme extensions are registered', () {
       final theme = NasikoTheme.darkTheme;
       expect(theme.extensions, isNotNull);
-      expect(theme.extensions.length, equals(6));
+      expect(theme.extensions.length, equals(7));
     });
   });
 
@@ -276,15 +289,25 @@ void main() {
   group('Icon Size Tokens', () {
     test('Icon size values are not null', () {
       expect(defaultNasikoIconSize.xs, isNotNull);
-      expect(defaultNasikoIconSize.s, isNotNull);
-      expect(defaultNasikoIconSize.m, isNotNull);
-      expect(defaultNasikoIconSize.l, isNotNull);
+      expect(defaultNasikoIconSize.sm, isNotNull);
+      expect(defaultNasikoIconSize.md, isNotNull);
+      expect(defaultNasikoIconSize.lg, isNotNull);
+      expect(defaultNasikoIconSize.xl, isNotNull);
+    });
+
+    test('Icon sizes match the rebased ramp', () {
+      expect(defaultNasikoIconSize.xs, 12);
+      expect(defaultNasikoIconSize.sm, 16);
+      expect(defaultNasikoIconSize.md, 20);
+      expect(defaultNasikoIconSize.lg, 24);
+      expect(defaultNasikoIconSize.xl, 32);
     });
 
     test('Icon sizes are in ascending order', () {
-      expect(defaultNasikoIconSize.xs, lessThan(defaultNasikoIconSize.s));
-      expect(defaultNasikoIconSize.s, lessThan(defaultNasikoIconSize.m));
-      expect(defaultNasikoIconSize.m, lessThan(defaultNasikoIconSize.l));
+      expect(defaultNasikoIconSize.xs, lessThan(defaultNasikoIconSize.sm));
+      expect(defaultNasikoIconSize.sm, lessThan(defaultNasikoIconSize.md));
+      expect(defaultNasikoIconSize.md, lessThan(defaultNasikoIconSize.lg));
+      expect(defaultNasikoIconSize.lg, lessThan(defaultNasikoIconSize.xl));
     });
   });
 
@@ -456,6 +479,67 @@ void main() {
       final bgColor = lightColors.backgroundBase;
       expect(textColor, isNotNull);
       expect(bgColor, isNotNull);
+    });
+  });
+
+  group('DESIGN-1 foundation regen', () {
+    // Line-height `height` multipliers are set directly (lineHeightPx /
+    // fontSizePx), independent of screenutil `.sp` scaling — so they assert
+    // the type re-scale robustly even though fontSize is `.sp`-scaled.
+    testWidgets('Type re-scale: line-height multipliers match new ramp', (
+      tester,
+    ) async {
+      late NasikoTypography t;
+      await _pumpWithScreenUtil(
+        tester,
+        (_) => MaterialApp(
+          theme: NasikoTheme.lightTheme,
+          home: Builder(
+            builder: (context) {
+              t = context.typography;
+              return const Scaffold();
+            },
+          ),
+        ),
+      );
+      expect(t.titlePrimary.height!, closeTo(36 / 28, 0.001)); // 28/36
+      expect(t.titleSecondary.height!, closeTo(28 / 20, 0.001)); // 20/28
+      expect(t.bodyPrimary.height!, closeTo(20 / 14, 0.001)); // 14/20
+      expect(t.buttonPrimary.height!, closeTo(20 / 14, 0.001)); // 14/20
+      expect(t.bodySecondary.height!, closeTo(18 / 13, 0.001)); // 13/18
+      expect(t.code.height!, closeTo(18 / 13, 0.001)); // 13/18
+      expect(t.bodyTertiary.height!, closeTo(16 / 12, 0.001)); // 12/16
+      expect(t.caption.height!, closeTo(16 / 12, 0.001)); // 12/16
+    });
+
+    test('Sand ramp: greys are warm (sand), not cool (slate)', () {
+      // The warm sand ramp replaces the former cool "neutral"/slate ramp.
+      expect(lightColors.foregroundSecondary, equals(const Color(0xFF645C52))); // sand700
+      expect(lightColors.backgroundGroup, equals(const Color(0xFFF5F2EC))); // sand50
+      expect(lightColors.borderPrimary, equals(const Color(0xFFD4CCC0))); // sand300
+    });
+
+    test('Spacing ramp filled: s5/s6/s7 present and correct', () {
+      expect(defaultNasikoSpacing.s5, equals(5.0));
+      expect(defaultNasikoSpacing.s6, equals(6.0));
+      expect(defaultNasikoSpacing.s7, equals(7.0));
+    });
+
+    testWidgets('Icon stroke-width token resolves to 1', (tester) async {
+      late NasikoIconStrokeWidthTheme captured;
+      await _pumpWithScreenUtil(
+        tester,
+        (_) => MaterialApp(
+          theme: NasikoTheme.lightTheme,
+          home: Builder(
+            builder: (context) {
+              captured = context.iconStrokeWidth;
+              return const Scaffold();
+            },
+          ),
+        ),
+      );
+      expect(captured.width, equals(1.0));
     });
   });
 }
