@@ -119,7 +119,7 @@ class _NasikoListItemState extends State<NasikoListItem> {
                       widget.isExpanded
                           ? Icons.keyboard_arrow_down_rounded
                           : Icons.keyboard_arrow_right_rounded,
-                      size: iconSizes.s,
+                      size: iconSizes.sm,
                       color: widget.isDisabled
                           ? colors.foregroundDisabled
                           : colors.foregroundIconPrimary,
@@ -142,8 +142,9 @@ class _NasikoListItemState extends State<NasikoListItem> {
                 // 4. Leading Icon (The Hexagon)
                 if (widget.leadingIcon != null) ...[
                   HugeIcon(
+                    strokeWidth: context.iconStrokeWidth.width,
                     icon: widget.leadingIcon!,
-                    size: iconSizes.s,
+                    size: iconSizes.sm,
                     color: widget.isDisabled
                         ? colors.foregroundDisabled
                         : colors.foregroundPrimary,
@@ -202,6 +203,7 @@ class _NasikoListItemState extends State<NasikoListItem> {
                       children: [
                         if (widget.badgeIcon != null) ...[
                           HugeIcon(
+                            strokeWidth: context.iconStrokeWidth.width,
                             icon: widget.badgeIcon!,
                             size: iconSizes.xs, // Tiny icon
                             color: widget.isDisabled

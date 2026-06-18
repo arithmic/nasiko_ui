@@ -94,12 +94,9 @@ class _NasikoTableState extends State<NasikoTable> {
 
     return Container(
       decoration: BoxDecoration(
-        color:  colors.backgroundSurface,
+        color: colors.backgroundSurface,
         borderRadius: BorderRadius.circular(radii.r12),
-        border: Border.all(
-          color: colors.borderPrimary,
-          width: borderWidths.w1,
-        ),
+        border: Border.all(color: colors.borderPrimary, width: borderWidths.w1),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(radii.r12),
@@ -112,10 +109,7 @@ class _NasikoTableState extends State<NasikoTable> {
             // Body with vertical scroll
             Container(
               height: widget.bodyHeight ?? 400,
-              padding: EdgeInsets.only(
-                left: spacing.s16,
-                bottom: spacing.s12,
-              ),
+              padding: EdgeInsets.only(left: spacing.s16, bottom: spacing.s12),
               child: Scrollbar(
                 controller: _verticalController,
                 thumbVisibility: true,
@@ -171,7 +165,7 @@ class _NasikoTableState extends State<NasikoTable> {
                             padding: EdgeInsets.only(left: spacing.s4),
                             child: Icon(
                               Icons.arrow_downward_rounded,
-                              size: iconSizes.s,
+                              size: iconSizes.sm,
                               color: colors.foregroundSecondary,
                             ),
                           ),
@@ -281,8 +275,9 @@ class NasikoTableCopyCell extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         HugeIcon(
+          strokeWidth: context.iconStrokeWidth.width,
           icon: HugeIcons.strokeRoundedInformationCircle,
-          size: context.iconSize.s,
+          size: context.iconSize.sm,
           color: context.colors.foregroundSecondary,
         ),
         SizedBox(width: context.spacing.s8),
@@ -424,7 +419,7 @@ class NasikoTableCellItem extends StatelessWidget {
               SizedBox(width: spacing.s12),
               Icon(
                 Icons.airplanemode_active,
-                size: context.iconSize.s,
+                size: context.iconSize.sm,
                 color: colors.foregroundPrimary,
               ),
               SizedBox(width: spacing.s8),
@@ -466,7 +461,7 @@ class NasikoTableCellItem extends StatelessWidget {
             children: [
               Icon(
                 Icons.info_outline,
-                size: context.iconSize.s,
+                size: context.iconSize.sm,
                 color: colors.foregroundSecondary,
               ),
               SizedBox(width: spacing.s12),
@@ -476,7 +471,7 @@ class NasikoTableCellItem extends StatelessWidget {
               SizedBox(width: spacing.s12),
               Icon(
                 Icons.info_outline,
-                size: context.iconSize.s,
+                size: context.iconSize.sm,
                 color: colors.foregroundSecondary,
               ),
             ],

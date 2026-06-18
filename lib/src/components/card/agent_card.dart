@@ -368,8 +368,9 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
       children: [
         if (widget.leadingIcon != null) ...[
           HugeIcon(
+            strokeWidth: context.iconStrokeWidth.width,
             icon: widget.leadingIcon!,
-            size: iconSizes.s,
+            size: iconSizes.sm,
             color: widget.disabled
                 ? colors.foregroundDisabled
                 : _isError
@@ -457,8 +458,9 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
     }
 
     return HugeIcon(
+      strokeWidth: context.iconStrokeWidth.width,
       icon: HugeIcons.strokeRoundedMoreVertical,
-      size: iconSizes.m,
+      size: iconSizes.md,
       color: colors.foregroundDisabled,
     );
   }

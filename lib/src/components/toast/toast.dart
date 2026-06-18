@@ -89,14 +89,14 @@ class NasikoToast extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: [
               SizedBox(
-                width: iconSizes.m,
-                height: iconSizes.m,
+                width: iconSizes.md,
+                height: iconSizes.md,
                 child: inProgress == true
                     ? CircularProgressIndicator(
                         strokeWidth: context.borderWidth.w1,
                         valueColor: AlwaysStoppedAnimation<Color>(iconColor),
                       )
-                    : Icon(icon, size: iconSizes.m, color: iconColor),
+                    : Icon(icon, size: iconSizes.md, color: iconColor),
               ),
               inProgress == true
                   ? SizedBox(width: spacing.s8)

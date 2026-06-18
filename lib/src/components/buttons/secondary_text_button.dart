@@ -97,7 +97,11 @@ class SecondaryTextButton extends StatelessWidget {
         children: [
           // Leading Icon
           if (leadingIcon != null) ...[
-            HugeIcon(icon: leadingIcon!, size: layout.iconSize),
+            HugeIcon(
+              icon: leadingIcon!,
+              size: layout.iconSize,
+              strokeWidth: context.iconStrokeWidth.width,
+            ),
             SizedBox(width: layout.iconSpacing),
           ],
 
@@ -107,7 +111,11 @@ class SecondaryTextButton extends StatelessWidget {
           // Trailing Icon
           if (trailingIcon != null) ...[
             SizedBox(width: layout.iconSpacing),
-            HugeIcon(icon: trailingIcon!, size: layout.iconSize),
+            HugeIcon(
+              icon: trailingIcon!,
+              size: layout.iconSize,
+              strokeWidth: context.iconStrokeWidth.width,
+            ),
           ],
         ],
       ),

@@ -9,7 +9,7 @@ class NasikoNavigationRail extends StatelessWidget {
     required this.selectedId,
     required this.onSelect,
     this.isExpanded = false,
-    this.widthCollapsed = 36,
+    this.widthCollapsed = 40,
     this.widthExpanded = 170,
     this.footerItems,
     this.footer,
@@ -102,7 +102,7 @@ class _RailItemState extends State<_RailItem> {
         ? colors.backgroundSecondaryBrand
         : Colors.transparent;
 
-    final border = !isDisabled && _hovered 
+    final border = !isDisabled && _hovered
         ? colors.borderSecondary
         : colors.borderPrimary;
 
@@ -127,7 +127,7 @@ class _RailItemState extends State<_RailItem> {
               HugeIcon(
                 strokeWidth: widget.isExpanded || isDisabled ? 1.5 : 1.8,
                 icon: widget.item.icon,
-                size: iconSizes.s,
+                size: iconSizes.sm,
                 color: isDisabled
                     ? colors.foregroundDisabled
                     : widget.isSelected

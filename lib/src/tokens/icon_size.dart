@@ -1,27 +1,46 @@
 import 'package:flutter/material.dart';
 
+import 'scale.dart';
+
 @immutable
 class NasikoIconSizeTheme extends ThemeExtension<NasikoIconSizeTheme> {
   const NasikoIconSizeTheme({
-    required this.l,
-    required this.m,
-    required this.s,
     required this.xs,
+    required this.sm,
+    required this.md,
+    required this.lg,
+    required this.xl,
   });
 
-  // Define your icon size properties
-  final double l;
-  final double m;
-  final double s;
+  /// 12 — tiny / secondary (small inputs & search, secondary list icon).
   final double xs;
 
+  /// 16 — default workhorse (inputs, search, menu, most controls).
+  final double sm;
+
+  /// 20 — emphasis / large controls.
+  final double md;
+
+  /// 24 — headers, avatars.
+  final double lg;
+
+  /// 32 — empty states / feature.
+  final double xl;
+
   @override
-  NasikoIconSizeTheme copyWith({double? l, double? m, double? s, double? xs}) {
+  NasikoIconSizeTheme copyWith({
+    double? xs,
+    double? sm,
+    double? md,
+    double? lg,
+    double? xl,
+  }) {
     return NasikoIconSizeTheme(
-      l: l ?? this.l,
-      m: m ?? this.m,
-      s: s ?? this.s,
       xs: xs ?? this.xs,
+      sm: sm ?? this.sm,
+      md: md ?? this.md,
+      lg: lg ?? this.lg,
+      xl: xl ?? this.xl,
     );
   }
 
@@ -34,26 +53,32 @@ class NasikoIconSizeTheme extends ThemeExtension<NasikoIconSizeTheme> {
       return this;
     }
 
-    // Helper for linear interpolation of doubles
     double lerpDouble(double a, double b, double t) {
       return a + (b - a) * t;
     }
 
     return NasikoIconSizeTheme(
-      l: lerpDouble(l, other.l, t),
-      m: lerpDouble(m, other.m, t),
-      s: lerpDouble(s, other.s, t),
       xs: lerpDouble(xs, other.xs, t),
+      sm: lerpDouble(sm, other.sm, t),
+      md: lerpDouble(md, other.md, t),
+      lg: lerpDouble(lg, other.lg, t),
+      xl: lerpDouble(xl, other.xl, t),
     );
   }
 }
 
 // --- Default Icon Size Instance ---
-NasikoIconSizeTheme get defaultNasikoIconSize =>
-    NasikoIconSizeTheme(l: 28, m: 24, s: 20, xs: 16);
+// Aliases scale/* primitives — no raw values.
+const NasikoIconSizeTheme defaultNasikoIconSize = NasikoIconSizeTheme(
+  xs: scale12,
+  sm: scale16,
+  md: scale20,
+  lg: scale24,
+  xl: scale32,
+);
 
 // --- BuildContext Extension ---
-// Provides easy access like: `context.iconSize.l`
+// Provides easy access like: `context.iconSize.sm`
 extension NasikoIconSizeThemeExtension on BuildContext {
   NasikoIconSizeTheme get iconSize =>
       Theme.of(this).extension<NasikoIconSizeTheme>()!;

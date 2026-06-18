@@ -62,19 +62,19 @@ class NasikoAvatar extends StatelessWidget {
         diameter = 64.0;
         squareCornerRadius = 12.0;
         textStyle = typography.buttonPrimary; // 20px
-        iconSize = iconSizes.l;
+        iconSize = iconSizes.lg;
         break;
       case NasikoAvatarSize.medium:
         diameter = 48.0;
         squareCornerRadius = 10.0;
         textStyle = typography.buttonSecondary; // 18px
-        iconSize = iconSizes.m; // 24px
+        iconSize = iconSizes.md;
         break;
       case NasikoAvatarSize.small:
         diameter = 36.0;
         squareCornerRadius = 8.0;
         textStyle = typography.bodySecondary; // 16px
-        iconSize = iconSizes.s; // 20px
+        iconSize = iconSizes.sm;
         break;
     }
 
@@ -94,6 +94,7 @@ class NasikoAvatar extends StatelessWidget {
       child = Text(text!, style: textStyle.copyWith(color: fgColor));
     } else {
       child = HugeIcon(
+        strokeWidth: context.iconStrokeWidth.width,
         icon: icon ?? HugeIcons.strokeRoundedRelieved01,
         size: iconSize,
         color: fgColor,

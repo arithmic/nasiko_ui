@@ -75,7 +75,7 @@ class NasikoInputField extends StatelessWidget {
     final borderWidths = context.borderWidth;
     final iconSizes = context.iconSize;
 
-    final iconSize = iconSizes.s;
+    final iconSize = iconSizes.sm;
     final textStyle = typography.bodySecondary;
     final contentPadding = EdgeInsets.symmetric(
       horizontal: spacing.s12,
@@ -147,6 +147,7 @@ class NasikoInputField extends StatelessWidget {
                     child: IconTheme(
                       data: IconThemeData(size: iconSize),
                       child: HugeIcon(
+                        strokeWidth: context.iconStrokeWidth.width,
                         icon: leadingIcon!,
                         size: iconSize,
                         color: colors.foregroundIconTertiary,
@@ -169,6 +170,7 @@ class NasikoInputField extends StatelessWidget {
                     child: IconTheme(
                       data: IconThemeData(size: iconSize),
                       child: HugeIcon(
+                        strokeWidth: context.iconStrokeWidth.width,
                         icon: trailingIcon!,
                         size: iconSize,
                         color: colors.foregroundIconTertiary,
@@ -250,8 +252,9 @@ class NasikoInputField extends StatelessWidget {
         if (labelInfoIcon != null) ...[
           SizedBox(width: spacing.s8),
           HugeIcon(
+            strokeWidth: context.iconStrokeWidth.width,
             icon: labelInfoIcon!,
-            size: iconSizes.s,
+            size: iconSizes.sm,
             color: colors.foregroundIconPrimary,
           ),
         ],

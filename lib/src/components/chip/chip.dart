@@ -140,8 +140,9 @@ class NasikoChip extends StatelessWidget {
           // Leading Icon
           if (leadingIcon != null) ...[
             HugeIcon(
+              strokeWidth: context.iconStrokeWidth.width,
               icon: leadingIcon!,
-              size: size == NasikoChipSize.small ? iconSizes.xs : iconSizes.s,
+              size: size == NasikoChipSize.small ? iconSizes.xs : iconSizes.sm,
               color: foregroundColor,
             ),
             SizedBox(width: spacing.s4),
@@ -159,8 +160,11 @@ class NasikoChip extends StatelessWidget {
             GestureDetector(
               onTap: enabled ? onDelete : null,
               child: HugeIcon(
+                strokeWidth: context.iconStrokeWidth.width,
                 icon: HugeIcons.strokeRoundedMinusSign,
-                size: size == NasikoChipSize.small ? iconSizes.xs : iconSizes.s,
+                size: size == NasikoChipSize.small
+                    ? iconSizes.xs
+                    : iconSizes.sm,
                 color: foregroundColor,
               ),
             ),

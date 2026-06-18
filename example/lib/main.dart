@@ -469,9 +469,10 @@ class ExampleHomePage extends StatelessWidget {
       runSpacing: context.spacing.s16,
       children: [
         _buildIconSizeTile(context, 'xs', context.iconSize.xs),
-        _buildIconSizeTile(context, 's', context.iconSize.s),
-        _buildIconSizeTile(context, 'm', context.iconSize.m),
-        _buildIconSizeTile(context, 'l', context.iconSize.l),
+        _buildIconSizeTile(context, 'sm', context.iconSize.sm),
+        _buildIconSizeTile(context, 'md', context.iconSize.md),
+        _buildIconSizeTile(context, 'lg', context.iconSize.lg),
+        _buildIconSizeTile(context, 'xl', context.iconSize.xl),
       ],
     );
   }

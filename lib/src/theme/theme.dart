@@ -72,6 +72,7 @@ class NasikoTheme {
         defaultNasikoBorderRadius,
         defaultNasikoBorderWidth,
         defaultNasikoIconSize,
+        defaultNasikoIconStrokeWidth,
       ],
     );
   }

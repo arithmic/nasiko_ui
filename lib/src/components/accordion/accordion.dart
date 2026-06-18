@@ -157,7 +157,7 @@ class _NasikoAccordionItemWidget extends StatelessWidget {
                       ? Icons.keyboard_arrow_up
                       : Icons.keyboard_arrow_down,
                   color: colors.foregroundSecondary,
-                  size: iconSizes.m, // 24px
+                  size: iconSizes.md,
                 ),
               ],
             ),

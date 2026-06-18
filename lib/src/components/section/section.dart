@@ -232,8 +232,9 @@ class _SectionState extends State<Section> {
                 children: [
                   if (widget.icon != null) ...[
                     HugeIcon(
+                      strokeWidth: context.iconStrokeWidth.width,
                       icon: widget.icon!,
-                      size: iconSizes.s,
+                      size: iconSizes.sm,
                       color: widget.isDisabled
                           ? colors.foregroundDisabled
                           : hasSelectedChild
@@ -263,7 +264,7 @@ class _SectionState extends State<Section> {
                       duration: const Duration(milliseconds: 200),
                       child: Icon(
                         Icons.keyboard_arrow_down_rounded,
-                        size: iconSizes.s,
+                        size: iconSizes.sm,
                         color: widget.isDisabled
                             ? colors.foregroundDisabled
                             : colors.foregroundIconPrimary,
@@ -362,8 +363,9 @@ class _SectionState extends State<Section> {
           child: Row(
             children: [
               HugeIcon(
+                strokeWidth: context.iconStrokeWidth.width,
                 icon: widget.icon!,
-                size: iconSizes.s,
+                size: iconSizes.sm,
                 color: widget.isDisabled
                     ? colors.foregroundDisabled
                     : showSelectedState
@@ -582,6 +584,7 @@ class _MenuButton extends StatelessWidget {
             child: Row(
               children: [
                 HugeIcon(
+                  strokeWidth: context.iconStrokeWidth.width,
                   icon: actions[i].icon!,
                   color: actions[i].isDestructive
                       ? colors.foregroundError
@@ -603,8 +606,9 @@ class _MenuButton extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.only(left: spacing.s4),
         child: HugeIcon(
+          strokeWidth: context.iconStrokeWidth.width,
           icon: HugeIcons.strokeRoundedMoreHorizontal,
-          size: iconSizes.s - 2,
+          size: iconSizes.sm - 2,
           color: colors.foregroundSecondary,
         ),
       ),
