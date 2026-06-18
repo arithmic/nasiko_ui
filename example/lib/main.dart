@@ -23,7 +23,7 @@ class _ExampleAppState extends State<ExampleApp> {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(1728, 1117),
+      designSize: const Size(1512, 1024),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
@@ -1139,7 +1139,6 @@ class ExampleHomePage extends StatelessWidget {
         Expanded(
           child: NasikoCard(
             title: 'Document Expert',
-            titleIcon: HugeIcons.strokeRoundedDocumentCode,
             tags: [
               'document analysis',
               'chat',
@@ -1152,7 +1151,6 @@ class ExampleHomePage extends StatelessWidget {
               'history',
             ],
             description: 'A helpful assistant that answers user questions.',
-            secondaryButtonLabel: 'Learn More',
           ),
         ),
         SizedBox(width: context.spacing.s16),
@@ -1189,11 +1187,9 @@ class ExampleHomePage extends StatelessWidget {
         Expanded(
           child: NasikoCard(
             title: 'Code Expert',
-            titleIcon: HugeIcons.strokeRoundedCode,
             tags: ['code analysis', 'chat', 'history'],
             description:
                 'An AI-powered coding assistant that helps users understand and debug code snippets. It supports multiple programming languages and maintains a chat history for each session.',
-            secondaryButtonLabel: 'Learn More',
           ),
         ),
       ],

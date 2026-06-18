@@ -2,6 +2,30 @@
 
 import 'package:flutter/material.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
+import 'scale.dart';
+
+// --- Tier layer ---
+// font/size/* and font/lineheight/* tiers, each pointing at a raw scale/*
+// primitive. Roles below compose their TextStyles from these tiers so the
+// scale -> tier -> role -> text-style cascade holds.
+
+// Size tiers (px). (xs 8 exists in the ramp but no text style consumes it.)
+const double _sizeSm = scale12; // 12
+const double _sizeMd = scale13; // 13
+const double _sizeLg = scale14; // 14
+const double _sizeXl = scale20; // 20
+const double _size2xl = scale28; // 28
+// (3xl 40 exists in the ramp but no text style consumes it post-rescale.)
+
+// Line-height tiers (px)
+const double _lhSm = scale16; // 16
+const double _lhMd = scale18; // 18
+const double _lhLg = scale20; // 20
+const double _lhXl = scale28; // 28
+const double _lh2xl = scale36; // 36
+
+// Helper: Flutter `height` is a multiplier (lineHeightPx / fontSizePx).
+double _heightFor(double sizePx, double lineHeightPx) => lineHeightPx / sizePx;
 
 // Mark the class as immutable for performance and consistency
 @immutable
@@ -182,106 +206,106 @@ const String _interFontFamily = 'Inter';
 // Letter spacing values are multiplied by font size,
 // so 0.016 is 1.6% of the font size.
 
+// title/primary — 28 / 36
 TextStyle get _baseTitlePrimary => TextStyle(
   fontFamily: _chivoMonoFontFamily,
   fontWeight: FontWeight.w500, // Medium
-  fontSize: 40.sp.clamp(32, 44),
-  // fontSize: 40,
-  height: 1.2,
+  fontSize: _size2xl.sp.clamp(24, 32),
+  height: _heightFor(_size2xl, _lh2xl),
   letterSpacing: 0.16,
 );
 
+// title/secondary — 20 / 28
 TextStyle get _baseTitleSecondary => TextStyle(
   fontFamily: _chivoMonoFontFamily,
   fontWeight: FontWeight.w500, // Medium
-  fontSize: 32.sp.clamp(28, 36),
-  // fontSize: 32,
-  height: 1.125,
+  fontSize: _sizeXl.sp.clamp(18, 24),
+  height: _heightFor(_sizeXl, _lhXl),
   letterSpacing: 0.16,
 );
 
+// buttons/primary — 14 / 20
 TextStyle get _baseButtonPrimary => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w500, // Medium
-  fontSize: 20.sp.clamp(18, 22),
-  // fontSize: 20,
-  height: 1.2,
+  fontSize: _sizeLg.sp.clamp(12, 16),
+  height: _heightFor(_sizeLg, _lhLg),
   letterSpacing: 0.16,
 );
 
 TextStyle get _baseButtonPrimaryBold =>
     _baseButtonPrimary.copyWith(fontWeight: FontWeight.w700);
 
+// buttons/secondary — 13 / 18
 TextStyle get _baseButtonSecondary => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w500, // Medium
-  fontSize: 16.sp.clamp(14, 18),
-  // fontSize: 16,
-  height: 1.25,
+  fontSize: _sizeMd.sp.clamp(11, 15),
+  height: _heightFor(_sizeMd, _lhMd),
   letterSpacing: 0.16,
 );
 
 TextStyle get _baseButtonSecondaryBold =>
     _baseButtonSecondary.copyWith(fontWeight: FontWeight.w700);
 
+// body/primary — 14 / 20
 TextStyle get _baseBodyPrimary => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w400, // Regular
-  fontSize: 20.sp.clamp(18, 22),
-  // fontSize: 20,
-  height: 1.2,
+  fontSize: _sizeLg.sp.clamp(12, 16),
+  height: _heightFor(_sizeLg, _lhLg),
 );
 
 TextStyle get _baseBodyPrimaryBold =>
     _baseBodyPrimary.copyWith(fontWeight: FontWeight.w700);
 
+// body/secondary — 13 / 18
 TextStyle get _baseBodySecondary => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w400, // Regular
-  fontSize: 16.sp.clamp(14, 18),
-  // fontSize: 16,
-  height: 1.25,
+  fontSize: _sizeMd.sp.clamp(11, 15),
+  height: _heightFor(_sizeMd, _lhMd),
 );
 
 TextStyle get _baseBodySecondaryBold =>
     _baseBodySecondary.copyWith(fontWeight: FontWeight.w700);
 
+// body/tertiary — 12 / 16 (unchanged)
 TextStyle get _baseBodyTertiary => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w400, // Regular
-  fontSize: 12.sp.clamp(10, 14),
-  // fontSize: 12,
-  height: 1.333,
+  fontSize: _sizeSm.sp.clamp(10, 14),
+  height: _heightFor(_sizeSm, _lhSm),
 );
 
 TextStyle get _baseBodyTertiaryBold =>
     _baseBodyTertiary.copyWith(fontWeight: FontWeight.w700);
 
+// link/primary — 14 / 20
 TextStyle get _baseLinkPrimary => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w400, // Regular
-  fontSize: 16.sp.clamp(14, 18),
-  // fontSize: 16,
-  height: 1.25,
+  fontSize: _sizeLg.sp.clamp(12, 16),
+  height: _heightFor(_sizeLg, _lhLg),
   decoration: TextDecoration.underline,
 );
 
+// caption — 12 / 16 (unchanged)
 TextStyle get _baseCaption => TextStyle(
   fontFamily: _interFontFamily,
   fontStyle: FontStyle.italic, // Regular Italics
   fontWeight: FontWeight.w400,
-  fontSize: 12.sp.clamp(10, 14),
-  // fontSize: 12,
-  height: 1.333,
+  fontSize: _sizeSm.sp.clamp(10, 14),
+  height: _heightFor(_sizeSm, _lhSm),
   letterSpacing: -0.04,
 );
 
+// code/primary — 13 / 18
 TextStyle get _baseCode => TextStyle(
   fontFamily: _chivoMonoFontFamily,
   fontWeight: FontWeight.w400, // Regular
-  fontSize: 16.sp.clamp(14, 18),
-  // fontSize: 16,
-  height: 1.25,
+  fontSize: _sizeMd.sp.clamp(11, 15),
+  height: _heightFor(_sizeMd, _lhMd),
   letterSpacing: 0,
 );
 
