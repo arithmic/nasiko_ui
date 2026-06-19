@@ -30,7 +30,7 @@ NasikoButtonLayout standardButtonLayout(
         horizontal: spacing.s24,
       ),
       minHeight: spacing.s64,
-      iconSize: iconSizes.l,
+      iconSize: iconSizes.lg,
       iconSpacing: spacing.s12,
     ),
     NasikoButtonSize.medium => NasikoButtonLayout(
@@ -39,7 +39,7 @@ NasikoButtonLayout standardButtonLayout(
         horizontal: spacing.s16,
       ),
       minHeight: spacing.s24 + spacing.s20,
-      iconSize: iconSizes.s,
+      iconSize: iconSizes.md,
       iconSpacing: spacing.s8,
     ),
     NasikoButtonSize.small => NasikoButtonLayout(
@@ -48,7 +48,7 @@ NasikoButtonLayout standardButtonLayout(
         horizontal: spacing.s12,
       ),
       minHeight: spacing.s36,
-      iconSize: iconSizes.s,
+      iconSize: iconSizes.sm,
       iconSpacing: spacing.s8,
     ),
   };
@@ -68,7 +68,7 @@ NasikoButtonLayout quietButtonLayout(
         horizontal: spacing.s24,
       ),
       minHeight: spacing.s64,
-      iconSize: iconSizes.l,
+      iconSize: iconSizes.lg,
       iconSpacing: spacing.s12,
     ),
     NasikoButtonSize.medium => NasikoButtonLayout(
@@ -77,7 +77,7 @@ NasikoButtonLayout quietButtonLayout(
         horizontal: spacing.s16,
       ),
       minHeight: spacing.s48,
-      iconSize: iconSizes.s,
+      iconSize: iconSizes.md,
       iconSpacing: spacing.s8,
     ),
     NasikoButtonSize.small => NasikoButtonLayout(
@@ -86,7 +86,7 @@ NasikoButtonLayout quietButtonLayout(
         horizontal: spacing.s12,
       ),
       minHeight: spacing.s36,
-      iconSize: iconSizes.s,
+      iconSize: iconSizes.sm,
       iconSpacing: spacing.s8,
     ),
   };
@@ -102,7 +102,7 @@ NasikoButtonLayout textButtonLayout(BuildContext context) {
       horizontal: spacing.s12,
     ),
     minHeight: spacing.s36,
-    iconSize: iconSizes.s,
+    iconSize: iconSizes.sm,
     iconSpacing: spacing.s8,
   );
 }
@@ -114,7 +114,7 @@ NasikoButtonLayout linkButtonLayout(BuildContext context) {
   return NasikoButtonLayout(
     padding: EdgeInsets.all(spacing.s12),
     minHeight: spacing.s36,
-    iconSize: iconSizes.s,
+    iconSize: iconSizes.sm,
     iconSpacing: spacing.s8,
   );
 }
@@ -130,17 +130,17 @@ NasikoButtonLayout iconButtonLayout(
     NasikoButtonSize.large => NasikoButtonLayout(
       padding: EdgeInsets.all(spacing.s20),
       minHeight: spacing.s64,
-      iconSize: iconSizes.l,
+      iconSize: iconSizes.lg,
     ),
     NasikoButtonSize.medium => NasikoButtonLayout(
       padding: EdgeInsets.all(spacing.s12),
       minHeight: spacing.s48,
-      iconSize: iconSizes.m,
+      iconSize: iconSizes.md,
     ),
     NasikoButtonSize.small => NasikoButtonLayout(
       padding: EdgeInsets.all(spacing.s8),
       minHeight: spacing.s36,
-      iconSize: iconSizes.s,
+      iconSize: iconSizes.sm,
     ),
   };
 }

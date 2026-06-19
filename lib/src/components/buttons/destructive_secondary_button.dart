@@ -62,7 +62,7 @@ class DestructiveSecondaryButton extends StatelessWidget {
           return colors.backgroundDisabled;
         }
         // Default, Focused, Pressed states
-        return colors.backgroundError; 
+        return colors.backgroundError;
       }),
 
       // --- Foreground Color (Text & Icons) ---
@@ -115,7 +115,11 @@ class DestructiveSecondaryButton extends StatelessWidget {
         children: [
           // Leading Icon
           if (leadingIcon != null) ...[
-            HugeIcon(icon: leadingIcon!, size: layout.iconSize),
+            HugeIcon(
+              icon: leadingIcon!,
+              size: layout.iconSize,
+              strokeWidth: context.iconStrokeWidth.width,
+            ),
             SizedBox(width: layout.iconSpacing),
           ],
 
@@ -125,7 +129,11 @@ class DestructiveSecondaryButton extends StatelessWidget {
           // Trailing Icon
           if (trailingIcon != null) ...[
             SizedBox(width: layout.iconSpacing),
-            HugeIcon(icon: trailingIcon!, size: layout.iconSize),
+            HugeIcon(
+              icon: trailingIcon!,
+              size: layout.iconSize,
+              strokeWidth: context.iconStrokeWidth.width,
+            ),
           ],
         ],
       ),

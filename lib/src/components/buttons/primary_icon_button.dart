@@ -106,7 +106,11 @@ class PrimaryIconButton extends StatelessWidget {
               height: layout.iconSize,
               child: CircularProgressIndicator(strokeWidth: borderWidths.w2),
             )
-          : HugeIcon(icon: icon, size: layout.iconSize),
+          : HugeIcon(
+              icon: icon,
+              size: layout.iconSize,
+              strokeWidth: context.iconStrokeWidth.width,
+            ),
     );
   }
 }

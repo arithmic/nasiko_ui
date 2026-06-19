@@ -368,8 +368,9 @@ class _NasikoCardState extends State<NasikoCard> {
       children: [
         if (widget.leadingIcon != null) ...[
           HugeIcon(
+            strokeWidth: context.iconStrokeWidth.width,
             icon: widget.leadingIcon!,
-            size: iconSizes.s,
+            size: iconSizes.sm,
             color: widget.disabled
                 ? colors.foregroundDisabled
                 : _isError
@@ -457,8 +458,9 @@ class _NasikoCardState extends State<NasikoCard> {
     }
 
     return HugeIcon(
+      strokeWidth: context.iconStrokeWidth.width,
       icon: HugeIcons.strokeRoundedMoreVertical,
-      size: iconSizes.m,
+      size: iconSizes.md,
       color: colors.foregroundDisabled,
     );
   }

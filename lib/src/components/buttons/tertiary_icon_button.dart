@@ -109,7 +109,11 @@ class TertiaryIconButton extends StatelessWidget {
       onPressed: onPressed,
       style: style,
       statesController: statesController,
-      icon: HugeIcon(icon: icon, size: layout.iconSize),
+      icon: HugeIcon(
+        icon: icon,
+        size: layout.iconSize,
+        strokeWidth: context.iconStrokeWidth.width,
+      ),
     );
   }
 }

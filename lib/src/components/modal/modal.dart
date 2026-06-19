@@ -206,8 +206,9 @@ class NasikoModal extends StatelessWidget {
       children: [
         if (titleIcon != null) ...[
           HugeIcon(
+            strokeWidth: context.iconStrokeWidth.width,
             icon: titleIcon!,
-            size: iconSizes.m,
+            size: iconSizes.md,
             color: _iconColor(context),
           ),
           SizedBox(width: spacing.s12),
@@ -222,6 +223,7 @@ class NasikoModal extends StatelessWidget {
         ),
         IconButton(
           icon: HugeIcon(
+            strokeWidth: context.iconStrokeWidth.width,
             icon: HugeIcons.strokeRoundedCancel01,
             size: iconSizes.xs,
           ),

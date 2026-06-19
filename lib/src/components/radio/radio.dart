@@ -68,7 +68,7 @@ class _NasikoRadioState<T> extends State<NasikoRadio<T>> {
     final iconSizes = context.iconSize;
 
     // Size expands to 24px when focused, otherwise stays at 20px
-    final size = _isFocused ? iconSizes.m : iconSizes.s;
+    final size = _isFocused ? iconSizes.md : iconSizes.sm;
 
     return MouseRegion(
       cursor: _isDisabled ? SystemMouseCursors.basic : SystemMouseCursors.click,

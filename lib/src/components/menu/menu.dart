@@ -385,6 +385,7 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
                 children: [
                   if (widget.icon != null) ...[
                     HugeIcon(
+                      strokeWidth: context.iconStrokeWidth.width,
                       icon: widget.icon!,
                       size: 20,
                       color: foregroundColor,

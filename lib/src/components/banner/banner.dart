@@ -195,6 +195,7 @@ class NasikoBanner extends StatelessWidget {
   Widget _buildIcon(BuildContext context, double size) {
     if (bannerIconData != null) {
       return HugeIcon(
+        strokeWidth: context.iconStrokeWidth.width,
         icon: bannerIconData!,
         size: size,
         color: context.colors.foregroundPrimary,

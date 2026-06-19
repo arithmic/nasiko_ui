@@ -390,8 +390,9 @@ class _TextBoxAttachmentChipState extends State<_TextBoxAttachmentChip> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 HugeIcon(
+                  strokeWidth: context.iconStrokeWidth.width,
                   icon: widget.leadingIcon,
-                  size: iconSizes.s,
+                  size: iconSizes.sm,
                   color: colors.foregroundIconPrimary,
                 ),
                 SizedBox(width: spacing.s2),
@@ -413,8 +414,9 @@ class _TextBoxAttachmentChipState extends State<_TextBoxAttachmentChip> {
                     behavior: HitTestBehavior.opaque,
                     onTap: widget.onDelete,
                     child: HugeIcon(
+                      strokeWidth: context.iconStrokeWidth.width,
                       icon: HugeIcons.strokeRoundedCancel01,
-                      size: iconSizes.s,
+                      size: iconSizes.sm,
                       color: colors.foregroundIconPrimary,
                     ),
                   ),

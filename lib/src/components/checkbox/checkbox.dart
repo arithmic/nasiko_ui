@@ -63,7 +63,7 @@ class _NasikoCheckboxState extends State<NasikoCheckbox> {
 
       checkIcon = Icon(
         Icons.check,
-        size: iconSizes.s, // 20px
+        size: iconSizes.sm,
         color: colors.foregroundOnAction, // White
       );
     } else {
@@ -90,8 +90,8 @@ class _NasikoCheckboxState extends State<NasikoCheckbox> {
         highlightColor: colors.backgroundBrandSubtle,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
-          width: iconSizes.m, // 24px
-          height: iconSizes.m, // 24px
+          width: iconSizes.md,
+          height: iconSizes.md,
           decoration: BoxDecoration(
             color: fillColor,
             border: border,
