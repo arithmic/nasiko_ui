@@ -314,63 +314,27 @@ class NasikoModal extends StatelessWidget {
     HugeIconsType? leadingIcon,
     HugeIconsType? trailingIcon,
   }) {
-    Widget button;
+    final type = switch (hierarchy) {
+      NasikoModalButtonHierarchy.primary => NasikoButtonType.primary,
+      NasikoModalButtonHierarchy.secondary => NasikoButtonType.secondary,
+      NasikoModalButtonHierarchy.tertiary => NasikoButtonType.tertiary,
+    };
+    // Destructive is only styled for primary/secondary; tertiary falls back to
+    // the default tone (matches the design — no destructive tertiary).
+    final tone = intent == NasikoModalButtonIntent.destructive &&
+            type != NasikoButtonType.tertiary
+        ? NasikoButtonTone.destructive
+        : NasikoButtonTone.default_;
 
-    switch (hierarchy) {
-      case NasikoModalButtonHierarchy.primary:
-        button = intent == NasikoModalButtonIntent.destructive
-            ? DestructiveButton(
-                label: label,
-                size: NasikoButtonSize.small,
-                onPressed: onPressed,
-                leadingIcon: leadingIcon,
-                trailingIcon: trailingIcon,
-              )
-            : PrimaryButton(
-                label: label,
-                size: NasikoButtonSize.small,
-                onPressed: onPressed,
-                leadingIcon: leadingIcon,
-                trailingIcon: trailingIcon,
-              );
-        break;
-
-      case NasikoModalButtonHierarchy.secondary:
-        button = intent == NasikoModalButtonIntent.destructive
-            ? DestructiveSecondaryButton(
-                label: label,
-                size: NasikoButtonSize.small,
-                onPressed: onPressed,
-                leadingIcon: leadingIcon,
-                trailingIcon: trailingIcon,
-              )
-            : SecondaryButton(
-                label: label,
-                size: NasikoButtonSize.small,
-                onPressed: onPressed,
-                leadingIcon: leadingIcon,
-                trailingIcon: trailingIcon,
-              );
-        break;
-
-      case NasikoModalButtonHierarchy.tertiary:
-        button = intent == NasikoModalButtonIntent.destructive
-            ? DestructiveTextButton(
-                label: label,
-                size: NasikoButtonSize.small,
-                onPressed: onPressed,
-                leadingIcon: leadingIcon,
-                trailingIcon: trailingIcon,
-              )
-            : TertiaryButton(
-                label: label,
-                size: NasikoButtonSize.small,
-                onPressed: onPressed,
-                leadingIcon: leadingIcon,
-                trailingIcon: trailingIcon,
-              );
-        break;
-    }
+    final Widget button = NasikoButton(
+      type: type,
+      tone: tone,
+      label: label,
+      size: NasikoButtonSize.small,
+      onPressed: onPressed,
+      leadingIcon: leadingIcon,
+      trailingIcon: trailingIcon,
+    );
 
     return fullWidth ? SizedBox(width: double.infinity, child: button) : button;
   }

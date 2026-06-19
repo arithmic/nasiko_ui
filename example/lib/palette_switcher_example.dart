@@ -95,9 +95,21 @@ class _PaletteSwitcherExampleState extends State<PaletteSwitcherExample> {
                         spacing: 8,
                         runSpacing: 8,
                         children: [
-                          PrimaryButton(onPressed: () {}, label: 'Primary'),
-                          SecondaryButton(onPressed: () {}, label: 'Secondary'),
-                          TertiaryButton(onPressed: () {}, label: 'Tertiary'),
+                          NasikoButton(
+                            type: NasikoButtonType.primary,
+                            onPressed: () {},
+                            label: 'Primary',
+                          ),
+                          NasikoButton(
+                            type: NasikoButtonType.secondary,
+                            onPressed: () {},
+                            label: 'Secondary',
+                          ),
+                          NasikoButton(
+                            type: NasikoButtonType.tertiary,
+                            onPressed: () {},
+                            label: 'Tertiary',
+                          ),
                         ],
                       ),
                       const SizedBox(height: 24),
