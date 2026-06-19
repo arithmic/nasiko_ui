@@ -114,7 +114,12 @@ class NasikoToast extends StatelessWidget {
               ),
 
               if (showCancel)
-                SecondaryTextButton(onPressed: onCancel, label: 'Cancel', foregroundColor :foregroundColor),
+                NasikoButton(
+                  type: NasikoButtonType.ghost,
+                  size: NasikoButtonSize.small,
+                  onPressed: onCancel,
+                  label: 'Cancel',
+                ),
             ],
           ),
         ),

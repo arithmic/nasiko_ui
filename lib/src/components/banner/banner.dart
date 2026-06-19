@@ -119,7 +119,8 @@ class NasikoBanner extends StatelessWidget {
               SizedBox(width: spacing.s8),
               // Close Button
               if (onClose != null)
-                TertiaryIconButton(
+                NasikoIconButton(
+                  type: NasikoButtonType.tertiary,
                   size: NasikoButtonSize.small,
                   onPressed: onClose,
                   icon: HugeIcons.strokeRoundedCancel01,

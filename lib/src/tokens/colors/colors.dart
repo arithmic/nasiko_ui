@@ -71,6 +71,12 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
     required this.borderDisabled,
     required this.borderInformation,
     required this.borderInformationOverlay,
+
+    // Action (button) — pressed/active fills not covered by the roles above
+    required this.backgroundNeutralActive,
+    required this.backgroundErrorHover,
+    required this.backgroundErrorActive,
+    required this.borderErrorStrong,
   });
 
   // Background Default
@@ -140,6 +146,12 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
   final Color borderInformation;
   final Color borderInformationOverlay;
 
+  // Action (button) — pressed/active fills not covered by the roles above
+  final Color backgroundNeutralActive;
+  final Color backgroundErrorHover;
+  final Color backgroundErrorActive;
+  final Color borderErrorStrong;
+
   @override
   NasikoColorTheme copyWith({
     Color? backgroundBase,
@@ -192,6 +204,10 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
     Color? borderDisabled,
     Color? borderInformation,
     Color? borderInformationOverlay,
+    Color? backgroundNeutralActive,
+    Color? backgroundErrorHover,
+    Color? backgroundErrorActive,
+    Color? borderErrorStrong,
   }) {
     return NasikoColorTheme(
       backgroundBase: backgroundBase ?? this.backgroundBase,
@@ -264,6 +280,12 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
       borderInformation: borderInformation ?? this.borderInformation,
       borderInformationOverlay:
           borderInformationOverlay ?? this.borderInformationOverlay,
+      backgroundNeutralActive:
+          backgroundNeutralActive ?? this.backgroundNeutralActive,
+      backgroundErrorHover: backgroundErrorHover ?? this.backgroundErrorHover,
+      backgroundErrorActive:
+          backgroundErrorActive ?? this.backgroundErrorActive,
+      borderErrorStrong: borderErrorStrong ?? this.borderErrorStrong,
     );
   }
 
@@ -466,6 +488,26 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
         other.borderInformationOverlay,
         t,
       )!,
+      backgroundNeutralActive: Color.lerp(
+        backgroundNeutralActive,
+        other.backgroundNeutralActive,
+        t,
+      )!,
+      backgroundErrorHover: Color.lerp(
+        backgroundErrorHover,
+        other.backgroundErrorHover,
+        t,
+      )!,
+      backgroundErrorActive: Color.lerp(
+        backgroundErrorActive,
+        other.backgroundErrorActive,
+        t,
+      )!,
+      borderErrorStrong: Color.lerp(
+        borderErrorStrong,
+        other.borderErrorStrong,
+        t,
+      )!,
     );
   }
 }
@@ -542,6 +584,12 @@ final NasikoColorTheme lightColors = NasikoColorTheme(
   borderDisabled: sand300,
   borderInformation: yellow300,
   borderInformationOverlay: sand800,
+
+  // Action (button)
+  backgroundNeutralActive: sand700,
+  backgroundErrorHover: red700,
+  backgroundErrorActive: red900,
+  borderErrorStrong: red500,
 );
 
 // --- Dark Instance ---
@@ -615,6 +663,12 @@ final NasikoColorTheme darkColors = NasikoColorTheme(
   borderDisabled: sand700,
   borderInformation: yellow700,
   borderInformationOverlay: sand200,
+
+  // Action (button)
+  backgroundNeutralActive: sand600,
+  backgroundErrorHover: red500,
+  backgroundErrorActive: red400,
+  borderErrorStrong: red500,
 );
 
 // --- BuildContext Extension ---

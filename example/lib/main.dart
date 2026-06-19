@@ -123,52 +123,15 @@ class ExampleHomePage extends StatelessWidget {
             SizedBox(height: context.spacing.s28),
             _buildSection(
               context,
-              title: 'Primary Buttons',
-              child: _buildPrimaryButtonsExample(context),
+              title: 'NasikoButton (V2 — Type × Tone × Size)',
+              child: _buildNasikoButtonExample(context),
             ),
             SizedBox(height: context.spacing.s28),
             _buildSection(
               context,
-              title: 'Secondary Buttons',
-              child: _buildSecondaryButtonsExample(context),
+              title: 'NasikoIconButton (V2 — Type × Tone × Size)',
+              child: _buildNasikoIconButtonExample(context),
             ),
-            SizedBox(height: context.spacing.s28),
-            _buildSection(
-              context,
-              title: 'Tertiary Buttons',
-              child: _buildTertiaryButtonsExample(context),
-            ),
-            SizedBox(height: context.spacing.s28),
-            _buildSection(
-              context,
-              title: 'Primary Icon Buttons',
-              child: _buildPrimaryIconButtonsExample(context),
-            ),
-            SizedBox(height: context.spacing.s28),
-            _buildSection(
-              context,
-              title: 'Secondary Icon Buttons',
-              child: _buildSecondaryIconButtonsExample(context),
-            ),
-            SizedBox(height: context.spacing.s28),
-            _buildSection(
-              context,
-              title: 'Tertiary Icon Buttons',
-              child: _buildTertiaryIconButtonsExample(context),
-            ),
-            SizedBox(height: context.spacing.s28),
-            _buildSection(
-              context,
-              title: 'Destructive Buttons',
-              child: _buildDestructiveButtonsExample(context),
-            ),
-            SizedBox(height: context.spacing.s28),
-            _buildSection(
-              context,
-              title: 'Link',
-              child: _buildLinkExample(context),
-            ),
-
             SizedBox(height: context.spacing.s28),
             _buildSection(
               context,
@@ -542,593 +505,132 @@ class ExampleHomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildPrimaryButtonsExample(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Large buttons
-        Text('Large', style: context.typography.bodyPrimaryBold),
-        SizedBox(height: context.spacing.s12),
-        Wrap(
-          spacing: context.spacing.s12,
-          runSpacing: context.spacing.s12,
-          children: [
-            PrimaryButton(
-              size: NasikoButtonSize.large,
-              onPressed: () {},
-              label: 'Button',
-            ),
-            PrimaryButton(
-              size: NasikoButtonSize.large,
-              onPressed: () {},
-              label: 'Button',
-              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
-            ),
-            PrimaryButton(
-              size: NasikoButtonSize.large,
-              onPressed: () {},
-              label: 'Button',
-              trailingIcon: HugeIcons.strokeRoundedArrowRight01,
-            ),
-            PrimaryButton(
-              size: NasikoButtonSize.large,
-              onPressed: null,
-              label: 'Disabled',
-            ),
-          ],
-        ),
-        SizedBox(height: context.spacing.s20),
-        // Medium buttons
-        Text('Medium', style: context.typography.bodyPrimaryBold),
-        SizedBox(height: context.spacing.s12),
-        Wrap(
-          spacing: context.spacing.s12,
-          runSpacing: context.spacing.s12,
-          children: [
-            PrimaryButton(
-              size: NasikoButtonSize.medium,
-              onPressed: () {},
-              label: 'Button',
-            ),
-            PrimaryButton(
-              size: NasikoButtonSize.medium,
-              onPressed: () {},
-              label: 'Try Orchestrator',
-              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
-            ),
-            PrimaryButton(
-              size: NasikoButtonSize.medium,
-              onPressed: () {},
-              label: 'Button',
-              trailingIcon: HugeIcons.strokeRoundedArrowRight01,
-            ),
-            PrimaryButton(
-              size: NasikoButtonSize.medium,
-              onPressed: null,
-              label: 'Disabled',
-            ),
-          ],
-        ),
-        SizedBox(height: context.spacing.s20),
-        // Small buttons
-        Text('Small', style: context.typography.bodyPrimaryBold),
-        SizedBox(height: context.spacing.s12),
-        Wrap(
-          spacing: context.spacing.s12,
-          runSpacing: context.spacing.s12,
-          children: [
-            PrimaryButton(
-              size: NasikoButtonSize.small,
-              onPressed: () {},
-              label: 'Button',
-            ),
-            PrimaryButton(
-              size: NasikoButtonSize.small,
-              onPressed: () {},
-              label: 'Button',
-              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
-            ),
-            PrimaryButton(
-              size: NasikoButtonSize.small,
-              onPressed: () {},
-              label: 'Button',
-              trailingIcon: HugeIcons.strokeRoundedArrowRight01,
-            ),
-            PrimaryButton(
-              size: NasikoButtonSize.small,
-              onPressed: null,
-              label: 'Disabled',
-            ),
-          ],
-        ),
-      ],
-    );
-  }
 
-  Widget _buildSecondaryButtonsExample(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Large buttons
-        Text('Large', style: context.typography.bodyPrimaryBold),
-        SizedBox(height: context.spacing.s12),
-        Wrap(
-          spacing: context.spacing.s12,
-          runSpacing: context.spacing.s12,
-          children: [
-            SecondaryButton(
-              size: NasikoButtonSize.large,
-              onPressed: () {},
-              label: 'Button',
-            ),
-            SecondaryButton(
-              size: NasikoButtonSize.large,
-              onPressed: () {},
-              label: 'Button',
-              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
-            ),
-            SecondaryButton(
-              size: NasikoButtonSize.large,
-              onPressed: () {},
-              label: 'Button',
-              trailingIcon: HugeIcons.strokeRoundedArrowRight01,
-            ),
-            SecondaryButton(
-              size: NasikoButtonSize.large,
-              onPressed: null,
-              label: 'Disabled',
-            ),
-          ],
-        ),
-        SizedBox(height: context.spacing.s20),
-        // Medium buttons
-        Text('Medium', style: context.typography.bodyPrimaryBold),
-        SizedBox(height: context.spacing.s12),
-        Wrap(
-          spacing: context.spacing.s12,
-          runSpacing: context.spacing.s12,
-          children: [
-            SecondaryButton(
-              size: NasikoButtonSize.medium,
-              onPressed: () {},
-              label: 'Button',
-            ),
-            SecondaryButton(
-              size: NasikoButtonSize.medium,
-              onPressed: () {},
-              label: 'Button',
-              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
-            ),
-            SecondaryButton(
-              size: NasikoButtonSize.medium,
-              onPressed: () {},
-              label: 'Button',
-              trailingIcon: HugeIcons.strokeRoundedArrowRight01,
-            ),
-            SecondaryButton(
-              size: NasikoButtonSize.medium,
-              onPressed: null,
-              label: 'Disabled',
-            ),
-          ],
-        ),
-        SizedBox(height: context.spacing.s20),
-        // Small buttons
-        Text('Small', style: context.typography.bodyPrimaryBold),
-        SizedBox(height: context.spacing.s12),
-        Wrap(
-          spacing: context.spacing.s12,
-          runSpacing: context.spacing.s12,
-          children: [
-            SecondaryButton(
-              size: NasikoButtonSize.small,
-              onPressed: () {},
-              label: 'Button',
-            ),
-            SecondaryButton(
-              size: NasikoButtonSize.small,
-              onPressed: () {},
-              label: 'Button',
-              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
-            ),
-            SecondaryButton(
-              size: NasikoButtonSize.small,
-              onPressed: () {},
-              label: 'Button',
-              trailingIcon: HugeIcons.strokeRoundedArrowRight01,
-            ),
-            SecondaryButton(
-              size: NasikoButtonSize.small,
-              onPressed: null,
-              label: 'Disabled',
-            ),
-          ],
-        ),
-      ],
-    );
-  }
 
-  Widget _buildTertiaryButtonsExample(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Large buttons
-        Text('Large', style: context.typography.bodyPrimaryBold),
-        SizedBox(height: context.spacing.s12),
-        Wrap(
-          spacing: context.spacing.s12,
-          runSpacing: context.spacing.s12,
-          children: [
-            TertiaryButton(
-              size: NasikoButtonSize.large,
-              onPressed: () {},
-              label: 'Button',
-            ),
-            TertiaryButton(
-              size: NasikoButtonSize.large,
-              onPressed: () {},
-              label: 'Button',
-              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
-            ),
-            TertiaryButton(
-              size: NasikoButtonSize.large,
-              onPressed: () {},
-              label: 'Button',
-              trailingIcon: HugeIcons.strokeRoundedArrowRight01,
-            ),
-            TertiaryButton(
-              size: NasikoButtonSize.large,
-              onPressed: null,
-              label: 'Disabled',
-            ),
-          ],
-        ),
-        SizedBox(height: context.spacing.s20),
-        // Medium buttons
-        Text('Medium', style: context.typography.bodyPrimaryBold),
-        SizedBox(height: context.spacing.s12),
-        Wrap(
-          spacing: context.spacing.s12,
-          runSpacing: context.spacing.s12,
-          children: [
-            TertiaryButton(
-              size: NasikoButtonSize.medium,
-              onPressed: () {},
-              label: 'Button',
-            ),
-            TertiaryButton(
-              size: NasikoButtonSize.medium,
-              onPressed: () {},
-              label: 'Button',
-              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
-            ),
-            TertiaryButton(
-              size: NasikoButtonSize.medium,
-              onPressed: () {},
-              label: 'Button',
-              trailingIcon: HugeIcons.strokeRoundedArrowRight01,
-            ),
-            TertiaryButton(
-              size: NasikoButtonSize.medium,
-              onPressed: null,
-              label: 'Disabled',
-            ),
-          ],
-        ),
-        SizedBox(height: context.spacing.s20),
-        // Small buttons
-        Text('Small', style: context.typography.bodyPrimaryBold),
-        SizedBox(height: context.spacing.s12),
-        Wrap(
-          spacing: context.spacing.s12,
-          runSpacing: context.spacing.s12,
-          children: [
-            TertiaryButton(
-              size: NasikoButtonSize.small,
-              onPressed: () {},
-              label: 'Button',
-            ),
-            TertiaryButton(
-              size: NasikoButtonSize.small,
-              onPressed: () {},
-              label: 'Button',
-              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
-            ),
-            TertiaryButton(
-              size: NasikoButtonSize.small,
-              onPressed: () {},
-              label: 'Button',
-              trailingIcon: HugeIcons.strokeRoundedArrowRight01,
-            ),
-            TertiaryButton(
-              size: NasikoButtonSize.small,
-              onPressed: null,
-              label: 'Disabled',
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPrimaryIconButtonsExample(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Large',
-          style: context.typography.bodyPrimary.copyWith(
-            fontWeight: FontWeight.w600,
+  Widget _buildNasikoButtonExample(BuildContext context) {
+    Widget rowForSize(NasikoButtonSize size, String label) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: context.typography.bodyPrimaryBold),
+          SizedBox(height: context.spacing.s12),
+          Wrap(
+            spacing: context.spacing.s12,
+            runSpacing: context.spacing.s12,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              // One of each type (default tone).
+              for (final type in NasikoButtonType.values)
+                NasikoButton(
+                  type: type,
+                  size: size,
+                  label: type.name,
+                  onPressed: () {},
+                  leadingIcon: HugeIcons.strokeRoundedAdd01,
+                  trailingIcon: HugeIcons.strokeRoundedArrowRight01,
+                ),
+              // Destructive tone (only primary + secondary).
+              NasikoButton(
+                type: NasikoButtonType.primary,
+                tone: NasikoButtonTone.destructive,
+                size: size,
+                label: 'delete',
+                onPressed: () {},
+                leadingIcon: HugeIcons.strokeRoundedDelete02,
+              ),
+              NasikoButton(
+                type: NasikoButtonType.secondary,
+                tone: NasikoButtonTone.destructive,
+                size: size,
+                label: 'delete',
+                onPressed: () {},
+                leadingIcon: HugeIcons.strokeRoundedDelete02,
+              ),
+              // Disabled.
+              NasikoButton(
+                type: NasikoButtonType.primary,
+                size: size,
+                label: 'disabled',
+                onPressed: null,
+              ),
+            ],
           ),
-        ),
-        SizedBox(height: context.spacing.s12),
-        Wrap(
-          spacing: context.spacing.s12,
-          runSpacing: context.spacing.s12,
-          children: [
-            PrimaryIconButton(
-              icon: HugeIcons.strokeRoundedStar,
-              onPressed: () {},
-              size: NasikoButtonSize.large,
-              isLoading: true,
-            ),
-            PrimaryIconButton(
-              icon: HugeIcons.strokeRoundedStar,
-              onPressed: null,
-              size: NasikoButtonSize.large,
-            ),
-          ],
-        ),
+        ],
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        rowForSize(NasikoButtonSize.large, 'Large'),
         SizedBox(height: context.spacing.s20),
-        Text('Medium', style: context.typography.bodyPrimary),
-        SizedBox(height: context.spacing.s12),
-        Wrap(
-          spacing: context.spacing.s12,
-          runSpacing: context.spacing.s12,
-          children: [
-            PrimaryIconButton(
-              icon: HugeIcons.strokeRoundedStar,
-              onPressed: () {},
-              size: NasikoButtonSize.medium,
-            ),
-            PrimaryIconButton(
-              icon: HugeIcons.strokeRoundedStar,
-              onPressed: null,
-              size: NasikoButtonSize.medium,
-            ),
-          ],
-        ),
+        rowForSize(NasikoButtonSize.medium, 'Medium'),
         SizedBox(height: context.spacing.s20),
-        Text(
-          'Small',
-          style: context.typography.bodyPrimary.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        SizedBox(height: context.spacing.s12),
-        Wrap(
-          spacing: context.spacing.s12,
-          runSpacing: context.spacing.s12,
-          children: [
-            PrimaryIconButton(
-              icon: HugeIcons.strokeRoundedStar,
-              onPressed: () {},
-              size: NasikoButtonSize.small,
-            ),
-            PrimaryIconButton(
-              icon: HugeIcons.strokeRoundedStar,
-              onPressed: null,
-              size: NasikoButtonSize.small,
-            ),
-          ],
-        ),
+        rowForSize(NasikoButtonSize.small, 'Small'),
       ],
     );
   }
 
-  Widget _buildSecondaryIconButtonsExample(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Large',
-          style: context.typography.bodyPrimary.copyWith(
-            fontWeight: FontWeight.w600,
+  Widget _buildNasikoIconButtonExample(BuildContext context) {
+    Widget rowForSize(NasikoButtonSize size, String label) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: context.typography.bodyPrimaryBold),
+          SizedBox(height: context.spacing.s12),
+          Wrap(
+            spacing: context.spacing.s12,
+            runSpacing: context.spacing.s12,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              for (final type in NasikoButtonType.values)
+                NasikoIconButton(
+                  type: type,
+                  size: size,
+                  icon: HugeIcons.strokeRoundedAdd01,
+                  onPressed: () {},
+                ),
+              NasikoIconButton(
+                type: NasikoButtonType.primary,
+                tone: NasikoButtonTone.destructive,
+                size: size,
+                icon: HugeIcons.strokeRoundedDelete02,
+                onPressed: () {},
+              ),
+              NasikoIconButton(
+                type: NasikoButtonType.secondary,
+                tone: NasikoButtonTone.destructive,
+                size: size,
+                icon: HugeIcons.strokeRoundedDelete02,
+                onPressed: () {},
+              ),
+              NasikoIconButton(
+                type: NasikoButtonType.primary,
+                size: size,
+                icon: HugeIcons.strokeRoundedAdd01,
+                onPressed: null,
+              ),
+              NasikoIconButton(
+                type: NasikoButtonType.primary,
+                size: size,
+                icon: HugeIcons.strokeRoundedAdd01,
+                onPressed: () {},
+                isLoading: true,
+              ),
+            ],
           ),
-        ),
-        SizedBox(height: context.spacing.s12),
-        Wrap(
-          spacing: context.spacing.s12,
-          runSpacing: context.spacing.s12,
-          children: [
-            SecondaryIconButton(
-              icon: HugeIcons.strokeRoundedStar,
-              onPressed: () {},
-              size: NasikoButtonSize.large,
-            ),
-            SecondaryIconButton(
-              icon: HugeIcons.strokeRoundedStar,
-              onPressed: null,
-              size: NasikoButtonSize.large,
-            ),
-          ],
-        ),
-        SizedBox(height: context.spacing.s20),
-        Text(
-          'Medium',
-          style: context.typography.bodyPrimary.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        SizedBox(height: context.spacing.s12),
-        Wrap(
-          spacing: context.spacing.s12,
-          runSpacing: context.spacing.s12,
-          children: [
-            SecondaryIconButton(
-              icon: HugeIcons.strokeRoundedStar,
-              onPressed: () {},
-              size: NasikoButtonSize.medium,
-            ),
-            SecondaryIconButton(
-              icon: HugeIcons.strokeRoundedStar,
-              onPressed: null,
-              size: NasikoButtonSize.medium,
-            ),
-          ],
-        ),
-        SizedBox(height: context.spacing.s20),
-        Text(
-          'Small',
-          style: context.typography.bodyPrimary.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        SizedBox(height: context.spacing.s12),
-        Wrap(
-          spacing: context.spacing.s12,
-          runSpacing: context.spacing.s12,
-          children: [
-            SecondaryIconButton(
-              icon: HugeIcons.strokeRoundedStar,
-              onPressed: () {},
-              size: NasikoButtonSize.small,
-            ),
-            SecondaryIconButton(
-              icon: HugeIcons.strokeRoundedStar,
-              onPressed: null,
-              size: NasikoButtonSize.small,
-            ),
-          ],
-        ),
-      ],
-    );
-  }
+        ],
+      );
+    }
 
-  Widget _buildTertiaryIconButtonsExample(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Large', style: context.typography.bodyPrimaryBold),
-        SizedBox(height: context.spacing.s12),
-        Wrap(
-          spacing: context.spacing.s12,
-          runSpacing: context.spacing.s12,
-          children: [
-            TertiaryIconButton(
-              icon: HugeIcons.strokeRoundedStar,
-              onPressed: () {},
-              size: NasikoButtonSize.large,
-            ),
-            TertiaryIconButton(
-              icon: HugeIcons.strokeRoundedStar,
-              onPressed: null,
-              size: NasikoButtonSize.large,
-            ),
-          ],
-        ),
+        rowForSize(NasikoButtonSize.large, 'Large'),
         SizedBox(height: context.spacing.s20),
-        Text('Medium', style: context.typography.bodyPrimaryBold),
-        SizedBox(height: context.spacing.s12),
-        Wrap(
-          spacing: context.spacing.s12,
-          runSpacing: context.spacing.s12,
-          children: [
-            TertiaryIconButton(
-              icon: HugeIcons.strokeRoundedStar,
-              onPressed: () {},
-              size: NasikoButtonSize.medium,
-            ),
-            TertiaryIconButton(
-              icon: HugeIcons.strokeRoundedStar,
-              onPressed: null,
-              size: NasikoButtonSize.medium,
-            ),
-          ],
-        ),
+        rowForSize(NasikoButtonSize.medium, 'Medium'),
         SizedBox(height: context.spacing.s20),
-        Text('Small', style: context.typography.bodyPrimaryBold),
-        SizedBox(height: context.spacing.s12),
-        Wrap(
-          spacing: context.spacing.s12,
-          runSpacing: context.spacing.s12,
-          children: [
-            TertiaryIconButton(
-              icon: HugeIcons.strokeRoundedStar,
-              onPressed: () {},
-              size: NasikoButtonSize.small,
-            ),
-            TertiaryIconButton(
-              icon: HugeIcons.strokeRoundedStar,
-              onPressed: null,
-              size: NasikoButtonSize.small,
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDestructiveButtonsExample(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Wrap(
-          spacing: context.spacing.s12,
-          runSpacing: context.spacing.s12,
-          children: [
-            DestructiveIconButton(
-              icon: HugeIcons.strokeRoundedDelete02,
-              size: NasikoButtonSize.small,
-              onPressed: () {},
-            ),
-            DestructiveButton(
-              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
-              size: NasikoButtonSize.small,
-              onPressed: () {},
-              label: 'Button',
-            ),
-            DestructiveTextButton(
-              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
-              size: NasikoButtonSize.small,
-              onPressed: () {},
-              label: 'Button',
-            ),
-            DestructiveSecondaryButton(
-              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
-              size: NasikoButtonSize.small,
-              onPressed: () {},
-              label: 'Button',
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildLinkExample(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Default state
-        Wrap(
-          spacing: context.spacing.s12,
-          runSpacing: context.spacing.s12,
-          children: [
-            LinkButton(onPressed: () {}, label: 'Button'),
-            LinkButton(
-              onPressed: () {},
-              label: 'Button',
-              leadingIcon: HugeIcons.strokeRoundedCheckmarkCircle01,
-            ),
-            LinkButton(
-              onPressed: () {},
-              label: 'Button',
-              trailingIcon: HugeIcons.strokeRoundedInformationCircle,
-            ),
-            LinkButton(onPressed: null, label: 'Disabled'),
-          ],
-        ),
+        rowForSize(NasikoButtonSize.small, 'Small'),
       ],
     );
   }
@@ -1246,7 +748,8 @@ class ExampleHomePage extends StatelessWidget {
           children: [
             const Text('This is the content for the second item.'),
             SizedBox(height: context.spacing.s16),
-            PrimaryButton(
+            NasikoButton(
+              type: NasikoButtonType.primary,
               onPressed: () {},
               label: 'Nested Button',
               size: NasikoButtonSize.small,
@@ -1366,7 +869,8 @@ class ExampleHomePage extends StatelessWidget {
           onClose: () {
             debugPrint('Horizontal Banner closed');
           },
-          action: PrimaryButton(
+          action: NasikoButton(
+            type: NasikoButtonType.primary,
             onPressed: () {},
             label: 'Add Agent',
             size: NasikoButtonSize.small,
@@ -1385,7 +889,8 @@ class ExampleHomePage extends StatelessWidget {
           onClose: () {
             debugPrint('Vertical Banner closed');
           },
-          action: PrimaryButton(
+          action: NasikoButton(
+            type: NasikoButtonType.primary,
             onPressed: () {},
             label: 'Button',
             size: NasikoButtonSize.small,
@@ -1478,7 +983,8 @@ class ExampleHomePage extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        PrimaryButton(
+        NasikoButton(
+          type: NasikoButtonType.primary,
           onPressed: () {
             showNasikoModal(
               context: context,
@@ -1492,7 +998,8 @@ class ExampleHomePage extends StatelessWidget {
           label: 'Primary action modal',
         ),
         SizedBox(width: context.spacing.s16),
-        PrimaryButton(
+        NasikoButton(
+          type: NasikoButtonType.primary,
           onPressed: () {
             showNasikoModal(
               context: context,
@@ -1510,7 +1017,8 @@ class ExampleHomePage extends StatelessWidget {
           label: 'Primary destructive button modal',
         ),
         SizedBox(width: context.spacing.s16),
-        PrimaryButton(
+        NasikoButton(
+          type: NasikoButtonType.primary,
           onPressed: () {
             showNasikoModal(
               context: context,
@@ -1525,7 +1033,8 @@ class ExampleHomePage extends StatelessWidget {
           label: 'Secondary destructive button modal',
         ),
         SizedBox(width: context.spacing.s16),
-        PrimaryButton(
+        NasikoButton(
+          type: NasikoButtonType.primary,
           onPressed: () {
             showNasikoModal(
               context: context,
@@ -1539,7 +1048,8 @@ class ExampleHomePage extends StatelessWidget {
           label: 'Tertiary destructive button modal',
         ),
         SizedBox(width: context.spacing.s16),
-        PrimaryButton(
+        NasikoButton(
+          type: NasikoButtonType.primary,
           label: 'Show Confirmation',
           onPressed: () {
             showNasikoModal(
@@ -1563,7 +1073,8 @@ class ExampleHomePage extends StatelessWidget {
         ),
         SizedBox(width: context.spacing.s16),
 
-        PrimaryButton(
+        NasikoButton(
+          type: NasikoButtonType.primary,
           label: 'Show Alert',
           onPressed: () {
             showNasikoModal(
@@ -1728,21 +1239,24 @@ class ExampleHomePage extends StatelessWidget {
       spacing: spacing.s16,
       runSpacing: spacing.s16,
       children: [
-        PrimaryButton(
+        NasikoButton(
+          type: NasikoButtonType.primary,
           label: 'Show Success Toast',
           onPressed: () => NasikoToastService.showSuccess(
             context,
             'Operation successful! Your settings have been saved and applied.',
           ),
         ),
-        PrimaryButton(
+        NasikoButton(
+          type: NasikoButtonType.primary,
           label: 'Show Error Toast',
           onPressed: () => NasikoToastService.showError(
             context,
             'Failed to load resource. Check your network connection.',
           ),
         ),
-        PrimaryButton(
+        NasikoButton(
+          type: NasikoButtonType.primary,
           label: 'Show Warning Toast',
           onPressed: () => NasikoToastService.show(
             context,
@@ -1750,7 +1264,8 @@ class ExampleHomePage extends StatelessWidget {
             type: NasikoToastType.warning,
           ),
         ),
-        PrimaryButton(
+        NasikoButton(
+          type: NasikoButtonType.primary,
           label: 'Show Info Toast',
           onPressed: () => NasikoToastService.show(
             context,
@@ -1758,7 +1273,8 @@ class ExampleHomePage extends StatelessWidget {
             type: NasikoToastType.info,
           ),
         ),
-        PrimaryButton(
+        NasikoButton(
+          type: NasikoButtonType.primary,
           label: 'Show In progress Info Toast',
           onPressed: () => NasikoToastService.show(
             context,
@@ -2032,7 +1548,8 @@ class _MenuExampleState extends State<_MenuExample> {
           _selectedIndex = index;
         });
       },
-      child: SecondaryButton(
+      child: NasikoButton(
+        type: NasikoButtonType.secondary,
         label: _menuItems[_selectedIndex].label,
         size: NasikoButtonSize.medium,
         trailingIcon: HugeIcons.strokeRoundedArrowDown01,

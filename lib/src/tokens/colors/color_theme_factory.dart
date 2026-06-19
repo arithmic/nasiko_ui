@@ -85,6 +85,12 @@ class NasikoColorThemeFactory {
       borderDisabled: sand300,
       borderInformation: brandColors.primaryHover,
       borderInformationOverlay: sand800,
+
+      // Action (button)
+      backgroundNeutralActive: sand700,
+      backgroundErrorHover: red700,
+      backgroundErrorActive: red900,
+      borderErrorStrong: red500,
     );
   }
 
@@ -164,6 +170,12 @@ class NasikoColorThemeFactory {
       borderDisabled: sand700,
       borderInformation: brandColors.primaryDarkAccent,
       borderInformationOverlay: sand200,
+
+      // Action (button)
+      backgroundNeutralActive: sand600,
+      backgroundErrorHover: red500,
+      backgroundErrorActive: red400,
+      borderErrorStrong: red500,
     );
   }
 

@@ -423,7 +423,8 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (widget.onRetry != null)
-            PrimaryIconButton(
+            NasikoIconButton(
+              type: NasikoButtonType.secondary,
               icon: HugeIcons.strokeRoundedReload,
               onPressed: widget.onRetry!,
               size: NasikoButtonSize.small,
@@ -431,7 +432,9 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
           if (widget.onRetry != null && widget.onDelete != null)
             SizedBox(width: spacing.s8),
           if (widget.onDelete != null)
-            DestructiveIconButton(
+            NasikoIconButton(
+              type: NasikoButtonType.primary,
+              tone: NasikoButtonTone.destructive,
               icon: HugeIcons.strokeRoundedDelete02,
               onPressed: widget.onDelete!,
               size: NasikoButtonSize.small,
@@ -740,7 +743,7 @@ class _NasikoAgentCardState extends State<NasikoAgentCard> {
 /// Three-dot popover trigger rendered at the end of a [NasikoAgentCard] header.
 ///
 /// [NasikoPopupMenu] wraps its child in [AbsorbPointer], which blocks all
-/// pointer events from reaching the [TertiaryIconButton]. A [MouseRegion] +
+/// pointer events from reaching the [NasikoIconButton]. A [MouseRegion] +
 /// [Listener] placed above the [AbsorbPointer] track hover and pressed state
 /// and forward them into the button via an external [WidgetStatesController].
 class _AgentCardMenuButton extends StatefulWidget {
@@ -779,7 +782,8 @@ class _AgentCardMenuButtonState extends State<_AgentCardMenuButton> {
           width: 160,
           items: widget.actions,
           onItemSelected: (index) => widget.onItemSelected?.call(index),
-          child: TertiaryIconButton(
+          child: NasikoIconButton(
+            type: NasikoButtonType.tertiary,
             icon: HugeIcons.strokeRoundedMoreVertical,
             onPressed: () {},
             size: NasikoButtonSize.small,

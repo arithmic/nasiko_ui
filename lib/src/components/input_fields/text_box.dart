@@ -223,7 +223,8 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         if (widget.showAttachmentButton)
-                          SecondaryIconButton(
+                          NasikoIconButton(
+                            type: NasikoButtonType.tertiary,
                             icon: HugeIcons.strokeRoundedAttachment01,
                             onPressed: widget.enabled
                                 ? widget.onAttachmentTap
@@ -250,7 +251,8 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
                   ),
                   if (widget.showSendButton) ...[
                     SizedBox(width: spacing.s12),
-                    PrimaryIconButton(
+                    NasikoIconButton(
+                      type: NasikoButtonType.primary,
                       icon: HugeIcons.strokeRoundedSent,
                       onPressed: widget.enabled ? widget.onSend : null,
                       size: NasikoButtonSize.medium,
