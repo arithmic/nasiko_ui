@@ -298,10 +298,8 @@ class _EstimatedTokensPill extends StatelessWidget {
     return NasikoTooltip(
       message: tooltip,
       preferBelow: false,
-      child: NasikoChip(
-        enabled: true,
-        shape: NasikoChipShape.rounded,
-        size: NasikoChipSize.small,
+      child: NasikoBadge(
+        size: NasikoBadgeSize.small,
         label: '$tokens',
         leadingIcon: HugeIcons.strokeRoundedCoins02,
       ),
