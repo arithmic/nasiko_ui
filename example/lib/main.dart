@@ -145,6 +145,17 @@ class ExampleHomePage extends StatelessWidget {
               child: _buildInputFieldsExample(context),
             ),
             SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'NasikoInput (V2 — State × Size)',
+              child: const _NasikoInputExample(),
+            ),
+            _buildSection(
+              context,
+              title: 'NasikoSearch (V2 — State × Size)',
+              child: const _NasikoSearchExample(),
+            ),
+            SizedBox(height: context.spacing.s28),
             _buildSection(context, title: 'Menu', child: const _MenuExample()),
             SizedBox(height: context.spacing.s28),
             _buildSection(
@@ -703,29 +714,31 @@ class ExampleHomePage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        NasikoInputField(
+        NasikoInput(
           label: 'Label',
-          labelInfoIcon: HugeIcons.strokeRoundedMail01,
-          hintText: 'Email',
-          helperText: 'Hint',
+          placeholder: 'Email',
+          showHint: true,
+          hint: 'Hint',
           leadingIcon: HugeIcons.strokeRoundedMail01,
           trailingIcon: HugeIcons.strokeRoundedInformationCircle,
           onChanged: (value) {
             // Handle change
           },
-          isRequired: true,
+          required: true,
         ),
         SizedBox(height: context.spacing.s16),
-        NasikoInputField(
+        NasikoInput(
           label: 'Password',
-          hintText: 'Enter your password',
-          helperText: 'Must be 8 characters.',
+          placeholder: 'Enter your password',
+          showHint: true,
+          hint: 'Must be 8 characters.',
           leadingIcon: HugeIcons.strokeRoundedLock,
           obscureText: true,
+          showPasswordToggle: true,
           onChanged: (value) {
             // Handle change
           },
-          isRequired: true,
+          required: true,
         ),
       ],
     );
@@ -2078,6 +2091,208 @@ class _ChipExampleState extends State<_ChipExample> {
             ),
           ],
         ),
+      ],
+    );
+  }
+}
+
+/// Showcases [NasikoInput] across both sizes and every state. Stateful so the
+/// runtime states (hover, focus, live character count) are actually exercised.
+class _NasikoInputExample extends StatefulWidget {
+  const _NasikoInputExample();
+
+  @override
+  State<_NasikoInputExample> createState() => _NasikoInputExampleState();
+}
+
+class _NasikoInputExampleState extends State<_NasikoInputExample> {
+  final TextEditingController _countController =
+      TextEditingController(text: 'Hello');
+  final TextEditingController _readOnlyController =
+      TextEditingController(text: 'nsk_8f2a91');
+
+  @override
+  void dispose() {
+    _countController.dispose();
+    _readOnlyController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget columnForSize(NasikoInputSize size, String label) {
+      return Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label, style: context.typography.bodyPrimaryBold),
+            SizedBox(height: context.spacing.s12),
+
+            // Default — required label, leading + trailing icon, hint.
+            NasikoInput(
+              size: size,
+              label: 'Email',
+              required: true,
+              placeholder: 'you@nasiko.com',
+              leadingIcon: HugeIcons.strokeRoundedMail01,
+              trailingIcon: HugeIcons.strokeRoundedCancel01,
+              showHint: true,
+              hint: 'We will never share it.',
+            ),
+            SizedBox(height: context.spacing.s16),
+
+            // Error.
+            NasikoInput(
+              size: size,
+              label: 'Email',
+              placeholder: 'you@nasiko.com',
+              errorText: 'Enter a valid email address.',
+              showHint: true,
+            ),
+            SizedBox(height: context.spacing.s16),
+
+            // Success.
+            NasikoInput(
+              size: size,
+              label: 'Username',
+              placeholder: 'nasiko',
+              isSuccess: true,
+              showHint: true,
+              hint: 'Available!',
+            ),
+            SizedBox(height: context.spacing.s16),
+
+            // Character count (count-only row: showHint true + empty hint).
+            NasikoInput(
+              size: size,
+              label: 'Bio',
+              controller: _countController,
+              placeholder: 'Tell us about yourself',
+              showHint: true,
+              hint: '',
+              showCount: true,
+              maxLength: 80,
+            ),
+            SizedBox(height: context.spacing.s16),
+
+            // Read-only.
+            NasikoInput(
+              size: size,
+              label: 'Workspace ID',
+              controller: _readOnlyController,
+              readOnly: true,
+            ),
+            SizedBox(height: context.spacing.s16),
+
+            // Disabled.
+            NasikoInput(
+              size: size,
+              label: 'Plan',
+              placeholder: 'Enterprise',
+              enabled: false,
+            ),
+            SizedBox(height: context.spacing.s16),
+
+            // Password — tappable show/hide toggle in the trailing slot.
+            NasikoInput(
+              size: size,
+              label: 'Password',
+              required: true,
+              placeholder: 'Enter your password',
+              leadingIcon: HugeIcons.strokeRoundedLockPassword,
+              obscureText: true,
+              showPasswordToggle: true,
+              showHint: true,
+              hint: 'Must be at least 8 characters.',
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        columnForSize(NasikoInputSize.medium, 'Default (m)'),
+        SizedBox(width: context.spacing.s24),
+        columnForSize(NasikoInputSize.small, 'Compact (s)'),
+      ],
+    );
+  }
+}
+
+class _NasikoSearchExample extends StatefulWidget {
+  const _NasikoSearchExample();
+
+  @override
+  State<_NasikoSearchExample> createState() => _NasikoSearchExampleState();
+}
+
+class _NasikoSearchExampleState extends State<_NasikoSearchExample> {
+  final TextEditingController _filledM =
+      TextEditingController(text: 'Invoices');
+  final TextEditingController _filledS =
+      TextEditingController(text: 'Invoices');
+  final TextEditingController _loadingM =
+      TextEditingController(text: 'Searching…');
+  final TextEditingController _loadingS =
+      TextEditingController(text: 'Searching…');
+
+  @override
+  void dispose() {
+    _filledM.dispose();
+    _filledS.dispose();
+    _loadingM.dispose();
+    _loadingS.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget columnForSize(
+      NasikoSearchSize size,
+      String label,
+      TextEditingController filled,
+      TextEditingController loading,
+    ) {
+      return Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label, style: context.typography.bodyPrimaryBold),
+            SizedBox(height: context.spacing.s12),
+
+            // Default — empty placeholder.
+            NasikoSearch(size: size),
+            SizedBox(height: context.spacing.s16),
+
+            // Has value — clear icon visible.
+            NasikoSearch(
+              size: size,
+              controller: filled,
+              onClear: () {},
+            ),
+            SizedBox(height: context.spacing.s16),
+
+            // Loading — spinner in the trailing slot.
+            NasikoSearch(size: size, controller: loading, isLoading: true),
+            SizedBox(height: context.spacing.s16),
+
+            // Disabled.
+            NasikoSearch(size: size, placeholder: 'Search', enabled: false),
+          ],
+        ),
+      );
+    }
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        columnForSize(
+            NasikoSearchSize.medium, 'Default (m)', _filledM, _loadingM),
+        SizedBox(width: context.spacing.s24),
+        columnForSize(
+            NasikoSearchSize.small, 'Compact (s)', _filledS, _loadingS),
       ],
     );
   }
