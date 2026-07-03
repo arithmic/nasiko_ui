@@ -13,6 +13,7 @@ export 'src/components/card/agent_card.dart';
 export 'src/components/card/card.dart';
 export 'src/components/checkbox/checkbox.dart';
 export 'src/components/checkbox/checkbox_tile.dart';
+export 'src/components/chart/chart.dart';
 export 'src/components/chip/chips.dart';
 export 'src/components/divider/divider.dart';
 export 'src/components/input_fields/input_field.dart';

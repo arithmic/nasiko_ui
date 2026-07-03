@@ -169,12 +169,12 @@ class ExampleHomePage extends StatelessWidget {
               child: _buildLinkExample(context),
             ),
 
-            SizedBox(height: context.spacing.s28),
-            _buildSection(
-              context,
-              title: 'Cards',
-              child: _buildCardsExample(context),
-            ),
+            // SizedBox(height: context.spacing.s28),
+            // _buildSection(
+            //   context,
+            //   title: 'Cards',
+            //   child: _buildCardsExample(context),
+            // ),
             SizedBox(height: context.spacing.s28),
             _buildSection(
               context,
@@ -274,6 +274,12 @@ class ExampleHomePage extends StatelessWidget {
               context,
               title: 'Query Box',
               child: _buildQueryBoxExample(context),
+            ),
+            SizedBox(height: context.spacing.s28),
+            _buildSection(
+              context,
+              title: 'Charts',
+              child: const _ChartExample(),
             ),
           ],
         ),
@@ -1132,73 +1138,73 @@ class ExampleHomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildCardsExample(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: NasikoCard(
-            title: 'Document Expert',
-            titleIcon: HugeIcons.strokeRoundedDocumentCode,
-            tags: [
-              'document analysis',
-              'chat',
-              'history',
-              'document analysis',
-              'chat',
-              'history',
-              'document analysis',
-              'chat',
-              'history',
-            ],
-            description: 'A helpful assistant that answers user questions.',
-            secondaryButtonLabel: 'Learn More',
-          ),
-        ),
-        SizedBox(width: context.spacing.s16),
-        Expanded(
-          child: NasikoAgentCard(
-            title: 'Document Expert',
-            tags: [
-              'document analysis',
-              'chat',
-              'history',
-              'document analysis',
-              'chat',
-              'history',
-              'document analysis',
-              'chat',
-              'history',
-            ],
-            description:
-                'A helpful assistant that answers user questions based on the provided document. It supports file uploads for document processing and maintains a chat history for each session.',
-            onTap: () {},
-            menuActions: [
-              NasikoPopupMenuItemData(
-                label: 'Edit',
-                icon: HugeIcons.strokeRoundedEdit01,
-              ),
-              NasikoPopupMenuItemData(
-                label: 'Delete',
-                icon: HugeIcons.strokeRoundedDelete02,
-              ),
-            ],
-          ),
-        ),
-        SizedBox(width: context.spacing.s16),
-        Expanded(
-          child: NasikoCard(
-            title: 'Code Expert',
-            titleIcon: HugeIcons.strokeRoundedCode,
-            tags: ['code analysis', 'chat', 'history'],
-            description:
-                'An AI-powered coding assistant that helps users understand and debug code snippets. It supports multiple programming languages and maintains a chat history for each session.',
-            secondaryButtonLabel: 'Learn More',
-          ),
-        ),
-      ],
-    );
-  }
+  // Widget _buildCardsExample(BuildContext context) {
+  //   return Row(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       Expanded(
+  //         child: NasikoCard(
+  //           title: 'Document Expert',
+  //           titleIcon: HugeIcons.strokeRoundedDocumentCode,
+  //           tags: [
+  //             'document analysis',
+  //             'chat',
+  //             'history',
+  //             'document analysis',
+  //             'chat',
+  //             'history',
+  //             'document analysis',
+  //             'chat',
+  //             'history',
+  //           ],
+  //           description: 'A helpful assistant that answers user questions.',
+  //           secondaryButtonLabel: 'Learn More',
+  //         ),
+  //       ),
+  //       SizedBox(width: context.spacing.s16),
+  //       Expanded(
+  //         child: NasikoAgentCard(
+  //           title: 'Document Expert',
+  //           tags: [
+  //             'document analysis',
+  //             'chat',
+  //             'history',
+  //             'document analysis',
+  //             'chat',
+  //             'history',
+  //             'document analysis',
+  //             'chat',
+  //             'history',
+  //           ],
+  //           description:
+  //               'A helpful assistant that answers user questions based on the provided document. It supports file uploads for document processing and maintains a chat history for each session.',
+  //           onTap: () {},
+  //           menuActions: [
+  //             NasikoPopupMenuItemData(
+  //               label: 'Edit',
+  //               icon: HugeIcons.strokeRoundedEdit01,
+  //             ),
+  //             NasikoPopupMenuItemData(
+  //               label: 'Delete',
+  //               icon: HugeIcons.strokeRoundedDelete02,
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //       SizedBox(width: context.spacing.s16),
+  //       Expanded(
+  //         child: NasikoCard(
+  //           title: 'Code Expert',
+  //           titleIcon: HugeIcons.strokeRoundedCode,
+  //           tags: ['code analysis', 'chat', 'history'],
+  //           description:
+  //               'An AI-powered coding assistant that helps users understand and debug code snippets. It supports multiple programming languages and maintains a chat history for each session.',
+  //           secondaryButtonLabel: 'Learn More',
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget _buildInputFieldsExample(BuildContext context) {
     return Column(
@@ -2564,6 +2570,291 @@ class _ChipExampleState extends State<_ChipExample> {
             ),
           ],
         ),
+      ],
+    );
+  }
+}
+
+// ── Charts ───────────────────────────────────────────────────────────────────
+
+/// Sample data and a gallery of every chart variant in all four states, plus
+/// the stat-card wrapper in each trailing mode.
+class _ChartExample extends StatelessWidget {
+  const _ChartExample();
+
+  static const _days = ['Mar 10', 'Mar 11', 'Mar 12', 'Mar 13', 'Mar 14'];
+
+  List<NasikoChartSeries> get _lineSeries => [
+    const NasikoChartSeries(
+      name: 'Claude Opus',
+      points: [
+        NasikoChartPoint(x: 0, y: 800, label: 'Mar 10'),
+        NasikoChartPoint(x: 1, y: 1100, label: 'Mar 11'),
+        NasikoChartPoint(x: 2, y: 950, label: 'Mar 12'),
+        NasikoChartPoint(x: 3, y: 1300, label: 'Mar 13'),
+        NasikoChartPoint(x: 4, y: 1240, label: 'Mar 14'),
+      ],
+    ),
+    const NasikoChartSeries(
+      name: 'GPT-4o',
+      points: [
+        NasikoChartPoint(x: 0, y: 600, label: 'Mar 10'),
+        NasikoChartPoint(x: 1, y: 750, label: 'Mar 11'),
+        NasikoChartPoint(x: 2, y: 700, label: 'Mar 12'),
+        NasikoChartPoint(x: 3, y: 900, label: 'Mar 13'),
+        NasikoChartPoint(x: 4, y: 860, label: 'Mar 14'),
+      ],
+    ),
+  ];
+
+  List<NasikoChartPoint> get _areaPoints => const [
+    NasikoChartPoint(x: 0, y: 20000),
+    NasikoChartPoint(x: 1, y: 32000),
+    NasikoChartPoint(x: 2, y: 30000),
+    NasikoChartPoint(x: 3, y: 46000),
+    NasikoChartPoint(x: 4, y: 53200),
+    NasikoChartPoint(x: 5, y: 62000),
+  ];
+
+  List<NasikoDonutSegment> get _donutSegments => const [
+    NasikoDonutSegment(label: 'gpt-4o', value: 35),
+    NasikoDonutSegment(label: 'claude', value: 25),
+    NasikoDonutSegment(label: 'embeddings', value: 18),
+    NasikoDonutSegment(label: 'gemini', value: 12),
+    NasikoDonutSegment(label: 'other', value: 10),
+  ];
+
+  List<NasikoBarDatum> get _barData => const [
+    NasikoBarDatum(
+      label: 'gpt-4o',
+      value: 4.2,
+      valueLabel: '\$4.2k',
+      delta: NasikoTrendDelta(label: '12%', direction: NasikoTrendDirection.up),
+    ),
+    NasikoBarDatum(
+      label: 'claude-opus',
+      value: 3.3,
+      valueLabel: '\$3.3k',
+      delta: NasikoTrendDelta(label: '5%', direction: NasikoTrendDirection.up),
+    ),
+    NasikoBarDatum(
+      label: 'embeddings',
+      value: 2.2,
+      valueLabel: '\$2.2k',
+      delta: NasikoTrendDelta(
+        label: '8%',
+        direction: NasikoTrendDirection.down,
+      ),
+    ),
+    NasikoBarDatum(
+      label: 'whisper',
+      value: 0.9,
+      valueLabel: '\$0.9k',
+      delta: NasikoTrendDelta(
+        label: '2%',
+        direction: NasikoTrendDirection.down,
+      ),
+    ),
+  ];
+
+  List<NasikoStackedDatum> get _stackedData => [
+    for (var i = 0; i < 5; i++)
+      NasikoStackedDatum(
+        label: _days[i],
+        segments: [
+          NasikoStackedSegment(name: 'Claude', value: 20 + i * 4),
+          NasikoStackedSegment(name: 'GPT-4o', value: 16 + (i % 3) * 6),
+          NasikoStackedSegment(name: 'Gemini', value: 12 + ((i + 1) % 3) * 5),
+        ],
+      ),
+  ];
+
+  List<NasikoSegmentDatum> get _segmentRows => const [
+    NasikoSegmentDatum(
+      label: 'Budget used',
+      percent: 0.72,
+      delta: NasikoTrendDelta(label: '9%', direction: NasikoTrendDirection.up),
+    ),
+    NasikoSegmentDatum(
+      label: 'Token quota',
+      percent: 0.54,
+      delta: NasikoTrendDelta(label: '3%', direction: NasikoTrendDirection.up),
+    ),
+    NasikoSegmentDatum(
+      label: 'Seat limit',
+      percent: 0.36,
+      delta: NasikoTrendDelta(
+        label: '4%',
+        direction: NasikoTrendDirection.down,
+      ),
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final spacing = context.spacing;
+    final typography = context.typography;
+    final colors = context.colors;
+
+    Widget labeled(String label, Widget child) => Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: typography.bodyTertiaryBold.copyWith(
+            color: colors.foregroundSecondary,
+          ),
+        ),
+        SizedBox(height: spacing.s8h),
+        SizedBox(width: 360, child: child),
+      ],
+    );
+
+    // Render a chart in each of the four states.
+    List<Widget> states(Widget Function(NasikoChartState state) build) => [
+      for (final s in NasikoChartState.values)
+        labeled(s.name, build(s)),
+    ];
+
+    Wrap gallery(List<Widget> children) => Wrap(
+      spacing: spacing.s24w,
+      runSpacing: spacing.s24h,
+      children: children,
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Line', style: typography.bodyPrimaryBold),
+        SizedBox(height: spacing.s12h),
+        gallery(
+          states(
+            (s) => NasikoLineChart(
+              series: _lineSeries,
+              state: s,
+              onRetry: () {},
+            ),
+          ),
+        ),
+        SizedBox(height: spacing.s28h),
+
+        Text('Area (threshold + projection)', style: typography.bodyPrimaryBold),
+        SizedBox(height: spacing.s12h),
+        gallery(
+          states(
+            (s) => NasikoAreaChart(
+              points: _areaPoints,
+              state: s,
+              onRetry: () {},
+              threshold: 53200,
+              thresholdLabel: '\$53,200',
+              projectionFromIndex: 4,
+            ),
+          ),
+        ),
+        SizedBox(height: spacing.s28h),
+
+        Text('Donut', style: typography.bodyPrimaryBold),
+        SizedBox(height: spacing.s12h),
+        gallery(
+          states(
+            (s) => NasikoDonutChart(
+              segments: _donutSegments,
+              centerLabel: '\$11.4k',
+              state: s,
+              onRetry: () {},
+            ),
+          ),
+        ),
+        SizedBox(height: spacing.s28h),
+
+        Text('Horizontal bar', style: typography.bodyPrimaryBold),
+        SizedBox(height: spacing.s12h),
+        gallery(
+          states(
+            (s) => NasikoBarChart(data: _barData, state: s, onRetry: () {}),
+          ),
+        ),
+        SizedBox(height: spacing.s28h),
+
+        Text('Stacked bar', style: typography.bodyPrimaryBold),
+        SizedBox(height: spacing.s12h),
+        gallery(
+          states(
+            (s) => NasikoStackedBarChart(
+              data: _stackedData,
+              state: s,
+              onRetry: () {},
+            ),
+          ),
+        ),
+        SizedBox(height: spacing.s28h),
+
+        Text('Segmented progress', style: typography.bodyPrimaryBold),
+        SizedBox(height: spacing.s12h),
+        gallery(
+          states(
+            (s) => NasikoSegmentBar(rows: _segmentRows, state: s, onRetry: () {}),
+          ),
+        ),
+        SizedBox(height: spacing.s28h),
+
+        Text('Stat card wrapper', style: typography.bodyPrimaryBold),
+        SizedBox(height: spacing.s12h),
+        gallery([
+          labeled(
+            'icons',
+            NasikoStatChartCard(
+              title: 'Total spend',
+              value: '\$94,127',
+              infoTooltip: 'Total spend across all models this month.',
+              delta: const NasikoTrendDelta(
+                label: '9%',
+                direction: NasikoTrendDirection.up,
+              ),
+              onExpand: () {},
+              onOverflow: () {},
+              child: NasikoLineChart(
+                series: _lineSeries,
+                height: 160,
+              ),
+            ),
+          ),
+          labeled(
+            'periodDropdown',
+            NasikoStatChartCard(
+              title: 'Total spend',
+              value: '\$94,127',
+              trailing: NasikoStatCardTrailing.periodDropdown,
+              periods: const ['This month', 'Last month', 'This quarter'],
+              selectedPeriod: 'This month',
+              onPeriodChanged: (_) {},
+              delta: const NasikoTrendDelta(
+                label: '9%',
+                direction: NasikoTrendDirection.up,
+              ),
+              child: NasikoDonutChart(
+                segments: _donutSegments,
+                centerLabel: '\$11.4k',
+                height: 160,
+              ),
+            ),
+          ),
+          labeled(
+            'viewAllLink',
+            NasikoStatChartCard(
+              title: 'Total spend',
+              value: '\$94,127',
+              trailing: NasikoStatCardTrailing.viewAllLink,
+              onViewAll: () {},
+              delta: const NasikoTrendDelta(
+                label: '9%',
+                direction: NasikoTrendDirection.up,
+              ),
+              child: NasikoBarChart(data: _barData),
+            ),
+          ),
+        ]),
       ],
     );
   }

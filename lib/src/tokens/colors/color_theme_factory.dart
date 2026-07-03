@@ -85,6 +85,15 @@ class NasikoColorThemeFactory {
       borderDisabled: sand300,
       borderInformation: brandColors.primaryHover,
       borderInformationOverlay: sand800,
+
+      // Chart Series (categorical)
+      chartSeries1: teal300,
+      chartSeries2: purple400,
+      chartSeries3: yellow300,
+      chartSeries4: blue400,
+      chartSeries5: red300,
+      chartSeries6: orange300,
+      chartSeries7: green400,
     );
   }
 
@@ -164,6 +173,15 @@ class NasikoColorThemeFactory {
       borderDisabled: sand700,
       borderInformation: brandColors.primaryDarkAccent,
       borderInformationOverlay: sand200,
+
+      // Chart Series (categorical)
+      chartSeries1: teal300,
+      chartSeries2: purple400,
+      chartSeries3: yellow300,
+      chartSeries4: blue400,
+      chartSeries5: red300,
+      chartSeries6: orange300,
+      chartSeries7: green400,
     );
   }
 

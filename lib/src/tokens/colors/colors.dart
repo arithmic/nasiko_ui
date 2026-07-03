@@ -71,6 +71,15 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
     required this.borderDisabled,
     required this.borderInformation,
     required this.borderInformationOverlay,
+
+    // Chart Series (categorical)
+    required this.chartSeries1,
+    required this.chartSeries2,
+    required this.chartSeries3,
+    required this.chartSeries4,
+    required this.chartSeries5,
+    required this.chartSeries6,
+    required this.chartSeries7,
   });
 
   // Background Default
@@ -140,6 +149,31 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
   final Color borderInformation;
   final Color borderInformationOverlay;
 
+  // Chart Series (categorical)
+  final Color chartSeries1;
+  final Color chartSeries2;
+  final Color chartSeries3;
+  final Color chartSeries4;
+  final Color chartSeries5;
+  final Color chartSeries6;
+  final Color chartSeries7;
+
+  /// The categorical series palette in assignment order.
+  List<Color> get chartSeries => [
+    chartSeries1,
+    chartSeries2,
+    chartSeries3,
+    chartSeries4,
+    chartSeries5,
+    chartSeries6,
+    chartSeries7,
+  ];
+
+  /// Returns the i-th categorical series colour, wrapping modulo the palette
+  /// length so any number of series gets a stable colour.
+  Color chartSeriesColor(int index) =>
+      chartSeries[index % chartSeries.length];
+
   @override
   NasikoColorTheme copyWith({
     Color? backgroundBase,
@@ -192,6 +226,13 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
     Color? borderDisabled,
     Color? borderInformation,
     Color? borderInformationOverlay,
+    Color? chartSeries1,
+    Color? chartSeries2,
+    Color? chartSeries3,
+    Color? chartSeries4,
+    Color? chartSeries5,
+    Color? chartSeries6,
+    Color? chartSeries7,
   }) {
     return NasikoColorTheme(
       backgroundBase: backgroundBase ?? this.backgroundBase,
@@ -264,6 +305,13 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
       borderInformation: borderInformation ?? this.borderInformation,
       borderInformationOverlay:
           borderInformationOverlay ?? this.borderInformationOverlay,
+      chartSeries1: chartSeries1 ?? this.chartSeries1,
+      chartSeries2: chartSeries2 ?? this.chartSeries2,
+      chartSeries3: chartSeries3 ?? this.chartSeries3,
+      chartSeries4: chartSeries4 ?? this.chartSeries4,
+      chartSeries5: chartSeries5 ?? this.chartSeries5,
+      chartSeries6: chartSeries6 ?? this.chartSeries6,
+      chartSeries7: chartSeries7 ?? this.chartSeries7,
     );
   }
 
@@ -466,6 +514,13 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
         other.borderInformationOverlay,
         t,
       )!,
+      chartSeries1: Color.lerp(chartSeries1, other.chartSeries1, t)!,
+      chartSeries2: Color.lerp(chartSeries2, other.chartSeries2, t)!,
+      chartSeries3: Color.lerp(chartSeries3, other.chartSeries3, t)!,
+      chartSeries4: Color.lerp(chartSeries4, other.chartSeries4, t)!,
+      chartSeries5: Color.lerp(chartSeries5, other.chartSeries5, t)!,
+      chartSeries6: Color.lerp(chartSeries6, other.chartSeries6, t)!,
+      chartSeries7: Color.lerp(chartSeries7, other.chartSeries7, t)!,
     );
   }
 }
@@ -542,6 +597,15 @@ final NasikoColorTheme lightColors = NasikoColorTheme(
   borderDisabled: sand300,
   borderInformation: yellow300,
   borderInformationOverlay: sand800,
+
+  // Chart Series (categorical)
+  chartSeries1: teal300,
+  chartSeries2: purple400,
+  chartSeries3: yellow300,
+  chartSeries4: blue400,
+  chartSeries5: red300,
+  chartSeries6: orange300,
+  chartSeries7: green400,
 );
 
 // --- Dark Instance ---
@@ -615,6 +679,15 @@ final NasikoColorTheme darkColors = NasikoColorTheme(
   borderDisabled: sand700,
   borderInformation: yellow700,
   borderInformationOverlay: sand200,
+
+  // Chart Series (categorical)
+  chartSeries1: teal300,
+  chartSeries2: purple400,
+  chartSeries3: yellow300,
+  chartSeries4: blue400,
+  chartSeries5: red300,
+  chartSeries6: orange300,
+  chartSeries7: green400,
 );
 
 // --- BuildContext Extension ---
