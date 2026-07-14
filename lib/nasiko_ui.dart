@@ -9,7 +9,6 @@ export 'src/components/avatar/avatar_size.dart';
 export 'src/components/banner/banner.dart';
 export 'src/components/breadcrumb/breadcrumb.dart';
 export 'src/components/buttons/buttons.dart';
-export 'src/components/card/agent_card.dart';
 export 'src/components/card/card.dart';
 export 'src/components/checkbox/checkbox.dart';
 export 'src/components/checkbox/checkbox_tile.dart';
