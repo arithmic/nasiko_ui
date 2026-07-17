@@ -24,7 +24,7 @@ class NasikoInputField extends StatelessWidget {
     this.onChanged,
     this.isRequired = false,
     this.isReadOnly = false,
-    this.maxLines = 10,
+    this.maxLines = 1,
   });
 
   /// Controls the text being edited.
@@ -68,7 +68,6 @@ class NasikoInputField extends StatelessWidget {
   final bool? isReadOnly;
 
 
-   /// The maximum number of lines to display.
   final int? maxLines;
 
   @override
