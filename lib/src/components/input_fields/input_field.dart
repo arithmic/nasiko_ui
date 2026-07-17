@@ -24,6 +24,7 @@ class NasikoInputField extends StatelessWidget {
     this.onChanged,
     this.isRequired = false,
     this.isReadOnly = false,
+    this.maxLines = 1,
   });
 
   /// Controls the text being edited.
@@ -66,6 +67,7 @@ class NasikoInputField extends StatelessWidget {
 
   final bool? isReadOnly;
 
+  final int? maxLines;
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
@@ -126,6 +128,7 @@ class NasikoInputField extends StatelessWidget {
           enabled: !isReadOnly!,
           validator: validator,
           onChanged: onChanged,
+          maxLines: maxLines,
           obscureText: obscureText,
           keyboardType: keyboardType,
           cursorColor: colors.borderSecondary,
