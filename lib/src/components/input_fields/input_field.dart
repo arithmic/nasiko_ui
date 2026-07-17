@@ -67,7 +67,9 @@ class NasikoInputField extends StatelessWidget {
 
   final bool? isReadOnly;
 
+
   final int? maxLines;
+
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
