@@ -179,7 +179,7 @@ class NasikoInputField extends StatelessWidget {
 
             filled: true,
             fillColor: isReadOnly!
-                ? colors.backgroundDisabled
+                  ? colors.backgroundDisabled
                 : colors.backgroundGroup,
             hoverColor: colors.backgroundSurface,
             contentPadding: contentPadding,
@@ -259,5 +259,3 @@ class NasikoInputField extends StatelessWidget {
     );
   }
 }
-
-typedef HugeIconsType = List<List<dynamic>>;

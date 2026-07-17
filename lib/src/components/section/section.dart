@@ -34,6 +34,7 @@ class SectionItem {
     required this.label,
     this.id,
     this.icon,
+    this.subtitle,
     this.onTap,
     this.menuActions,
     this.maxLines,
@@ -48,6 +49,9 @@ class SectionItem {
 
   /// Optional leading icon for this item.
   final HugeIconsType? icon;
+
+  /// Optional subtitle shown below the label when this item is selected.
+  final String? subtitle;
 
   /// Callback when the item row is tapped.
   final VoidCallback? onTap;
@@ -83,6 +87,7 @@ class Section extends StatefulWidget {
     this.selectedChild,
     this.selectedChildId,
     this.isSelected = false,
+    this.isCollapsible = true,
     this.onTap,
     this.onChildTap,
     this.backgroundColor,
@@ -114,6 +119,9 @@ class Section extends StatefulWidget {
 
   /// Whether this section is currently selected (non-expandable sections only).
   final bool isSelected;
+
+  /// When false the section is always expanded and the toggle chevron is hidden.
+  final bool isCollapsible;
 
   /// Callback when section header is tapped (non-expandable sections only).
   final VoidCallback? onTap;
@@ -158,7 +166,7 @@ class _SectionState extends State<Section> {
   @override
   void initState() {
     super.initState();
-    _isExpanded = _hasSelectedChild();
+    _isExpanded = !widget.isCollapsible || _hasSelectedChild();
   }
 
   @override
@@ -193,6 +201,7 @@ class _SectionState extends State<Section> {
   void _toggleExpanded() {
     if (!_canInteract) return;
     if (widget.isExpandable) {
+      if (!widget.isCollapsible) return;
       setState(() => _isExpanded = !_isExpanded);
     } else if (widget.onTap != null) {
       widget.onTap!();
@@ -211,32 +220,17 @@ class _SectionState extends State<Section> {
     if (widget.isExpandable) {
       final bool hasSelectedChild = _hasSelectedChild();
 
-      return Container(
-        decoration: BoxDecoration(
-          color: hasSelectedChild && !_isExpanded
-              ? colors.backgroundSecondaryBrand
-              : _isExpanded
-              ? (widget.expandedBgColor ?? colors.backgroundBase)
-              : (widget.backgroundColor ?? colors.backgroundBase),
-          borderRadius: BorderRadius.circular(radii.r12),
-          border: Border.all(
-            color: hasSelectedChild && !_isExpanded
-                ? colors.borderSecondary
-                : (_isExpanded ? colors.borderPrimary : Colors.transparent),
-            width: borderWidths.w1,
-          ),
-        ),
-        padding: EdgeInsets.all(spacing.s8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // ── Header ────────────────────────────────────────────────────
-            GestureDetector(
-              onTap: _canInteract ? _toggleExpanded : null,
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: Row(
-                  children: [
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // ── Header ────────────────────────────────────────────────────
+          GestureDetector(
+            onTap: _canInteract ? _toggleExpanded : null,
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: Row(
+                children: [
+                  if (widget.icon != null) ...[
                     HugeIcon(
                       icon: widget.icon!,
                       size: iconSizes.s,
@@ -247,20 +241,22 @@ class _SectionState extends State<Section> {
                           : colors.foregroundIconTertiary,
                     ),
                     SizedBox(width: spacing.s8),
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: spacing.s4),
-                        child: Text(
-                          widget.label,
-                          maxLines: widget.maxLines,
-                          style: typography.bodySecondaryBold.copyWith(
-                            color: widget.isDisabled
-                                ? colors.foregroundDisabled
-                                : colors.foregroundPrimary,
-                          ),
+                  ],
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: spacing.s4),
+                      child: Text(
+                        widget.label,
+                        maxLines: widget.maxLines,
+                        style: typography.bodySecondaryBold.copyWith(
+                          color: widget.isDisabled
+                              ? colors.foregroundDisabled
+                              : colors.foregroundPrimary,
                         ),
                       ),
                     ),
+                  ),
+                  if (widget.isCollapsible) ...[
                     SizedBox(width: spacing.s8),
                     AnimatedRotation(
                       turns: _isExpanded ? 0.5 : 0,
@@ -274,57 +270,57 @@ class _SectionState extends State<Section> {
                       ),
                     ),
                   ],
-                ),
+                ],
               ),
             ),
+          ),
 
-            // ── Expanded content ──────────────────────────────────────────
-            if (_isExpanded) ...[
-              SizedBox(height: spacing.s8),
-              if (widget.isLoading)
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: spacing.s12,
-                    vertical: spacing.s8,
-                  ),
-                  child: Text(
-                    'Loading...',
-                    style: typography.bodySecondary.copyWith(
-                      color: colors.foregroundSecondary,
-                    ),
-                  ),
-                )
-              else if (widget.children == null || widget.children!.isEmpty)
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: spacing.s12,
-                    vertical: spacing.s8,
-                  ),
-                  child: Text(
-                    widget.emptyMessage ?? '',
-                    style: typography.bodySecondary.copyWith(
-                      color: colors.foregroundSecondary,
-                    ),
-                  ),
-                )
-              else
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: widget.children!.map((child) {
-                    return _SectionChildItem(
-                      item: child,
-                      isSelected: _isChildSelected(child),
-                      onTap: () {
-                        child.onTap?.call();
-                        widget.onChildTap?.call(child.id ?? child.label);
-                      },
-                      isDisabled: widget.isDisabled,
-                    );
-                  }).toList(),
+          // ── Expanded content ──────────────────────────────────────────
+          if (_isExpanded) ...[
+            SizedBox(height: spacing.s8),
+            if (widget.isLoading)
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: spacing.s12,
+                  vertical: spacing.s8,
                 ),
-            ],
+                child: Text(
+                  'Loading...',
+                  style: typography.bodySecondary.copyWith(
+                    color: colors.foregroundSecondary,
+                  ),
+                ),
+              )
+            else if (widget.children == null || widget.children!.isEmpty)
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: spacing.s12,
+                  vertical: spacing.s8,
+                ),
+                child: Text(
+                  widget.emptyMessage ?? '',
+                  style: typography.bodySecondary.copyWith(
+                    color: colors.foregroundSecondary,
+                  ),
+                ),
+              )
+            else
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: widget.children!.map((child) {
+                  return _SectionChildItem(
+                    item: child,
+                    isSelected: _isChildSelected(child),
+                    onTap: () {
+                      child.onTap?.call();
+                      widget.onChildTap?.call(child.id ?? child.label);
+                    },
+                    isDisabled: widget.isDisabled,
+                  );
+                }).toList(),
+              ),
           ],
-        ),
+        ],
       );
     }
 
@@ -442,7 +438,7 @@ class _SectionChildItemState extends State<_SectionChildItem> {
       borderColor = colors.borderDisabled;
     } else if (widget.isSelected) {
       backgroundColor = colors.backgroundSecondaryBrand;
-      borderColor = Colors.transparent;
+      borderColor = colors.borderPrimary;
     } else if (_isHovered) {
       backgroundColor = Colors.transparent;
       borderColor = colors.borderSecondary;
@@ -451,8 +447,7 @@ class _SectionChildItemState extends State<_SectionChildItem> {
       borderColor = Colors.transparent;
     }
 
-    final showTrailing =
-        _hasMenu && (_isHovered || _isMenuOpen) && _canInteract;
+    final showTrailing = _hasMenu && _canInteract;
 
     return MouseRegion(
       cursor: _canInteract
@@ -468,54 +463,74 @@ class _SectionChildItemState extends State<_SectionChildItem> {
                 widget.onTap();
               }
             : null,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          margin: EdgeInsets.only(bottom: spacing.s4),
-          padding: EdgeInsets.symmetric(
-            horizontal: spacing.s12,
-            vertical: spacing.s8,
-          ),
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(radii.r8),
-            border: Border.all(color: borderColor, width: borderWidths.w1),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  widget.item.label,
-                  maxLines: widget.item.maxLines,
-                  overflow: widget.item.maxLines != null
-                      ? TextOverflow.ellipsis
-                      : null,
-                  style: widget.isSelected
-                      ? typography.bodySecondaryBold.copyWith(
-                          color: widget.isDisabled
-                              ? colors.foregroundDisabled
-                              : colors.foregroundPrimary,
-                        )
-                      : typography.bodySecondary.copyWith(
-                          color: widget.isDisabled
-                              ? colors.foregroundDisabled
-                              : colors.foregroundSecondary,
-                        ),
-                ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 150),
+              margin: EdgeInsets.only(bottom: spacing.s4),
+              padding: EdgeInsets.symmetric(
+                horizontal: spacing.s12,
+                vertical: spacing.s8,
               ),
-              if (showTrailing)
-                Listener(
-                  behavior: HitTestBehavior.opaque,
-                  onPointerDown: (_) => _isMenuPointerDown = true,
-                  onPointerUp: (_) => _isMenuPointerDown = false,
-                  onPointerCancel: (_) => _isMenuPointerDown = false,
-                  child: _MenuButton(
-                    actions: widget.item.menuActions!,
-                    onMenuOpened: () => setState(() => _isMenuOpen = true),
-                    onMenuClosed: () => setState(() => _isMenuOpen = false),
+              decoration: BoxDecoration(
+                color: backgroundColor,
+                borderRadius: BorderRadius.circular(radii.r8),
+                border: Border.all(color: borderColor, width: borderWidths.w1),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      widget.item.label,
+                      maxLines: widget.item.maxLines,
+                      overflow: widget.item.maxLines != null
+                          ? TextOverflow.ellipsis
+                          : null,
+                      style: widget.isSelected
+                          ? typography.buttonSecondary.copyWith(
+                              color: widget.isDisabled
+                                  ? colors.foregroundDisabled
+                                  : colors.foregroundPrimary,
+                            )
+                          : typography.bodySecondary.copyWith(
+                              color: widget.isDisabled
+                                  ? colors.foregroundDisabled
+                                  : colors.foregroundSecondary,
+                            ),
+                    ),
+                  ),
+                  if (showTrailing)
+                    Opacity(
+                      opacity: (_isHovered || _isMenuOpen) ? 1.0 : 0.0,
+                      child: Listener(
+                        behavior: HitTestBehavior.opaque,
+                        onPointerDown: (_) => _isMenuPointerDown = true,
+                        onPointerUp: (_) => _isMenuPointerDown = false,
+                        onPointerCancel: (_) => _isMenuPointerDown = false,
+                        child: _MenuButton(
+                          actions: widget.item.menuActions!,
+                          onMenuOpened: () =>
+                              setState(() => _isMenuOpen = true),
+                          onMenuClosed: () =>
+                              setState(() => _isMenuOpen = false),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            if (widget.isSelected && widget.item.subtitle != null)
+              Padding(
+                padding: EdgeInsets.only(left: spacing.s12, bottom: spacing.s4),
+                child: Text(
+                  widget.item.subtitle!,
+                  style: typography.bodySecondary.copyWith(
+                    color: colors.foregroundSecondary,
                   ),
                 ),
-            ],
-          ),
+              ),
+          ],
         ),
       ),
     );

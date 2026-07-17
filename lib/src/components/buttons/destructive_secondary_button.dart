@@ -61,11 +61,8 @@ class DestructiveSecondaryButton extends StatelessWidget {
         if (states.contains(WidgetState.disabled)) {
           return colors.backgroundDisabled;
         }
-        if (states.contains(WidgetState.hovered)) {
-          return const Color(0xFFFECACA); // red200
-        }
         // Default, Focused, Pressed states
-        return colors.backgroundError; // red100
+        return colors.backgroundError; 
       }),
 
       // --- Foreground Color (Text & Icons) ---

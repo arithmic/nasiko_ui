@@ -68,7 +68,7 @@ class NasikoTheme {
       extensions: <ThemeExtension<dynamic>>[
         nasikoColors,
         defaultNasikoSpacing,
-        defaultNasikoTypography,
+        defaultNasikoTypographyWithColor(nasikoColors.foregroundPrimary),
         defaultNasikoBorderRadius,
         defaultNasikoBorderWidth,
         defaultNasikoIconSize,

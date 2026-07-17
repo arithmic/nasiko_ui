@@ -17,6 +17,10 @@ import 'package:nasiko_ui/nasiko_ui.dart';
 /// There are two size variants:
 /// - [NasikoChipSize.large] - Uses bodySecondary typography with standard padding
 /// - [NasikoChipSize.small] - Uses bodyTertiary typography with compact padding
+///
+/// There are two shape variants:
+/// - [NasikoChipShape.rectangle] - Subtly rounded rectangular chip
+/// - [NasikoChipShape.rounded] - Rounded chip with 32px border radius
 class NasikoChip extends StatelessWidget {
   const NasikoChip({
     super.key,
@@ -25,14 +29,16 @@ class NasikoChip extends StatelessWidget {
     this.onTap,
     this.onDelete,
     this.variant = NasikoChipVariant.neutral,
-    this.size = NasikoChipSize.large,
+    this.size = NasikoChipSize.small,
+    this.shape = NasikoChipShape.rectangle,
     this.enabled = true,
+    this.borderColor,
   });
 
   /// The text label displayed on the chip.
   final String label;
 
-  /// An optional icon to display before the label.
+  /// An optional icon to display before the label.a
   final HugeIconsType? leadingIcon;
 
   /// Callback when the chip is tapped.
@@ -51,9 +57,16 @@ class NasikoChip extends StatelessWidget {
   /// Defaults to [NasikoChipSize.large].
   final NasikoChipSize size;
 
+  /// The shape variant of the chip.
+  /// Defaults to [NasikoChipShape.rectangle].
+  final NasikoChipShape shape;
+
   /// Whether the chip is enabled.
   /// When `false`, the chip appears disabled and ignores interactions.
   final bool enabled;
+
+  /// The color of the chip's border. Defaults to a [NasikoColorTheme.borderPrimary] color.
+  final Color? borderColor;
 
   @override
   Widget build(BuildContext context) {
@@ -62,25 +75,22 @@ class NasikoChip extends StatelessWidget {
     final typography = context.typography;
     final iconSizes = context.iconSize;
     final radii = context.radius;
-
+    final borderWidths = context.borderWidth;
     // Determine colors based on variant and enabled state
     final Color backgroundColor;
     final Color hoverColor;
     final Color pressedColor;
     final Color foregroundColor;
-
     if (!enabled) {
-      backgroundColor = colors.backgroundDisabled;
+      backgroundColor = colors.backgroundBase;
       hoverColor = colors.backgroundDisabled;
       pressedColor = colors.backgroundDisabled;
       foregroundColor = colors.foregroundDisabled;
     } else {
       switch (variant) {
         case NasikoChipVariant.neutral:
-          backgroundColor = colors.backgroundSurfaceHover.withValues(
-            alpha: 0.7,
-          );
-          hoverColor = colors.backgroundSurface;
+          backgroundColor = colors.backgroundSurfaceHover;
+          hoverColor = colors.backgroundSurfaceHover;
           pressedColor = colors.backgroundSurfaceActive;
           foregroundColor = colors.foregroundPrimary;
           break;
@@ -90,19 +100,39 @@ class NasikoChip extends StatelessWidget {
           pressedColor = colors.backgroundSecondaryBrandActive;
           foregroundColor = colors.foregroundPrimary;
           break;
+        case NasikoChipVariant.base:
+          backgroundColor = colors.backgroundBase;
+          hoverColor = colors.backgroundSurfaceHover;
+          pressedColor = colors.backgroundSurfaceActive;
+          foregroundColor = colors.foregroundPrimary;
+          break;
+        case NasikoChipVariant.tag:
+          backgroundColor = colors.backgroundInformation.withValues(alpha: 0.64);
+          hoverColor = colors.backgroundInformation.withValues(alpha: 0.64);
+          pressedColor = colors.backgroundSurfaceActive;
+          foregroundColor = colors.foregroundPrimary;
+          break;
       }
     }
 
     final isActionable = onTap != null || onDelete != null;
+    final borderRadius = BorderRadius.circular(
+      shape == NasikoChipShape.rounded ? radii.r40 : radii.r8,
+    );
 
     Widget chipContent = Container(
       padding: EdgeInsets.symmetric(
-        horizontal: size == NasikoChipSize.large ? spacing.s12 : spacing.s8,
-        vertical: size == NasikoChipSize.large ? spacing.s8 : spacing.s4,
+        horizontal: spacing.s12,
+        vertical: spacing.s8,
       ),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(radii.r8),
+        borderRadius: borderRadius,
+        border: Border.all(
+          color:variant == NasikoChipVariant.tag ? Colors.transparent : borderColor ?? colors.borderPrimary,
+          strokeAlign: BorderSide.strokeAlignOutside,
+          width: borderWidths.w1,
+        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -116,20 +146,12 @@ class NasikoChip extends StatelessWidget {
             ),
             SizedBox(width: spacing.s4),
           ],
-          if (size == NasikoChipSize.small)
-            Padding(
-              padding: EdgeInsets.only(top: spacing.s4, bottom: spacing.s4),
-              child: Text(
-                label,
-                style: typography.bodyTertiary.copyWith(color: foregroundColor),
-              ),
-            )
-          else
-            // Label
-            Text(
-              label,
-              style: typography.bodySecondary.copyWith(color: foregroundColor),
-            ),
+          Text(
+            label,
+            style: size == NasikoChipSize.small
+                ? typography.bodyTertiary.copyWith(height: 1.0)
+                : typography.bodySecondary.copyWith(height: 1.0),
+          ),
 
           // Delete Icon (only for actionable chips)
           if (onDelete != null) ...[
@@ -155,6 +177,7 @@ class NasikoChip extends StatelessWidget {
         hoverColor: hoverColor,
         pressedColor: pressedColor,
         size: size,
+        borderRadius: borderRadius,
         child: chipContent,
       );
     }
@@ -171,6 +194,7 @@ class _InteractiveChip extends StatefulWidget {
     required this.hoverColor,
     required this.pressedColor,
     required this.size,
+    required this.borderRadius,
     this.onTap,
   });
 
@@ -180,6 +204,7 @@ class _InteractiveChip extends StatefulWidget {
   final Color hoverColor;
   final Color pressedColor;
   final NasikoChipSize size;
+  final BorderRadius borderRadius;
 
   @override
   State<_InteractiveChip> createState() => _InteractiveChipState();
@@ -212,7 +237,7 @@ class _InteractiveChipState extends State<_InteractiveChip> {
           duration: const Duration(milliseconds: 150),
           decoration: BoxDecoration(
             color: _currentColor,
-            borderRadius: BorderRadius.circular(context.radius.r8),
+            borderRadius: widget.borderRadius,
           ),
           child: widget.child,
         ),

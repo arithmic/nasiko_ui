@@ -5,12 +5,12 @@ import 'package:nasiko_ui/nasiko_ui.dart';
 class NasikoPopupMenuItemData {
   const NasikoPopupMenuItemData({
     required this.label,
-    required this.icon,
+    this.icon,
     this.isDestructive = false,
   });
 
   final String label;
-  final HugeIconsType icon;
+  final HugeIconsType? icon;
   final bool isDestructive;
 }
 
@@ -43,11 +43,7 @@ class NasikoPopupMenu extends StatefulWidget {
 }
 
 class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
-  final LayerLink _layerLink = LayerLink();
   OverlayEntry? _overlayEntry;
-  double? _resolvedMenuWidth;
-  double _resolvedYOffset = 0;
-  double _anchorHeight = 0;
 
   @override
   void dispose() {
@@ -60,7 +56,6 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
       _removeMenu();
       return;
     }
-
     _openMenu();
   }
 
@@ -71,12 +66,64 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
     if (renderBox == null) return;
 
     final spacing = context.spacing;
-    final size = renderBox.size;
-    final overlay = Overlay.of(context);
+    final anchorSize = renderBox.size;
 
-    _resolvedMenuWidth = widget.width ?? size.width;
-    _resolvedYOffset = widget.offset?.dy ?? spacing.s4;
-    _anchorHeight = size.height;
+    // Convert anchor position into the overlay's coordinate space rather than
+    // screen space. Positioned() inside the overlay uses overlay-local coords,
+    // which can differ from screen coords when the overlay is inside a
+    // Navigator/Scaffold with an offset (common in Flutter web).
+    final overlay = Overlay.of(context);
+    final overlayBox = overlay.context.findRenderObject() as RenderBox;
+    final anchor = renderBox.localToGlobal(Offset.zero, ancestor: overlayBox);
+    final overlaySize = overlayBox.size;
+
+    final gap = widget.offset?.dy ?? spacing.s4;
+    final menuWidth = widget.width ?? anchorSize.width;
+
+    // ── Vertical ──────────────────────────────────────────────────────────────
+    // Open below by default; flip upward when there isn't enough space below.
+    final spaceBelow = overlaySize.height - (anchor.dy + anchorSize.height);
+    final openUpward = spaceBelow < widget.maxHeight + gap;
+
+    double? top, bottom;
+    if (openUpward) {
+      // Menu bottom aligns with anchor bottom — grows upward.
+      bottom = overlaySize.height - (anchor.dy + anchorSize.height);
+    } else {
+      // Menu top aligns with anchor top — grows downward (industry standard).
+      top = anchor.dy;
+    }
+
+    // ── Horizontal ────────────────────────────────────────────────────────────
+    // Right-align menu's right edge to anchor's right edge so it opens to the
+    // LEFT — natural for trailing "⋮" buttons.
+    // Flip to left-align only if that would clip the left edge.
+    final anchorRight = anchor.dx + anchorSize.width;
+    final overflowsLeft = anchorRight - menuWidth < 0;
+
+    double? left, right;
+    if (overflowsLeft) {
+      left = 0;
+    } else {
+      right = overlaySize.width - anchorRight;
+    }
+
+    final themeData = Theme.of(context).copyWith(
+      splashFactory: NoSplash.splashFactory,
+      highlightColor: Colors.transparent,
+      hoverColor: Colors.transparent,
+      focusColor: Colors.transparent,
+      splashColor: Colors.transparent,
+    );
+    final surface = _NasikoPopupMenuSurface(
+      items: widget.items,
+      width: menuWidth,
+      maxHeight: widget.maxHeight,
+      onItemSelected: (index) {
+        _removeMenu();
+        widget.onItemSelected(index);
+      },
+    );
 
     _overlayEntry = OverlayEntry(
       builder: (_) => Positioned.fill(
@@ -87,33 +134,14 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
               onTap: _removeMenu,
               child: const SizedBox.expand(),
             ),
-            CompositedTransformFollower(
-              link: _layerLink,
-              showWhenUnlinked: false,
-              offset: Offset(
-                widget.offset?.dx ?? 0,
-                _anchorHeight + _resolvedYOffset,
-              ),
+            Positioned(
+              top: top,
+              bottom: bottom,
+              left: left,
+              right: right,
               child: Material(
                 color: Colors.transparent,
-                child: Theme(
-                  data: Theme.of(context).copyWith(
-                    splashFactory: NoSplash.splashFactory,
-                    highlightColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    focusColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                  ),
-                  child: _NasikoPopupMenuSurface(
-                    items: widget.items,
-                    width: _resolvedMenuWidth!,
-                    maxHeight: widget.maxHeight,
-                    onItemSelected: (index) {
-                      _removeMenu();
-                      widget.onItemSelected(index);
-                    },
-                  ),
-                ),
+                child: Theme(data: themeData, child: surface),
               ),
             ),
           ],
@@ -121,7 +149,7 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
       ),
     );
 
-    overlay.insert(_overlayEntry!);
+    Overlay.of(context).insert(_overlayEntry!);
   }
 
   void _removeMenu() {
@@ -132,7 +160,6 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
   @override
   void didUpdateWidget(covariant NasikoPopupMenu oldWidget) {
     super.didUpdateWidget(oldWidget);
-
     if (!widget.enabled && _overlayEntry != null) {
       _removeMenu();
     }
@@ -140,16 +167,12 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return CompositedTransformTarget(
-      link: _layerLink,
-      child: MouseRegion(
-        // ← add this
-        cursor: SystemMouseCursors.click,
-        child: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: _toggleMenu,
-          child: AbsorbPointer(child: widget.child),
-        ),
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: _toggleMenu,
+        child: AbsorbPointer(child: widget.child),
       ),
     );
   }
@@ -232,7 +255,7 @@ class _NasikoPopupMenuSurfaceState extends State<_NasikoPopupMenuSurface> {
         width: widget.width,
         constraints: BoxConstraints(maxHeight: widget.maxHeight),
         decoration: BoxDecoration(
-          color: colors.backgroundGroup,
+          color: const Color(0xFF242628),
           borderRadius: BorderRadius.circular(radii.r16),
           border: Border.all(color: colors.borderPrimary),
           boxShadow: [
@@ -293,13 +316,13 @@ class _NasikoPopupMenuSurfaceState extends State<_NasikoPopupMenuSurface> {
 class _NasikoMenuItem extends StatefulWidget {
   const _NasikoMenuItem({
     required this.label,
-    required this.icon,
     required this.onTap,
     required this.isDestructive,
+    this.icon,
   });
 
   final String label;
-  final HugeIconsType icon;
+  final HugeIconsType? icon;
   final bool isDestructive;
   final VoidCallback onTap;
 
@@ -333,13 +356,9 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
 
     final foregroundColor = widget.isDestructive
         ? colors.foregroundError
-        : colors.foregroundPrimary;
+        : const Color(0xFFFFFFFF);
 
-    final textStyle =
-        (isHighlighted
-                ? typography.bodySecondaryBold
-                : typography.bodySecondary)
-            .copyWith(color: foregroundColor);
+    final textStyle = typography.bodySecondary.copyWith(color: foregroundColor);
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
@@ -353,7 +372,7 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
           child: Container(
             decoration: BoxDecoration(
               color: isHighlighted
-                  ? colors.backgroundSecondaryBrandHover
+                  ? colors.foregroundSecondary
                   : Colors.transparent,
               borderRadius: BorderRadius.circular(radii.r8),
             ),
@@ -364,8 +383,14 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
               ),
               child: Row(
                 children: [
-                  HugeIcon(icon: widget.icon, size: 20, color: foregroundColor),
-                  SizedBox(width: spacing.s8),
+                  if (widget.icon != null) ...[
+                    HugeIcon(
+                      icon: widget.icon!,
+                      size: 20,
+                      color: foregroundColor,
+                    ),
+                    SizedBox(width: spacing.s8),
+                  ],
                   Expanded(
                     child: Text(
                       widget.label,

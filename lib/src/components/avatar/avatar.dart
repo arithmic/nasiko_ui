@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
-/// A circular avatar component for the Nasiko Design System.
+/// A circular or rounded-square avatar component for the Nasiko Design System.
 ///
 /// Displays an image, text initials, or an icon.
 class NasikoAvatar extends StatelessWidget {
   const NasikoAvatar({
     super.key,
     this.size = NasikoAvatarSize.medium,
+    this.shape = NasikoAvatarShape.circle,
     this.imageUrl,
     this.text,
     this.icon,
@@ -18,6 +19,9 @@ class NasikoAvatar extends StatelessWidget {
 
   /// The size of the avatar. Defaults to [NasikoAvatarSize.medium].
   final NasikoAvatarSize size;
+
+  /// The shape of the avatar. Defaults to [NasikoAvatarShape.circle].
+  final NasikoAvatarShape shape;
 
   /// A URL for a network image. If provided, this takes
   /// precedence over `text` and `icon`.
@@ -45,44 +49,50 @@ class NasikoAvatar extends StatelessWidget {
     final typography = context.typography;
     final iconSizes = context.iconSize;
 
-    // 1. Determine size and styles from the 'size' property
-    final double radius;
+    // 1. Resolve outer dimensions and content styles from `size`.
+    //    Square corner radii are tuned per size so the rounding reads
+    //    consistently regardless of the box dimension.
+    final double diameter;
+    final double squareCornerRadius;
     final TextStyle textStyle;
     final double iconSize;
 
     switch (size) {
       case NasikoAvatarSize.large:
-        radius = 32.0; // 64px diameter
+        diameter = 64.0;
+        squareCornerRadius = 12.0;
         textStyle = typography.buttonPrimary; // 20px
-        iconSize = iconSizes.m; // 24px
+        iconSize = iconSizes.l;
         break;
       case NasikoAvatarSize.medium:
-        radius = 24.0; // 48px diameter
+        diameter = 48.0;
+        squareCornerRadius = 10.0;
         textStyle = typography.buttonSecondary; // 18px
         iconSize = iconSizes.m; // 24px
         break;
       case NasikoAvatarSize.small:
-        radius = 18.0; // 36px diameter
+        diameter = 36.0;
+        squareCornerRadius = 8.0;
         textStyle = typography.bodySecondary; // 16px
         iconSize = iconSizes.s; // 20px
         break;
     }
 
-    // 2. Determine the content of the avatar
-    ImageProvider? backgroundImage;
+    // 2. Resolve content (image, text initials, or icon).
+    DecorationImage? decorationImage;
     Widget? child;
     Color? bgColor = backgroundColor ?? colors.backgroundGroup;
-    Color? fgColor = foregroundColor ?? colors.foregroundIconPrimary;
+    final Color fgColor = foregroundColor ?? colors.foregroundIconPrimary;
 
     if (imageUrl != null) {
-      // Image avatar
-      backgroundImage = NetworkImage(imageUrl!);
-      bgColor = null; // Use image
+      decorationImage = DecorationImage(
+        image: NetworkImage(imageUrl!),
+        fit: BoxFit.cover,
+      );
+      bgColor = null;
     } else if (text != null) {
-      // Text avatar
       child = Text(text!, style: textStyle.copyWith(color: fgColor));
     } else {
-      // HugeIcon avatar (or default)
       child = HugeIcon(
         icon: icon ?? HugeIcons.strokeRoundedRelieved01,
         size: iconSize,
@@ -90,13 +100,22 @@ class NasikoAvatar extends StatelessWidget {
       );
     }
 
-    // 3. Render the CircleAvatar
-    return CircleAvatar(
-      radius: radius,
-      backgroundColor: bgColor,
-      backgroundImage: backgroundImage,
-      // The child is only rendered if there is no background image
-      child: backgroundImage == null ? child : null,
+    // 3. Render. `BoxDecoration` requires `borderRadius` to be null when
+    //    `shape: BoxShape.circle`, so we branch on shape here.
+    final isCircle = shape == NasikoAvatarShape.circle;
+    return Container(
+      width: diameter,
+      height: diameter,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: bgColor,
+        image: decorationImage,
+        shape: isCircle ? BoxShape.circle : BoxShape.rectangle,
+        borderRadius: isCircle
+            ? null
+            : BorderRadius.circular(squareCornerRadius),
+      ),
+      child: decorationImage == null ? child : null,
     );
   }
 }

@@ -166,9 +166,6 @@ class NasikoModal extends StatelessWidget {
     final radii = context.radius;
 
     final isVertical = buttonLayout == NasikoModalVariant.vertical;
-    final screenWidth = MediaQuery.of(context).size.width;
-    final effectiveMaxWidth =
-        maxWidth ?? (isVertical ? 300.0 : screenWidth * 0.5);
 
     // Use a Dialog for standard modal behavior and default barrier
     return Dialog(
@@ -177,7 +174,7 @@ class NasikoModal extends StatelessWidget {
         borderRadius: BorderRadius.circular(radii.r8),
       ),
       child: Container(
-        constraints: BoxConstraints(maxWidth: effectiveMaxWidth),
+        constraints: BoxConstraints(maxWidth: 680),
         padding: EdgeInsets.all(spacing.s24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -258,7 +255,7 @@ class NasikoModal extends StatelessWidget {
         if (primaryButtonLabel != null)
           _buildActionButton(
             label: primaryButtonLabel!,
-            onPressed: onPrimaryAction ?? onClose,
+            onPressed: onPrimaryAction,
             hierarchy: primaryButtonHierarchy,
             intent: primaryButtonIntent,
             leadingIcon: primaryButtonLeadingIcon,
@@ -294,7 +291,7 @@ class NasikoModal extends StatelessWidget {
         if (primaryButtonLabel != null)
           _buildActionButton(
             label: primaryButtonLabel!,
-            onPressed: onPrimaryAction ?? onClose,
+            onPressed: onPrimaryAction,
             hierarchy: primaryButtonHierarchy,
             intent: primaryButtonIntent,
             leadingIcon: primaryButtonLeadingIcon,
@@ -308,7 +305,7 @@ class NasikoModal extends StatelessWidget {
   /// Helper method to build buttons with appropriate styling
   Widget _buildActionButton({
     required String label,
-    required VoidCallback onPressed,
+    required VoidCallback? onPressed,
     required NasikoModalButtonHierarchy hierarchy,
     required NasikoModalButtonIntent intent,
     required bool fullWidth,

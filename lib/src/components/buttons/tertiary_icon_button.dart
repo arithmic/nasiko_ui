@@ -4,17 +4,17 @@ import 'package:nasiko_ui/nasiko_ui.dart';
 
 import 'button_layout.dart';
 
-/// A primary icon button for Nasiko UI.
+/// A tertiary icon button for Nasiko UI.
 ///
-/// This is a high-emphasis icon-only button with brand color fill.
+/// This is a low-emphasis icon-only button without an outline.
 /// Supports three sizes: large, medium and small.
-class PrimaryIconButton extends StatelessWidget {
-  const PrimaryIconButton({
+class TertiaryIconButton extends StatelessWidget {
+  const TertiaryIconButton({
     super.key,
     required this.onPressed,
     required this.icon,
     this.size = NasikoButtonSize.medium,
-    this.isLoading,
+    this.statesController,
   });
 
   /// The callback that is called when the button is tapped.
@@ -27,7 +27,11 @@ class PrimaryIconButton extends StatelessWidget {
   /// The size of the button. Defaults to [NasikoButtonSize.medium].
   final NasikoButtonSize size;
 
-  final bool? isLoading;
+  /// Optional external controller for driving widget states (e.g. hover,
+  /// pressed) from outside the button — used when [AbsorbPointer] or similar
+  /// blocks pointer events from reaching the button directly.
+  final WidgetStatesController? statesController;
+
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
@@ -48,10 +52,10 @@ class PrimaryIconButton extends StatelessWidget {
         if (states.contains(WidgetState.disabled)) {
           return colors.backgroundDisabled;
         }
-        if (states.contains(WidgetState.hovered)) {
-          return colors.backgroundSecondaryBrandHover;
+        if (states.contains(WidgetState.pressed)) {
+          return colors.backgroundSecondaryBrand;
         }
-        return colors.backgroundSecondaryBrand;
+        return Colors.transparent;
       }),
 
       // --- Foreground Color (Icon) ---
@@ -59,31 +63,35 @@ class PrimaryIconButton extends StatelessWidget {
         if (states.contains(WidgetState.disabled)) {
           return colors.foregroundDisabled;
         }
-        return colors.foregroundIconPrimary;
+        if (states.contains(WidgetState.pressed)) {
+          return colors.foregroundIconSecondary;
+        }
+        return colors.foregroundIconTertiary;
       }),
 
-      // --- Shape & Focus Ring ---
+      // --- Shape & Border ---
       shape: WidgetStateProperty.resolveWith<OutlinedBorder>((states) {
-        BorderSide borderSide = BorderSide.none;
+        BorderSide borderSide;
 
         if (states.contains(WidgetState.disabled)) {
           borderSide = BorderSide(
             color: colors.borderDisabled,
             width: borderWidths.w1,
           );
-        } else if (states.contains(WidgetState.hovered)) {
+        } else if (states.contains(WidgetState.pressed)) {
           borderSide = BorderSide(
-            color: colors.borderHover,
+            color: Colors.transparent,
             width: borderWidths.w1,
           );
-        } else if (states.contains(WidgetState.focused)) {
+        } else if (states.contains(WidgetState.hovered) ||
+            states.contains(WidgetState.focused)) {
           borderSide = BorderSide(
-            color: colors.borderSecondary,
-            width: borderWidths.w2,
+            color: colors.borderPrimary,
+            width: borderWidths.w1,
           );
         } else {
           borderSide = BorderSide(
-            color: colors.borderSecondary,
+            color: Colors.transparent,
             width: borderWidths.w1,
           );
         }
@@ -100,13 +108,8 @@ class PrimaryIconButton extends StatelessWidget {
     return IconButton(
       onPressed: onPressed,
       style: style,
-      icon: (isLoading ?? false)
-          ? SizedBox(
-              width: layout.iconSize,
-              height: layout.iconSize,
-              child: CircularProgressIndicator(strokeWidth: borderWidths.w2),
-            )
-          : HugeIcon(icon: icon, size: layout.iconSize),
+      statesController: statesController,
+      icon: HugeIcon(icon: icon, size: layout.iconSize),
     );
   }
 }

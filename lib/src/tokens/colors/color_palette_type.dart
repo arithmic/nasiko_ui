@@ -3,6 +3,9 @@
 /// Each palette type corresponds to a distinct color scheme that can be
 /// used to dynamically theme your application.
 enum NasikoColorPalette {
+  /// Sand-based palette
+  sand,
+  
   /// Yellow-based palette (default)
   yellow,
 

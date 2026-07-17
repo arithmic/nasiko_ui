@@ -57,6 +57,7 @@ class PrimaryButton extends StatelessWidget {
       textStyle: WidgetStateProperty.all(textStyle),
       elevation: WidgetStateProperty.all(0),
       shadowColor: WidgetStateProperty.all(Colors.transparent),
+      overlayColor: WidgetStateProperty.all(Colors.transparent),
 
       // --- Background Color (Handles Default, Hover, Disabled) ---
       backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {

@@ -11,12 +11,12 @@ const lightColorScheme = ColorScheme(
   primary: yellow500,
   onPrimary: white,
   primaryContainer: yellow100,
-  onPrimaryContainer: neutral700,
+  onPrimaryContainer: sand700,
 
-  secondary: neutral500,
-  onSecondary: neutral700,
-  secondaryContainer: neutral50,
-  onSecondaryContainer: neutral700,
+  secondary: sand500,
+  onSecondary: sand700,
+  secondaryContainer: sand50,
+  onSecondaryContainer: sand700,
 
   tertiary: blue100,
   onTertiary: white,
@@ -28,19 +28,19 @@ const lightColorScheme = ColorScheme(
   errorContainer: red100,
   onErrorContainer: red500,
 
-  surface: neutral100,
-  onSurface: neutral700,
-  surfaceContainerHighest: neutral500,
-  onSurfaceVariant: neutral500,
+  surface: sand100,
+  onSurface: sand700,
+  surfaceContainerHighest: sand500,
+  onSurfaceVariant: sand500,
 
-  outline: neutral300,
-  outlineVariant: neutral200,
+  outline: sand300,
+  outlineVariant: sand200,
   shadow: black,
   scrim: black,
 
   // Mappings for dark theme colors
-  inverseSurface: neutral800,
-  onInverseSurface: neutral100,
+  inverseSurface: sand800,
+  onInverseSurface: sand100,
   inversePrimary: yellow500,
   surfaceTint: yellow500,
 );
@@ -51,17 +51,17 @@ const darkColorScheme = ColorScheme(
 
   // Use your dark tokens
   primary: yellow500,
-  onPrimary: neutral900,
+  onPrimary: sand900,
   primaryContainer: yellow900,
-  onPrimaryContainer: neutral100,
+  onPrimaryContainer: sand100,
 
-  secondary: neutral700,
-  onSecondary: neutral100,
-  secondaryContainer: neutral900,
-  onSecondaryContainer: neutral100,
+  secondary: sand700,
+  onSecondary: sand100,
+  secondaryContainer: sand900,
+  onSecondaryContainer: sand100,
 
   tertiary: blue900,
-  onTertiary: neutral900,
+  onTertiary: sand900,
   tertiaryContainer: blue900,
   onTertiaryContainer: blue400,
 
@@ -70,19 +70,19 @@ const darkColorScheme = ColorScheme(
   errorContainer: red900,
   onErrorContainer: red400,
 
-  surface: neutral800,
-  onSurface: neutral100,
-  surfaceContainerHighest: neutral700,
-  onSurfaceVariant: neutral400,
+  surface: sand800,
+  onSurface: sand100,
+  surfaceContainerHighest: sand700,
+  onSurfaceVariant: sand400,
 
-  outline: neutral700,
-  outlineVariant: neutral700,
+  outline: sand700,
+  outlineVariant: sand700,
   shadow: black,
   scrim: black,
 
   // Mappings for light theme colors
-  inverseSurface: neutral100,
-  onInverseSurface: neutral800,
+  inverseSurface: sand100,
+  onInverseSurface: sand800,
   inversePrimary: yellow500,
   surfaceTint: yellow500,
 );
