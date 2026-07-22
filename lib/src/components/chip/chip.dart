@@ -120,6 +120,18 @@ class NasikoChip extends StatelessWidget {
       shape == NasikoChipShape.rounded ? radii.r40 : radii.r8,
     );
 
+    final labelStyle = size == NasikoChipSize.small
+        ? typography.bodyTertiary.copyWith(height: 1.0)
+        : typography.bodySecondary.copyWith(height: 1.0);
+    final iconSize = size == NasikoChipSize.small ? iconSizes.xs : iconSizes.s;
+    final labelHeight = labelStyle.fontSize! * (labelStyle.height ?? 1.0);
+    // Fixed regardless of this chip's own icons, so icon and non-icon chips
+    // stay the same height when placed side by side.
+    final contentHeight = [
+      labelHeight,
+      iconSize,
+    ].reduce((a, b) => a > b ? a : b);
+
     Widget chipContent = Container(
       padding: EdgeInsets.symmetric(
         horizontal: spacing.s12,
@@ -134,38 +146,37 @@ class NasikoChip extends StatelessWidget {
           width: borderWidths.w1,
         ),
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Leading Icon
-          if (leadingIcon != null) ...[
-            HugeIcon(
-              icon: leadingIcon!,
-              size: size == NasikoChipSize.small ? iconSizes.xs : iconSizes.s,
-              color: foregroundColor,
-            ),
-            SizedBox(width: spacing.s4),
-          ],
-          Text(
-            label,
-            style: size == NasikoChipSize.small
-                ? typography.bodyTertiary.copyWith(height: 1.0)
-                : typography.bodySecondary.copyWith(height: 1.0),
-          ),
-
-          // Delete Icon (only for actionable chips)
-          if (onDelete != null) ...[
-            SizedBox(width: spacing.s4),
-            GestureDetector(
-              onTap: enabled ? onDelete : null,
-              child: HugeIcon(
-                icon: HugeIcons.strokeRoundedMinusSign,
-                size: size == NasikoChipSize.small ? iconSizes.xs : iconSizes.s,
+      child: SizedBox(
+        height: contentHeight,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // Leading Icon
+            if (leadingIcon != null) ...[
+              HugeIcon(
+                icon: leadingIcon!,
+                size: iconSize,
                 color: foregroundColor,
               ),
-            ),
+              SizedBox(width: spacing.s4),
+            ],
+            Text(label, style: labelStyle),
+
+            // Delete Icon (only for actionable chips)
+            if (onDelete != null) ...[
+              SizedBox(width: spacing.s4),
+              GestureDetector(
+                onTap: enabled ? onDelete : null,
+                child: HugeIcon(
+                  icon: HugeIcons.strokeRoundedMinusSign,
+                  size: iconSize,
+                  color: foregroundColor,
+                ),
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
 

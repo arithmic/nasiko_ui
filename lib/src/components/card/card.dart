@@ -20,6 +20,18 @@ enum NasikoCardVariant {
   error,
 }
 
+/// A single tag rendered via [NasikoCard.tags] — e.g. a tool count or a
+/// connection state — with an optional leading icon.
+class NasikoCardTag {
+  const NasikoCardTag(this.label, {this.icon});
+
+  /// The tag's label. Rendered uppercase.
+  final String label;
+
+  /// Optional leading icon for this tag.
+  final HugeIconsType? icon;
+}
+
 /// A compact card for displaying an agent or an agent-like entry.
 ///
 /// Distinct from [NasikoCard]: optimised for agent listings with an optional
@@ -40,12 +52,15 @@ class NasikoCard extends StatefulWidget {
     this.subtitle,
     this.leadingIcon,
     this.leadingIconColor,
+    this.leadingWidget,
+    this.titleBadge,
     this.description,
     this.tags = const [],
     this.maxVisibleTags = 2,
     this.menuActions,
     this.onMenuActionSelected,
     this.showMore = true,
+    this.trailingWidget,
     this.disabled = false,
     this.selected = false,
     this.author,
@@ -78,12 +93,20 @@ class NasikoCard extends StatefulWidget {
   /// Ignored for [NasikoCardVariant.error] (always rendered in error red).
   final Color? leadingIconColor;
 
+  /// Custom widget rendered at the top-left instead of [leadingIcon] — e.g.
+  /// a logo image. Takes priority over [leadingIcon] when both are set.
+  final Widget? leadingWidget;
+
+  /// Small widget rendered inline right after [title] — e.g. a verified
+  /// checkmark icon. Sits before [version] in the header row.
+  final Widget? titleBadge;
+
   /// Short description — clamps to 2 lines with ellipsis.
   final String? description;
 
-  /// Tag strings rendered as uppercase chips. Tags beyond [maxVisibleTags]
-  /// are collapsed into a single "+N" chip.
-  final List<String> tags;
+  /// Tags rendered as uppercase chips, each with an optional leading icon.
+  /// Tags beyond [maxVisibleTags] are collapsed into a single "+N" chip.
+  final List<NasikoCardTag> tags;
 
   /// Maximum number of tag chips rendered before the "+N" overflow chip.
   final int maxVisibleTags;
@@ -93,6 +116,11 @@ class NasikoCard extends StatefulWidget {
 
   /// Called with the index of the selected menu item when [menuActions] is set.
   final ValueChanged<int>? onMenuActionSelected;
+
+  /// Custom widget rendered at the top-right instead of the three-dot menu
+  /// (or the error retry/delete controls) — e.g. a "connect" button. Takes
+  /// priority over [menuActions] and the error/setting-up header actions.
+  final Widget? trailingWidget;
 
   /// Whether to render the three-dot menu slot at all. Ignored when
   /// [variant] is [NasikoCardVariant.error].
@@ -366,7 +394,10 @@ class _NasikoCardState extends State<NasikoCard> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        if (widget.leadingIcon != null) ...[
+        if (widget.leadingWidget != null) ...[
+          widget.leadingWidget!,
+          SizedBox(width: spacing.s8),
+        ] else if (widget.leadingIcon != null) ...[
           HugeIcon(
             icon: widget.leadingIcon!,
             size: iconSizes.s,
@@ -395,6 +426,7 @@ class _NasikoCardState extends State<NasikoCard> {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
+              if (widget.titleBadge != null) widget.titleBadge!,
               if (widget.version != null)
                 Text(
                   widget.version!,
@@ -416,6 +448,10 @@ class _NasikoCardState extends State<NasikoCard> {
     final colors = context.colors;
     final spacing = context.spacing;
     final iconSizes = context.iconSize;
+
+    if (widget.trailingWidget != null) {
+      return widget.trailingWidget!;
+    }
 
     if (_isError) {
       return Row(
@@ -652,13 +688,14 @@ class _NasikoCardState extends State<NasikoCard> {
 
   // ── Tags ───────────────────────────────────────────────────────────────────
 
-  List<String> _fittingTags(double availableWidth) {
+  List<NasikoCardTag> _fittingTags(double availableWidth) {
     final tags = widget.tags;
     if (tags.isEmpty) return [];
 
     final style = context.typography.bodyTertiary;
     final gap = context.spacing.s8;
     final chipHPad = context.spacing.s12 * 2 + 2.0;
+    final iconWidth = 12 + context.spacing.s4;
 
     double textWidth(String text) {
       final tp = TextPainter(
@@ -669,7 +706,12 @@ class _NasikoCardState extends State<NasikoCard> {
     }
 
     final chipWidths = tags
-        .map((t) => chipHPad + textWidth(t.toUpperCase()))
+        .map(
+          (t) =>
+              chipHPad +
+              textWidth(t.label.toUpperCase()) +
+              (t.icon != null ? iconWidth : 0),
+        )
         .toList();
 
     for (int count = tags.length; count >= 0; count--) {
@@ -700,7 +742,8 @@ class _NasikoCardState extends State<NasikoCard> {
             for (int i = 0; i < visibleTags.length; i++) ...[
               if (i > 0) SizedBox(width: spacing.s8),
               NasikoChip(
-                label: visibleTags[i].toUpperCase(),
+                label: visibleTags[i].label.toUpperCase(),
+                leadingIcon: visibleTags[i].icon,
                 size: NasikoChipSize.small,
                 variant: NasikoChipVariant.base,
                 shape: NasikoChipShape.rounded,
@@ -713,7 +756,7 @@ class _NasikoCardState extends State<NasikoCard> {
               NasikoTooltip(
                 message: widget.tags
                     .skip(visibleTags.length)
-                    .map((t) => t.toUpperCase())
+                    .map((t) => t.label.toUpperCase())
                     .join(', '),
                 preferBelow: false,
                 child: NasikoChip(
