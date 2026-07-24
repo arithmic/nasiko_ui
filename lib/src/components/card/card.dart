@@ -461,7 +461,7 @@ class _NasikoCardState extends State<NasikoCard> {
             PrimaryIconButton(
               icon: HugeIcons.strokeRoundedReload,
               onPressed: widget.onRetry!,
-              size: NasikoButtonSize.small,
+              size: NasikoButtonSize.extraSmall,
             ),
           if (widget.onRetry != null && widget.onDelete != null)
             SizedBox(width: spacing.s8),
@@ -469,7 +469,7 @@ class _NasikoCardState extends State<NasikoCard> {
             DestructiveIconButton(
               icon: HugeIcons.strokeRoundedDelete02,
               onPressed: widget.onDelete!,
-              size: NasikoButtonSize.small,
+              size: NasikoButtonSize.extraSmall,
             ),
         ],
       );

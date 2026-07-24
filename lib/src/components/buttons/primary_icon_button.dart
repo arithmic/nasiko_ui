@@ -39,6 +39,7 @@ class PrimaryIconButton extends StatelessWidget {
     final style = ButtonStyle(
       padding: WidgetStateProperty.all(layout.padding),
       minimumSize: WidgetStateProperty.all(Size.zero),
+      fixedSize: WidgetStateProperty.all(Size.square(layout.minHeight)),
       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       elevation: WidgetStateProperty.all(0),
       shadowColor: WidgetStateProperty.all(Colors.transparent),
