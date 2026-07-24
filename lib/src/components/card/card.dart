@@ -350,7 +350,7 @@ class _NasikoCardState extends State<NasikoCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: spacing.s36, child: _buildHeader(context)),
+                    SizedBox(height: spacing.s28, child: _buildHeader(context)),
                     if (_isError)
                       _buildErrorBody(context)
                     else if (_hasSettingUpBody)
