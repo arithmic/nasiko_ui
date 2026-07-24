@@ -7,7 +7,7 @@ import 'button_layout.dart';
 /// A tertiary icon button for Nasiko UI.
 ///
 /// This is a low-emphasis icon-only button without an outline.
-/// Supports three sizes: large, medium and small.
+/// Supports four sizes: large, medium, small and extraSmall.
 class TertiaryIconButton extends StatelessWidget {
   const TertiaryIconButton({
     super.key,

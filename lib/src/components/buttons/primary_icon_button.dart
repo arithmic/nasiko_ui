@@ -7,7 +7,7 @@ import 'button_layout.dart';
 /// A primary icon button for Nasiko UI.
 ///
 /// This is a high-emphasis icon-only button with brand color fill.
-/// Supports three sizes: large, medium and small.
+/// Supports four sizes: large, medium, small and extraSmall.
 class PrimaryIconButton extends StatelessWidget {
   const PrimaryIconButton({
     super.key,

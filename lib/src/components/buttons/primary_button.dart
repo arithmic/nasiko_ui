@@ -45,8 +45,7 @@ class PrimaryButton extends StatelessWidget {
     final layout = standardButtonLayout(context, size);
     final textStyle = switch (size) {
       NasikoButtonSize.large => typography.buttonPrimary,
-      NasikoButtonSize.medium ||
-      NasikoButtonSize.small => typography.buttonSecondary,
+      _ => typography.buttonSecondary,
     };
     final borderRadius = size == NasikoButtonSize.large ? radii.r10 : radii.r8;
 

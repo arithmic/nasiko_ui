@@ -7,7 +7,7 @@ import 'button_layout.dart';
 /// A destructive icon button for Nasiko UI.
 ///
 /// This is a medium-emphasis icon-only button with outline style.
-/// Supports three sizes: large, medium and small.
+/// Supports four sizes: large, medium, small and extraSmall.
 class DestructiveIconButton extends StatelessWidget {
   const DestructiveIconButton({
     super.key,

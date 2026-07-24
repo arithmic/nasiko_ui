@@ -414,7 +414,7 @@ class _NasikoCardState extends State<NasikoCard> {
         Expanded(
           child: Wrap(
             crossAxisAlignment: WrapCrossAlignment.center,
-            spacing: spacing.s8,
+            spacing: spacing.s12,
             children: [
               Text(
                 widget.title,
