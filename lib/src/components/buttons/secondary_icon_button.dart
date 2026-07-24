@@ -99,7 +99,8 @@ class SecondaryIconButton extends StatelessWidget {
     return IconButton(
       onPressed: onPressed,
       style: style,
-      icon: HugeIcon(icon: icon, size: layout.iconSize),
+      icon: HugeIcon(icon: icon),
+      iconSize: layout.iconSize,
     );
   }
 }

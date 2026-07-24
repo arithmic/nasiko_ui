@@ -1194,6 +1194,11 @@ class ExampleHomePage extends StatelessWidget {
             ],
             description:
                 'An AI-powered coding assistant that helps users understand and debug code snippets. It supports multiple programming languages and maintains a chat history for each session.',
+            trailingWidget: TertiaryIconButton(
+              onPressed: () {},
+              icon: HugeIcons.strokeRoundedPlusSignSquare,
+              size: NasikoButtonSize.extraSmall,
+            ),
           ),
         ),
       ],

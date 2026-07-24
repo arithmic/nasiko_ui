@@ -144,8 +144,8 @@ NasikoButtonLayout iconButtonLayout(
     ),
     NasikoButtonSize.extraSmall => NasikoButtonLayout(
       padding: EdgeInsets.all(spacing.s2),
-      minHeight: spacing.s20,
-      iconSize: iconSizes.xs,
+      minHeight: spacing.s24,
+      iconSize: iconSizes.s,
     ),
   };
 }
