@@ -24,17 +24,10 @@ flutter:
 
   assets:
     - assets/images/
-    - assets/fonts/
 
-  fonts:
-    - family: Inter
-      fonts:
-        - asset: assets/fonts/Inter-VariableFont_opsz.ttf
-        - asset: assets/fonts/Inter-Italic-VariableFont_opsz.ttf
-          style: italic
-
-    - family: Chivo Mono
-      fonts:
-        - asset: assets/fonts/ChivoMono-Regular.ttf
-        - asset: assets/fonts/ChivoMono-Medium.ttf
-          weight: 500
+  # No fonts: section on purpose. Package-declared fonts register under
+  # "packages/nasiko_ui/<family>", but this package's TextStyles use bare
+  # 'Inter' / 'Chivo Mono' family names, which resolve against the CONSUMING
+  # app's font declarations. Every consumer must declare both families in its
+  # own pubspec (the nasiko web app already does); bundling them here only
+  # shipped ~1.9 MB of fonts nothing could reference.
