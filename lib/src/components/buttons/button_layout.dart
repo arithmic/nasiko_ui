@@ -42,7 +42,7 @@ NasikoButtonLayout standardButtonLayout(
       iconSize: iconSizes.s,
       iconSpacing: spacing.s8,
     ),
-    NasikoButtonSize.small => NasikoButtonLayout(
+    _ => NasikoButtonLayout(
       padding: EdgeInsets.symmetric(
         vertical: spacing.s8,
         horizontal: spacing.s12,
@@ -80,7 +80,7 @@ NasikoButtonLayout quietButtonLayout(
       iconSize: iconSizes.s,
       iconSpacing: spacing.s8,
     ),
-    NasikoButtonSize.small => NasikoButtonLayout(
+    _ => NasikoButtonLayout(
       padding: EdgeInsets.symmetric(
         vertical: spacing.s12,
         horizontal: spacing.s12,
@@ -140,6 +140,11 @@ NasikoButtonLayout iconButtonLayout(
     NasikoButtonSize.small => NasikoButtonLayout(
       padding: EdgeInsets.all(spacing.s8),
       minHeight: spacing.s36,
+      iconSize: iconSizes.s,
+    ),
+    NasikoButtonSize.extraSmall => NasikoButtonLayout(
+      padding: EdgeInsets.all(spacing.s2),
+      minHeight: spacing.s24,
       iconSize: iconSizes.s,
     ),
   };

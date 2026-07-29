@@ -80,37 +80,45 @@ class NasikoChip extends StatelessWidget {
     final Color backgroundColor;
     final Color hoverColor;
     final Color pressedColor;
-    final Color foregroundColor;
+    final Color iconColor;
+    final Color labelColor;
     if (!enabled) {
       backgroundColor = colors.backgroundBase;
       hoverColor = colors.backgroundDisabled;
       pressedColor = colors.backgroundDisabled;
-      foregroundColor = colors.foregroundDisabled;
+      iconColor = colors.foregroundDisabled;
+      labelColor = colors.foregroundDisabled;
     } else {
       switch (variant) {
         case NasikoChipVariant.neutral:
           backgroundColor = colors.backgroundSurfaceHover;
           hoverColor = colors.backgroundSurfaceHover;
           pressedColor = colors.backgroundSurfaceActive;
-          foregroundColor = colors.foregroundPrimary;
+          iconColor = colors.foregroundPrimary;
+          labelColor = colors.foregroundPrimary;
           break;
         case NasikoChipVariant.brand:
           backgroundColor = colors.backgroundSecondaryBrand;
           hoverColor = colors.backgroundSecondaryBrandHover;
           pressedColor = colors.backgroundSecondaryBrandActive;
-          foregroundColor = colors.foregroundPrimary;
+          iconColor = colors.foregroundPrimary;
+          labelColor = colors.foregroundPrimary;
           break;
         case NasikoChipVariant.base:
           backgroundColor = colors.backgroundBase;
           hoverColor = colors.backgroundSurfaceHover;
           pressedColor = colors.backgroundSurfaceActive;
-          foregroundColor = colors.foregroundPrimary;
+          iconColor = colors.foregroundIconPrimary;
+          labelColor = colors.foregroundSecondary;
           break;
         case NasikoChipVariant.tag:
-          backgroundColor = colors.backgroundInformation.withValues(alpha: 0.64);
+          backgroundColor = colors.backgroundInformation.withValues(
+            alpha: 0.64,
+          );
           hoverColor = colors.backgroundInformation.withValues(alpha: 0.64);
           pressedColor = colors.backgroundSurfaceActive;
-          foregroundColor = colors.foregroundPrimary;
+          iconColor = colors.foregroundPrimary;
+          labelColor = colors.foregroundPrimary;
           break;
       }
     }
@@ -119,6 +127,18 @@ class NasikoChip extends StatelessWidget {
     final borderRadius = BorderRadius.circular(
       shape == NasikoChipShape.rounded ? radii.r40 : radii.r8,
     );
+
+    final labelStyle = size == NasikoChipSize.small
+        ? typography.bodyTertiary.copyWith(height: 1.0)
+        : typography.bodySecondary.copyWith(height: 1.0);
+    final iconSize = size == NasikoChipSize.small ? 13.0 : iconSizes.s;
+    final labelHeight = labelStyle.fontSize! * (labelStyle.height ?? 1.0);
+    // Fixed regardless of this chip's own icons, so icon and non-icon chips
+    // stay the same height when placed side by side.
+    final contentHeight = [
+      labelHeight,
+      iconSize,
+    ].reduce((a, b) => a > b ? a : b);
 
     Widget chipContent = Container(
       padding: EdgeInsets.symmetric(
@@ -129,43 +149,40 @@ class NasikoChip extends StatelessWidget {
         color: backgroundColor,
         borderRadius: borderRadius,
         border: Border.all(
-          color:variant == NasikoChipVariant.tag ? Colors.transparent : borderColor ?? colors.borderPrimary,
+          color: variant == NasikoChipVariant.tag
+              ? Colors.transparent
+              : borderColor ?? colors.borderPrimary,
           strokeAlign: BorderSide.strokeAlignOutside,
           width: borderWidths.w1,
         ),
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Leading Icon
-          if (leadingIcon != null) ...[
-            HugeIcon(
-              icon: leadingIcon!,
-              size: size == NasikoChipSize.small ? iconSizes.xs : iconSizes.s,
-              color: foregroundColor,
-            ),
-            SizedBox(width: spacing.s4),
-          ],
-          Text(
-            label,
-            style: size == NasikoChipSize.small
-                ? typography.bodyTertiary.copyWith(height: 1.0)
-                : typography.bodySecondary.copyWith(height: 1.0),
-          ),
+      child: SizedBox(
+        height: contentHeight,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // Leading Icon
+            if (leadingIcon != null) ...[
+              HugeIcon(icon: leadingIcon!, size: iconSize, color: iconColor),
+              SizedBox(width: spacing.s4),
+            ],
+            Text(label, style: labelStyle.copyWith(color: labelColor)),
 
-          // Delete Icon (only for actionable chips)
-          if (onDelete != null) ...[
-            SizedBox(width: spacing.s4),
-            GestureDetector(
-              onTap: enabled ? onDelete : null,
-              child: HugeIcon(
-                icon: HugeIcons.strokeRoundedMinusSign,
-                size: size == NasikoChipSize.small ? iconSizes.xs : iconSizes.s,
-                color: foregroundColor,
+            // Delete Icon (only for actionable chips)
+            if (onDelete != null) ...[
+              SizedBox(width: spacing.s4),
+              GestureDetector(
+                onTap: enabled ? onDelete : null,
+                child: HugeIcon(
+                  icon: HugeIcons.strokeRoundedMinusSign,
+                  size: iconSize,
+                  color: iconColor,
+                ),
               ),
-            ),
+            ],
           ],
-        ],
+        ),
       ),
     );
 
