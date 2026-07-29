@@ -43,8 +43,7 @@ class SecondaryButton extends StatelessWidget {
     final layout = standardButtonLayout(context, size);
     final textStyle = switch (size) {
       NasikoButtonSize.large => typography.buttonPrimaryBold,
-      NasikoButtonSize.medium ||
-      NasikoButtonSize.small => typography.buttonSecondaryBold,
+      _ => typography.buttonSecondaryBold,
     };
     final borderRadius = size == NasikoButtonSize.large ? radii.r10 : radii.r8;
 

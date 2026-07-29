@@ -24,6 +24,10 @@ class NasikoNavigationPanel extends StatelessWidget {
         itemBuilder: (_, i) {
           final section = sections[i];
           return Section(
+            // Key by stable id so per-section expand state isn't reused by
+            // list position across screen changes (a collapsed section's state
+            // leaking onto a non-collapsible one hides its children).
+            key: ValueKey(section.id),
             label: section.title.toUpperCase(),
             icon: section.icon,
             isCollapsible: section.isCollapsible,

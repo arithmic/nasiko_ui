@@ -43,8 +43,7 @@ class DestructiveTextButton extends StatelessWidget {
     final layout = quietButtonLayout(context, size);
     final textStyle = switch (size) {
       NasikoButtonSize.large => typography.buttonPrimary,
-      NasikoButtonSize.medium ||
-      NasikoButtonSize.small => typography.buttonSecondary,
+      _ => typography.buttonSecondary,
     };
     final borderRadius = radii.r8;
 
