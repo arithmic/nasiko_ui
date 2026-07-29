@@ -1199,6 +1199,7 @@ class ExampleHomePage extends StatelessWidget {
               icon: HugeIcons.strokeRoundedPlusSignSquare,
               size: NasikoButtonSize.extraSmall,
             ),
+            author: "Satya Nadella",
           ),
         ),
       ],

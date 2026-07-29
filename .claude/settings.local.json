@@ -6,7 +6,14 @@
       "Bash(flutter pub get:*)",
       "Bash(git add *)",
       "Bash(grep -n \"fixedSize\\\\|minimumSize\\\\|maximumSize\" /Users/satya/Library/flutter/packages/flutter/lib/src/material/button_style_button.dart | head -40)",
-      "Read(//Users/satya/Library/flutter/packages/flutter/lib/src/material/**)"
+      "Read(//Users/satya/Library/flutter/packages/flutter/lib/src/material/**)",
+      "mcp__8ce6681c-1221-4e85-a4b5-3f2901a77bce__list_teams",
+      "mcp__8ce6681c-1221-4e85-a4b5-3f2901a77bce__list_issue_statuses",
+      "mcp__8ce6681c-1221-4e85-a4b5-3f2901a77bce__list_projects",
+      "mcp__8ce6681c-1221-4e85-a4b5-3f2901a77bce__save_project",
+      "mcp__8ce6681c-1221-4e85-a4b5-3f2901a77bce__save_issue",
+      "mcp__8ce6681c-1221-4e85-a4b5-3f2901a77bce__list_users",
+      "mcp__8ce6681c-1221-4e85-a4b5-3f2901a77bce__save_comment"
     ],
     "deny": [],
     "ask": []
