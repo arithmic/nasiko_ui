@@ -7,13 +7,13 @@ import 'button_layout.dart';
 /// A tertiary icon button for Nasiko UI.
 ///
 /// This is a low-emphasis icon-only button without an outline.
-/// Supports four sizes: large, medium, small and extraSmall.
+/// Supports three sizes: large, medium and small.
 class TertiaryIconButton extends StatelessWidget {
   const TertiaryIconButton({
     super.key,
     required this.onPressed,
     required this.icon,
-    this.size = NasikoButtonSize.medium,
+    this.size = NasikoButtonSize.large,
     this.statesController,
   });
 
@@ -24,7 +24,7 @@ class TertiaryIconButton extends StatelessWidget {
   /// The icon to display on the button.
   final HugeIconsType icon;
 
-  /// The size of the button. Defaults to [NasikoButtonSize.medium].
+  /// The size of the button. Defaults to [NasikoButtonSize.large].
   final NasikoButtonSize size;
 
   /// Optional external controller for driving widget states (e.g. hover,
@@ -110,7 +110,8 @@ class TertiaryIconButton extends StatelessWidget {
       onPressed: onPressed,
       style: style,
       statesController: statesController,
-      icon: HugeIcon(icon: icon, size: layout.iconSize),
+      icon: HugeIcon(icon: icon),
+      iconSize: layout.iconSize,
     );
   }
 }

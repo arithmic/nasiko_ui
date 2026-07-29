@@ -15,7 +15,7 @@ class DestructiveTextButton extends StatelessWidget {
     required this.label,
     this.leadingIcon,
     this.trailingIcon,
-    this.size = NasikoButtonSize.medium,
+    this.size = NasikoButtonSize.large,
   });
 
   /// The callback that is called when the button is tapped.
@@ -31,7 +31,7 @@ class DestructiveTextButton extends StatelessWidget {
   /// An optional icon to display after the label.
   final HugeIconsType? trailingIcon;
 
-  /// The size of the button. Defaults to [NasikoButtonSize.medium].
+  /// The size of the button. Defaults to [NasikoButtonSize.large].
   final NasikoButtonSize size;
 
   @override
@@ -43,7 +43,8 @@ class DestructiveTextButton extends StatelessWidget {
     final layout = quietButtonLayout(context, size);
     final textStyle = switch (size) {
       NasikoButtonSize.large => typography.buttonPrimary,
-      _ => typography.buttonSecondary,
+      NasikoButtonSize.medium ||
+      NasikoButtonSize.small => typography.buttonSecondary,
     };
     final borderRadius = radii.r8;
 
