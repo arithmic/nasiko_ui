@@ -350,7 +350,7 @@ class _NasikoCardState extends State<NasikoCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: spacing.s28, child: _buildHeader(context)),
+                    SizedBox(height: spacing.s32, child: _buildHeader(context)),
                     if (_isError)
                       _buildErrorBody(context)
                     else if (_hasSettingUpBody)
@@ -461,7 +461,7 @@ class _NasikoCardState extends State<NasikoCard> {
             PrimaryIconButton(
               icon: HugeIcons.strokeRoundedReload,
               onPressed: widget.onRetry!,
-              size: NasikoButtonSize.extraSmall,
+              size: NasikoButtonSize.small,
             ),
           if (widget.onRetry != null && widget.onDelete != null)
             SizedBox(width: spacing.s8),
@@ -469,7 +469,7 @@ class _NasikoCardState extends State<NasikoCard> {
             DestructiveIconButton(
               icon: HugeIcons.strokeRoundedDelete02,
               onPressed: widget.onDelete!,
-              size: NasikoButtonSize.extraSmall,
+              size: NasikoButtonSize.small,
             ),
         ],
       );

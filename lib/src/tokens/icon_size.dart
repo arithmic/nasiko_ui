@@ -7,6 +7,7 @@ class NasikoIconSizeTheme extends ThemeExtension<NasikoIconSizeTheme> {
     required this.m,
     required this.s,
     required this.xs,
+    required this.xxs,
   });
 
   // Define your icon size properties
@@ -14,14 +15,22 @@ class NasikoIconSizeTheme extends ThemeExtension<NasikoIconSizeTheme> {
   final double m;
   final double s;
   final double xs;
+  final double xxs;
 
   @override
-  NasikoIconSizeTheme copyWith({double? l, double? m, double? s, double? xs}) {
+  NasikoIconSizeTheme copyWith({
+    double? l,
+    double? m,
+    double? s,
+    double? xs,
+    double? xxs,
+  }) {
     return NasikoIconSizeTheme(
       l: l ?? this.l,
       m: m ?? this.m,
       s: s ?? this.s,
       xs: xs ?? this.xs,
+      xxs: xxs ?? this.xxs,
     );
   }
 
@@ -44,13 +53,14 @@ class NasikoIconSizeTheme extends ThemeExtension<NasikoIconSizeTheme> {
       m: lerpDouble(m, other.m, t),
       s: lerpDouble(s, other.s, t),
       xs: lerpDouble(xs, other.xs, t),
+      xxs: lerpDouble(xxs, other.xxs, t),
     );
   }
 }
 
 // --- Default Icon Size Instance ---
 NasikoIconSizeTheme get defaultNasikoIconSize =>
-    NasikoIconSizeTheme(l: 28, m: 24, s: 20, xs: 16);
+    NasikoIconSizeTheme(l: 28, m: 24, s: 20, xs: 16, xxs: 12);
 
 // --- BuildContext Extension ---
 // Provides easy access like: `context.iconSize.l`

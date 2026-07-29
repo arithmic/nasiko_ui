@@ -11,6 +11,7 @@ extension NasikoSpacingResolved on NasikoSpacingTheme {
   double get s20h => s20.h;
   double get s24h => s24.h;
   double get s28h => s28.h;
+  double get s32h => s32.h;
   double get s36h => s36.h;
   double get s48h => s48.h;
   double get s64h => s64.h;
@@ -25,6 +26,7 @@ extension NasikoSpacingResolved on NasikoSpacingTheme {
   double get s20w => s20.w;
   double get s24w => s24.w;
   double get s28w => s28.w;
+  double get s32w => s32.w;
   double get s36w => s36.w;
   double get s48w => s48.w;
   double get s64w => s64.w;
@@ -39,6 +41,7 @@ extension NasikoSpacingResolved on NasikoSpacingTheme {
   double get s20r => s20.r;
   double get s24r => s24.r;
   double get s28r => s28.r;
+  double get s32r => s32.r;
   double get s36r => s36.r;
   double get s48r => s48.r;
   double get s64r => s64.r;
@@ -57,6 +60,7 @@ class NasikoSpacingTheme extends ThemeExtension<NasikoSpacingTheme> {
     required this.s20,
     required this.s24,
     required this.s28,
+    required this.s32,
     required this.s36,
     required this.s48,
     required this.s64,
@@ -72,6 +76,7 @@ class NasikoSpacingTheme extends ThemeExtension<NasikoSpacingTheme> {
   final double s20;
   final double s24;
   final double s28;
+  final double s32;
   final double s36;
   final double s48;
   final double s64;
@@ -88,6 +93,7 @@ class NasikoSpacingTheme extends ThemeExtension<NasikoSpacingTheme> {
     double? s20,
     double? s24,
     double? s28,
+    double? s32,
     double? s36,
     double? s48,
     double? s64,
@@ -103,6 +109,7 @@ class NasikoSpacingTheme extends ThemeExtension<NasikoSpacingTheme> {
       s20: s20 ?? this.s20,
       s24: s24 ?? this.s24,
       s28: s28 ?? this.s28,
+      s32: s32 ?? this.s32,
       s36: s36 ?? this.s36,
       s48: s48 ?? this.s48,
       s64: s64 ?? this.s64,
@@ -131,6 +138,7 @@ class NasikoSpacingTheme extends ThemeExtension<NasikoSpacingTheme> {
       s20: lerpDouble(s20, other.s20, t),
       s24: lerpDouble(s24, other.s24, t),
       s28: lerpDouble(s28, other.s28, t),
+      s32: lerpDouble(s32, other.s32, t),
       s36: lerpDouble(s36, other.s36, t),
       s48: lerpDouble(s48, other.s48, t),
       s64: lerpDouble(s64, other.s64, t),
@@ -151,6 +159,7 @@ const NasikoSpacingTheme defaultNasikoSpacing = NasikoSpacingTheme(
   s20: 20.0,
   s24: 24.0,
   s28: 28.0,
+  s32: 32.0,
   s36: 36.0,
   s48: 48.0,
   s64: 64.0,

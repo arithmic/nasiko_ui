@@ -15,7 +15,7 @@ class SecondaryButton extends StatelessWidget {
     required this.label,
     this.leadingIcon,
     this.trailingIcon,
-    this.size = NasikoButtonSize.medium,
+    this.size = NasikoButtonSize.large,
   });
 
   /// The callback that is called when the button is tapped.
@@ -31,7 +31,7 @@ class SecondaryButton extends StatelessWidget {
   /// An optional icon to display after the label.
   final HugeIconsType? trailingIcon;
 
-  /// The size of the button. Defaults to [NasikoButtonSize.medium].
+  /// The size of the button. Defaults to [NasikoButtonSize.large].
   final NasikoButtonSize size;
 
   @override
@@ -43,7 +43,8 @@ class SecondaryButton extends StatelessWidget {
     final layout = standardButtonLayout(context, size);
     final textStyle = switch (size) {
       NasikoButtonSize.large => typography.buttonPrimaryBold,
-      _ => typography.buttonSecondaryBold,
+      NasikoButtonSize.medium ||
+      NasikoButtonSize.small => typography.buttonSecondaryBold,
     };
     final borderRadius = size == NasikoButtonSize.large ? radii.r10 : radii.r8;
 
