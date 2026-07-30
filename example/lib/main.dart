@@ -1197,7 +1197,7 @@ class ExampleHomePage extends StatelessWidget {
             trailingWidget: TertiaryIconButton(
               onPressed: () {},
               icon: HugeIcons.strokeRoundedPlusSignSquare,
-              size: NasikoButtonSize.small,
+              size: NasikoButtonSize.medium,
             ),
             author: "Satya Nadella",
           ),
