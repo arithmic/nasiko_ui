@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
+import '../buttons/button_layout.dart';
+
 class NasikoNavigationRail extends StatelessWidget {
   const NasikoNavigationRail({
     super.key,
@@ -9,7 +11,7 @@ class NasikoNavigationRail extends StatelessWidget {
     required this.selectedId,
     required this.onSelect,
     this.isExpanded = false,
-    this.widthCollapsed = 36,
+    this.widthCollapsed,
     this.widthExpanded = 170,
     this.footerItems,
     this.footer,
@@ -22,13 +24,19 @@ class NasikoNavigationRail extends StatelessWidget {
   final Widget? footer;
   final bool isExpanded;
   final double widthExpanded;
-  final double widthCollapsed;
+
+  /// Width of the rail when collapsed. Defaults to the large icon button
+  /// size, matching the collapsed [_RailItem]s.
+  final double? widthCollapsed;
 
   @override
   Widget build(BuildContext context) {
     final spacing = context.spacing;
+    final largeIconLayout = iconButtonLayout(context, NasikoButtonSize.large);
 
-    final width = isExpanded ? widthExpanded : widthCollapsed;
+    final width = isExpanded
+        ? widthExpanded
+        : (widthCollapsed ?? largeIconLayout.minHeight);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
@@ -93,16 +101,16 @@ class _RailItemState extends State<_RailItem> {
     final colors = context.colors;
     final spacing = context.spacing;
     final radii = context.radius;
-    final iconSizes = context.iconSize;
     final borderWidths = context.borderWidth;
     final typography = context.typography;
     final isDisabled = widget.item.isDisabled;
+    final layout = iconButtonLayout(context, NasikoButtonSize.large);
 
     final bgColor = widget.isSelected
         ? colors.backgroundSecondaryBrand
         : Colors.transparent;
 
-    final border = !isDisabled && _hovered 
+    final border = !isDisabled && _hovered
         ? colors.borderSecondary
         : colors.borderPrimary;
 
@@ -116,7 +124,7 @@ class _RailItemState extends State<_RailItem> {
         onTap: widget.item.isDisabled ? null : widget.onTap,
         child: Container(
           margin: EdgeInsets.symmetric(vertical: spacing.s4),
-          padding: EdgeInsets.all(spacing.s8),
+          padding: layout.padding,
           decoration: BoxDecoration(
             color: bgColor,
             borderRadius: BorderRadius.circular(radii.r8),
@@ -127,7 +135,7 @@ class _RailItemState extends State<_RailItem> {
               HugeIcon(
                 strokeWidth: widget.isExpanded || isDisabled ? 1.5 : 1.8,
                 icon: widget.item.icon,
-                size: iconSizes.s,
+                size: layout.iconSize,
                 color: isDisabled
                     ? colors.foregroundDisabled
                     : widget.isSelected
