@@ -1197,7 +1197,7 @@ class ExampleHomePage extends StatelessWidget {
             trailingWidget: TertiaryIconButton(
               onPressed: () {},
               icon: HugeIcons.strokeRoundedPlusSignSquare,
-              size: NasikoButtonSize.small,
+              size: NasikoButtonSize.medium,
             ),
             author: "Satya Nadella",
           ),
@@ -1488,6 +1488,7 @@ class ExampleHomePage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         PrimaryButton(
+          size: NasikoButtonSize.medium,
           onPressed: () {
             showNasikoModal(
               context: context,
@@ -1502,6 +1503,7 @@ class ExampleHomePage extends StatelessWidget {
         ),
         SizedBox(width: context.spacing.s16),
         PrimaryButton(
+          size: NasikoButtonSize.medium,
           onPressed: () {
             showNasikoModal(
               context: context,
@@ -1520,6 +1522,7 @@ class ExampleHomePage extends StatelessWidget {
         ),
         SizedBox(width: context.spacing.s16),
         PrimaryButton(
+          size: NasikoButtonSize.medium,
           onPressed: () {
             showNasikoModal(
               context: context,
@@ -1535,6 +1538,7 @@ class ExampleHomePage extends StatelessWidget {
         ),
         SizedBox(width: context.spacing.s16),
         PrimaryButton(
+          size: NasikoButtonSize.medium,
           onPressed: () {
             showNasikoModal(
               context: context,
@@ -1549,6 +1553,7 @@ class ExampleHomePage extends StatelessWidget {
         ),
         SizedBox(width: context.spacing.s16),
         PrimaryButton(
+          size: NasikoButtonSize.medium,
           label: 'Show Confirmation',
           onPressed: () {
             showNasikoModal(
@@ -1573,6 +1578,7 @@ class ExampleHomePage extends StatelessWidget {
         SizedBox(width: context.spacing.s16),
 
         PrimaryButton(
+          size: NasikoButtonSize.medium,
           label: 'Show Alert',
           onPressed: () {
             showNasikoModal(
@@ -1738,6 +1744,7 @@ class ExampleHomePage extends StatelessWidget {
       runSpacing: spacing.s16,
       children: [
         PrimaryButton(
+          size: NasikoButtonSize.medium,
           label: 'Show Success Toast',
           onPressed: () => NasikoToastService.showSuccess(
             context,
@@ -1745,6 +1752,7 @@ class ExampleHomePage extends StatelessWidget {
           ),
         ),
         PrimaryButton(
+          size: NasikoButtonSize.medium,
           label: 'Show Error Toast',
           onPressed: () => NasikoToastService.showError(
             context,
@@ -1752,6 +1760,7 @@ class ExampleHomePage extends StatelessWidget {
           ),
         ),
         PrimaryButton(
+          size: NasikoButtonSize.medium,
           label: 'Show Warning Toast',
           onPressed: () => NasikoToastService.show(
             context,
@@ -1760,6 +1769,7 @@ class ExampleHomePage extends StatelessWidget {
           ),
         ),
         PrimaryButton(
+          size: NasikoButtonSize.medium,
           label: 'Show Info Toast',
           onPressed: () => NasikoToastService.show(
             context,
@@ -1768,6 +1778,7 @@ class ExampleHomePage extends StatelessWidget {
           ),
         ),
         PrimaryButton(
+          size: NasikoButtonSize.medium,
           label: 'Show In progress Info Toast',
           onPressed: () => NasikoToastService.show(
             context,

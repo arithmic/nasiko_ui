@@ -461,7 +461,7 @@ class _NasikoCardState extends State<NasikoCard> {
             PrimaryIconButton(
               icon: HugeIcons.strokeRoundedReload,
               onPressed: widget.onRetry!,
-              size: NasikoButtonSize.small,
+              size: NasikoButtonSize.medium,
             ),
           if (widget.onRetry != null && widget.onDelete != null)
             SizedBox(width: spacing.s8),
@@ -469,7 +469,7 @@ class _NasikoCardState extends State<NasikoCard> {
             DestructiveIconButton(
               icon: HugeIcons.strokeRoundedDelete02,
               onPressed: widget.onDelete!,
-              size: NasikoButtonSize.small,
+              size: NasikoButtonSize.medium,
             ),
         ],
       );
@@ -823,7 +823,7 @@ class _CardMenuButtonState extends State<_CardMenuButton> {
           child: TertiaryIconButton(
             icon: HugeIcons.strokeRoundedMoreVertical,
             onPressed: () {},
-            size: NasikoButtonSize.small,
+            size: NasikoButtonSize.medium,
             statesController: _statesController,
           ),
         ),
