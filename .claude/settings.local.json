@@ -13,7 +13,17 @@
       "mcp__8ce6681c-1221-4e85-a4b5-3f2901a77bce__save_project",
       "mcp__8ce6681c-1221-4e85-a4b5-3f2901a77bce__save_issue",
       "mcp__8ce6681c-1221-4e85-a4b5-3f2901a77bce__list_users",
-      "mcp__8ce6681c-1221-4e85-a4b5-3f2901a77bce__save_comment"
+      "mcp__8ce6681c-1221-4e85-a4b5-3f2901a77bce__save_comment",
+      "Bash(ls /Users/satya/Documents/GitHub/nasiko)",
+      "Read(//Users/satya/Documents/GitHub/nasiko/**)",
+      "Bash(grep -n \"splitScreenMode\\\\|MediaQuery\\\\|devicePixelRatio\" /Users/satya/.pub-cache/hosted/pub.dev/flutter_screenutil-5.9.3/lib/src/screenutil_init.dart)",
+      "Read(//Users/satya/.pub-cache/hosted/pub.dev/flutter_screenutil-5.9.3/lib/src/**)",
+      "Bash(grep -n \"strokeAlign\\\\b\" -B2 -A5 /Users/satya/Library/flutter/packages/flutter/lib/src/painting/borders.dart | head -40)",
+      "Read(//Users/satya/Library/flutter/packages/flutter/lib/src/painting/**)",
+      "Bash(grep -n \"_paddingIncludingDecoration\" -B2 -A 20 /Users/satya/Library/flutter/packages/flutter/lib/src/widgets/container.dart | head -40)",
+      "Read(//Users/satya/Library/flutter/packages/flutter/lib/src/widgets/**)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
     ],
     "deny": [],
     "ask": []
