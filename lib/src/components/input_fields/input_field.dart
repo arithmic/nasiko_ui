@@ -202,7 +202,7 @@ class NasikoInputField extends StatelessWidget {
             errorBorder: errorBorder,
             disabledBorder: disabledBorder,
 
-            errorStyle: typography.bodyTertiary.copyWith(
+            errorStyle: typography.bodySecondary.copyWith(
               color: colors.foregroundError,
             ),
           ),
@@ -214,7 +214,7 @@ class NasikoInputField extends StatelessWidget {
             padding: EdgeInsets.only(left: spacing.s4),
             child: Text(
               helperText!,
-              style: typography.bodyTertiary.copyWith(
+              style: typography.bodySecondary.copyWith(
                 color: colors.foregroundSecondary,
               ),
             ),

@@ -212,7 +212,7 @@ class _NasikoListItemState extends State<NasikoListItem> {
                         ],
                         Text(
                           widget.badgeLabel!,
-                          style: typography.bodyTertiary.copyWith(
+                          style: typography.bodySecondary.copyWith(
                             color: widget.isDisabled
                                 ? colors.foregroundDisabled
                                 : colors.foregroundPrimary,

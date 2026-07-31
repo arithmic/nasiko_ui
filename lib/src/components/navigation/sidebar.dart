@@ -664,7 +664,7 @@
 //                   Expanded(
 //                     child: Text(
 //                       widget.section.title.toUpperCase(),
-//                       style: typography.bodyTertiaryBold,
+//                       style: typography.bodySecondaryBold,
 //                     ),
 //                   ),
 //                   if (widget.section.trailingIcon != null)
@@ -1029,7 +1029,7 @@
 //                             SizedBox(height: spacing.s2),
 //                             Text(
 //                               userSubtitle!,
-//                               style: typography.bodyTertiary.copyWith(
+//                               style: typography.bodySecondary.copyWith(
 //                                 color: colors.foregroundSecondary,
 //                               ),
 //                               maxLines: 1,
