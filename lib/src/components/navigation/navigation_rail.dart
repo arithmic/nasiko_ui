@@ -124,7 +124,10 @@ class _RailItemState extends State<_RailItem> {
         onTap: widget.item.isDisabled ? null : widget.onTap,
         child: Container(
           margin: EdgeInsets.symmetric(vertical: spacing.s4),
-          padding: layout.padding,
+          // Container adds the border's own width as extra padding on top of
+          // this (even for the default inside-aligned stroke), so subtract it
+          // here to keep the total inset at layout.padding.
+          padding: EdgeInsets.all(layout.padding.left - borderWidths.w1),
           decoration: BoxDecoration(
             color: bgColor,
             borderRadius: BorderRadius.circular(radii.r8),
