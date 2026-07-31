@@ -42,7 +42,7 @@ class NasikoTooltip extends StatelessWidget {
       message: message,
       preferBelow: preferBelow,
       waitDuration: waitDuration,
-      textStyle: typography.bodySecondary.copyWith(
+      textStyle: typography.bodyPrimary.copyWith(
         color: colors.foregroundConstantWhite,
         fontStyle: FontStyle.normal,
         height: 1.4,
