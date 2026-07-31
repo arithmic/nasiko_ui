@@ -136,7 +136,16 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        if (widget.enabled) {
+        if (!widget.enabled) return;
+        if (_focusNode.hasFocus) {
+          // On web the engine can silently drop the text input connection
+          // while the node stays focused (focused border, but typing is
+          // dead); requestFocus would be a no-op in that state.
+          // requestKeyboard reopens the connection.
+          _focusNode.context
+              ?.findAncestorStateOfType<EditableTextState>()
+              ?.requestKeyboard();
+        } else {
           FocusScope.of(context).requestFocus(_focusNode);
         }
       },
