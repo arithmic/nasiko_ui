@@ -410,7 +410,7 @@ class _TextBoxAttachmentChipState extends State<_TextBoxAttachmentChip> {
                         : widget.label,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: typography.bodySecondary,
+                    style: typography.bodyTertiary,
                   ),
                 ),
                 if (widget.onDelete != null) ...[
