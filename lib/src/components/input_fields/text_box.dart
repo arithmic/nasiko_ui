@@ -237,7 +237,7 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
                             onPressed: widget.enabled
                                 ? widget.onAttachmentTap
                                 : null,
-                            size: NasikoButtonSize.small,
+                            size: NasikoButtonSize.medium,
                           ),
                         ...widget.attachments.asMap().entries.map((entry) {
                           final index = entry.key;
@@ -250,8 +250,10 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
                                     widget.onRemoveAttachment != null
                                 ? () => widget.onRemoveAttachment!(index)
                                 : null,
-                            preview: widget.attachmentPreviewBuilder
-                                ?.call(index, file),
+                            preview: widget.attachmentPreviewBuilder?.call(
+                              index,
+                              file,
+                            ),
                           );
                         }),
                       ],
@@ -262,7 +264,7 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
                     PrimaryIconButton(
                       icon: HugeIcons.strokeRoundedSent,
                       onPressed: widget.enabled ? widget.onSend : null,
-                      size: NasikoButtonSize.medium,
+                      size: NasikoButtonSize.large,
                       isLoading: widget.isLoading,
                     ),
                   ],
@@ -400,7 +402,7 @@ class _TextBoxAttachmentChipState extends State<_TextBoxAttachmentChip> {
               children: [
                 HugeIcon(
                   icon: widget.leadingIcon,
-                  size: iconSizes.s,
+                  size: iconSizes.xs,
                   color: colors.foregroundIconPrimary,
                 ),
                 SizedBox(width: spacing.s2),
@@ -411,20 +413,21 @@ class _TextBoxAttachmentChipState extends State<_TextBoxAttachmentChip> {
                         : widget.label,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: typography.buttonSecondary.copyWith(
-                      color: colors.foregroundPrimary,
-                    ),
+                    style: typography.bodyPrimary,
                   ),
                 ),
                 if (widget.onDelete != null) ...[
                   SizedBox(width: spacing.s8),
-                  GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: widget.onDelete,
-                    child: HugeIcon(
-                      icon: HugeIcons.strokeRoundedCancel01,
-                      size: iconSizes.s,
-                      color: colors.foregroundIconPrimary,
+                  MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: widget.onDelete,
+                      child: HugeIcon(
+                        icon: HugeIcons.strokeRoundedCancel01,
+                        size: iconSizes.xs,
+                        color: colors.foregroundIconPrimary,
+                      ),
                     ),
                   ),
                 ],
@@ -461,10 +464,7 @@ class _AttachmentPreviewPopup extends StatelessWidget {
           ],
         ),
         padding: const EdgeInsets.all(8),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(6),
-          child: child,
-        ),
+        child: ClipRRect(borderRadius: BorderRadius.circular(6), child: child),
       ),
     );
   }
