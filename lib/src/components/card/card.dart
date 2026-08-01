@@ -512,7 +512,7 @@ class _NasikoCardState extends State<NasikoCard> {
     final subtleColor = _isMuted
         ? colors.foregroundDisabled
         : colors.foregroundSecondary;
-    final descriptionStyle = typography.bodyPrimary.copyWith(
+    final descriptionStyle = typography.bodySecondary.copyWith(
       color: subtleColor,
     );
     final descriptionHeight =
