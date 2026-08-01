@@ -385,10 +385,7 @@ class _TextBoxAttachmentChipState extends State<_TextBoxAttachmentChip> {
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 440),
           child: Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: spacing.s12,
-              vertical: spacing.s8,
-            ),
+            padding: EdgeInsets.all(spacing.s8),
             decoration: BoxDecoration(
               color: colors.backgroundBase,
               borderRadius: BorderRadius.circular(radii.r8),
