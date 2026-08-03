@@ -3,6 +3,7 @@
 export 'border_width.dart';
 export 'colors/colors.dart';
 export 'icon_size.dart';
+export 'motion.dart';
 export 'radius.dart';
 export 'spacing.dart';
 export 'types.dart';

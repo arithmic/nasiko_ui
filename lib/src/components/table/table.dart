@@ -217,6 +217,7 @@ class _NasikoTableRowState extends State<_NasikoTableRow> {
   Widget build(BuildContext context) {
     final spacing = context.spacing;
     final colors = context.colors;
+    final motion = context.motion;
     final Color backgroundColor = _isHovering
         ? colors.backgroundSurfaceHover
         : Colors.transparent;
@@ -224,7 +225,9 @@ class _NasikoTableRowState extends State<_NasikoTableRow> {
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovering = true),
       onExit: (_) => setState(() => _isHovering = false),
-      child: Container(
+      child: AnimatedContainer(
+        duration: motion.hover,
+        curve: motion.enter,
         color: backgroundColor,
         child: Column(
           children: [

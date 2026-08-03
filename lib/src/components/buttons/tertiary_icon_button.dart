@@ -3,6 +3,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
 import 'button_layout.dart';
+import 'button_press_scale.dart';
 
 /// A tertiary icon button for Nasiko UI.
 ///
@@ -45,6 +46,7 @@ class TertiaryIconButton extends StatelessWidget {
       minimumSize: WidgetStateProperty.all(Size.zero),
       fixedSize: WidgetStateProperty.all(Size.square(layout.minHeight)),
       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      animationDuration: context.motion.fast,
       elevation: WidgetStateProperty.all(0),
       shadowColor: WidgetStateProperty.all(Colors.transparent),
 
@@ -106,12 +108,14 @@ class TertiaryIconButton extends StatelessWidget {
       overlayColor: WidgetStatePropertyAll(Colors.transparent),
     );
 
-    return IconButton(
+    final Widget button = IconButton(
       onPressed: onPressed,
       style: style,
       statesController: statesController,
       icon: HugeIcon(icon: icon),
       iconSize: layout.iconSize,
     );
+
+    return ButtonPressScale(enabled: onPressed != null, child: button);
   }
 }

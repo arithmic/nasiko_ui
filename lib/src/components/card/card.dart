@@ -250,7 +250,7 @@ class _NasikoCardState extends State<NasikoCard> {
                   ),
                   child: Text(
                     widget.errorDetails!,
-                    style: typography.bodyTertiary.copyWith(
+                    style: typography.bodyPrimary.copyWith(
                       color: colors.foregroundConstantWhite,
                     ),
                   ),
@@ -328,7 +328,8 @@ class _NasikoCardState extends State<NasikoCard> {
           child: Stack(
             children: [
               AnimatedContainer(
-                duration: const Duration(milliseconds: 150),
+                duration: context.motion.hover,
+                curve: context.motion.enter,
                 padding: EdgeInsets.all(spacing.s20),
                 decoration: BoxDecoration(
                   color: settingUpGradient == null
@@ -430,7 +431,7 @@ class _NasikoCardState extends State<NasikoCard> {
               if (widget.version != null)
                 Text(
                   widget.version!,
-                  style: typography.bodyTertiary.copyWith(
+                  style: typography.bodyPrimary.copyWith(
                     color: _isMuted
                         ? colors.foregroundDisabled
                         : colors.foregroundPrimary,
@@ -512,7 +513,7 @@ class _NasikoCardState extends State<NasikoCard> {
     final subtleColor = _isMuted
         ? colors.foregroundDisabled
         : colors.foregroundSecondary;
-    final descriptionStyle = typography.bodyTertiary.copyWith(
+    final descriptionStyle = typography.bodySecondary.copyWith(
       color: subtleColor,
     );
     final descriptionHeight =
@@ -527,7 +528,7 @@ class _NasikoCardState extends State<NasikoCard> {
             widget.subtitle!,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: typography.bodyTertiaryBold.copyWith(color: contentColor),
+            style: typography.bodyPrimaryBold.copyWith(color: contentColor),
           ),
         ],
         if (widget.tags.isNotEmpty) ...[
@@ -552,12 +553,12 @@ class _NasikoCardState extends State<NasikoCard> {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             text: TextSpan(
-              style: typography.bodyTertiary.copyWith(color: subtleColor),
+              style: typography.bodyPrimary.copyWith(color: subtleColor),
               children: [
                 const TextSpan(text: 'Author : '),
                 TextSpan(
                   text: widget.author!,
-                  style: typography.bodyTertiaryBold.copyWith(
+                  style: typography.bodyPrimaryBold.copyWith(
                     color: subtleColor,
                   ),
                 ),
@@ -576,7 +577,7 @@ class _NasikoCardState extends State<NasikoCard> {
     final spacing = context.spacing;
     final typography = context.typography;
 
-    final descriptionStyle = typography.bodyTertiary;
+    final descriptionStyle = typography.bodyPrimary;
     final descriptionHeight =
         (descriptionStyle.height ?? 1.2) * descriptionStyle.fontSize! * 2;
 
@@ -630,7 +631,7 @@ class _NasikoCardState extends State<NasikoCard> {
     final spacing = context.spacing;
     final typography = context.typography;
 
-    final descriptionStyle = typography.bodyTertiary.copyWith(
+    final descriptionStyle = typography.bodyPrimary.copyWith(
       color: colors.foregroundSecondary,
     );
     final descriptionHeight =
@@ -692,7 +693,7 @@ class _NasikoCardState extends State<NasikoCard> {
     final tags = widget.tags;
     if (tags.isEmpty) return [];
 
-    final style = context.typography.bodyTertiary;
+    final style = context.typography.bodyPrimary;
     final gap = context.spacing.s8;
     final chipHPad = context.spacing.s12 * 2 + 2.0;
     final iconWidth = 12 + context.spacing.s4;

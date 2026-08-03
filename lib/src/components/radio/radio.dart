@@ -66,15 +66,50 @@ class _NasikoRadioState<T> extends State<NasikoRadio<T>> {
     final colors = context.colors;
     final borderWidths = context.borderWidth;
     final iconSizes = context.iconSize;
+    final motion = context.motion;
 
     // Size expands to 24px when focused, otherwise stays at 20px
     final size = _isFocused ? iconSizes.m : iconSizes.s;
+
+    // Main 20px ring color
+    // (priority order: disabled > focused > hovering > default).
+    final Color ringColor;
+    if (_isDisabled) {
+      // Disabled: Light gray border
+      ringColor = colors.borderDisabled;
+    } else if (_isFocused) {
+      // Focused: Light gray 20px ring (brand 24px ring drawn separately)
+      ringColor = colors.borderPrimary;
+    } else if (_isHovering) {
+      // Hover: Dark brand color outer ring
+      ringColor = colors.backgroundBrandHover;
+    } else {
+      // Default: Light gray outer ring
+      ringColor = colors.borderPrimary;
+    }
+
+    // Inner dot color; the dot scales to 0 when unselected, so a color is
+    // always resolved (same priority order as the ring).
+    final Color dotColor;
+    if (_isDisabled) {
+      // Muted gray inner circle with transparency
+      dotColor = colors.backgroundOverlay.withValues(alpha: 0.4);
+    } else if (_isFocused) {
+      dotColor = colors.backgroundBrand;
+    } else if (_isHovering) {
+      dotColor = colors.backgroundBrandHover;
+    } else {
+      dotColor = colors.backgroundBrand;
+    }
 
     return MouseRegion(
       cursor: _isDisabled ? SystemMouseCursors.basic : SystemMouseCursors.click,
       onEnter: _isDisabled ? null : (_) => setState(() => _isHovering = true),
       onExit: _isDisabled ? null : (_) => setState(() => _isHovering = false),
       child: GestureDetector(
+        // Keep the full (square) bounds tappable, matching the previous
+        // CustomPaint hit area.
+        behavior: HitTestBehavior.opaque,
         onTapDown: _isDisabled
             ? null
             : (_) => setState(() => _isFocused = true),
@@ -88,130 +123,63 @@ class _NasikoRadioState<T> extends State<NasikoRadio<T>> {
             ? null
             : () => setState(() => _isFocused = false),
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
+          duration: motion.resolve(context, motion.fast),
+          curve: motion.move,
           width: size,
           height: size,
-          child: CustomPaint(
-            painter: _RadioPainter(
-              isSelected: _isSelected,
-              isDisabled: _isDisabled,
-              isHovering: _isHovering,
-              isFocused: _isFocused,
-              colors: colors,
-              borderWidths: borderWidths,
-            ),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              // Brand focus ring at the box edge (24px when focused/pressed).
+              Positioned.fill(
+                child: AnimatedContainer(
+                  duration: motion.resolve(context, motion.pressed),
+                  curve: motion.enter,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: _isFocused && !_isDisabled
+                          ? colors.backgroundBrand
+                          : Colors.transparent,
+                      width: borderWidths.w1,
+                    ),
+                  ),
+                ),
+              ),
+              // Main ring (20px diameter) + disabled background fill.
+              AnimatedContainer(
+                duration: motion.resolve(context, motion.hover),
+                curve: motion.enter,
+                width: iconSizes.s, // 20px
+                height: iconSizes.s,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: _isDisabled
+                      ? colors.backgroundDisabled
+                      : Colors.transparent,
+                  border: Border.all(color: ringColor, width: borderWidths.w1),
+                ),
+              ),
+              // Inner filled dot (12px diameter) — scales in on selection.
+              AnimatedScale(
+                scale: _isSelected ? 1.0 : 0.0,
+                duration: motion.resolve(context, motion.fast),
+                curve: motion.enter,
+                child: AnimatedContainer(
+                  duration: motion.resolve(context, motion.hover),
+                  curve: motion.enter,
+                  width: 12.0, // 12px diameter
+                  height: 12.0,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: dotColor,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
-  }
-}
-
-/// Custom painter for rendering the radio button with state-based styling.
-class _RadioPainter extends CustomPainter {
-  const _RadioPainter({
-    required this.isSelected,
-    required this.isDisabled,
-    required this.isHovering,
-    required this.isFocused,
-    required this.colors,
-    required this.borderWidths,
-  });
-
-  /// Whether the radio button is currently selected.
-  final bool isSelected;
-
-  /// Whether the radio button is disabled.
-  final bool isDisabled;
-
-  /// Whether the mouse is hovering over the radio button.
-  final bool isHovering;
-
-  /// Whether the radio button is currently focused/pressed.
-  final bool isFocused;
-
-  /// Color theme for the radio button.
-  final NasikoColorTheme colors;
-
-  /// Border widths for drawing strokes.
-  final NasikoBorderWidthTheme borderWidths;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final baseRadius = 10.0; // 20px diameter
-    final innerRadius = 6.0; // 12px diameter (half of 24px focused size)
-
-    // Determine colors based on current state (priority order: disabled > focused > hovering > default)
-    Color outerRingColor;
-    Color? innerCircleColor;
-
-    if (isDisabled) {
-      // Disabled: Light gray border
-      outerRingColor = colors.borderDisabled;
-      if (isSelected) {
-        // Muted gray inner circle with transparency
-        innerCircleColor = colors.backgroundOverlay.withValues(alpha: 0.4);
-      }
-    } else if (isFocused) {
-      // Focused: Light gray 20px ring, brand color 24px ring (drawn separately)
-      outerRingColor = colors.borderPrimary;
-      if (isSelected) {
-        innerCircleColor = colors.backgroundBrand;
-      }
-    } else if (isHovering) {
-      // Hover: Dark brand color outer ring
-      outerRingColor = colors.backgroundBrandHover;
-      if (isSelected) {
-        innerCircleColor = colors.backgroundBrandHover;
-      }
-    } else {
-      // Default: Light gray outer ring
-      outerRingColor = colors.borderPrimary;
-      if (isSelected) {
-        innerCircleColor = colors.backgroundBrand;
-      }
-    }
-
-    // Step 1: Draw filled background for disabled state
-    if (isDisabled) {
-      final bgPaint = Paint()
-        ..color = colors.backgroundDisabled
-        ..style = PaintingStyle.fill;
-      canvas.drawCircle(center, baseRadius, bgPaint);
-    }
-
-    // Step 2: Draw outer ring for focused state (24px diameter, brand color)
-    if (isFocused) {
-      final outerPaint = Paint()
-        ..color = colors.backgroundBrand
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = borderWidths.w1;
-      canvas.drawCircle(center, 12.0 - borderWidths.w1 / 2, outerPaint);
-    }
-
-    // Step 3: Draw main ring (20px diameter, color varies by state)
-    final mainPaint = Paint()
-      ..color = outerRingColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = borderWidths.w1;
-    canvas.drawCircle(center, baseRadius - borderWidths.w1 / 2, mainPaint);
-
-    // Step 4: Draw inner filled circle when selected (12px diameter)
-    if (innerCircleColor != null) {
-      final innerPaint = Paint()
-        ..color = innerCircleColor
-        ..style = PaintingStyle.fill;
-      canvas.drawCircle(center, innerRadius, innerPaint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(_RadioPainter oldDelegate) {
-    // Repaint when any state changes
-    return oldDelegate.isSelected != isSelected ||
-        oldDelegate.isDisabled != isDisabled ||
-        oldDelegate.isHovering != isHovering ||
-        oldDelegate.isFocused != isFocused;
   }
 }

@@ -10,6 +10,8 @@ class NasikoNavigationSection {
     this.isCollapsible = true,
     this.selectedChildId,
     this.onChildTap,
+    this.isLoading = false,
+    this.emptyMessage,
   });
 
   final String id;
@@ -19,6 +21,12 @@ class NasikoNavigationSection {
   final bool isCollapsible;
   final String? selectedChildId;
   final ValueChanged<String>? onChildTap;
+
+  /// When true the section shows a loading indicator instead of children.
+  final bool isLoading;
+
+  /// Message shown when [children] is empty and [isLoading] is false.
+  final String? emptyMessage;
 }
 
 class NasikoNavigationItem {

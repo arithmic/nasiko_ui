@@ -25,21 +25,24 @@ class NasikoSwitch extends StatelessWidget {
     final colors = context.colors;
     final borderWidths = context.borderWidth;
     final spacing = context.spacing;
-    // Define the custom style for the Switch
+    // Define the custom style for the Switch.
+    //
+    // NOTE: resolve against WidgetState.selected (not the raw `value` field)
+    // so Material's internal toggle animation can lerp the track color in
+    // sync with the thumb travel. Resolving on `value` made both the
+    // selected and unselected lookups return the same color, which snapped
+    // the track instantly instead of cross-fading.
     final materialStateProperty = WidgetStateProperty.resolveWith<Color>((
       Set<WidgetState> states,
     ) {
       // --- Disabled State (Overrides all other states) ---
       if (states.contains(WidgetState.disabled)) {
         // Disabled Track color (neutral/200 or similar subtle background)
-        if (value) {
-          return colors.backgroundDisabled; // Disabled ON state
-        }
-        return colors.backgroundDisabled; // Disabled OFF state
+        return colors.backgroundDisabled; // Same for ON and OFF
       }
 
       // --- Active State (Switch is ON) ---
-      if (value) {
+      if (states.contains(WidgetState.selected)) {
         // Active Track color (Brand color)
         return colors.backgroundBrand;
       }
@@ -78,8 +81,10 @@ class NasikoSwitch extends StatelessWidget {
             if (states.contains(WidgetState.disabled)) {
               return colors.borderDisabled;
             }
-            // Show primary border when unchecked
-            if (!value) {
+            // Show primary border when unchecked. Resolved via
+            // WidgetState.selected so the outline fades with the toggle
+            // animation instead of jumping.
+            if (!states.contains(WidgetState.selected)) {
               return colors.borderPrimary;
             }
             // No border when checked, let the brand color handle the track

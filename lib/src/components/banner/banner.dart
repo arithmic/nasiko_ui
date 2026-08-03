@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart'; // Import your main barrel file
 
+import '../internal/overlay_reveal.dart';
+
 /// Defines the layout orientation of the NasikoBanner.
 enum NasikoBannerType {
   /// A wide, horizontal layout for larger spaces.
@@ -52,11 +54,16 @@ class NasikoBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Select the correct build method based on the type
-    return switch (bannerType) {
-      NasikoBannerType.horizontal => _buildHorizontalLayout(context),
-      NasikoBannerType.vertical => _buildVerticalLayout(context),
-    };
+    // One-shot entrance (fade + slight slide) so appearing banners don't
+    // pop in. Paint-only: layout is identical once settled.
+    return NasikoOverlayReveal(
+      duration: context.motion.base,
+      // Select the correct build method based on the type
+      child: switch (bannerType) {
+        NasikoBannerType.horizontal => _buildHorizontalLayout(context),
+        NasikoBannerType.vertical => _buildVerticalLayout(context),
+      },
+    );
   }
 
   // --- Horizontal Layout Builder ---

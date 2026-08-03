@@ -19,13 +19,16 @@ class _NasikoNavigationListItemState extends State<NasikoNavigationListItem> {
     final spacing = context.spacing;
     final radii = context.radius;
     final colors = context.colors;
+    final motion = context.motion;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _hovered = true),
       onExit: (_) => setState(() => _hovered = false),
       child: GestureDetector(
         onTap: widget.item.onTap,
-        child: Container(
+        child: AnimatedContainer(
+          duration: motion.hover,
+          curve: motion.enter,
           margin: EdgeInsets.only(bottom: spacing.s4),
           padding: EdgeInsets.all(spacing.s8),
           decoration: BoxDecoration(

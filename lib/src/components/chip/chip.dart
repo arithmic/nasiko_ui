@@ -76,6 +76,7 @@ class NasikoChip extends StatelessWidget {
     final iconSizes = context.iconSize;
     final radii = context.radius;
     final borderWidths = context.borderWidth;
+    final motion = context.motion;
     // Determine colors based on variant and enabled state
     final Color backgroundColor;
     final Color hoverColor;
@@ -140,7 +141,9 @@ class NasikoChip extends StatelessWidget {
       iconSize,
     ].reduce((a, b) => a > b ? a : b);
 
-    Widget chipContent = Container(
+    Widget chipContent = AnimatedContainer(
+      duration: motion.hover,
+      curve: motion.enter,
       padding: EdgeInsets.symmetric(
         horizontal: spacing.s12,
         vertical: spacing.s8,
@@ -164,7 +167,17 @@ class NasikoChip extends StatelessWidget {
           children: [
             // Leading Icon
             if (leadingIcon != null) ...[
-              HugeIcon(icon: leadingIcon!, size: iconSize, color: iconColor),
+              AnimatedSwitcher(
+                duration: motion.fast,
+                switchInCurve: motion.enter,
+                switchOutCurve: motion.exit,
+                child: HugeIcon(
+                  key: ValueKey<HugeIconsType>(leadingIcon!),
+                  icon: leadingIcon!,
+                  size: iconSize,
+                  color: iconColor,
+                ),
+              ),
               SizedBox(width: spacing.s4),
             ],
             Text(label, style: labelStyle.copyWith(color: labelColor)),
@@ -251,7 +264,8 @@ class _InteractiveChipState extends State<_InteractiveChip> {
         },
         onTapCancel: () => setState(() => _isPressed = false),
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
+          duration: context.motion.hover,
+          curve: context.motion.enter,
           decoration: BoxDecoration(
             color: _currentColor,
             borderRadius: widget.borderRadius,

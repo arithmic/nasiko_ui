@@ -1,6 +1,7 @@
 // lib/src/components/input_fields/nasiko_input_field.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
@@ -25,6 +26,7 @@ class NasikoInputField extends StatelessWidget {
     this.isRequired = false,
     this.isReadOnly = false,
     this.maxLines = 1,
+    this.inputFormatters,
   });
 
   /// Controls the text being edited.
@@ -69,6 +71,10 @@ class NasikoInputField extends StatelessWidget {
 
 
   final int? maxLines;
+
+  /// Optional input formatters to restrict or transform user input,
+  /// e.g. `[FilteringTextInputFormatter.deny(RegExp(r'\s'))]`.
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   Widget build(BuildContext context) {
@@ -133,6 +139,7 @@ class NasikoInputField extends StatelessWidget {
           maxLines: maxLines,
           obscureText: obscureText,
           keyboardType: keyboardType,
+          inputFormatters: inputFormatters,
           cursorColor: colors.borderSecondary,
           style: textStyle.copyWith(color: colors.foregroundPrimary),
           decoration: InputDecoration(
@@ -195,7 +202,7 @@ class NasikoInputField extends StatelessWidget {
             errorBorder: errorBorder,
             disabledBorder: disabledBorder,
 
-            errorStyle: typography.bodyTertiary.copyWith(
+            errorStyle: typography.bodyPrimary.copyWith(
               color: colors.foregroundError,
             ),
           ),
@@ -207,7 +214,7 @@ class NasikoInputField extends StatelessWidget {
             padding: EdgeInsets.only(left: spacing.s4),
             child: Text(
               helperText!,
-              style: typography.bodyTertiary.copyWith(
+              style: typography.bodyPrimary.copyWith(
                 color: colors.foregroundSecondary,
               ),
             ),

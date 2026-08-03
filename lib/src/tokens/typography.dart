@@ -185,27 +185,27 @@ const String _interFontFamily = 'Inter';
 TextStyle get _baseTitlePrimary => TextStyle(
   fontFamily: _chivoMonoFontFamily,
   fontWeight: FontWeight.w500, // Medium
-  fontSize: 40.sp.clamp(32, 44),
-  // fontSize: 40,
-  height: 1.2,
-  letterSpacing: 0.16,
+  fontSize: 28.sp.clamp(22, 31),
+  // fontSize: 28,
+  height: 1.2857, // 36 / 28
+  letterSpacing: -0.04,
 );
 
 TextStyle get _baseTitleSecondary => TextStyle(
   fontFamily: _chivoMonoFontFamily,
   fontWeight: FontWeight.w500, // Medium
-  fontSize: 32.sp.clamp(28, 36),
-  // fontSize: 32,
-  height: 1.125,
-  letterSpacing: 0.16,
+  fontSize: 20.sp.clamp(18, 23),
+  // fontSize: 20,
+  height: 1.4, // 28 / 20
+  letterSpacing: -0.04,
 );
 
 TextStyle get _baseButtonPrimary => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w500, // Medium
-  fontSize: 20.sp.clamp(18, 22),
-  // fontSize: 20,
-  height: 1.2,
+  fontSize: 14.sp.clamp(13, 15),
+  // fontSize: 14,
+  height: 1.4286, // 20 / 14
   letterSpacing: 0.16,
 );
 
@@ -215,9 +215,9 @@ TextStyle get _baseButtonPrimaryBold =>
 TextStyle get _baseButtonSecondary => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w500, // Medium
-  fontSize: 16.sp.clamp(14, 18),
-  // fontSize: 16,
-  height: 1.25,
+  fontSize: 13.sp.clamp(11, 15),
+  // fontSize: 13,
+  height: 1.3846, // 18 / 13
   letterSpacing: 0.16,
 );
 
@@ -227,9 +227,9 @@ TextStyle get _baseButtonSecondaryBold =>
 TextStyle get _baseBodyPrimary => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w400, // Regular
-  fontSize: 20.sp.clamp(18, 22),
-  // fontSize: 20,
-  height: 1.2,
+  fontSize: 14.sp.clamp(13, 15),
+  // fontSize: 14,
+  height: 1.4286, // 20 / 14
 );
 
 TextStyle get _baseBodyPrimaryBold =>
@@ -238,9 +238,9 @@ TextStyle get _baseBodyPrimaryBold =>
 TextStyle get _baseBodySecondary => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w400, // Regular
-  fontSize: 16.sp.clamp(14, 18),
-  // fontSize: 16,
-  height: 1.25,
+  fontSize: 13.sp.clamp(11, 15),
+  // fontSize: 13,
+  height: 1.3846, // 18 / 13
 );
 
 TextStyle get _baseBodySecondaryBold =>
@@ -251,7 +251,7 @@ TextStyle get _baseBodyTertiary => TextStyle(
   fontWeight: FontWeight.w400, // Regular
   fontSize: 12.sp.clamp(10, 14),
   // fontSize: 12,
-  height: 1.333,
+  height: 1.333, // 16 / 12
 );
 
 TextStyle get _baseBodyTertiaryBold =>
@@ -260,9 +260,9 @@ TextStyle get _baseBodyTertiaryBold =>
 TextStyle get _baseLinkPrimary => TextStyle(
   fontFamily: _interFontFamily,
   fontWeight: FontWeight.w400, // Regular
-  fontSize: 16.sp.clamp(14, 18),
-  // fontSize: 16,
-  height: 1.25,
+  fontSize: 14.sp.clamp(12, 16),
+  // fontSize: 14,
+  height: 1.4286, // 20 / 14
   decoration: TextDecoration.underline,
 );
 
@@ -272,17 +272,16 @@ TextStyle get _baseCaption => TextStyle(
   fontWeight: FontWeight.w400,
   fontSize: 12.sp.clamp(10, 14),
   // fontSize: 12,
-  height: 1.333,
-  letterSpacing: -0.04,
+  height: 1.333, // 16 / 12
+  letterSpacing: 0.04,
 );
 
 TextStyle get _baseCode => TextStyle(
-  fontFamily: _chivoMonoFontFamily,
+  fontFamily: _interFontFamily,
   fontWeight: FontWeight.w400, // Regular
-  fontSize: 16.sp.clamp(14, 18),
-  // fontSize: 16,
-  height: 1.25,
-  letterSpacing: 0,
+  fontSize: 13.sp.clamp(11, 15),
+  // fontSize: 13,
+  height: 1.3846, // 18 / 13
 );
 
 // --- Concrete Default Instance for your Design System ---

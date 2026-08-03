@@ -29,12 +29,26 @@ class _NasikoCheckboxState extends State<NasikoCheckbox> {
   bool _isHovering = false;
   bool _isFocused = false;
 
+  /// Whether the latest visual change came from hover/focus rather than a
+  /// check-state change. Hover polish runs at `motion.hover`, check toggles
+  /// at `motion.fast`.
+  bool _interactionDriven = false;
+
+  @override
+  void didUpdateWidget(NasikoCheckbox oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isChecked != widget.isChecked) {
+      _interactionDriven = false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
     final radii = context.radius;
     final borderWidths = context.borderWidth;
     final iconSizes = context.iconSize;
+    final motion = context.motion;
 
     final bool isDisabled = widget.onChanged == null;
     final bool isInteracting = _isHovering || _isFocused;
@@ -63,6 +77,7 @@ class _NasikoCheckboxState extends State<NasikoCheckbox> {
 
       checkIcon = Icon(
         Icons.check,
+        key: const ValueKey('checked'),
         size: iconSizes.s, // 20px
         color: colors.foregroundOnAction, // White
       );
@@ -80,16 +95,25 @@ class _NasikoCheckboxState extends State<NasikoCheckbox> {
     }
 
     return FocusableActionDetector(
-      onFocusChange: (isFocused) => setState(() => _isFocused = isFocused),
-      onShowHoverHighlight: (isHovering) =>
-          setState(() => _isHovering = isHovering),
+      onFocusChange: (isFocused) => setState(() {
+        _interactionDriven = true;
+        _isFocused = isFocused;
+      }),
+      onShowHoverHighlight: (isHovering) => setState(() {
+        _interactionDriven = true;
+        _isHovering = isHovering;
+      }),
       child: InkWell(
         onTap: isDisabled ? null : () => widget.onChanged!(!widget.isChecked),
         borderRadius: BorderRadius.circular(radii.r6),
         splashColor: colors.backgroundBrandSubtle,
         highlightColor: colors.backgroundBrandSubtle,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
+          duration: motion.resolve(
+            context,
+            _interactionDriven ? motion.hover : motion.fast,
+          ),
+          curve: motion.enter,
           width: iconSizes.m, // 24px
           height: iconSizes.m, // 24px
           decoration: BoxDecoration(
@@ -97,7 +121,22 @@ class _NasikoCheckboxState extends State<NasikoCheckbox> {
             border: border,
             borderRadius: BorderRadius.circular(radii.r6), // 6px radius
           ),
-          child: checkIcon,
+          // The check mark scales up (0.6 -> 1.0) and fades in on check,
+          // reversing on uncheck.
+          child: AnimatedSwitcher(
+            duration: motion.resolve(context, motion.fast),
+            switchInCurve: motion.enter,
+            switchOutCurve: motion.exit,
+            transitionBuilder: (child, animation) => FadeTransition(
+              opacity: animation,
+              child: ScaleTransition(
+                scale: Tween<double>(begin: 0.6, end: 1.0).animate(animation),
+                child: child,
+              ),
+            ),
+            child: checkIcon ??
+                const SizedBox.shrink(key: ValueKey('unchecked')),
+          ),
         ),
       ),
     );

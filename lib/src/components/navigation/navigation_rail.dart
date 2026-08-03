@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
+import '../buttons/button_layout.dart';
+
 class NasikoNavigationRail extends StatelessWidget {
   const NasikoNavigationRail({
     super.key,
@@ -9,7 +11,7 @@ class NasikoNavigationRail extends StatelessWidget {
     required this.selectedId,
     required this.onSelect,
     this.isExpanded = false,
-    this.widthCollapsed = 36,
+    this.widthCollapsed,
     this.widthExpanded = 170,
     this.footerItems,
     this.footer,
@@ -22,16 +24,25 @@ class NasikoNavigationRail extends StatelessWidget {
   final Widget? footer;
   final bool isExpanded;
   final double widthExpanded;
-  final double widthCollapsed;
+
+  /// Width of the rail when collapsed. Defaults to the large icon button
+  /// size, matching the collapsed [_RailItem]s.
+  final double? widthCollapsed;
 
   @override
   Widget build(BuildContext context) {
     final spacing = context.spacing;
+    final motion = context.motion;
+    final largeIconLayout = iconButtonLayout(context, NasikoButtonSize.large);
 
-    final width = isExpanded ? widthExpanded : widthCollapsed;
+    final width = isExpanded
+        ? widthExpanded
+        : (widthCollapsed ?? largeIconLayout.minHeight);
 
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
+      // Matches the consumer-side sidebar rail resize (250ms easeInOutCubic).
+      duration: motion.resolve(context, motion.panel),
+      curve: motion.move,
       width: width,
       padding: EdgeInsets.only(bottom: spacing.s8),
       child: Column(
@@ -93,16 +104,17 @@ class _RailItemState extends State<_RailItem> {
     final colors = context.colors;
     final spacing = context.spacing;
     final radii = context.radius;
-    final iconSizes = context.iconSize;
     final borderWidths = context.borderWidth;
     final typography = context.typography;
+    final motion = context.motion;
     final isDisabled = widget.item.isDisabled;
+    final layout = iconButtonLayout(context, NasikoButtonSize.large);
 
     final bgColor = widget.isSelected
         ? colors.backgroundSecondaryBrand
         : Colors.transparent;
 
-    final border = !isDisabled && _hovered 
+    final border = !isDisabled && _hovered
         ? colors.borderSecondary
         : colors.borderPrimary;
 
@@ -114,9 +126,14 @@ class _RailItemState extends State<_RailItem> {
           : SystemMouseCursors.click,
       child: GestureDetector(
         onTap: widget.item.isDisabled ? null : widget.onTap,
-        child: Container(
+        child: AnimatedContainer(
+          duration: motion.hover,
+          curve: motion.enter,
           margin: EdgeInsets.symmetric(vertical: spacing.s4),
-          padding: EdgeInsets.all(spacing.s8),
+          // Container adds the border's own width as extra padding on top of
+          // this (even for the default inside-aligned stroke), so subtract it
+          // here to keep the total inset at layout.padding.
+          padding: EdgeInsets.all(layout.padding.left - borderWidths.w1),
           decoration: BoxDecoration(
             color: bgColor,
             borderRadius: BorderRadius.circular(radii.r8),
@@ -127,7 +144,7 @@ class _RailItemState extends State<_RailItem> {
               HugeIcon(
                 strokeWidth: widget.isExpanded || isDisabled ? 1.5 : 1.8,
                 icon: widget.item.icon,
-                size: iconSizes.s,
+                size: layout.iconSize,
                 color: isDisabled
                     ? colors.foregroundDisabled
                     : widget.isSelected
@@ -137,20 +154,29 @@ class _RailItemState extends State<_RailItem> {
               if (widget.isExpanded) ...[
                 SizedBox(width: spacing.s8),
                 Expanded(
-                  child: Text(
-                    widget.item.label,
-                    style:
-                        (widget.isSelected
-                                ? typography.buttonSecondary
-                                : typography.bodySecondary)
-                            .copyWith(
-                              fontWeight: widget.isSelected
-                                  ? FontWeight.w500
-                                  : FontWeight.w400,
-                              color: isDisabled
-                                  ? colors.foregroundDisabled
-                                  : colors.foregroundPrimary,
-                            ),
+                  // Fade the label in as the rail expands — opacity only, no
+                  // slide, so the text never fights the width animation.
+                  child: TweenAnimationBuilder<double>(
+                    tween: Tween<double>(begin: 0, end: 1),
+                    duration: motion.resolve(context, motion.fast),
+                    curve: motion.enter,
+                    child: Text(
+                      widget.item.label,
+                      style:
+                          (widget.isSelected
+                                  ? typography.buttonSecondary
+                                  : typography.bodySecondary)
+                              .copyWith(
+                                fontWeight: widget.isSelected
+                                    ? FontWeight.w500
+                                    : FontWeight.w400,
+                                color: isDisabled
+                                    ? colors.foregroundDisabled
+                                    : colors.foregroundPrimary,
+                              ),
+                    ),
+                    builder: (context, opacity, child) =>
+                        Opacity(opacity: opacity, child: child),
                   ),
                 ),
               ],

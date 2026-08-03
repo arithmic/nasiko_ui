@@ -3,6 +3,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
 import 'button_layout.dart';
+import 'button_press_scale.dart';
 
 /// The secondary call-to-action button for Nasiko UI.
 ///
@@ -52,6 +53,7 @@ class SecondaryButton extends StatelessWidget {
       padding: WidgetStateProperty.all(layout.padding),
       fixedSize: WidgetStateProperty.all(Size.fromHeight(layout.minHeight)),
       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      animationDuration: context.motion.fast,
       textStyle: WidgetStateProperty.all(textStyle),
       elevation: WidgetStateProperty.all(0),
       shadowColor: WidgetStateProperty.all(Colors.transparent),
@@ -110,7 +112,7 @@ class SecondaryButton extends StatelessWidget {
       ),
     );
 
-    return OutlinedButton(
+    final Widget button = OutlinedButton(
       onPressed: onPressed,
       style: style,
       child: Row(
@@ -133,5 +135,7 @@ class SecondaryButton extends StatelessWidget {
         ],
       ),
     );
+
+    return ButtonPressScale(enabled: onPressed != null, child: button);
   }
 }
