@@ -87,37 +87,52 @@ class NasikoBreadcrumb extends StatelessWidget {
 }
 
 /// An internal widget for a single breadcrumb item.
-class _BreadcrumbItem extends StatelessWidget {
+class _BreadcrumbItem extends StatefulWidget {
   const _BreadcrumbItem({required this.label, this.onTap});
 
   final String label;
   final VoidCallback? onTap;
 
   @override
+  State<_BreadcrumbItem> createState() => _BreadcrumbItemState();
+}
+
+class _BreadcrumbItemState extends State<_BreadcrumbItem> {
+  bool _isHovered = false;
+
+  @override
   Widget build(BuildContext context) {
     final colors = context.colors;
     final typography = context.typography;
+    final motion = context.motion;
 
-    final bool isTappable = onTap != null;
-
-    final text = Text(
-      label,
-      style: typography.bodySecondary.copyWith(
-        color: isTappable
-            ? colors
-                  .foregroundPrimary // neutral/700
-            : colors.foregroundSecondary, // neutral/500 for the last item
-        fontWeight: isTappable ? FontWeight.w400 : FontWeight.w600,
-      ),
-    );
+    final bool isTappable = widget.onTap != null;
 
     if (!isTappable) {
-      return text;
+      return Text(
+        widget.label,
+        style: typography.bodySecondary.copyWith(
+          color: colors.foregroundSecondary, // neutral/500 for the last item
+          fontWeight: FontWeight.w600,
+        ),
+      );
     }
+
+    final baseStyle = typography.bodySecondary.copyWith(
+      color: colors.foregroundPrimary, // neutral/700
+      fontWeight: FontWeight.w400,
+    );
+    // Subtle hover feedback: an underline in the existing foreground color.
+    final hoverStyle = baseStyle.copyWith(
+      decoration: TextDecoration.underline,
+      decorationColor: colors.foregroundPrimary,
+      decorationThickness: context.borderWidth.w1,
+    );
 
     // Wrap with InkWell to make it tappable
     return InkWell(
-      onTap: onTap,
+      onTap: widget.onTap,
+      onHover: (hovered) => setState(() => _isHovered = hovered),
       borderRadius: BorderRadius.circular(context.radius.r4),
       splashColor: context.colors.backgroundBrandSubtle.withValues(alpha: 0.5),
       highlightColor: context.colors.backgroundBrandSubtle.withValues(
@@ -128,7 +143,12 @@ class _BreadcrumbItem extends StatelessWidget {
           horizontal: context.spacing.s4,
           vertical: context.spacing.s2,
         ),
-        child: text,
+        child: AnimatedDefaultTextStyle(
+          duration: motion.hover,
+          curve: motion.enter,
+          style: _isHovered ? hoverStyle : baseStyle,
+          child: Text(widget.label),
+        ),
       ),
     );
   }

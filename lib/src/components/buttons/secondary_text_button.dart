@@ -5,6 +5,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
 import 'button_layout.dart';
+import 'button_press_scale.dart';
 
 /// A secondary text button for Nasiko UI with optional icons.
 ///
@@ -41,12 +42,13 @@ class SecondaryTextButton extends StatelessWidget {
     final borderWidth = context.borderWidth;
     final layout = textButtonLayout(context);
 
-    return TextButton(
+    final Widget button = TextButton(
       onPressed: onPressed,
       style: ButtonStyle(
         padding: WidgetStateProperty.all(layout.padding),
         fixedSize: WidgetStateProperty.all(Size.fromHeight(layout.minHeight)),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        animationDuration: context.motion.fast,
         elevation: WidgetStateProperty.all(0),
         shadowColor: WidgetStateProperty.all(Colors.transparent),
         overlayColor: WidgetStateProperty.all(Colors.transparent),
@@ -112,5 +114,7 @@ class SecondaryTextButton extends StatelessWidget {
         ],
       ),
     );
+
+    return ButtonPressScale(enabled: onPressed != null, child: button);
   }
 }

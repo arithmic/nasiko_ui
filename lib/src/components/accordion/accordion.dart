@@ -129,6 +129,7 @@ class _NasikoAccordionItemWidget extends StatelessWidget {
     final spacing = context.spacing;
     final typography = context.typography;
     final iconSizes = context.iconSize;
+    final motion = context.motion;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -151,23 +152,29 @@ class _NasikoAccordionItemWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                // Icon
-                Icon(
-                  isExpanded
-                      ? Icons.keyboard_arrow_up
-                      : Icons.keyboard_arrow_down,
-                  color: colors.foregroundSecondary,
-                  size: iconSizes.m, // 24px
+                // Icon — a single chevron rotating 180° in sync with the
+                // expansion (down when collapsed, up when expanded).
+                AnimatedRotation(
+                  turns: isExpanded ? 0.5 : 0.0,
+                  duration: motion.resolve(context, motion.base),
+                  curve: motion.move,
+                  child: Icon(
+                    Icons.keyboard_arrow_down,
+                    color: colors.foregroundSecondary,
+                    size: iconSizes.m, // 24px
+                  ),
                 ),
               ],
             ),
           ),
         ),
 
-        // 2. The expandable content area
+        // 2. The expandable content area.
+        // AnimatedSize clips (Clip.hardEdge by default), so content cannot
+        // overflow while the height animates.
         AnimatedSize(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeInOut,
+          duration: motion.resolve(context, motion.base),
+          curve: motion.move,
           alignment: Alignment.topCenter,
           child: SizedBox(
             width: double.infinity,

@@ -40,10 +40,29 @@ Future<T?> showNasikoModal<T>({
   Color? backgroundColor,
   NasikoModalTitleType titleType = NasikoModalTitleType.normal,
 }) {
-  return showDialog<T>(
+  final motion = context.motion;
+
+  return showGeneralDialog<T>(
     context: context,
     barrierDismissible: isDismissible,
-    builder: (BuildContext dialogContext) {
+    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+    barrierColor: Colors.black54,
+    transitionDuration: motion.resolve(context, motion.base),
+    transitionBuilder: (context, animation, secondaryAnimation, child) {
+      final curved = CurvedAnimation(
+        parent: animation,
+        curve: motion.enter,
+        reverseCurve: motion.exit,
+      );
+      return FadeTransition(
+        opacity: curved,
+        child: ScaleTransition(
+          scale: Tween<double>(begin: 0.96, end: 1.0).animate(curved),
+          child: child,
+        ),
+      );
+    },
+    pageBuilder: (dialogContext, animation, secondaryAnimation) {
       return NasikoModal(
         title: title,
         content: content,

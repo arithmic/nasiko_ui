@@ -3,6 +3,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
 import 'button_layout.dart';
+import 'button_press_scale.dart';
 
 /// A primary icon button for Nasiko UI.
 ///
@@ -41,6 +42,7 @@ class PrimaryIconButton extends StatelessWidget {
       minimumSize: WidgetStateProperty.all(Size.zero),
       fixedSize: WidgetStateProperty.all(Size.square(layout.minHeight)),
       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      animationDuration: context.motion.fast,
       elevation: WidgetStateProperty.all(0),
       shadowColor: WidgetStateProperty.all(Colors.transparent),
 
@@ -98,7 +100,7 @@ class PrimaryIconButton extends StatelessWidget {
       overlayColor: WidgetStatePropertyAll(Colors.transparent),
     );
 
-    return IconButton(
+    final Widget button = IconButton(
       onPressed: onPressed,
       style: style,
       icon: (isLoading ?? false)
@@ -109,5 +111,7 @@ class PrimaryIconButton extends StatelessWidget {
             )
           : HugeIcon(icon: icon, size: layout.iconSize),
     );
+
+    return ButtonPressScale(enabled: onPressed != null, child: button);
   }
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
+import '../internal/overlay_reveal.dart';
+
 class NasikoPopupMenuItemData {
   const NasikoPopupMenuItemData({
     required this.label,
@@ -139,9 +141,15 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
               bottom: bottom,
               left: left,
               right: right,
-              child: Material(
-                color: Colors.transparent,
-                child: Theme(data: themeData, child: surface),
+              // Entrance only — removal via OverlayEntry.remove() stays
+              // instant, matching the subtle & fast motion personality.
+              child: NasikoOverlayReveal(
+                // Slide in the direction the menu opens.
+                slideFrom: Offset(0, openUpward ? 4 : -4),
+                child: Material(
+                  color: Colors.transparent,
+                  child: Theme(data: themeData, child: surface),
+                ),
               ),
             ),
           ],
@@ -369,7 +377,9 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: widget.onTap,
-          child: Container(
+          child: AnimatedContainer(
+            duration: context.motion.hover,
+            curve: context.motion.enter,
             decoration: BoxDecoration(
               color: isHighlighted
                   ? colors.foregroundSecondary

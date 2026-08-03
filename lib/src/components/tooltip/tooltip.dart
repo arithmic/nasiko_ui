@@ -6,6 +6,9 @@ import 'package:nasiko_ui/nasiko_ui.dart';
 /// r8 rounded corners.
 ///
 /// Shows on hover (desktop/web) or long-press (touch) after [waitDuration].
+/// Fades in via [Tooltip]'s built-in 150ms fade — matching the design
+/// system's `motion.fast` token (the framework does not expose the fade
+/// duration publicly).
 ///
 /// ```dart
 /// NasikoTooltip(
@@ -19,7 +22,7 @@ class NasikoTooltip extends StatelessWidget {
     required this.message,
     required this.child,
     this.preferBelow = true,
-    this.waitDuration = const Duration(milliseconds: 200),
+    this.waitDuration = const Duration(milliseconds: 300),
   });
 
   final String message;

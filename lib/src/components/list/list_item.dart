@@ -70,6 +70,7 @@ class _NasikoListItemState extends State<NasikoListItem> {
     final typography = context.typography;
     final borderWidths = context.borderWidth;
     final iconSizes = context.iconSize;
+    final motion = context.motion;
 
     // --- Determine Styles based on State ---
     Color backgroundColor = Colors.transparent;
@@ -89,7 +90,9 @@ class _NasikoListItemState extends State<NasikoListItem> {
       onTap: widget.isDisabled ? null : widget.onTap,
       onHover: (val) => setState(() => _isHovering = val),
       borderRadius: BorderRadius.circular(radii.r4),
-      child: Container(
+      child: AnimatedContainer(
+        duration: motion.hover,
+        curve: motion.enter,
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.circular(radii.r4),
@@ -115,14 +118,20 @@ class _NasikoListItemState extends State<NasikoListItem> {
                   InkWell(
                     onTap: widget.isDisabled ? null : widget.onToggleExpand,
                     borderRadius: BorderRadius.circular(radii.r4),
-                    child: Icon(
-                      widget.isExpanded
-                          ? Icons.keyboard_arrow_down_rounded
-                          : Icons.keyboard_arrow_right_rounded,
-                      size: iconSizes.s,
-                      color: widget.isDisabled
-                          ? colors.foregroundDisabled
-                          : colors.foregroundIconPrimary,
+                    // Rotating the down chevron by -90deg reproduces the
+                    // right chevron, so the toggle animates instead of
+                    // swapping glyphs.
+                    child: AnimatedRotation(
+                      turns: widget.isExpanded ? 0 : -0.25,
+                      duration: motion.resolve(context, motion.fast),
+                      curve: motion.move,
+                      child: Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        size: iconSizes.s,
+                        color: widget.isDisabled
+                            ? colors.foregroundDisabled
+                            : colors.foregroundIconPrimary,
+                      ),
                     ),
                   )
                 else
@@ -181,7 +190,9 @@ class _NasikoListItemState extends State<NasikoListItem> {
 
                 // 7. Badge (e.g., 1.85s)
                 if (widget.badgeLabel != null) ...[
-                  Container(
+                  AnimatedContainer(
+                    duration: motion.hover,
+                    curve: motion.enter,
                     padding: EdgeInsets.symmetric(
                       horizontal: spacing.s8,
                       vertical: spacing.s4,

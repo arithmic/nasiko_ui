@@ -328,7 +328,8 @@ class _NasikoCardState extends State<NasikoCard> {
           child: Stack(
             children: [
               AnimatedContainer(
-                duration: const Duration(milliseconds: 150),
+                duration: context.motion.hover,
+                curve: context.motion.enter,
                 padding: EdgeInsets.all(spacing.s20),
                 decoration: BoxDecoration(
                   color: settingUpGradient == null
