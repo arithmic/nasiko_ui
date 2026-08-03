@@ -17,6 +17,8 @@ class NasikoToastService {
     bool showCancel = true,
     bool inProgress = false,
   }) {
+    final motion = context.motion;
+
     // 1. Ensure any previous toast is dismissed immediately
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
@@ -50,6 +52,13 @@ class NasikoToastService {
           left: context.spacing.s24,
           bottom: context.spacing.s48,
         ),
+      ),
+      // Requires Flutter >= 3.22 (consumer lockfile pins >= 3.44).
+      snackBarAnimationStyle: AnimationStyle(
+        duration: motion.resolve(context, motion.base),
+        reverseDuration: motion.resolve(context, motion.fast),
+        curve: motion.enter,
+        reverseCurve: motion.exit,
       ),
     );
   }

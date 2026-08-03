@@ -216,6 +216,7 @@ class _SectionState extends State<Section> {
     final typography = context.typography;
     final iconSizes = context.iconSize;
     final borderWidths = context.borderWidth;
+    final motion = context.motion;
 
     if (widget.isExpandable) {
       final bool hasSelectedChild = _hasSelectedChild();
@@ -260,7 +261,9 @@ class _SectionState extends State<Section> {
                     SizedBox(width: spacing.s8),
                     AnimatedRotation(
                       turns: _isExpanded ? 0.5 : 0,
-                      duration: const Duration(milliseconds: 200),
+                      // Keep the chevron in sync with the AnimatedSize below.
+                      duration: motion.resolve(context, motion.base),
+                      curve: motion.move,
                       child: Icon(
                         Icons.keyboard_arrow_down_rounded,
                         size: iconSizes.s,
@@ -276,50 +279,65 @@ class _SectionState extends State<Section> {
           ),
 
           // ── Expanded content ──────────────────────────────────────────
-          if (_isExpanded) ...[
-            SizedBox(height: spacing.s8),
-            if (widget.isLoading)
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: spacing.s12,
-                  vertical: spacing.s8,
-                ),
-                child: Text(
-                  'Loading...',
-                  style: typography.bodySecondary.copyWith(
-                    color: colors.foregroundSecondary,
+          // AnimatedSize grows/shrinks the content in sync with the chevron
+          // rotation above; the collapsed state renders a zero-size child.
+          AnimatedSize(
+            duration: motion.resolve(context, motion.base),
+            curve: motion.move,
+            alignment: Alignment.topCenter,
+            child: !_isExpanded
+                ? const SizedBox.shrink()
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SizedBox(height: spacing.s8),
+                      if (widget.isLoading)
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: spacing.s12,
+                            vertical: spacing.s8,
+                          ),
+                          child: Text(
+                            'Loading...',
+                            style: typography.bodySecondary.copyWith(
+                              color: colors.foregroundSecondary,
+                            ),
+                          ),
+                        )
+                      else if (widget.children == null ||
+                          widget.children!.isEmpty)
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: spacing.s12,
+                            vertical: spacing.s8,
+                          ),
+                          child: Text(
+                            widget.emptyMessage ?? '',
+                            style: typography.bodySecondary.copyWith(
+                              color: colors.foregroundSecondary,
+                            ),
+                          ),
+                        )
+                      else
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: widget.children!.map((child) {
+                            return _SectionChildItem(
+                              item: child,
+                              isSelected: _isChildSelected(child),
+                              onTap: () {
+                                child.onTap?.call();
+                                widget.onChildTap?.call(
+                                  child.id ?? child.label,
+                                );
+                              },
+                              isDisabled: widget.isDisabled,
+                            );
+                          }).toList(),
+                        ),
+                    ],
                   ),
-                ),
-              )
-            else if (widget.children == null || widget.children!.isEmpty)
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: spacing.s12,
-                  vertical: spacing.s8,
-                ),
-                child: Text(
-                  widget.emptyMessage ?? '',
-                  style: typography.bodySecondary.copyWith(
-                    color: colors.foregroundSecondary,
-                  ),
-                ),
-              )
-            else
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: widget.children!.map((child) {
-                  return _SectionChildItem(
-                    item: child,
-                    isSelected: _isChildSelected(child),
-                    onTap: () {
-                      child.onTap?.call();
-                      widget.onChildTap?.call(child.id ?? child.label);
-                    },
-                    isDisabled: widget.isDisabled,
-                  );
-                }).toList(),
-              ),
-          ],
+          ),
         ],
       );
     }
@@ -349,7 +367,8 @@ class _SectionState extends State<Section> {
       child: GestureDetector(
         onTap: _canInteract ? _toggleExpanded : null,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
+          duration: motion.hover,
+          curve: motion.enter,
           padding: EdgeInsets.symmetric(
             horizontal: spacing.s8,
             vertical: spacing.s12,
@@ -430,6 +449,7 @@ class _SectionChildItemState extends State<_SectionChildItem> {
     final radii = context.radius;
     final typography = context.typography;
     final borderWidths = context.borderWidth;
+    final motion = context.motion;
 
     Color backgroundColor;
     Color borderColor;
@@ -467,7 +487,8 @@ class _SectionChildItemState extends State<_SectionChildItem> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             AnimatedContainer(
-              duration: const Duration(milliseconds: 150),
+              duration: motion.hover,
+              curve: motion.enter,
               margin: EdgeInsets.only(bottom: spacing.s4),
               padding: EdgeInsets.symmetric(
                 horizontal: spacing.s12,
@@ -501,7 +522,9 @@ class _SectionChildItemState extends State<_SectionChildItem> {
                     ),
                   ),
                   if (showTrailing)
-                    Opacity(
+                    AnimatedOpacity(
+                      duration: motion.hover,
+                      curve: motion.enter,
                       opacity: (_isHovered || _isMenuOpen) ? 1.0 : 0.0,
                       child: Listener(
                         behavior: HitTestBehavior.opaque,

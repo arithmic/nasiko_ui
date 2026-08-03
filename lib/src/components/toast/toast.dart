@@ -91,25 +91,54 @@ class NasikoToast extends StatelessWidget {
               SizedBox(
                 width: iconSizes.m,
                 height: iconSizes.m,
-                child: inProgress == true
-                    ? CircularProgressIndicator(
-                        strokeWidth: context.borderWidth.w1,
-                        valueColor: AlwaysStoppedAnimation<Color>(iconColor),
-                      )
-                    : Icon(icon, size: iconSizes.m, color: iconColor),
+                // Cross-fade spinner <-> status icon when inProgress flips.
+                child: AnimatedSwitcher(
+                  duration: context.motion.resolve(context, context.motion.fast),
+                  switchInCurve: context.motion.enter,
+                  switchOutCurve: context.motion.exit,
+                  child: inProgress == true
+                      ? CircularProgressIndicator(
+                          key: const ValueKey<String>('toast-progress'),
+                          strokeWidth: context.borderWidth.w1,
+                          valueColor: AlwaysStoppedAnimation<Color>(iconColor),
+                        )
+                      : Icon(
+                          icon,
+                          key: const ValueKey<String>('toast-icon'),
+                          size: iconSizes.m,
+                          color: iconColor,
+                        ),
+                ),
               ),
               inProgress == true
                   ? SizedBox(width: spacing.s8)
                   : SizedBox(width: spacing.s4),
 
               Expanded(
-                child: Text(
-                  message,
-                  style: typography.bodySecondaryBold.copyWith(
-                    color: foregroundColor,
+                // Cross-fade when the message text is replaced in place
+                // (e.g. progress updates on an in-progress toast).
+                child: AnimatedSwitcher(
+                  duration: context.motion.resolve(context, context.motion.fast),
+                  switchInCurve: context.motion.enter,
+                  switchOutCurve: context.motion.exit,
+                  // Keep the text left-aligned (the default layoutBuilder
+                  // centers children, which would shift short messages).
+                  layoutBuilder: (currentChild, previousChildren) => Stack(
+                    alignment: Alignment.centerLeft,
+                    children: <Widget>[
+                      ...previousChildren,
+                      if (currentChild != null) currentChild,
+                    ],
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+                  child: Text(
+                    message,
+                    key: ValueKey<String>(message),
+                    style: typography.bodySecondaryBold.copyWith(
+                      color: foregroundColor,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
 

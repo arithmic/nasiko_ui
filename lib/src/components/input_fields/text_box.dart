@@ -128,6 +128,7 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
     final typography = context.typography;
     final radii = context.radius;
     final borderWidths = context.borderWidth;
+    final motion = context.motion;
 
     final borderColor = _isFocused
         ? colors.borderSecondary
@@ -149,7 +150,9 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
           FocusScope.of(context).requestFocus(_focusNode);
         }
       },
-      child: Container(
+      child: AnimatedContainer(
+        duration: motion.fast,
+        curve: motion.enter,
         padding: EdgeInsets.symmetric(
           horizontal: spacing.s16,
           vertical: spacing.s12,
