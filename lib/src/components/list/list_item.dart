@@ -193,10 +193,7 @@ class _NasikoListItemState extends State<NasikoListItem> {
                   AnimatedContainer(
                     duration: motion.hover,
                     curve: motion.enter,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: spacing.s8,
-                      vertical: spacing.s4,
-                    ),
+                    padding: EdgeInsets.all(spacing.s4),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(radii.r4),
                       border: Border.all(
@@ -223,7 +220,7 @@ class _NasikoListItemState extends State<NasikoListItem> {
                         ],
                         Text(
                           widget.badgeLabel!,
-                          style: typography.bodyPrimary.copyWith(
+                          style: typography.bodySecondary.copyWith(
                             color: widget.isDisabled
                                 ? colors.foregroundDisabled
                                 : colors.foregroundPrimary,
