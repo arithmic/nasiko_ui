@@ -99,8 +99,8 @@ class _NasikoListItemState extends State<NasikoListItem> {
           border: Border.all(color: borderColor, width: borderWidths.w1),
         ),
         padding: EdgeInsets.symmetric(
+          horizontal: spacing.s4,
           vertical: spacing.s8,
-          horizontal: spacing.s12,
         ),
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -191,9 +191,13 @@ class _NasikoListItemState extends State<NasikoListItem> {
                 // 7. Badge (e.g., 1.85s)
                 if (widget.badgeLabel != null) ...[
                   AnimatedContainer(
+                    width: 62,
                     duration: motion.hover,
                     curve: motion.enter,
-                    padding: EdgeInsets.all(spacing.s4),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: spacing.s4,
+                      vertical: spacing.s2,
+                    ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(radii.r4),
                       border: Border.all(
@@ -211,7 +215,7 @@ class _NasikoListItemState extends State<NasikoListItem> {
                         if (widget.badgeIcon != null) ...[
                           HugeIcon(
                             icon: widget.badgeIcon!,
-                            size: iconSizes.xs, // Tiny icon
+                            size: iconSizes.xxs, // Tiny icon
                             color: widget.isDisabled
                                 ? colors.foregroundDisabled
                                 : colors.foregroundIconPrimary,
@@ -220,7 +224,7 @@ class _NasikoListItemState extends State<NasikoListItem> {
                         ],
                         Text(
                           widget.badgeLabel!,
-                          style: typography.bodySecondary.copyWith(
+                          style: typography.bodyTertiary.copyWith(
                             color: widget.isDisabled
                                 ? colors.foregroundDisabled
                                 : colors.foregroundPrimary,

@@ -11,7 +11,11 @@ class NasikoTabItem {
   /// Only Hugeicons library's icon is called
   final HugeIcon? icon;
 
-  const NasikoTabItem({required this.label, this.icon});
+  /// Disabled tabs render in the disabled foreground color and cannot be
+  /// selected (taps revert to the previously selected tab).
+  final bool enabled;
+
+  const NasikoTabItem({required this.label, this.icon, this.enabled = true});
 }
 
 /// A horizontal, scrollable tab bar for the Nasiko Design System.
@@ -47,11 +51,24 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
     final typography = context.typography;
     final borderWidths = context.borderWidth;
 
+    final effectiveController =
+        controller ?? DefaultTabController.maybeOf(context);
+
     return SizedBox(
       height: spacing.s36,
       child: TabBar(
         controller: controller,
-        onTap: onTap,
+        onTap: (index) {
+          if (!tabs[index].enabled) {
+            // TabBar has already moved the selection; put it back.
+            final c = effectiveController;
+            if (c != null && c.previousIndex != index) {
+              c.index = c.previousIndex;
+            }
+            return;
+          }
+          onTap?.call(index);
+        },
         isScrollable: true,
         padding: EdgeInsets.zero,
         tabAlignment: tabAlignment,
@@ -80,18 +97,37 @@ class NasikoTabBar extends StatelessWidget implements PreferredSizeWidget {
         dividerHeight: borderWidths.w1,
 
         tabs: tabs.map((item) {
+          final icon = item.icon;
           return Tab(
             height: spacing.s36 - borderWidths.w1, // Account for divider
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (item.icon != null) ...[
-                  item.icon!,
-                  SizedBox(width: spacing.s8),
+            child: MouseRegion(
+              cursor: item.enabled
+                  ? SystemMouseCursors.click
+                  : SystemMouseCursors.basic,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (icon != null) ...[
+                    item.enabled
+                        ? icon
+                        : HugeIcon(
+                            icon: icon.icon,
+                            size: icon.size,
+                            color: colors.foregroundDisabled,
+                          ),
+                    SizedBox(width: spacing.s8),
+                  ],
+                  Text(
+                    item.label,
+                    style: item.enabled
+                        ? null
+                        : typography.bodySecondaryBold.copyWith(
+                            color: colors.foregroundDisabled,
+                          ),
+                  ),
                 ],
-                Text(item.label),
-              ],
+              ),
             ),
           );
         }).toList(),
