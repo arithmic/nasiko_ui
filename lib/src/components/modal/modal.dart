@@ -42,6 +42,12 @@ Future<T?> showNasikoModal<T>({
 }) {
   final motion = context.motion;
 
+  // Keyboard behavior notes (verified against Flutter's ModalRoute):
+  // - Escape: WidgetsApp maps Escape -> DismissIntent, and every ModalRoute
+  //   installs a DismissAction that only pops when `barrierDismissible` is
+  //   true — so Escape dismisses exactly when [isDismissible] is true.
+  // - Focus trap: ModalRoute hosts its content inside its own FocusScope,
+  //   so Tab traversal cannot leave the dialog while it is open.
   return showGeneralDialog<T>(
     context: context,
     barrierDismissible: isDismissible,
@@ -280,6 +286,7 @@ class NasikoModal extends StatelessWidget {
             leadingIcon: primaryButtonLeadingIcon,
             trailingIcon: primaryButtonTrailingIcon,
             fullWidth: false,
+            autofocus: true,
           ),
       ],
     );
@@ -316,6 +323,7 @@ class NasikoModal extends StatelessWidget {
             leadingIcon: primaryButtonLeadingIcon,
             trailingIcon: primaryButtonTrailingIcon,
             fullWidth: true,
+            autofocus: true,
           ),
       ],
     );
@@ -330,6 +338,7 @@ class NasikoModal extends StatelessWidget {
     required bool fullWidth,
     HugeIconsType? leadingIcon,
     HugeIconsType? trailingIcon,
+    bool autofocus = false,
   }) {
     Widget button;
 
@@ -389,6 +398,69 @@ class NasikoModal extends StatelessWidget {
         break;
     }
 
-    return fullWidth ? SizedBox(width: double.infinity, child: button) : button;
+    Widget result =
+        fullWidth ? SizedBox(width: double.infinity, child: button) : button;
+    if (autofocus) {
+      result = _ModalAutofocus(child: result);
+    }
+    return result;
+  }
+}
+
+/// Moves initial keyboard focus onto the modal's primary action button so
+/// pressing Enter confirms immediately.
+///
+/// The design-system buttons don't expose `autofocus`/`focusNode`, so this
+/// wrapper hosts a non-focusable anchor [Focus] node and, after the first
+/// frame, focuses its first traversable descendant — the button's own
+/// internal node. Focusing the real button node keeps the button's focus
+/// ring and Enter/Space activation intact. A disabled button has no
+/// traversable descendants, so this becomes a no-op; likewise it yields if
+/// something inside the dialog (e.g. an autofocused field in `content`) has
+/// already claimed focus.
+class _ModalAutofocus extends StatefulWidget {
+  const _ModalAutofocus({required this.child});
+
+  final Widget child;
+
+  @override
+  State<_ModalAutofocus> createState() => _ModalAutofocusState();
+}
+
+class _ModalAutofocusState extends State<_ModalAutofocus> {
+  final FocusNode _anchor = FocusNode(
+    debugLabel: 'NasikoModal primary action autofocus anchor',
+    canRequestFocus: false,
+    skipTraversal: true,
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      // Don't steal focus if something inside the dialog already claimed it.
+      final scope = _anchor.enclosingScope;
+      if (scope != null && scope.focusedChild != null) return;
+      final descendants = _anchor.traversalDescendants;
+      if (descendants.isNotEmpty) {
+        descendants.first.requestFocus();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _anchor.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Focus(
+      focusNode: _anchor,
+      includeSemantics: false,
+      child: widget.child,
+    );
   }
 }

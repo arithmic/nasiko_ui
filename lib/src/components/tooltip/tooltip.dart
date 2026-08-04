@@ -45,6 +45,10 @@ class NasikoTooltip extends StatelessWidget {
       message: message,
       preferBelow: preferBelow,
       waitDuration: waitDuration,
+      // Explicit (matches the framework default): keeps [message] exposed to
+      // assistive technology as a semantics tooltip. The framework Tooltip
+      // hosts no FocusNode of its own, so it never steals keyboard focus.
+      excludeFromSemantics: false,
       textStyle: typography.bodyPrimary.copyWith(
         color: colors.foregroundConstantWhite,
         fontStyle: FontStyle.normal,
