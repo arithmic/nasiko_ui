@@ -31,12 +31,30 @@ void main() {
   SemanticsHandle enableSemantics(WidgetTester tester) =>
       tester.ensureSemantics();
 
-  /// The single semantics node carrying [label] — used where the widget
-  /// excludes its inner text from semantics (select trigger, menu items),
-  /// which makes `tester.getSemantics(find.text(...))` resolve to the
-  /// wrong ancestor node.
-  SemanticsNode semanticsByLabel(String label) =>
-      find.semantics.byLabel(label).evaluate().single;
+  /// The semantics node carrying exactly [label], found by walking the
+  /// whole semantics tree. Used where the widget excludes its inner text
+  /// from semantics (select trigger, menu items), which makes
+  /// `tester.getSemantics(find.text(...))` resolve to the wrong ancestor
+  /// node. On a miss, fails with every label present in the tree so the
+  /// breakage is self-diagnosing.
+  SemanticsNode semanticsByLabel(WidgetTester tester, String label) {
+    final root =
+        tester.binding.pipelineOwner.semanticsOwner!.rootSemanticsNode!;
+    SemanticsNode? match;
+    final present = <String>[];
+    bool visit(SemanticsNode node) {
+      if (node.label.isNotEmpty) present.add(node.label);
+      match ??= node.label == label ? node : null;
+      node.visitChildren(visit);
+      return true;
+    }
+
+    visit(root);
+    if (match == null) {
+      fail('No semantics node labeled "$label". Labels present: $present');
+    }
+    return match!;
+  }
 
   group('Button semantics', () {
     testWidgets('label buttons expose button flag, label, and tap action',
@@ -232,7 +250,7 @@ void main() {
       // node by its semantic label rather than via find.text (which would
       // resolve to the FocusableActionDetector's focus-only node).
       expect(
-        semanticsByLabel(placeholder),
+        semanticsByLabel(tester, placeholder),
         containsSemantics(
           isButton: true,
           label: placeholder,
@@ -249,11 +267,11 @@ void main() {
       await tester.pump();
 
       expect(
-        semanticsByLabel(placeholder),
+        semanticsByLabel(tester, placeholder),
         containsSemantics(isButton: true, isExpanded: true),
       );
       expect(
-        semanticsByLabel('Apple'),
+        semanticsByLabel(tester, 'Apple'),
         containsSemantics(isButton: true, hasEnabledState: true,
             isEnabled: true),
       );
@@ -291,11 +309,11 @@ void main() {
 
       // Items live under MergeSemantics — target the merged nodes by label.
       expect(
-        semanticsByLabel('Rename'),
+        semanticsByLabel(tester, 'Rename'),
         containsSemantics(isButton: true, label: 'Rename', isEnabled: true),
       );
       expect(
-        semanticsByLabel('Delete'),
+        semanticsByLabel(tester, 'Delete'),
         containsSemantics(isButton: true, label: 'Delete'),
       );
       semantics.dispose();
