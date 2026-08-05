@@ -25,7 +25,7 @@ enum NasikoCardVariant {
 class NasikoCardTag {
   const NasikoCardTag(this.label, {this.icon});
 
-  /// The tag's label. Rendered uppercase.
+  /// The tag's label. Rendered as written — pass it in the case you want.
   final String label;
 
   /// Optional leading icon for this tag.
@@ -104,7 +104,7 @@ class NasikoCard extends StatefulWidget {
   /// Short description — clamps to 2 lines with ellipsis.
   final String? description;
 
-  /// Tags rendered as uppercase chips, each with an optional leading icon.
+  /// Tags rendered as chips, each with an optional leading icon.
   /// Tags beyond [maxVisibleTags] are collapsed into a single "+N" chip.
   final List<NasikoCardTag> tags;
 
@@ -701,7 +701,9 @@ class _NasikoCardState extends State<NasikoCard> {
     final tags = widget.tags;
     if (tags.isEmpty) return [];
 
-    final style = context.typography.bodyPrimary;
+    // Must match the chip's own label style (NasikoChipSize.small) or the
+    // fit calculation drops chips that would have fitted.
+    final style = context.typography.bodyTertiary;
     final gap = context.spacing.s8;
     final chipHPad = context.spacing.s12 * 2 + 2.0;
     final iconWidth = 12 + context.spacing.s4;
@@ -717,9 +719,7 @@ class _NasikoCardState extends State<NasikoCard> {
     final chipWidths = tags
         .map(
           (t) =>
-              chipHPad +
-              textWidth(t.label.toUpperCase()) +
-              (t.icon != null ? iconWidth : 0),
+              chipHPad + textWidth(t.label) + (t.icon != null ? iconWidth : 0),
         )
         .toList();
 
@@ -737,7 +737,6 @@ class _NasikoCardState extends State<NasikoCard> {
   }
 
   Widget _buildTags(bool disabled) {
-    final colors = context.colors;
     final spacing = context.spacing;
 
     return LayoutBuilder(
@@ -751,13 +750,12 @@ class _NasikoCardState extends State<NasikoCard> {
             for (int i = 0; i < visibleTags.length; i++) ...[
               if (i > 0) SizedBox(width: spacing.s8),
               NasikoChip(
-                label: visibleTags[i].label.toUpperCase(),
+                label: visibleTags[i].label,
                 leadingIcon: visibleTags[i].icon,
                 size: NasikoChipSize.small,
                 variant: NasikoChipVariant.base,
-                shape: NasikoChipShape.rounded,
+                shape: NasikoChipShape.rectangle,
                 enabled: !disabled,
-                borderColor: colors.borderPrimary,
               ),
             ],
             if (overflowCount > 0) ...[
@@ -765,16 +763,15 @@ class _NasikoCardState extends State<NasikoCard> {
               NasikoTooltip(
                 message: widget.tags
                     .skip(visibleTags.length)
-                    .map((t) => t.label.toUpperCase())
+                    .map((t) => t.label)
                     .join(', '),
                 preferBelow: false,
                 child: NasikoChip(
                   label: '+$overflowCount',
                   size: NasikoChipSize.small,
                   variant: NasikoChipVariant.base,
-                  shape: NasikoChipShape.rounded,
+                  shape: NasikoChipShape.rectangle,
                   enabled: !disabled,
-                  borderColor: colors.borderPrimary,
                 ),
               ),
             ],

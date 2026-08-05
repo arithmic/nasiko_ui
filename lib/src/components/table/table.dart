@@ -90,37 +90,33 @@ class _NasikoTableState extends State<NasikoTable> {
     final colors = context.colors;
     final radii = context.radius;
     final borderWidths = context.borderWidth;
-    final spacing = context.spacing;
 
     return Container(
       decoration: BoxDecoration(
-        color:  colors.backgroundSurface,
-        borderRadius: BorderRadius.circular(radii.r12),
+        color: colors.backgroundBase,
+        borderRadius: BorderRadius.circular(radii.r8),
         border: Border.all(
           color: colors.borderPrimary,
           width: borderWidths.w1,
         ),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(radii.r12),
+        borderRadius: BorderRadius.circular(radii.r8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             // Header
             _buildHeader(context),
 
-            // Body with vertical scroll
-            Container(
+            // Body with vertical scroll. No gutter here — rows own their
+            // horizontal padding so hover and dividers reach the table edges;
+            // the scrollbar thumb overlays the trailing gutter.
+            SizedBox(
               height: widget.bodyHeight ?? 400,
-              padding: EdgeInsets.only(
-                left: spacing.s16,
-                bottom: spacing.s12,
-              ),
               child: Scrollbar(
                 controller: _verticalController,
                 thumbVisibility: true,
                 child: SingleChildScrollView(
-                  padding: EdgeInsets.only(right: spacing.s16),
                   controller: _verticalController,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -162,7 +158,7 @@ class _NasikoTableState extends State<NasikoTable> {
                       children: [
                         Text(
                           col.title,
-                          style: typography.bodyPrimaryBold.copyWith(
+                          style: typography.bodySecondaryBold.copyWith(
                             color: colors.foregroundPrimary,
                           ),
                         ),
@@ -189,69 +185,69 @@ class _NasikoTableState extends State<NasikoTable> {
   }
 
   List<Widget> _buildBodyRows(BuildContext context) {
-    return widget.data.map((rowWidgets) {
+    return List.generate(widget.data.length, (i) {
+      final rowWidgets = widget.data[i];
       if (rowWidgets.length != widget.columns.length) {
         throw FlutterError(
           'NasikoTable: Row data length (${rowWidgets.length}) must match column definition length (${widget.columns.length}).',
         );
       }
-      return _NasikoTableRow(columns: widget.columns, rowWidgets: rowWidgets);
-    }).toList();
+      return _NasikoTableRow(
+        columns: widget.columns,
+        rowWidgets: rowWidgets,
+        // The table's own border closes the last row; a divider there too
+        // would read as a doubled bottom edge.
+        showDivider: i < widget.data.length - 1,
+      );
+    });
   }
 }
 
-class _NasikoTableRow extends StatefulWidget {
-  const _NasikoTableRow({required this.columns, required this.rowWidgets});
+/// One body row: cells laid out across the column flexes plus a trailing
+/// divider. Rows have no hover tint — the table is read, not clicked.
+class _NasikoTableRow extends StatelessWidget {
+  const _NasikoTableRow({
+    required this.columns,
+    required this.rowWidgets,
+    required this.showDivider,
+  });
 
   final List<NasikoTableColumn> columns;
   final List<Widget> rowWidgets;
 
-  @override
-  State<_NasikoTableRow> createState() => _NasikoTableRowState();
-}
-
-class _NasikoTableRowState extends State<_NasikoTableRow> {
-  bool _isHovering = false;
+  /// Whether to close the row with a divider. False for the last row, whose
+  /// edge is already drawn by the table's border.
+  final bool showDivider;
 
   @override
   Widget build(BuildContext context) {
     final spacing = context.spacing;
-    final colors = context.colors;
-    final motion = context.motion;
-    final Color backgroundColor = _isHovering
-        ? colors.backgroundSurfaceHover
-        : Colors.transparent;
 
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovering = true),
-      onExit: (_) => setState(() => _isHovering = false),
-      child: AnimatedContainer(
-        duration: motion.hover,
-        curve: motion.enter,
-        color: backgroundColor,
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: spacing.s12),
-              child: Row(
-                children: List.generate(widget.columns.length, (i) {
-                  final column = widget.columns[i];
-                  final cellWidget = widget.rowWidgets[i];
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: spacing.s16,
+            vertical: spacing.s8,
+          ),
+          child: Row(
+            children: List.generate(columns.length, (i) {
+              final column = columns[i];
+              final cellWidget = rowWidgets[i];
 
-                  return Expanded(
-                    flex: column.flex,
-                    child: Align(
-                      alignment: column.alignment,
-                      child: cellWidget,
-                    ),
-                  );
-                }),
-              ),
-            ),
-            const NasikoDivider(axis: NasikoDividerAxis.horizontal),
-          ],
+              return Expanded(
+                flex: column.flex,
+                child: Align(
+                  alignment: column.alignment,
+                  child: cellWidget,
+                ),
+              );
+            }),
+          ),
         ),
-      ),
+        if (showDivider)
+          const NasikoDivider(axis: NasikoDividerAxis.horizontal),
+      ],
     );
   }
 }

@@ -126,28 +126,22 @@ class NasikoChip extends StatelessWidget {
 
     final isActionable = onTap != null || onDelete != null;
     final borderRadius = BorderRadius.circular(
-      shape == NasikoChipShape.rounded ? radii.r40 : radii.r8,
+      shape == NasikoChipShape.rounded ? radii.r40 : radii.r6,
     );
 
     final labelStyle = size == NasikoChipSize.small
         ? typography.bodyTertiary.copyWith(height: 1.0)
         : typography.bodySecondary.copyWith(height: 1.0);
     final iconSize = size == NasikoChipSize.small ? 13.0 : iconSizes.s;
-    final labelHeight = labelStyle.fontSize! * (labelStyle.height ?? 1.0);
-    // Fixed regardless of this chip's own icons, so icon and non-icon chips
-    // stay the same height when placed side by side.
-    final contentHeight = [
-      labelHeight,
-      iconSize,
-    ].reduce((a, b) => a > b ? a : b);
+    // Fixed height per size so icon and non-icon chips stay the same height
+    // when placed side by side.
+    final chipHeight = size == NasikoChipSize.small ? 22.0 : 28.0;
 
     Widget chipContent = AnimatedContainer(
       duration: motion.hover,
       curve: motion.enter,
-      padding: EdgeInsets.symmetric(
-        horizontal: spacing.s12,
-        vertical: spacing.s8,
-      ),
+      height: chipHeight,
+      padding: EdgeInsets.symmetric(horizontal: spacing.s12),
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: borderRadius,
@@ -159,12 +153,10 @@ class NasikoChip extends StatelessWidget {
           width: borderWidths.w1,
         ),
       ),
-      child: SizedBox(
-        height: contentHeight,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
             // Leading Icon
             if (leadingIcon != null) ...[
               AnimatedSwitcher(
@@ -196,7 +188,6 @@ class NasikoChip extends StatelessWidget {
             ],
           ],
         ),
-      ),
     );
 
     // Wrap with interaction handlers if actionable
