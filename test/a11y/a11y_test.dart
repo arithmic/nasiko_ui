@@ -262,9 +262,12 @@ void main() {
 
       // Open the menu: the trigger reports expanded, and each option is a
       // button (the selected one would additionally carry isSelected).
+      // The overlay fades in (NasikoOverlayReveal); at opacity 0 its whole
+      // subtree is dropped from semantics, so pump THROUGH the entrance
+      // animation before asserting.
       await tester.tap(find.text(placeholder), warnIfMissed: false);
       await tester.pump();
-      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
 
       expect(
         semanticsByLabel(tester, placeholder),
@@ -303,9 +306,11 @@ void main() {
       // warnIfMissed: false — NasikoPopupMenu wraps its child in an
       // AbsorbPointer; the tap is handled by the wrapper's GestureDetector,
       // so the hit-test warning against the inner Text is expected noise.
+      // Pump THROUGH the overlay's entrance fade: at opacity 0 the menu
+      // subtree is dropped from semantics.
       await tester.tap(find.text('Open menu'), warnIfMissed: false);
       await tester.pump();
-      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
 
       // Items live under MergeSemantics — target the merged nodes by label.
       expect(
