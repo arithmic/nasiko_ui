@@ -1,1 +1,11 @@
-include: package:flutter_lints/flutter.yaml
+# Gallery-local analysis config.
+#
+# Deliberately minimal: the gallery's pubspec is just flutter + nasiko_ui
+# (no lint-package dev dependency), and every file imports only
+# `package:nasiko_ui/nasiko_ui.dart` — even the icons in
+# lib/gallery_icons.dart are hand-rolled HugeIconsType data, not hugeicons
+# imports. A local (empty) config also stops the analyzer from walking up to
+# the package root's analysis_options.yaml, whose flutter_lints include
+# cannot resolve from this package.
+linter:
+  rules: []

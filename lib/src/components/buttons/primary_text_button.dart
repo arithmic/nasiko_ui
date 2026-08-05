@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
-import 'button_layout.dart';
-import 'button_press_scale.dart';
+import 'button_base.dart';
 
 /// A primary text button for Nasiko UI with optional icons.
 ///
@@ -34,69 +32,13 @@ class PrimaryTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
-    final typography = context.typography;
-    final borderRadius = context.radius;
-    final borderWidth = context.borderWidth;
-    final layout = textButtonLayout(context);
-
-    final Widget button = TextButton(
+    return buildNasikoTextButton(
+      context,
+      variant: NasikoButtonVariant.primary,
       onPressed: onPressed,
-      style: ButtonStyle(
-        padding: WidgetStateProperty.all(layout.padding),
-        fixedSize: WidgetStateProperty.all(Size.fromHeight(layout.minHeight)),
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        animationDuration: context.motion.fast,
-        textStyle: WidgetStateProperty.all(typography.buttonSecondary),
-        elevation: WidgetStateProperty.all(0),
-        shadowColor: WidgetStateProperty.all(Colors.transparent),
-        overlayColor: WidgetStateProperty.all(Colors.transparent),
-
-        // --- Foreground Color (Text & Icons) ---
-        foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
-          if (states.contains(WidgetState.disabled)) {
-            return colors.foregroundDisabled;
-          }
-          return colors.foregroundBrand;
-        }),
-
-        shape: WidgetStateProperty.resolveWith<OutlinedBorder>((states) {
-          if (states.contains(WidgetState.hovered) ||
-              states.contains(WidgetState.focused)) {
-            return RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(borderRadius.r8)),
-              side: BorderSide(
-                color: colors.foregroundBrand,
-                width: borderWidth.w1,
-              ),
-            );
-          }
-          return RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(borderRadius.r8)),
-          );
-        }),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Leading Icon
-          if (leadingIcon != null) ...[
-            HugeIcon(icon: leadingIcon!, size: layout.iconSize),
-            SizedBox(width: layout.iconSpacing),
-          ],
-
-          // Label
-          Text(label),
-
-          // Trailing Icon
-          if (trailingIcon != null) ...[
-            SizedBox(width: layout.iconSpacing),
-            HugeIcon(icon: trailingIcon!, size: layout.iconSize),
-          ],
-        ],
-      ),
+      label: label,
+      leadingIcon: leadingIcon,
+      trailingIcon: trailingIcon,
     );
-
-    return ButtonPressScale(enabled: onPressed != null, child: button);
   }
 }

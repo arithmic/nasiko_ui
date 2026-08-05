@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
+import '../../tokens/colors/_color_palette.dart' show sand900;
+
 /// A multi-line text input component for the Nasiko Design System.
 class NasikoTextBox extends StatefulWidget {
   const NasikoTextBox({
@@ -453,7 +455,13 @@ class _AttachmentPreviewPopup extends StatelessWidget {
         width: 240,
         height: 160,
         decoration: BoxDecoration(
-          color: const Color(0xFF1A1A1A),
+          // The preview popup intentionally renders as an inverse (dark)
+          // frame in light mode. No inverse-surface token exists in
+          // [NasikoColorTheme], so derive from brightness: sand900 in light
+          // mode, the elevated surface token in dark mode.
+          color: Theme.of(context).brightness == Brightness.light
+              ? sand900
+              : context.colors.backgroundSurface,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(

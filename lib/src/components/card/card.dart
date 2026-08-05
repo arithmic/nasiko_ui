@@ -304,11 +304,14 @@ class _NasikoCardState extends State<NasikoCard> {
         ? colors.borderSecondary
         : colors.borderPrimary;
 
+    // Token mapping: the hardcoded whites were backgroundBase (0xFFFFFFFF)
+    // and backgroundGroup/sand50 (0xFFF5F2EC) in the light theme — using the
+    // tokens keeps the same look in light mode and resolves sensibly in dark.
     final Gradient? settingUpGradient = _hasSettingUpBody
-        ? const LinearGradient(
-            begin: Alignment(1.00, 0.50),
-            end: Alignment(0.00, 0.50),
-            colors: [Color(0xFFFFFFFF), Color(0xFFF5F2EC)],
+        ? LinearGradient(
+            begin: const Alignment(1.00, 0.50),
+            end: const Alignment(0.00, 0.50),
+            colors: [colors.backgroundBase, colors.backgroundGroup],
           )
         : null;
 
@@ -341,10 +344,13 @@ class _NasikoCardState extends State<NasikoCard> {
                   boxShadow: showElevation
                       ? [
                           BoxShadow(
-                            color: colors.foregroundConstantBlack.withValues(
-                              alpha: 0.10,
+                            // 0x40BB8F06 was backgroundBrand (yellow600) at
+                            // ~25% alpha — use the token so the glow follows
+                            // the active brand palette and theme.
+                            color: colors.backgroundBrand.withValues(
+                              alpha: 0.25,
                             ),
-                            blurRadius: 16,
+                            blurRadius: 12,
                             offset: const Offset(0, 4),
                           ),
                         ]
