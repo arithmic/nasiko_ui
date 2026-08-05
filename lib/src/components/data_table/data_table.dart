@@ -5,8 +5,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
-import 'pagination.dart';
-
 export 'pagination.dart';
 
 /// Signature for [NasikoDataTable.onSortChanged].

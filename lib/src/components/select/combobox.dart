@@ -8,7 +8,6 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
 import '../internal/overlay_reveal.dart';
-import 'select.dart';
 
 /// A controlled async autocomplete for the Nasiko Design System.
 ///
@@ -329,10 +328,7 @@ class _NasikoComboboxState<T> extends State<NasikoCombobox<T>> {
       decoration: BoxDecoration(
         color: colors.backgroundBase,
         borderRadius: BorderRadius.circular(radii.r12),
-        border: Border.all(
-          color: colors.borderPrimary,
-          width: borderWidths.w1,
-        ),
+        border: Border.all(color: colors.borderPrimary, width: borderWidths.w1),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.08),
@@ -415,10 +411,10 @@ class _NasikoComboboxState<T> extends State<NasikoCombobox<T>> {
 
   Widget _buildOverlayChild(BuildContext context) {
     final gap = context.spacing.s4;
-    final targetAnchor =
-        _openAbove ? Alignment.topLeft : Alignment.bottomLeft;
-    final followerAnchor =
-        _openAbove ? Alignment.bottomLeft : Alignment.topLeft;
+    final targetAnchor = _openAbove ? Alignment.topLeft : Alignment.bottomLeft;
+    final followerAnchor = _openAbove
+        ? Alignment.bottomLeft
+        : Alignment.topLeft;
 
     return CompositedTransformFollower(
       link: _link,
@@ -455,8 +451,8 @@ class _NasikoComboboxState<T> extends State<NasikoCombobox<T>> {
     final borderColor = !enabled
         ? colors.borderDisabled
         : _isFocused
-            ? colors.borderSecondary
-            : colors.borderPrimary;
+        ? colors.borderSecondary
+        : colors.borderPrimary;
 
     final field = GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -586,8 +582,9 @@ class _NasikoComboboxOptionState extends State<_NasikoComboboxOption> {
     final motion = context.motion;
 
     final isHighlighted = widget.enabled && (_isHovered || widget.active);
-    final foregroundColor =
-        widget.enabled ? colors.foregroundPrimary : colors.foregroundDisabled;
+    final foregroundColor = widget.enabled
+        ? colors.foregroundPrimary
+        : colors.foregroundDisabled;
 
     return MergeSemantics(
       child: Semantics(
