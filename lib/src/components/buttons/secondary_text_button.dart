@@ -1,11 +1,9 @@
 // lib/src/components/buttons/secondary_text_button.dart
 
 import 'package:flutter/material.dart';
-import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
-import 'button_layout.dart';
-import 'button_press_scale.dart';
+import 'button_base.dart';
 
 /// A secondary text button for Nasiko UI with optional icons.
 ///
@@ -35,86 +33,17 @@ class SecondaryTextButton extends StatelessWidget {
   final HugeIconsType? trailingIcon;
 
   final Color? foregroundColor;
+
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
-    final typography = context.typography;
-    final borderWidth = context.borderWidth;
-    final layout = textButtonLayout(context);
-
-    final Widget button = TextButton(
+    return buildNasikoTextButton(
+      context,
+      variant: NasikoButtonVariant.secondary,
       onPressed: onPressed,
-      style: ButtonStyle(
-        padding: WidgetStateProperty.all(layout.padding),
-        fixedSize: WidgetStateProperty.all(Size.fromHeight(layout.minHeight)),
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        animationDuration: context.motion.fast,
-        elevation: WidgetStateProperty.all(0),
-        shadowColor: WidgetStateProperty.all(Colors.transparent),
-        overlayColor: WidgetStateProperty.all(Colors.transparent),
-
-        // --- Foreground Color (For Icons) ---
-        // This will color the icons based on the button state
-        foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
-          if (states.contains(WidgetState.disabled)) {
-            return colors.foregroundDisabled;
-          }
-          if (states.contains(WidgetState.hovered)) {
-            return foregroundColor ??
-                colors.foregroundBrand; // Darker brand color (yellow/800)
-          }
-          if (states.contains(WidgetState.focused)) {
-            return foregroundColor ?? colors.foregroundIconHover;
-          }
-          return foregroundColor ??
-              colors.foregroundPrimary; // Default brand color (yellow/600)
-        }),
-
-        // --- TextStyle (For Text & Underline) ---
-        // This will style the text *and* apply the underline
-        textStyle: WidgetStateProperty.resolveWith<TextStyle>((states) {
-          final baseStyle = typography.bodySecondary;
-
-          if (states.contains(WidgetState.disabled)) {
-            return baseStyle.copyWith(color: colors.foregroundDisabled);
-          }
-          if (states.contains(WidgetState.hovered) ||
-              states.contains(WidgetState.focused)) {
-            return baseStyle.copyWith(
-              color: colors.foregroundBrandHover,
-              decoration: TextDecoration.underline,
-              decorationColor: colors.foregroundBrandHover,
-              decorationThickness: borderWidth.w1,
-            );
-          }
-          // Default state
-          return baseStyle.copyWith(
-            color: colors.foregroundBrand,
-            decoration: TextDecoration.none,
-          );
-        }),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Leading Icon
-          if (leadingIcon != null) ...[
-            HugeIcon(icon: leadingIcon!, size: layout.iconSize),
-            SizedBox(width: layout.iconSpacing),
-          ],
-
-          // Label
-          Text(label),
-
-          // Trailing Icon
-          if (trailingIcon != null) ...[
-            SizedBox(width: layout.iconSpacing),
-            HugeIcon(icon: trailingIcon!, size: layout.iconSize),
-          ],
-        ],
-      ),
+      label: label,
+      leadingIcon: leadingIcon,
+      trailingIcon: trailingIcon,
+      foregroundColor: foregroundColor,
     );
-
-    return ButtonPressScale(enabled: onPressed != null, child: button);
   }
 }

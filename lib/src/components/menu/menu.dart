@@ -3,7 +3,40 @@ import 'package:flutter/services.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
+import '../../tokens/colors/_color_palette.dart' show sand900;
 import '../internal/overlay_reveal.dart';
+
+/// Surface color for the popup menu.
+///
+/// The menu intentionally renders as an *inverse* (dark) surface in light
+/// mode — this is a design decision, not a theme bug. [NasikoColorTheme] has
+/// no inverse-surface background token, so the color is derived from the
+/// active [Theme] brightness: light mode pins the `sand900` palette value,
+/// while dark mode uses the elevated [NasikoColorTheme.backgroundSurface] so
+/// the menu still reads one step lighter than the page behind it.
+Color _menuSurfaceColor(BuildContext context) {
+  return Theme.of(context).brightness == Brightness.light
+      ? sand900
+      : context.colors.backgroundSurface;
+}
+
+/// Foreground for non-destructive menu items, matched to [_menuSurfaceColor]:
+/// constant white on the inverse surface in light mode, the regular primary
+/// foreground on the elevated surface in dark mode.
+Color _menuItemForegroundColor(BuildContext context) {
+  return Theme.of(context).brightness == Brightness.light
+      ? context.colors.foregroundConstantWhite
+      : context.colors.foregroundPrimary;
+}
+
+/// Hover/focus highlight for menu items, matched to [_menuSurfaceColor].
+/// Light mode keeps the historical `foregroundSecondary` fill (a mid sand
+/// that reads on the inverse surface); dark mode uses the surface-hover token.
+Color _menuItemHighlightColor(BuildContext context) {
+  return Theme.of(context).brightness == Brightness.light
+      ? context.colors.foregroundSecondary
+      : context.colors.backgroundSurfaceHover;
+}
 
 class NasikoPopupMenuItemData {
   const NasikoPopupMenuItemData({
@@ -436,7 +469,7 @@ class _NasikoPopupMenuSurfaceState extends State<_NasikoPopupMenuSurface> {
         width: widget.width,
         constraints: BoxConstraints(maxHeight: widget.maxHeight),
         decoration: BoxDecoration(
-          color: const Color(0xFF242628),
+          color: _menuSurfaceColor(context),
           borderRadius: BorderRadius.circular(radii.r16),
           border: Border.all(color: colors.borderPrimary),
           boxShadow: [
@@ -556,7 +589,7 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
 
     final foregroundColor = widget.isDestructive
         ? colors.foregroundError
-        : const Color(0xFFFFFFFF);
+        : _menuItemForegroundColor(context);
 
     final textStyle = typography.bodySecondary.copyWith(color: foregroundColor);
 
@@ -589,7 +622,7 @@ class _NasikoMenuItemState extends State<_NasikoMenuItem> {
                 curve: context.motion.enter,
                 decoration: BoxDecoration(
                   color: isHighlighted
-                      ? colors.foregroundSecondary
+                      ? _menuItemHighlightColor(context)
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(radii.r8),
                 ),

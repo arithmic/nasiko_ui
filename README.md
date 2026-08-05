@@ -243,6 +243,21 @@ The design system uses a carefully curated 10-color palette:
 
 Plus: Purple, Teal, and additional utility colors.
 
+## Example / Gallery
+
+A runnable component gallery lives in [`example/`](example/) — every public
+component in every meaningful state, with a light/dark/system theme toggle
+and a `NasikoColorPalette` switcher. It is the review surface for design and
+motion changes and the manual QA bed for dark mode.
+
+```bash
+cd example
+flutter run -d chrome
+```
+
+The gallery depends only on `flutter` and `nasiko_ui` (via `path: ../`) and
+imports nothing but the public barrel (`package:nasiko_ui/nasiko_ui.dart`).
+
 ## Testing
 
 Run the comprehensive test suite:

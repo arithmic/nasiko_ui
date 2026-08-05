@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
-import 'button_layout.dart';
-import 'button_press_scale.dart';
+import 'button_base.dart';
 
 /// A secondary icon button for Nasiko UI.
 ///
@@ -29,82 +27,12 @@ class SecondaryIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
-    final radii = context.radius;
-    final borderWidths = context.borderWidth;
-    final layout = iconButtonLayout(context, size);
-    final borderRadius = radii.r10;
-
-    final style = ButtonStyle(
-      padding: WidgetStateProperty.all(layout.padding),
-      minimumSize: WidgetStateProperty.all(Size.zero),
-      fixedSize: WidgetStateProperty.all(Size.square(layout.minHeight)),
-      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      animationDuration: context.motion.fast,
-      elevation: WidgetStateProperty.all(0),
-      shadowColor: WidgetStateProperty.all(Colors.transparent),
-
-      // --- Background Color ---
-      backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
-        if (states.contains(WidgetState.disabled)) {
-          return colors.backgroundDisabled;
-        }
-        return Colors.transparent;
-      }),
-
-      // --- Foreground Color (Icon) ---
-      foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
-        if (states.contains(WidgetState.disabled)) {
-          return colors.foregroundDisabled;
-        }
-        if (states.contains(WidgetState.pressed)) {
-          return colors.foregroundIconHover;
-        }
-        return colors.foregroundIconPrimary;
-      }),
-
-      // --- Shape & Border ---
-      shape: WidgetStateProperty.resolveWith<OutlinedBorder>((states) {
-        BorderSide borderSide;
-
-        if (states.contains(WidgetState.disabled)) {
-          borderSide = BorderSide(
-            color: colors.borderDisabled,
-            width: borderWidths.w1,
-          );
-        } else if (states.contains(WidgetState.hovered)) {
-          borderSide = BorderSide(
-            color: colors.borderHover,
-            width: borderWidths.w1,
-          );
-        } else if (states.contains(WidgetState.focused)) {
-          borderSide = BorderSide(
-            color: colors.borderSecondary,
-            width: borderWidths.w2,
-          );
-        } else {
-          borderSide = BorderSide(
-            color: colors.borderPrimary,
-            width: borderWidths.w1,
-          );
-        }
-
-        return RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-          side: borderSide,
-        );
-      }),
-
-      overlayColor: WidgetStatePropertyAll(Colors.transparent),
-    );
-
-    final Widget button = IconButton(
+    return buildNasikoIconButton(
+      context,
+      variant: NasikoButtonVariant.secondary,
       onPressed: onPressed,
-      style: style,
-      icon: HugeIcon(icon: icon),
-      iconSize: layout.iconSize,
+      icon: icon,
+      size: size,
     );
-
-    return ButtonPressScale(enabled: onPressed != null, child: button);
   }
 }

@@ -1,5 +1,5 @@
-name: nasiko_ui_example
-description: "Example application for Nasiko UI Design System"
+name: nasiko_ui_gallery
+description: "Component gallery for the Nasiko UI design system."
 version: 1.0.0
 publish_to: none
 
@@ -9,28 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  hugeicons: ^1.1.2
-  flutter_screenutil: ^5.9.3
   nasiko_ui:
     path: ../
 
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^5.0.0
-
 flutter:
   uses-material-design: true
-
-  # fonts:
-  #   - family: Inter
-  #     fonts:
-  #       - asset: assets/fonts/Inter-VariableFont_opsz.ttf
-  #       - asset: assets/fonts/Inter-Italic-VariableFont_opsz.ttf
-  #         style: italic
-
-  #   - family: Chivo Mono
-  #     fonts:
-  #       - asset: assets/fonts/ChivoMono-Regular.ttf
-  #       - asset: assets/fonts/ChivoMono-Medium.ttf
-  #         weight: 500
