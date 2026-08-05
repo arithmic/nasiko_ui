@@ -16,6 +16,7 @@
 //     by design.
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show SemanticsHandle, SemanticsNode;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
@@ -23,16 +24,24 @@ import 'package:nasiko_ui/nasiko_ui.dart';
 import '../helpers/harness.dart';
 
 void main() {
-  /// Turns real semantics on for the duration of one test.
-  void enableSemantics(WidgetTester tester) {
-    final handle = tester.ensureSemantics();
-    addTearDown(handle.dispose);
-  }
+  /// Turns real semantics on for one test. The returned handle MUST be
+  /// disposed at the end of the test body — flutter_test verifies handle
+  /// disposal BEFORE addTearDown callbacks run, so tearDown-based disposal
+  /// fails the test with "A SemanticsHandle was active at the end".
+  SemanticsHandle enableSemantics(WidgetTester tester) =>
+      tester.ensureSemantics();
+
+  /// The single semantics node carrying [label] — used where the widget
+  /// excludes its inner text from semantics (select trigger, menu items),
+  /// which makes `tester.getSemantics(find.text(...))` resolve to the
+  /// wrong ancestor node.
+  SemanticsNode semanticsByLabel(String label) =>
+      find.semantics.byLabel(label).evaluate().single;
 
   group('Button semantics', () {
     testWidgets('label buttons expose button flag, label, and tap action',
         (tester) async {
-      enableSemantics(tester);
+      final semantics = enableSemantics(tester);
       await pumpNasiko(
         tester,
         Wrap(
@@ -71,11 +80,12 @@ void main() {
           isEnabled: false,
         ),
       );
+      semantics.dispose();
     });
 
     testWidgets('icon-only buttons expose button flag and tap action',
         (tester) async {
-      enableSemantics(tester);
+      final semantics = enableSemantics(tester);
       await pumpNasiko(
         tester,
         TertiaryIconButton(
@@ -97,13 +107,14 @@ void main() {
           isEnabled: true,
         ),
       );
+      semantics.dispose();
     });
   });
 
   group('Toggle control semantics', () {
     testWidgets('NasikoSwitch exposes toggled state on/off/disabled',
         (tester) async {
-      enableSemantics(tester);
+      final semantics = enableSemantics(tester);
       await pumpNasiko(
         tester,
         Column(
@@ -145,6 +156,7 @@ void main() {
           isEnabled: false,
         ),
       );
+      semantics.dispose();
     });
 
     // LIB GAP: NasikoCheckbox is a bare InkWell — it never reports
@@ -152,7 +164,7 @@ void main() {
     // from unchecked. Unskip once lib/src/components/checkbox/checkbox.dart
     // wraps the control in Semantics(checked: isChecked).
     testWidgets('NasikoCheckbox exposes checked state', (tester) async {
-      enableSemantics(tester);
+      final semantics = enableSemantics(tester);
       await pumpNasiko(
         tester,
         NasikoCheckbox(isChecked: true, onChanged: (_) {}),
@@ -167,6 +179,7 @@ void main() {
           hasTapAction: true,
         ),
       );
+      semantics.dispose();
     }, skip: true); // TODO(lib): add checked-state semantics to NasikoCheckbox.
 
     // LIB GAP: NasikoRadio is a bare GestureDetector — no checked state and
@@ -174,7 +187,7 @@ void main() {
     // itself in Semantics(checked: ..., inMutuallyExclusiveGroup: true).
     testWidgets('NasikoRadio exposes checked state in a group',
         (tester) async {
-      enableSemantics(tester);
+      final semantics = enableSemantics(tester);
       await pumpNasiko(
         tester,
         NasikoRadio<int>(value: 1, groupValue: 1, onChanged: (_) {}),
@@ -189,6 +202,7 @@ void main() {
           isInMutuallyExclusiveGroup: true,
         ),
       );
+      semantics.dispose();
     }, skip: true); // TODO(lib): add checked-state semantics to NasikoRadio.
   });
 
@@ -201,7 +215,7 @@ void main() {
 
     testWidgets('trigger is a button announcing its value and expanded state',
         (tester) async {
-      enableSemantics(tester);
+      final semantics = enableSemantics(tester);
       await pumpNasikoOverlayHost(
         tester,
         SizedBox(
@@ -214,8 +228,11 @@ void main() {
         ),
       );
 
+      // The trigger's Semantics node excludes the inner Text, so target the
+      // node by its semantic label rather than via find.text (which would
+      // resolve to the FocusableActionDetector's focus-only node).
       expect(
-        tester.getSemantics(find.text(placeholder)),
+        semanticsByLabel(placeholder),
         containsSemantics(
           isButton: true,
           label: placeholder,
@@ -227,25 +244,26 @@ void main() {
 
       // Open the menu: the trigger reports expanded, and each option is a
       // button (the selected one would additionally carry isSelected).
-      await tester.tap(find.text(placeholder));
+      await tester.tap(find.text(placeholder), warnIfMissed: false);
       await tester.pump();
       await tester.pump();
 
       expect(
-        tester.getSemantics(find.text(placeholder)),
+        semanticsByLabel(placeholder),
         containsSemantics(isButton: true, isExpanded: true),
       );
       expect(
-        tester.getSemantics(find.text('Apple')),
+        semanticsByLabel('Apple'),
         containsSemantics(isButton: true, hasEnabledState: true,
             isEnabled: true),
       );
+      semantics.dispose();
     });
   });
 
   group('Menu item semantics', () {
     testWidgets('popup menu items are announced as buttons', (tester) async {
-      enableSemantics(tester);
+      final semantics = enableSemantics(tester);
       await pumpNasikoOverlayHost(
         tester,
         NasikoPopupMenu(
@@ -264,25 +282,30 @@ void main() {
         ),
       );
 
-      await tester.tap(find.text('Open menu'));
+      // warnIfMissed: false — NasikoPopupMenu wraps its child in an
+      // AbsorbPointer; the tap is handled by the wrapper's GestureDetector,
+      // so the hit-test warning against the inner Text is expected noise.
+      await tester.tap(find.text('Open menu'), warnIfMissed: false);
       await tester.pump();
       await tester.pump();
 
+      // Items live under MergeSemantics — target the merged nodes by label.
       expect(
-        tester.getSemantics(find.text('Rename')),
+        semanticsByLabel('Rename'),
         containsSemantics(isButton: true, label: 'Rename', isEnabled: true),
       );
       expect(
-        tester.getSemantics(find.text('Delete')),
+        semanticsByLabel('Delete'),
         containsSemantics(isButton: true, label: 'Delete'),
       );
+      semantics.dispose();
     });
   });
 
   group('Accessibility guidelines', () {
     testWidgets('label buttons meet the labeled-tap-target guideline',
         (tester) async {
-      enableSemantics(tester);
+      final semantics = enableSemantics(tester);
       await pumpNasiko(
         tester,
         Wrap(
@@ -311,6 +334,7 @@ void main() {
       await tester.pumpAndSettle();
 
       await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+      semantics.dispose();
     });
 
     // BY DESIGN: NasikoButtonSize.small renders a 28px control, which can
@@ -320,7 +344,7 @@ void main() {
     // filtered grid would silently stop guarding the small size's siblings.
     testWidgets('buttons meet the android 48dp tap-target guideline',
         (tester) async {
-      enableSemantics(tester);
+      final semantics = enableSemantics(tester);
       await pumpNasiko(
         tester,
         Wrap(
@@ -339,6 +363,7 @@ void main() {
       await tester.pumpAndSettle();
 
       await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+      semantics.dispose();
     }, skip: true); // By design: 28px small buttons < 48dp guideline.
   });
 }

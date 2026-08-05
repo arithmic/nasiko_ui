@@ -53,8 +53,12 @@ void main() {
 
   /// One pump inserts the overlay entry; the second runs the surface's
   /// post-frame focus-scope claim.
+  ///
+  /// warnIfMissed: false — NasikoPopupMenu wraps its child in an
+  /// AbsorbPointer, so the inner Text never hit-tests; the tap is handled
+  /// by the wrapper's own GestureDetector (the menu does open).
   Future<void> openMenu(WidgetTester tester) async {
-    await tester.tap(find.text('Open menu'));
+    await tester.tap(find.text('Open menu'), warnIfMissed: false);
     await tester.pump();
     await tester.pump();
   }
