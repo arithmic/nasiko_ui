@@ -45,7 +45,8 @@ void main() {
     test('Light theme extensions are registered', () {
       final theme = NasikoTheme.lightTheme;
       expect(theme.extensions, isNotNull);
-      expect(theme.extensions.length, equals(6));
+      // colors, spacing, typography, radius, borderWidth, iconSize, motion.
+      expect(theme.extensions.length, equals(7));
     });
   });
 
@@ -82,7 +83,8 @@ void main() {
     test('Dark theme extensions are registered', () {
       final theme = NasikoTheme.darkTheme;
       expect(theme.extensions, isNotNull);
-      expect(theme.extensions.length, equals(6));
+      // colors, spacing, typography, radius, borderWidth, iconSize, motion.
+      expect(theme.extensions.length, equals(7));
     });
   });
 
