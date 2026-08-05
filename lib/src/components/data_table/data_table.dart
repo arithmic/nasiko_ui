@@ -61,8 +61,8 @@ class NasikoDataColumn<T> {
 
 /// A composable, styled data table for Nasiko UI.
 ///
-/// Visually identical to [NasikoTable] (same header treatment, row hover,
-/// dividers, radii) but built around typed rows with per-column
+/// Visually identical to [NasikoTable] (same header treatment, dividers,
+/// radii) but built around typed rows with per-column
 /// [NasikoDataColumn.cellBuilder]s, and with optional sorting, selection,
 /// and pagination — each usable in a controlled or internal mode:
 ///
@@ -360,15 +360,15 @@ class _NasikoDataTableState<T> extends State<NasikoDataTable<T>> {
 
     return Container(
       decoration: BoxDecoration(
-        color: colors.backgroundSurface,
-        borderRadius: BorderRadius.circular(radii.r12),
+        color: colors.backgroundBase,
+        borderRadius: BorderRadius.circular(radii.r8),
         border: Border.all(
           color: colors.borderPrimary,
           width: borderWidths.w1,
         ),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(radii.r12),
+        borderRadius: BorderRadius.circular(radii.r8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -394,10 +394,9 @@ class _NasikoDataTableState<T> extends State<NasikoDataTable<T>> {
 
             // Footer
             if (showFooter) ...[
-              // Row and skeleton blocks close themselves with a divider;
-              // the empty state doesn't.
-              if (bodyIsEmptyState)
-                const NasikoDivider(axis: NasikoDividerAxis.horizontal),
+              // No body block closes itself with a divider any more, so the
+              // footer draws its own separator.
+              const NasikoDivider(axis: NasikoDividerAxis.horizontal),
               _buildFooter(
                 context,
                 currentPage,
@@ -478,7 +477,7 @@ class _NasikoDataTableState<T> extends State<NasikoDataTable<T>> {
 
     final Widget label = Text(
       col.label,
-      style: typography.bodyPrimaryBold.copyWith(
+      style: typography.bodySecondaryBold.copyWith(
         color: colors.foregroundPrimary,
       ),
     );
@@ -566,27 +565,34 @@ class _NasikoDataTableState<T> extends State<NasikoDataTable<T>> {
     return Expanded(flex: col.flex, child: aligned);
   }
 
+  /// Rows are laid out edge to edge: each row owns its horizontal padding so
+  /// the trailing divider spans the table's full width (matching
+  /// [NasikoTable]).
   Widget _buildRows(BuildContext context, List<T> visible,
       Set<Object> selected) {
-    final spacing = context.spacing;
-
-    return Padding(
-      padding: EdgeInsets.only(
-        left: spacing.s16,
-        right: spacing.s16,
-        bottom: spacing.s12,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          for (final row in visible) _buildRow(context, row, selected),
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (var i = 0; i < visible.length; i++)
+          _buildRow(
+            context,
+            visible[i],
+            selected,
+            // The container's own border closes the last row; a divider there
+            // too would read as a doubled bottom edge.
+            showDivider: i < visible.length - 1,
+          ),
+      ],
     );
   }
 
-  Widget _buildRow(BuildContext context, T row, Set<Object> selected) {
+  Widget _buildRow(
+    BuildContext context,
+    T row,
+    Set<Object> selected, {
+    required bool showDivider,
+  }) {
     final spacing = context.spacing;
 
     final Widget cells = Row(
@@ -609,6 +615,7 @@ class _NasikoDataTableState<T> extends State<NasikoDataTable<T>> {
 
     return _NasikoDataTableRow(
       onTap: widget.onRowTap == null ? null : () => widget.onRowTap!(row),
+      showDivider: showDivider,
       child: cells,
     );
   }
@@ -628,11 +635,14 @@ class _NasikoDataTableState<T> extends State<NasikoDataTable<T>> {
       return Expanded(flex: col.flex, child: block);
     }
 
-    Widget skeletonRow() {
+    Widget skeletonRow({required bool showDivider}) {
       return Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: spacing.s12),
+            padding: EdgeInsets.symmetric(
+              horizontal: spacing.s16,
+              vertical: spacing.s8,
+            ),
             child: Row(
               children: [
                 if (widget.selectable)
@@ -651,7 +661,8 @@ class _NasikoDataTableState<T> extends State<NasikoDataTable<T>> {
               ],
             ),
           ),
-          const NasikoDivider(axis: NasikoDividerAxis.horizontal),
+          if (showDivider)
+            const NasikoDivider(axis: NasikoDividerAxis.horizontal),
         ],
       );
     }
@@ -659,20 +670,14 @@ class _NasikoDataTableState<T> extends State<NasikoDataTable<T>> {
     // NasikoSkeletonScope excludes semantics; announce loading here.
     return Semantics(
       label: 'Loading',
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: spacing.s16,
-          right: spacing.s16,
-          bottom: spacing.s12,
-        ),
-        child: NasikoSkeletonScope(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              for (var i = 0; i < widget.skeletonRowCount; i++) skeletonRow(),
-            ],
-          ),
+      child: NasikoSkeletonScope(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            for (var i = 0; i < widget.skeletonRowCount; i++)
+              skeletonRow(showDivider: i < widget.skeletonRowCount - 1),
+          ],
         ),
       ),
     );
@@ -735,12 +740,23 @@ class _NasikoDataTableState<T> extends State<NasikoDataTable<T>> {
   }
 }
 
-/// One body row: hover highlight identical to [NasikoTable]'s rows, an
-/// optional tap/keyboard activation target, and a trailing divider.
+/// One body row: an optional tap/keyboard activation target and a trailing
+/// divider. Rows deliberately have no hover tint (same as [NasikoTable]);
+/// the only background treatment is the keyboard focus highlight, which
+/// accessibility requires.
 class _NasikoDataTableRow extends StatefulWidget {
-  const _NasikoDataTableRow({required this.child, this.onTap});
+  const _NasikoDataTableRow({
+    required this.child,
+    required this.showDivider,
+    this.onTap,
+  });
 
   final Widget child;
+
+  /// Whether to close the row with a divider. False for the last row, whose
+  /// edge is already drawn by the table's border or the footer divider.
+  final bool showDivider;
+
   final VoidCallback? onTap;
 
   @override
@@ -748,7 +764,6 @@ class _NasikoDataTableRow extends StatefulWidget {
 }
 
 class _NasikoDataTableRowState extends State<_NasikoDataTableRow> {
-  bool _isHovering = false;
   bool _isFocused = false;
 
   @override
@@ -757,24 +772,24 @@ class _NasikoDataTableRowState extends State<_NasikoDataTableRow> {
     final colors = context.colors;
     final motion = context.motion;
 
-    final bool highlighted = _isHovering || _isFocused;
-    final Color backgroundColor =
-        highlighted ? colors.backgroundSurfaceHover : Colors.transparent;
-
     Widget content = Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(vertical: spacing.s12),
+          padding: EdgeInsets.symmetric(
+            horizontal: spacing.s16,
+            vertical: spacing.s8,
+          ),
           child: widget.child,
         ),
-        const NasikoDivider(axis: NasikoDividerAxis.horizontal),
+        if (widget.showDivider)
+          const NasikoDivider(axis: NasikoDividerAxis.horizontal),
       ],
     );
 
     if (widget.onTap != null) {
-      // The AnimatedContainer above provides the hover/focus highlight, so
-      // the InkWell contributes only the tap target, click cursor, focus
-      // node, and Enter/Space activation.
+      // The AnimatedContainer below paints the focus highlight, so the
+      // InkWell contributes only the tap target, click cursor, focus node,
+      // and Enter/Space activation.
       content = InkWell(
         onTap: widget.onTap,
         onFocusChange: (isFocused) => setState(() => _isFocused = isFocused),
@@ -787,15 +802,11 @@ class _NasikoDataTableRowState extends State<_NasikoDataTableRow> {
       );
     }
 
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovering = true),
-      onExit: (_) => setState(() => _isHovering = false),
-      child: AnimatedContainer(
-        duration: motion.hover,
-        curve: motion.enter,
-        color: backgroundColor,
-        child: content,
-      ),
+    return AnimatedContainer(
+      duration: motion.hover,
+      curve: motion.enter,
+      color: _isFocused ? colors.backgroundSurfaceHover : Colors.transparent,
+      child: content,
     );
   }
 }
