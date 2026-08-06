@@ -39,16 +39,16 @@ class NasikoResizablePanel {
     this.defaultFlex = 1.0,
     this.minFlex,
     this.maxFlex,
-  })  : assert(defaultFlex > 0, 'defaultFlex must be > 0'),
-        assert(minFlex == null || minFlex >= 0, 'minFlex must be >= 0'),
-        assert(
-          minFlex == null || minFlex <= defaultFlex,
-          'minFlex must be <= defaultFlex',
-        ),
-        assert(
-          maxFlex == null || maxFlex >= defaultFlex,
-          'maxFlex must be >= defaultFlex',
-        );
+  }) : assert(defaultFlex > 0, 'defaultFlex must be > 0'),
+       assert(minFlex == null || minFlex >= 0, 'minFlex must be >= 0'),
+       assert(
+         minFlex == null || minFlex <= defaultFlex,
+         'minFlex must be <= defaultFlex',
+       ),
+       assert(
+         maxFlex == null || maxFlex >= defaultFlex,
+         'maxFlex must be >= defaultFlex',
+       );
 
   /// The panel's content. Clipped while smaller than its intrinsic size.
   final Widget child;
@@ -176,8 +176,7 @@ class _NasikoResizablePanelGroupState extends State<NasikoResizablePanelGroup> {
   /// Converts flex factors into normalized fractions and min/max bounds.
   void _normalizeFromPanels() {
     final panels = widget.panels;
-    final totalFlex =
-        panels.fold<double>(0.0, (sum, p) => sum + p.defaultFlex);
+    final totalFlex = panels.fold<double>(0.0, (sum, p) => sum + p.defaultFlex);
     _defaultFractions = <double>[
       for (final p in panels) _asFixed(p.defaultFlex / totalFlex),
     ];
@@ -237,8 +236,10 @@ class _NasikoResizablePanelGroupState extends State<NasikoResizablePanelGroup> {
       for (var i = leadingPivot - 1; i >= 0; i--) {
         totalExpandable += _maxFractions[i] - initialLayout[i];
       }
-      final cappedDelta =
-          math.min(delta, math.min(totalShrinkable, totalExpandable));
+      final cappedDelta = math.min(
+        delta,
+        math.min(totalShrinkable, totalExpandable),
+      );
 
       // Phase 1: shrink trailing panels from the pivot outward.
       var applied = 0.0;
@@ -281,8 +282,10 @@ class _NasikoResizablePanelGroupState extends State<NasikoResizablePanelGroup> {
       for (var i = trailingPivot + 1; i < next.length; i++) {
         totalExpandable += _maxFractions[i] - initialLayout[i];
       }
-      final cappedDelta =
-          math.min(absDelta, math.min(totalShrinkable, totalExpandable));
+      final cappedDelta = math.min(
+        absDelta,
+        math.min(totalShrinkable, totalExpandable),
+      );
 
       // Phase 1: shrink leading panels from the pivot outward.
       var applied = 0.0;
@@ -342,8 +345,9 @@ class _NasikoResizablePanelGroupState extends State<NasikoResizablePanelGroup> {
     if (initialLayout == null || startPosition == null) return;
     if (_availableExtent <= 0) return;
 
-    var pixelDelta =
-        _asFixed(_mainAxisPosition(details.globalPosition) - startPosition);
+    var pixelDelta = _asFixed(
+      _mainAxisPosition(details.globalPosition) - startPosition,
+    );
 
     // Invert the delta for RTL horizontal dragging (ported behavior).
     final rtl = Directionality.of(context) == TextDirection.rtl;
@@ -416,10 +420,13 @@ class _NasikoResizablePanelGroupState extends State<NasikoResizablePanelGroup> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final totalExtent =
-            _isHorizontal ? constraints.maxWidth : constraints.maxHeight;
-        _availableExtent =
-            math.max(0.0, totalExtent - dividerExtent * dividerCount);
+        final totalExtent = _isHorizontal
+            ? constraints.maxWidth
+            : constraints.maxHeight;
+        _availableExtent = math.max(
+          0.0,
+          totalExtent - dividerExtent * dividerCount,
+        );
 
         final children = <Widget>[];
         for (var i = 0; i < widget.panels.length; i++) {
@@ -637,9 +644,7 @@ class _ResizableDividerState extends State<_ResizableDivider> {
             child: SizedBox(
               width: _isHorizontal ? widget.hitExtent : null,
               height: _isHorizontal ? null : widget.hitExtent,
-              child: Stack(
-                children: [line, grip],
-              ),
+              child: Stack(children: [line, grip]),
             ),
           ),
         ),
