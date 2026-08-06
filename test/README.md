@@ -5,9 +5,9 @@
 | Path | What lives there |
 | --- | --- |
 | `helpers/harness.dart` | Shared pump helpers (`pumpNasiko`, `pumpNasikoOverlayHost`), golden frame/capture helpers, window pinning. |
-| `goldens/` | Golden (screenshot) tests, light + dark per frame. Baselines land in `goldens/goldens/*.png`. |
-| `behavior/` | Interaction tests: select, combobox, popup menu, modal, data table, calendar, command palette, field. |
-| `a11y/` | Semantics assertions and `meetsGuideline` checks. |
+| `goldens/` | Golden (screenshot) tests, light + dark per frame. Baselines land in `goldens/goldens/*.png`. `parity_golden_test.dart` covers the advanced interaction components (slider, toggle group, input OTP, alert). |
+| `behavior/` | Interaction tests: select, combobox, popup menu, modal, data table, calendar, command palette, field — plus the parity wave: slider, toggle group, input OTP, context menu, hover card, resizable, time picker. |
+| `a11y/` | Semantics assertions and `meetsGuideline` checks. `parity_a11y_test.dart` covers slider/toggle/OTP/context-menu semantics. |
 | `nasiko_ui_test.dart`, `text_box_test.dart` | Pre-existing package tests (theme/tokens, text box focus). |
 
 ## Running
@@ -109,3 +109,21 @@ Written statically (no local Flutter SDK); check these on the first real run:
    `NasikoRadio` expose no checked-state semantics, and 28 px small buttons
    cannot meet the android 48 dp tap-target guideline. Unskip alongside the
    lib fixes.
+9. **Anchored-overlay portal sync is post-frame** (context menu, hover
+   card, time-field popover): visibility changes need TWO pumps — one for
+   the frame that flips the flag, one for the portal's rebuild. Timer
+   boundaries in `hover_card_test.dart` therefore pump `duration` + one
+   extra frame.
+10. **Parity-suite geometry assumptions**: the slider maps pointer x with
+    `thumbBox = spacing.s28` read as a raw 28 (unscaled) and the resizable
+    divider is `spacing.s8` = 8 px wide; drag asserts in
+    `resizable_test.dart` rely on clamped drags landing exactly on min/max
+    (slop-independent). If the spacing tokens are ever ScreenUtil-scaled,
+    recompute the surface widths.
+11. **Private-type finders**: context-menu (`_NasikoContextMenuSurface`,
+    `_NasikoContextMenuDividerTile`) and resizable (`_ResizableDivider`)
+    tests locate internals via `runtimeType.toString()` predicates — rename
+    the lib classes and these finders must follow.
+12. **OTP backspace test** drives `EditableText`'s hardware-key delete
+    path (`sendKeyEvent(backspace)`); if a Flutter upgrade changes that
+    plumbing, fall back to `enterText` with the shortened code.

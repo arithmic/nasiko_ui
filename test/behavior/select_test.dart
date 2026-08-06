@@ -89,6 +89,9 @@ void main() {
       expect(menuIsOpen(tester), isTrue);
 
       await tester.tap(find.text(placeholder));
+      // Two pumps: the anchored-overlay engine syncs its portal post-frame,
+      // so the hide lands one frame after the rebuild (test/README #9).
+      await tester.pump();
       await tester.pump();
       expect(menuIsOpen(tester), isFalse);
     });
@@ -202,6 +205,9 @@ void main() {
       await tester.tap(find.text(placeholder));
       await pumpMenuOpen(tester);
       await tester.tap(find.text('Banana'));
+      // Two pumps: the post-frame portal sync removes the menu one frame
+      // after the rebuild (test/README #9).
+      await tester.pump();
       await tester.pump();
 
       expect(picked, ['banana']);

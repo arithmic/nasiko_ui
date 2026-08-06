@@ -2,15 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
-import '../internal/overlay_reveal.dart';
+import '../internal/anchored_overlay.dart';
 
 /// Horizontal alignment of the popover surface relative to its anchor.
 enum NasikoPopoverAlignment { start, center, end }
-
-/// Minimum space (logical px) required below the anchor before the popover
-/// flips above it. A heuristic — the surface sizes to its intrinsic content,
-/// so its height isn't known before layout.
-const double _kMinSpaceBelow = 240.0;
 
 /// Controls the visibility of a [NasikoPopover].
 ///
@@ -56,10 +51,12 @@ class NasikoPopoverController extends ChangeNotifier {
 /// An anchored, non-modal overlay surface attached to [child].
 ///
 /// The popover opens below the anchor with a small gap and flips above it
-/// when there isn't enough space below (mirroring [NasikoPopupMenu]).
-/// Visibility is driven entirely by [controller]; the surface is rendered
-/// through an [OverlayPortal], so it follows the anchor while open and needs
-/// no manual overlay lifecycle.
+/// when the surface doesn't fit below. Positioning runs on the shared
+/// [NasikoAnchoredOverlay] engine: the flip uses the surface's measured size
+/// (not a fixed heuristic), and the final position is clamped to the screen
+/// bounds horizontally and vertically. Visibility is driven entirely by
+/// [controller]; the surface is rendered through an overlay portal, so it
+/// follows the anchor while open and needs no manual overlay lifecycle.
 ///
 /// Dismissal: tapping outside (when [dismissOnOutsideTap]) or pressing
 /// Escape hides the popover; Escape also restores focus to where it was
@@ -104,23 +101,18 @@ class NasikoPopover extends StatefulWidget {
 }
 
 class _NasikoPopoverState extends State<NasikoPopover> {
-  final LayerLink _link = LayerLink();
-  final OverlayPortalController _portal = OverlayPortalController();
   final FocusScopeNode _popoverScope =
       FocusScopeNode(debugLabel: 'NasikoPopover');
 
   /// Focus owner before the popover opened — restored on Escape.
   FocusNode? _previousFocus;
-  bool _openAbove = false;
 
   @override
   void initState() {
     super.initState();
     widget.controller.addListener(_handleControllerChanged);
     if (widget.controller.isShowing) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) _handleControllerChanged();
-      });
+      _previousFocus = FocusManager.instance.primaryFocus;
     }
   }
 
@@ -130,11 +122,6 @@ class _NasikoPopoverState extends State<NasikoPopover> {
     if (oldWidget.controller != widget.controller) {
       oldWidget.controller.removeListener(_handleControllerChanged);
       widget.controller.addListener(_handleControllerChanged);
-      // Defer the sync: didUpdateWidget runs during build, and
-      // OverlayPortalController.show()/hide() must not be called then.
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) _handleControllerChanged();
-      });
     }
   }
 
@@ -146,30 +133,13 @@ class _NasikoPopoverState extends State<NasikoPopover> {
   }
 
   void _handleControllerChanged() {
-    if (!mounted || widget.controller.isShowing == _portal.isShowing) return;
+    if (!mounted) return;
     if (widget.controller.isShowing) {
       _previousFocus = FocusManager.instance.primaryFocus;
-      setState(() => _openAbove = _shouldOpenAbove());
-      _portal.show();
-    } else {
-      _portal.hide();
     }
-  }
-
-  /// Whether to flip above the anchor. Mirrors the popup menu's openUpward
-  /// logic, measured in the overlay's coordinate space.
-  bool _shouldOpenAbove() {
-    final renderBox = context.findRenderObject() as RenderBox?;
-    if (renderBox == null || !renderBox.hasSize) return false;
-
-    final overlayBox =
-        Overlay.of(context).context.findRenderObject() as RenderBox;
-    final anchor = renderBox.localToGlobal(Offset.zero, ancestor: overlayBox);
-
-    final spaceBelow =
-        overlayBox.size.height - (anchor.dy + renderBox.size.height);
-    final spaceAbove = anchor.dy;
-    return spaceBelow < _kMinSpaceBelow && spaceAbove > spaceBelow;
+    // The anchored-overlay engine syncs show/hide from the rebuilt
+    // `visible` value, so a rebuild is all that's needed here.
+    setState(() {});
   }
 
   void _dismissAndRestoreFocus() {
@@ -179,27 +149,11 @@ class _NasikoPopoverState extends State<NasikoPopover> {
     _previousFocus = null;
   }
 
-  /// Anchor points on the target (anchor) and follower (surface).
-  ///
-  /// The same alignment is reused for the inner [Align] so placement stays
-  /// correct whether the overlay lays the follower out tight (full-size) or
-  /// loose (shrink-wrapped).
-  (Alignment target, Alignment follower) get _anchors {
-    switch (widget.alignment) {
-      case NasikoPopoverAlignment.start:
-        return _openAbove
-            ? (Alignment.topLeft, Alignment.bottomLeft)
-            : (Alignment.bottomLeft, Alignment.topLeft);
-      case NasikoPopoverAlignment.center:
-        return _openAbove
-            ? (Alignment.topCenter, Alignment.bottomCenter)
-            : (Alignment.bottomCenter, Alignment.topCenter);
-      case NasikoPopoverAlignment.end:
-        return _openAbove
-            ? (Alignment.topRight, Alignment.bottomRight)
-            : (Alignment.bottomRight, Alignment.topRight);
-    }
-  }
+  NasikoAnchorAlignment get _anchorAlignment => switch (widget.alignment) {
+        NasikoPopoverAlignment.start => NasikoAnchorAlignment.start,
+        NasikoPopoverAlignment.center => NasikoAnchorAlignment.center,
+        NasikoPopoverAlignment.end => NasikoAnchorAlignment.end,
+      };
 
   Widget _buildSurface(BuildContext context) {
     final colors = context.colors;
@@ -231,47 +185,31 @@ class _NasikoPopoverState extends State<NasikoPopover> {
     );
   }
 
-  Widget _buildOverlayChild(BuildContext context) {
-    final gap = context.spacing.s4;
-    final (targetAnchor, followerAnchor) = _anchors;
-
-    return CompositedTransformFollower(
-      link: _link,
-      showWhenUnlinked: false,
-      targetAnchor: targetAnchor,
-      followerAnchor: followerAnchor,
-      offset: widget.offset + Offset(0, _openAbove ? -gap : gap),
-      child: Align(
-        alignment: followerAnchor,
-        child: TapRegion(
-          groupId: this,
-          onTapOutside:
-              widget.dismissOnOutsideTap ? (_) => widget.controller.hide() : null,
-          child: FocusScope(
-            node: _popoverScope,
-            child: Shortcuts(
-              shortcuts: const {
-                SingleActivator(LogicalKeyboardKey.escape): DismissIntent(),
-              },
-              child: Actions(
-                actions: {
-                  DismissIntent: CallbackAction<DismissIntent>(
-                    onInvoke: (_) {
-                      _dismissAndRestoreFocus();
-                      return null;
-                    },
-                  ),
+  /// Overlay content: the engine handles positioning and the entrance
+  /// reveal; this layer owns dismissal (outside tap, Escape) and focus.
+  Widget _buildOverlayContent(BuildContext context, NasikoAnchorSide side) {
+    return TapRegion(
+      groupId: this,
+      onTapOutside:
+          widget.dismissOnOutsideTap ? (_) => widget.controller.hide() : null,
+      child: FocusScope(
+        node: _popoverScope,
+        child: Shortcuts(
+          shortcuts: const {
+            SingleActivator(LogicalKeyboardKey.escape): DismissIntent(),
+          },
+          child: Actions(
+            actions: {
+              DismissIntent: CallbackAction<DismissIntent>(
+                onInvoke: (_) {
+                  _dismissAndRestoreFocus();
+                  return null;
                 },
-                child: Focus(
-                  autofocus: true,
-                  // Entrance only — removal stays instant, matching the
-                  // subtle & fast motion personality.
-                  child: NasikoOverlayReveal(
-                    slideFrom: Offset(0, _openAbove ? 4 : -4),
-                    child: _buildSurface(context),
-                  ),
-                ),
               ),
+            },
+            child: Focus(
+              autofocus: true,
+              child: _buildSurface(context),
             ),
           ),
         ),
@@ -281,15 +219,21 @@ class _NasikoPopoverState extends State<NasikoPopover> {
 
   @override
   Widget build(BuildContext context) {
-    return OverlayPortal(
-      controller: _portal,
-      overlayChildBuilder: _buildOverlayChild,
-      child: CompositedTransformTarget(
-        link: _link,
-        // Same tap group as the surface so taps on the anchor never count
-        // as "outside" — lets toggle buttons work without a hide/show race.
-        child: TapRegion(groupId: this, child: widget.child),
+    final spacing = context.spacing;
+
+    return NasikoAnchoredOverlay(
+      visible: widget.controller.isShowing,
+      anchor: NasikoAutoAnchor(
+        side: NasikoAnchorSide.bottom,
+        alignment: _anchorAlignment,
+        gap: spacing.s4,
+        offset: widget.offset,
+        screenPadding: spacing.s8,
       ),
+      overlayBuilder: _buildOverlayContent,
+      // Same tap group as the surface so taps on the anchor never count
+      // as "outside" — lets toggle buttons work without a hide/show race.
+      child: TapRegion(groupId: this, child: widget.child),
     );
   }
 }
