@@ -232,14 +232,19 @@ class _SectionState extends State<Section> {
               child: Row(
                 children: [
                   if (widget.icon != null) ...[
-                    HugeIcon(
-                      icon: widget.icon!,
-                      size: iconSizes.s,
+                    _AnimatedIconColor(
                       color: widget.isDisabled
                           ? colors.foregroundDisabled
                           : hasSelectedChild
                           ? colors.foregroundPrimary
                           : colors.foregroundIconTertiary,
+                      duration: motion.fast,
+                      curve: motion.enter,
+                      builder: (context, color) => HugeIcon(
+                        icon: widget.icon!,
+                        size: iconSizes.s,
+                        color: color,
+                      ),
                     ),
                     SizedBox(width: spacing.s8),
                   ],
@@ -279,64 +284,100 @@ class _SectionState extends State<Section> {
           ),
 
           // ── Expanded content ──────────────────────────────────────────
-          // AnimatedSize grows/shrinks the content in sync with the chevron
-          // rotation above; the collapsed state renders a zero-size child.
-          AnimatedSize(
-            duration: motion.resolve(context, motion.base),
-            curve: motion.move,
-            alignment: Alignment.topCenter,
-            child: !_isExpanded
-                ? const SizedBox.shrink()
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      SizedBox(height: spacing.s8),
-                      if (widget.isLoading)
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: spacing.s12,
-                            vertical: spacing.s8,
-                          ),
-                          child: Text(
-                            'Loading...',
-                            style: typography.bodySecondary.copyWith(
-                              color: colors.foregroundSecondary,
+          // The content stays mounted through the collapse so it fades and
+          // shrinks together (swapping to a zero-size child mid-animation
+          // makes rows vanish a frame before the height moves — flicker).
+          // AnimatedAlign drives the reveal height in sync with the chevron;
+          // the inner AnimatedSize keeps intra-expanded size changes
+          // (loading → items) smooth; AnimatedSwitcher cross-fades those
+          // content phases instead of hard-swapping them.
+          ClipRect(
+            child: AnimatedAlign(
+              alignment: Alignment.topCenter,
+              heightFactor: _isExpanded ? 1.0 : 0.0,
+              duration: motion.resolve(context, motion.base),
+              curve: motion.move,
+              child: AnimatedOpacity(
+                opacity: _isExpanded ? 1.0 : 0.0,
+                duration: motion.resolve(context, motion.base),
+                curve: _isExpanded ? motion.enter : motion.exit,
+                child: AnimatedSize(
+                  duration: motion.resolve(context, motion.base),
+                  curve: motion.move,
+                  alignment: Alignment.topCenter,
+                  child: AnimatedSwitcher(
+                    duration: motion.resolve(context, motion.fast),
+                    switchInCurve: motion.enter,
+                    switchOutCurve: motion.exit,
+                    layoutBuilder: (currentChild, previousChildren) => Stack(
+                      alignment: Alignment.topCenter,
+                      children: <Widget>[
+                        ...previousChildren,
+                        if (currentChild != null) currentChild,
+                      ],
+                    ),
+                    child: Column(
+                      key: ValueKey(
+                        widget.isLoading
+                            ? 'loading'
+                            : (widget.children == null ||
+                                  widget.children!.isEmpty)
+                            ? 'empty'
+                            : 'items',
+                      ),
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        SizedBox(height: spacing.s8),
+                        if (widget.isLoading)
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: spacing.s12,
+                              vertical: spacing.s8,
                             ),
-                          ),
-                        )
-                      else if (widget.children == null ||
-                          widget.children!.isEmpty)
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: spacing.s12,
-                            vertical: spacing.s8,
-                          ),
-                          child: Text(
-                            widget.emptyMessage ?? '',
-                            style: typography.bodySecondary.copyWith(
-                              color: colors.foregroundSecondary,
+                            child: Text(
+                              'Loading...',
+                              style: typography.bodySecondary.copyWith(
+                                color: colors.foregroundSecondary,
+                              ),
                             ),
+                          )
+                        else if (widget.children == null ||
+                            widget.children!.isEmpty)
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: spacing.s12,
+                              vertical: spacing.s8,
+                            ),
+                            child: Text(
+                              widget.emptyMessage ?? '',
+                              style: typography.bodySecondary.copyWith(
+                                color: colors.foregroundSecondary,
+                              ),
+                            ),
+                          )
+                        else
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: widget.children!.map((child) {
+                              return _SectionChildItem(
+                                item: child,
+                                isSelected: _isChildSelected(child),
+                                onTap: () {
+                                  child.onTap?.call();
+                                  widget.onChildTap?.call(
+                                    child.id ?? child.label,
+                                  );
+                                },
+                                isDisabled: widget.isDisabled,
+                              );
+                            }).toList(),
                           ),
-                        )
-                      else
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: widget.children!.map((child) {
-                            return _SectionChildItem(
-                              item: child,
-                              isSelected: _isChildSelected(child),
-                              onTap: () {
-                                child.onTap?.call();
-                                widget.onChildTap?.call(
-                                  child.id ?? child.label,
-                                );
-                              },
-                              isDisabled: widget.isDisabled,
-                            );
-                          }).toList(),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
+                ),
+              ),
+            ),
           ),
         ],
       );
@@ -345,18 +386,27 @@ class _SectionState extends State<Section> {
     // ── Non-expandable section ─────────────────────────────────────────────
     final bool showSelectedState = widget.isSelected;
 
+    // "Invisible" states use the TARGET hue at zero alpha rather than
+    // Colors.transparent: lerping from transparent black tints the fill/
+    // border with a muddy dark cast mid-animation — the visible flicker.
     Color backgroundColor;
     Color borderColor;
     if (showSelectedState) {
       backgroundColor = colors.backgroundSecondaryBrand;
       borderColor = colors.foregroundBrand;
     } else if (_isHovered && _canInteract) {
-      backgroundColor = Colors.transparent;
+      backgroundColor = colors.backgroundSecondaryBrand.withValues(alpha: 0);
       borderColor = colors.borderSecondary;
     } else {
-      backgroundColor = Colors.transparent;
-      borderColor = Colors.transparent;
+      backgroundColor = colors.backgroundSecondaryBrand.withValues(alpha: 0);
+      borderColor = colors.borderSecondary.withValues(alpha: 0);
     }
+
+    final iconColor = widget.isDisabled
+        ? colors.foregroundDisabled
+        : showSelectedState
+        ? colors.foregroundPrimary
+        : colors.foregroundIconTertiary;
 
     return MouseRegion(
       cursor: _canInteract
@@ -367,7 +417,7 @@ class _SectionState extends State<Section> {
       child: GestureDetector(
         onTap: _canInteract ? _toggleExpanded : null,
         child: AnimatedContainer(
-          duration: motion.hover,
+          duration: motion.fast,
           curve: motion.enter,
           padding: EdgeInsets.symmetric(
             horizontal: spacing.s8,
@@ -380,31 +430,56 @@ class _SectionState extends State<Section> {
           ),
           child: Row(
             children: [
-              HugeIcon(
-                icon: widget.icon!,
-                size: iconSizes.s,
-                color: widget.isDisabled
-                    ? colors.foregroundDisabled
-                    : showSelectedState
-                    ? colors.foregroundPrimary
-                    : colors.foregroundIconTertiary,
+              _AnimatedIconColor(
+                color: iconColor,
+                duration: motion.fast,
+                curve: motion.enter,
+                builder: (context, color) =>
+                    HugeIcon(icon: widget.icon!, size: iconSizes.s, color: color),
               ),
               SizedBox(width: spacing.s8),
               Expanded(
-                child: Text(
-                  widget.label,
-                  maxLines: widget.maxLines,
+                child: AnimatedDefaultTextStyle(
+                  duration: motion.fast,
+                  curve: motion.enter,
                   style: typography.bodySecondaryBold.copyWith(
                     color: widget.isDisabled
                         ? colors.foregroundDisabled
                         : colors.foregroundPrimary,
                   ),
+                  child: Text(widget.label, maxLines: widget.maxLines),
                 ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Implicitly animates a color handed to an arbitrary [builder] — used for
+/// icon tint transitions, which have no AnimatedContainer equivalent.
+class _AnimatedIconColor extends StatelessWidget {
+  const _AnimatedIconColor({
+    required this.color,
+    required this.duration,
+    required this.curve,
+    required this.builder,
+  });
+
+  final Color color;
+  final Duration duration;
+  final Curve curve;
+  final Widget Function(BuildContext context, Color color) builder;
+
+  @override
+  Widget build(BuildContext context) {
+    return TweenAnimationBuilder<Color?>(
+      tween: ColorTween(end: color),
+      duration: duration,
+      curve: curve,
+      builder: (context, value, _) => builder(context, value ?? color),
     );
   }
 }
@@ -451,6 +526,8 @@ class _SectionChildItemState extends State<_SectionChildItem> {
     final borderWidths = context.borderWidth;
     final motion = context.motion;
 
+    // Zero-alpha states reuse the target hue (not Colors.transparent) so
+    // color lerps never pass through a dark transparent-black cast.
     Color backgroundColor;
     Color borderColor;
     if (widget.isDisabled) {
@@ -460,11 +537,11 @@ class _SectionChildItemState extends State<_SectionChildItem> {
       backgroundColor = colors.backgroundSecondaryBrand;
       borderColor = colors.borderSecondary;
     } else if (_isHovered) {
-      backgroundColor = Colors.transparent;
+      backgroundColor = colors.backgroundSecondaryBrand.withValues(alpha: 0);
       borderColor = colors.borderSecondary;
     } else {
-      backgroundColor = Colors.transparent;
-      borderColor = Colors.transparent;
+      backgroundColor = colors.backgroundSecondaryBrand.withValues(alpha: 0);
+      borderColor = colors.borderSecondary.withValues(alpha: 0);
     }
 
     final showTrailing = _hasMenu && _canInteract;
@@ -487,7 +564,7 @@ class _SectionChildItemState extends State<_SectionChildItem> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             AnimatedContainer(
-              duration: motion.hover,
+              duration: motion.fast,
               curve: motion.enter,
               margin: EdgeInsets.only(bottom: spacing.s4),
               padding: EdgeInsets.symmetric(
@@ -502,12 +579,11 @@ class _SectionChildItemState extends State<_SectionChildItem> {
               child: Row(
                 children: [
                   Expanded(
-                    child: Text(
-                      widget.item.label,
-                      maxLines: widget.item.maxLines,
-                      overflow: widget.item.maxLines != null
-                          ? TextOverflow.ellipsis
-                          : null,
+                    // Selection swaps typography + color; animate the style
+                    // change instead of hard-cutting the text appearance.
+                    child: AnimatedDefaultTextStyle(
+                      duration: motion.fast,
+                      curve: motion.enter,
                       style: widget.isSelected
                           ? typography.buttonSecondary.copyWith(
                               color: widget.isDisabled
@@ -519,6 +595,13 @@ class _SectionChildItemState extends State<_SectionChildItem> {
                                   ? colors.foregroundDisabled
                                   : colors.foregroundSecondary,
                             ),
+                      child: Text(
+                        widget.item.label,
+                        maxLines: widget.item.maxLines,
+                        overflow: widget.item.maxLines != null
+                            ? TextOverflow.ellipsis
+                            : null,
+                      ),
                     ),
                   ),
                   if (showTrailing)
@@ -543,13 +626,31 @@ class _SectionChildItemState extends State<_SectionChildItem> {
                 ],
               ),
             ),
-            if (widget.isSelected && widget.item.subtitle != null)
-              Padding(
-                padding: EdgeInsets.only(left: spacing.s12, bottom: spacing.s4),
-                child: Text(
-                  widget.item.subtitle!,
-                  style: typography.bodySecondary.copyWith(
-                    color: colors.foregroundSecondary,
+            // The subtitle reveals/hides with the selection instead of
+            // popping the layout: height + fade, content kept mounted.
+            if (widget.item.subtitle != null)
+              ClipRect(
+                child: AnimatedAlign(
+                  alignment: Alignment.topCenter,
+                  heightFactor: widget.isSelected ? 1.0 : 0.0,
+                  duration: motion.resolve(context, motion.fast),
+                  curve: motion.move,
+                  child: AnimatedOpacity(
+                    opacity: widget.isSelected ? 1.0 : 0.0,
+                    duration: motion.resolve(context, motion.fast),
+                    curve: widget.isSelected ? motion.enter : motion.exit,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: spacing.s12,
+                        bottom: spacing.s4,
+                      ),
+                      child: Text(
+                        widget.item.subtitle!,
+                        style: typography.bodySecondary.copyWith(
+                          color: colors.foregroundSecondary,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
