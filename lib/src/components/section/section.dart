@@ -239,7 +239,9 @@ class _SectionState extends State<Section> {
                           ? colors.foregroundPrimary
                           : colors.foregroundIconTertiary,
                       duration: motion.fast,
-                      curve: motion.enter,
+                      // A symmetric curve prevents the icon tint from
+                      // jumping in quickly and lingering on the way out.
+                      curve: motion.move,
                       builder: (context, color) => HugeIcon(
                         icon: widget.icon!,
                         size: iconSizes.s,
@@ -418,7 +420,9 @@ class _SectionState extends State<Section> {
         onTap: _canInteract ? _toggleExpanded : null,
         child: AnimatedContainer(
           duration: motion.fast,
-          curve: motion.enter,
+          // Fill and border share a symmetric curve so a state can be
+          // interrupted or reversed without a visible colour flash.
+          curve: motion.move,
           padding: EdgeInsets.symmetric(
             horizontal: spacing.s8,
             vertical: spacing.s12,
@@ -433,7 +437,7 @@ class _SectionState extends State<Section> {
               _AnimatedIconColor(
                 color: iconColor,
                 duration: motion.fast,
-                curve: motion.enter,
+                curve: motion.move,
                 builder: (context, color) => HugeIcon(
                   icon: widget.icon!,
                   size: iconSizes.s,
@@ -444,7 +448,7 @@ class _SectionState extends State<Section> {
               Expanded(
                 child: AnimatedDefaultTextStyle(
                   duration: motion.fast,
-                  curve: motion.enter,
+                  curve: motion.move,
                   style: typography.bodySecondaryBold.copyWith(
                     color: widget.isDisabled
                         ? colors.foregroundDisabled
@@ -568,7 +572,9 @@ class _SectionChildItemState extends State<_SectionChildItem> {
           children: [
             AnimatedContainer(
               duration: motion.fast,
-              curve: motion.enter,
+              // Keep the background and border on the same continuous,
+              // bidirectional curve as the text and icon tint.
+              curve: motion.move,
               margin: EdgeInsets.only(bottom: spacing.s4),
               padding: EdgeInsets.symmetric(
                 horizontal: spacing.s12,
@@ -586,7 +592,7 @@ class _SectionChildItemState extends State<_SectionChildItem> {
                     // change instead of hard-cutting the text appearance.
                     child: AnimatedDefaultTextStyle(
                       duration: motion.fast,
-                      curve: motion.enter,
+                      curve: motion.move,
                       style: widget.isSelected
                           ? typography.buttonSecondary.copyWith(
                               color: widget.isDisabled
@@ -609,8 +615,8 @@ class _SectionChildItemState extends State<_SectionChildItem> {
                   ),
                   if (showTrailing)
                     AnimatedOpacity(
-                      duration: motion.hover,
-                      curve: motion.enter,
+                      duration: motion.fast,
+                      curve: motion.move,
                       opacity: (_isHovered || _isMenuOpen) ? 1.0 : 0.0,
                       child: Listener(
                         behavior: HitTestBehavior.opaque,
