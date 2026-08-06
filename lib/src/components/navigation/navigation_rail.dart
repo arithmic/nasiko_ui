@@ -116,55 +116,40 @@ class _RailItem extends StatefulWidget {
 
 class _RailItemState extends State<_RailItem> {
   bool _hovered = false;
-  final LayerLink _tooltipLink = LayerLink();
-  OverlayEntry? _tooltipEntry;
+  final OverlayPortalController _tooltipController = OverlayPortalController();
 
-  void _showTooltip() {
-    if (widget.isExpanded) return;
-    _removeTooltip();
-
+  Widget _buildTooltipOverlay(BuildContext context) {
     final colors = context.colors;
     final spacing = context.spacing;
     final radii = context.radius;
     final typography = context.typography;
 
-    _tooltipEntry = OverlayEntry(
-      // Non-Positioned overlay entries are stretched tight to the Overlay's
-      // full size (that's how modal barriers work) — Positioned.fill +
-      // Align(widthFactor/heightFactor: 1) opts back out of that so the
-      // follower only occupies its child's natural size.
-      builder: (_) => Positioned.fill(
-        child: IgnorePointer(
-          child: CompositedTransformFollower(
-            link: _tooltipLink,
-            // Right-center: anchored to the item's right edge, vertically
-            // centered — matches a collapsed icon-only rail (no room below).
-            targetAnchor: Alignment.centerRight,
-            followerAnchor: Alignment.centerLeft,
-            offset: const Offset(8, 0),
-            child: Align(
-              alignment: Alignment.topLeft,
-              widthFactor: 1,
-              heightFactor: 1,
-              child: Material(
-                color: Colors.transparent,
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: spacing.s12,
-                    vertical: spacing.s8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: colors.foregroundConstantBlack,
-                    borderRadius: BorderRadius.circular(radii.r8),
-                  ),
-                  child: Text(
-                    widget.item.label,
-                    style: typography.bodyPrimary.copyWith(
-                      color: colors.foregroundConstantWhite,
-                      fontStyle: FontStyle.normal,
-                      height: 1.4,
-                    ),
-                  ),
+    final renderBox = this.context.findRenderObject() as RenderBox;
+    final target = (renderBox.localToGlobal(Offset.zero) & renderBox.size).centerRight;
+
+    return Positioned.fill(
+      child: IgnorePointer(
+        child: CustomSingleChildLayout(
+          // Right-center: anchored to the item's right edge, vertically
+          // centered — matches a collapsed icon-only rail (no room below).
+          delegate: _RailTooltipPositionDelegate(target: target),
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: spacing.s12,
+                vertical: spacing.s8,
+              ),
+              decoration: BoxDecoration(
+                color: colors.foregroundConstantBlack,
+                borderRadius: BorderRadius.circular(radii.r8),
+              ),
+              child: Text(
+                widget.item.label,
+                style: typography.bodyPrimary.copyWith(
+                  color: colors.foregroundConstantWhite,
+                  fontStyle: FontStyle.normal,
+                  height: 1.4,
                 ),
               ),
             ),
@@ -172,19 +157,6 @@ class _RailItemState extends State<_RailItem> {
         ),
       ),
     );
-
-    Overlay.of(context).insert(_tooltipEntry!);
-  }
-
-  void _removeTooltip() {
-    _tooltipEntry?.remove();
-    _tooltipEntry = null;
-  }
-
-  @override
-  void dispose() {
-    _removeTooltip();
-    super.dispose();
   }
 
   @override
@@ -209,11 +181,11 @@ class _RailItemState extends State<_RailItem> {
     final content = MouseRegion(
       onEnter: (_) {
         setState(() => _hovered = true);
-        _showTooltip();
+        if (!widget.isExpanded) _tooltipController.show();
       },
       onExit: (_) {
         setState(() => _hovered = false);
-        _removeTooltip();
+        _tooltipController.hide();
       },
       cursor: widget.item.isDisabled
           ? SystemMouseCursors.basic
@@ -281,6 +253,42 @@ class _RailItemState extends State<_RailItem> {
     );
 
     if (widget.isExpanded) return content;
-    return CompositedTransformTarget(link: _tooltipLink, child: content);
+    return OverlayPortal(
+      controller: _tooltipController,
+      overlayChildBuilder: _buildTooltipOverlay,
+      child: content,
+    );
   }
+}
+
+/// Positions a tooltip's right-center at [target] in global coordinates —
+/// mirrors the framework's own `_TooltipPositionDelegate` (which anchors
+/// below/above), swapped to anchor at the item's right edge instead.
+class _RailTooltipPositionDelegate extends SingleChildLayoutDelegate {
+  _RailTooltipPositionDelegate({required this.target});
+
+  final Offset target;
+
+  @override
+  BoxConstraints getConstraintsForChild(BoxConstraints constraints) =>
+      constraints.loosen();
+
+  @override
+  Offset getPositionForChild(Size size, Size childSize) {
+    const gap = 8.0;
+    const margin = 8.0;
+    final x = (target.dx + gap).clamp(
+      margin,
+      (size.width - childSize.width - margin).clamp(margin, size.width),
+    );
+    final y = (target.dy - childSize.height / 2).clamp(
+      margin,
+      (size.height - childSize.height - margin).clamp(margin, size.height),
+    );
+    return Offset(x, y);
+  }
+
+  @override
+  bool shouldRelayout(_RailTooltipPositionDelegate oldDelegate) =>
+      target != oldDelegate.target;
 }
