@@ -129,30 +129,43 @@ class _RailItemState extends State<_RailItem> {
     final typography = context.typography;
 
     _tooltipEntry = OverlayEntry(
-      builder: (_) => CompositedTransformFollower(
-        link: _tooltipLink,
-        // Right-center: anchored to the item's right edge, vertically
-        // centered — matches a collapsed icon-only rail (no room below).
-        targetAnchor: Alignment.centerRight,
-        followerAnchor: Alignment.centerLeft,
-        offset: const Offset(8, 0),
-        child: Material(
-          color: Colors.transparent,
-          child: Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: spacing.s12,
-              vertical: spacing.s8,
-            ),
-            decoration: BoxDecoration(
-              color: colors.foregroundConstantBlack,
-              borderRadius: BorderRadius.circular(radii.r8),
-            ),
-            child: Text(
-              widget.item.label,
-              style: typography.bodyPrimary.copyWith(
-                color: colors.foregroundConstantWhite,
-                fontStyle: FontStyle.normal,
-                height: 1.4,
+      // Non-Positioned overlay entries are stretched tight to the Overlay's
+      // full size (that's how modal barriers work) — Positioned.fill +
+      // Align(widthFactor/heightFactor: 1) opts back out of that so the
+      // follower only occupies its child's natural size.
+      builder: (_) => Positioned.fill(
+        child: IgnorePointer(
+          child: CompositedTransformFollower(
+            link: _tooltipLink,
+            // Right-center: anchored to the item's right edge, vertically
+            // centered — matches a collapsed icon-only rail (no room below).
+            targetAnchor: Alignment.centerRight,
+            followerAnchor: Alignment.centerLeft,
+            offset: const Offset(8, 0),
+            child: Align(
+              alignment: Alignment.topLeft,
+              widthFactor: 1,
+              heightFactor: 1,
+              child: Material(
+                color: Colors.transparent,
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: spacing.s12,
+                    vertical: spacing.s8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: colors.foregroundConstantBlack,
+                    borderRadius: BorderRadius.circular(radii.r8),
+                  ),
+                  child: Text(
+                    widget.item.label,
+                    style: typography.bodyPrimary.copyWith(
+                      color: colors.foregroundConstantWhite,
+                      fontStyle: FontStyle.normal,
+                      height: 1.4,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
