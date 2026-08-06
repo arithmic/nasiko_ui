@@ -59,6 +59,10 @@ void main() {
   /// by the wrapper's own GestureDetector (the menu does open).
   Future<void> openMenu(WidgetTester tester) async {
     await tester.tap(find.text('Open menu'), warnIfMissed: false);
+    // Three frames: the anchored-overlay engine shows its portal in a
+    // post-frame callback, the next frame builds the surface, and the
+    // surface claims its focus scope in its own post-frame callback.
+    await tester.pump();
     await tester.pump();
     await tester.pump();
   }
@@ -142,6 +146,8 @@ void main() {
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown); // item 1
     await tester.pump();
     await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+    // Two frames: the engine hides its portal in a post-frame callback.
+    await tester.pump();
     await tester.pump();
 
     expect(selections, [1]);
@@ -155,6 +161,8 @@ void main() {
     await openMenu(tester);
 
     await tester.tap(find.text('Delete'));
+    // Two frames: the engine hides its portal in a post-frame callback.
+    await tester.pump();
     await tester.pump();
 
     expect(selections, [2]);

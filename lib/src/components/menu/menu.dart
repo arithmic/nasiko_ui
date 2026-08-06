@@ -4,7 +4,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
 import '../../tokens/colors/_color_palette.dart' show sand900;
-import '../internal/overlay_reveal.dart';
+import '../internal/anchored_overlay.dart';
 
 /// Surface color for the popup menu.
 ///
@@ -79,139 +79,47 @@ class NasikoPopupMenu extends StatefulWidget {
 }
 
 class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
-  OverlayEntry? _overlayEntry;
+  bool _isOpen = false;
+
+  /// Trigger width measured when the menu opens; the menu matches it when
+  /// [NasikoPopupMenu.width] is not provided.
+  double? _anchorWidth;
 
   /// The node holding keyboard focus before the menu opened; restored when
   /// the menu closes so focus returns to the trigger's context.
   FocusNode? _previousFocus;
 
-  @override
-  void dispose() {
-    _removeMenu();
-    super.dispose();
-  }
-
   void _toggleMenu() {
-    if (_overlayEntry != null) {
-      _removeMenu();
+    if (_isOpen) {
+      _closeMenu();
       return;
     }
     _openMenu();
   }
 
   void _openMenu() {
-    if (!widget.enabled) return;
+    if (!widget.enabled || _isOpen) return;
 
     final renderBox = context.findRenderObject() as RenderBox?;
     if (renderBox == null) return;
+    _anchorWidth = renderBox.size.width;
 
-    final spacing = context.spacing;
-    final anchorSize = renderBox.size;
-
-    // Convert anchor position into the overlay's coordinate space rather than
-    // screen space. Positioned() inside the overlay uses overlay-local coords,
-    // which can differ from screen coords when the overlay is inside a
-    // Navigator/Scaffold with an offset (common in Flutter web).
-    final overlay = Overlay.of(context);
-    final overlayBox = overlay.context.findRenderObject() as RenderBox;
-    final anchor = renderBox.localToGlobal(Offset.zero, ancestor: overlayBox);
-    final overlaySize = overlayBox.size;
-
-    final gap = widget.offset?.dy ?? spacing.s4;
-    final menuWidth = widget.width ?? anchorSize.width;
-
-    // ── Vertical ──────────────────────────────────────────────────────────────
-    // Open below by default; flip upward when there isn't enough space below.
-    final spaceBelow = overlaySize.height - (anchor.dy + anchorSize.height);
-    final openUpward = spaceBelow < widget.maxHeight + gap;
-
-    double? top, bottom;
-    if (openUpward) {
-      // Menu bottom aligns with anchor bottom — grows upward.
-      bottom = overlaySize.height - (anchor.dy + anchorSize.height);
-    } else {
-      // Menu top aligns with anchor top — grows downward (industry standard).
-      top = anchor.dy;
-    }
-
-    // ── Horizontal ────────────────────────────────────────────────────────────
-    // Right-align menu's right edge to anchor's right edge so it opens to the
-    // LEFT — natural for trailing "⋮" buttons.
-    // Flip to left-align only if that would clip the left edge.
-    final anchorRight = anchor.dx + anchorSize.width;
-    final overflowsLeft = anchorRight - menuWidth < 0;
-
-    double? left, right;
-    if (overflowsLeft) {
-      left = 0;
-    } else {
-      right = overlaySize.width - anchorRight;
-    }
-
-    final themeData = Theme.of(context).copyWith(
-      splashFactory: NoSplash.splashFactory,
-      highlightColor: Colors.transparent,
-      hoverColor: Colors.transparent,
-      focusColor: Colors.transparent,
-      splashColor: Colors.transparent,
-    );
     // Capture the currently focused node so it can be restored on close.
     _previousFocus = FocusManager.instance.primaryFocus;
-
-    final surface = _NasikoPopupMenuSurface(
-      items: widget.items,
-      width: menuWidth,
-      maxHeight: widget.maxHeight,
-      onDismiss: _removeMenu,
-      onItemSelected: (index) {
-        _removeMenu();
-        widget.onItemSelected(index);
-      },
-    );
-
-    _overlayEntry = OverlayEntry(
-      builder: (_) => Positioned.fill(
-        child: Stack(
-          children: [
-            GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: _removeMenu,
-              child: const SizedBox.expand(),
-            ),
-            Positioned(
-              top: top,
-              bottom: bottom,
-              left: left,
-              right: right,
-              // Entrance only — removal via OverlayEntry.remove() stays
-              // instant, matching the subtle & fast motion personality.
-              child: NasikoOverlayReveal(
-                // Slide in the direction the menu opens.
-                slideFrom: Offset(0, openUpward ? 4 : -4),
-                child: Material(
-                  color: Colors.transparent,
-                  child: Theme(data: themeData, child: surface),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-
-    Overlay.of(context).insert(_overlayEntry!);
+    setState(() => _isOpen = true);
   }
 
-  void _removeMenu() {
-    if (_overlayEntry == null) return;
-    _overlayEntry!.remove();
-    _overlayEntry = null;
+  void _closeMenu({bool restoreFocus = true}) {
+    if (!_isOpen) return;
+    setState(() => _isOpen = false);
 
     // Restore keyboard focus to wherever it lived before the menu opened
     // (typically the trigger), matching platform menu conventions.
     final previousFocus = _previousFocus;
     _previousFocus = null;
-    if (previousFocus != null && previousFocus.canRequestFocus) {
+    if (restoreFocus &&
+        previousFocus != null &&
+        previousFocus.canRequestFocus) {
       previousFocus.requestFocus();
     }
   }
@@ -219,19 +127,66 @@ class _NasikoPopupMenuState extends State<NasikoPopupMenu> {
   @override
   void didUpdateWidget(covariant NasikoPopupMenu oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (!widget.enabled && _overlayEntry != null) {
-      _removeMenu();
+    if (!widget.enabled && _isOpen) {
+      _closeMenu(restoreFocus: false);
     }
+  }
+
+  Widget _buildOverlay(BuildContext context, NasikoAnchorSide side) {
+    final themeData = Theme.of(context).copyWith(
+      splashFactory: NoSplash.splashFactory,
+      highlightColor: Colors.transparent,
+      hoverColor: Colors.transparent,
+      focusColor: Colors.transparent,
+      splashColor: Colors.transparent,
+    );
+
+    return TapRegion(
+      onTapOutside: (_) => _closeMenu(restoreFocus: false),
+      child: Material(
+        color: Colors.transparent,
+        child: Theme(
+          data: themeData,
+          child: _NasikoPopupMenuSurface(
+            items: widget.items,
+            width: widget.width ?? _anchorWidth ?? 220.0,
+            maxHeight: widget.maxHeight,
+            onDismiss: _closeMenu,
+            onItemSelected: (index) {
+              _closeMenu();
+              widget.onItemSelected(index);
+            },
+          ),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onTap: _toggleMenu,
-        child: AbsorbPointer(child: widget.child),
+    // Anchored-overlay engine: opens BELOW the trigger with a 2px gap and
+    // flips ABOVE (same gap) when the measured surface wouldn't fit —
+    // positions are exact (single-pass measurement) and clamped to the
+    // screen. The entrance reveal slides away from the resolved side, so
+    // below-openings drift down and above-openings drift up.
+    return NasikoAnchoredOverlay(
+      visible: _isOpen,
+      anchor: NasikoAutoAnchor(
+        side: NasikoAnchorSide.bottom,
+        // Trailing edges aligned — the menu opens leftward from "⋮"
+        // triggers; the engine clamps/flips horizontally when needed.
+        alignment: NasikoAnchorAlignment.end,
+        gap: widget.offset?.dy ?? 2.0,
+        screenPadding: context.spacing.s8,
+      ),
+      overlayBuilder: _buildOverlay,
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: _toggleMenu,
+          child: AbsorbPointer(child: widget.child),
+        ),
       ),
     );
   }
