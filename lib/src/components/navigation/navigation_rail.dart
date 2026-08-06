@@ -116,6 +116,63 @@ class _RailItem extends StatefulWidget {
 
 class _RailItemState extends State<_RailItem> {
   bool _hovered = false;
+  final LayerLink _tooltipLink = LayerLink();
+  OverlayEntry? _tooltipEntry;
+
+  void _showTooltip() {
+    if (widget.isExpanded) return;
+    _removeTooltip();
+
+    final colors = context.colors;
+    final spacing = context.spacing;
+    final radii = context.radius;
+    final typography = context.typography;
+
+    _tooltipEntry = OverlayEntry(
+      builder: (_) => CompositedTransformFollower(
+        link: _tooltipLink,
+        // Right-center: anchored to the item's right edge, vertically
+        // centered — matches a collapsed icon-only rail (no room below).
+        targetAnchor: Alignment.centerRight,
+        followerAnchor: Alignment.centerLeft,
+        offset: const Offset(8, 0),
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: spacing.s12,
+              vertical: spacing.s8,
+            ),
+            decoration: BoxDecoration(
+              color: colors.foregroundConstantBlack,
+              borderRadius: BorderRadius.circular(radii.r8),
+            ),
+            child: Text(
+              widget.item.label,
+              style: typography.bodyPrimary.copyWith(
+                color: colors.foregroundConstantWhite,
+                fontStyle: FontStyle.normal,
+                height: 1.4,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    Overlay.of(context).insert(_tooltipEntry!);
+  }
+
+  void _removeTooltip() {
+    _tooltipEntry?.remove();
+    _tooltipEntry = null;
+  }
+
+  @override
+  void dispose() {
+    _removeTooltip();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,8 +194,14 @@ class _RailItemState extends State<_RailItem> {
         : colors.borderPrimary;
 
     final content = MouseRegion(
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
+      onEnter: (_) {
+        setState(() => _hovered = true);
+        _showTooltip();
+      },
+      onExit: (_) {
+        setState(() => _hovered = false);
+        _removeTooltip();
+      },
       cursor: widget.item.isDisabled
           ? SystemMouseCursors.basic
           : SystemMouseCursors.click,
@@ -205,6 +268,6 @@ class _RailItemState extends State<_RailItem> {
     );
 
     if (widget.isExpanded) return content;
-    return Tooltip(message: widget.item.label, child: content);
+    return CompositedTransformTarget(link: _tooltipLink, child: content);
   }
 }
