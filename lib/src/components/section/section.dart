@@ -434,8 +434,11 @@ class _SectionState extends State<Section> {
                 color: iconColor,
                 duration: motion.fast,
                 curve: motion.enter,
-                builder: (context, color) =>
-                    HugeIcon(icon: widget.icon!, size: iconSizes.s, color: color),
+                builder: (context, color) => HugeIcon(
+                  icon: widget.icon!,
+                  size: iconSizes.s,
+                  color: color,
+                ),
               ),
               SizedBox(width: spacing.s8),
               Expanded(
