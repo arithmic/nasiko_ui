@@ -199,7 +199,9 @@ class NasikoModal extends StatelessWidget {
         borderRadius: BorderRadius.circular(radii.r8),
       ),
       child: Container(
-        constraints: BoxConstraints(maxWidth: 680),
+        // Honor the caller's maxWidth (wide content like diagrams); the
+        // classic dialog width stays the default.
+        constraints: BoxConstraints(maxWidth: maxWidth ?? 680),
         padding: EdgeInsets.all(spacing.s24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
