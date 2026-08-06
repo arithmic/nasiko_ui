@@ -458,7 +458,7 @@ class _SectionChildItemState extends State<_SectionChildItem> {
       borderColor = colors.borderDisabled;
     } else if (widget.isSelected) {
       backgroundColor = colors.backgroundSecondaryBrand;
-      borderColor = colors.borderPrimary;
+      borderColor = colors.borderSecondary;
     } else if (_isHovered) {
       backgroundColor = Colors.transparent;
       borderColor = colors.borderSecondary;
