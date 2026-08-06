@@ -8,6 +8,7 @@ class NasikoNavigationSection {
     this.icon,
     this.children = const [],
     this.isCollapsible = true,
+    this.initiallyExpanded = false,
     this.selectedChildId,
     this.onChildTap,
     this.isLoading = false,
@@ -19,6 +20,9 @@ class NasikoNavigationSection {
   final List<List<dynamic>>? icon;
   final List<NasikoNavigationItem> children;
   final bool isCollapsible;
+
+  /// When true the section starts expanded even without a selected child.
+  final bool initiallyExpanded;
   final String? selectedChildId;
   final ValueChanged<String>? onChildTap;
 

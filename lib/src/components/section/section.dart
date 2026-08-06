@@ -88,6 +88,7 @@ class Section extends StatefulWidget {
     this.selectedChildId,
     this.isSelected = false,
     this.isCollapsible = true,
+    this.initiallyExpanded = false,
     this.onTap,
     this.onChildTap,
     this.backgroundColor,
@@ -122,6 +123,10 @@ class Section extends StatefulWidget {
 
   /// When false the section is always expanded and the toggle chevron is hidden.
   final bool isCollapsible;
+
+  /// When true the section starts expanded even without a selected child.
+  /// Ignored when [isCollapsible] is false (always expanded regardless).
+  final bool initiallyExpanded;
 
   /// Callback when section header is tapped (non-expandable sections only).
   final VoidCallback? onTap;
@@ -166,7 +171,8 @@ class _SectionState extends State<Section> {
   @override
   void initState() {
     super.initState();
-    _isExpanded = !widget.isCollapsible || _hasSelectedChild();
+    _isExpanded =
+        !widget.isCollapsible || widget.initiallyExpanded || _hasSelectedChild();
   }
 
   @override

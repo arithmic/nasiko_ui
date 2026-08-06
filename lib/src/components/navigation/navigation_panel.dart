@@ -31,6 +31,7 @@ class NasikoNavigationPanel extends StatelessWidget {
             label: section.title.toUpperCase(),
             icon: section.icon,
             isCollapsible: section.isCollapsible,
+            initiallyExpanded: section.initiallyExpanded,
             isLoading: section.isLoading,
             emptyMessage: section.emptyMessage,
             children:
