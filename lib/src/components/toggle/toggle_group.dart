@@ -2,10 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
-
-import 'toggle.dart';
 
 // Interaction model: single mode behaves like an optional radio set
 // (tapping the selected item clears it), multiple mode toggles items
@@ -35,8 +32,10 @@ class NasikoToggleGroupItem<T> {
     this.icon,
     this.enabled = true,
     this.semanticLabel,
-  }) : assert(label != null || icon != null,
-            'Provide a label, an icon, or both.');
+  }) : assert(
+         label != null || icon != null,
+         'Provide a label, an icon, or both.',
+       );
 
   /// The unique value this item represents.
   final T value;
@@ -99,9 +98,9 @@ class NasikoToggleGroup<T> extends StatefulWidget {
     required this.onChanged,
     this.size = NasikoButtonSize.large,
     this.enabled = true,
-  })  : mode = NasikoToggleGroupMode.single,
-        values = null,
-        onValuesChanged = null;
+  }) : mode = NasikoToggleGroupMode.single,
+       values = null,
+       onValuesChanged = null;
 
   /// Creates a group where any number of items may be on.
   const NasikoToggleGroup.multiple({
@@ -111,9 +110,9 @@ class NasikoToggleGroup<T> extends StatefulWidget {
     required this.onValuesChanged,
     this.size = NasikoButtonSize.large,
     this.enabled = true,
-  })  : mode = NasikoToggleGroupMode.multiple,
-        value = null,
-        onChanged = null;
+  }) : mode = NasikoToggleGroupMode.multiple,
+       value = null,
+       onChanged = null;
 
   /// The selection behavior of this group.
   final NasikoToggleGroupMode mode;
@@ -149,15 +148,19 @@ class NasikoToggleGroup<T> extends StatefulWidget {
 class _NasikoToggleGroupState<T> extends State<NasikoToggleGroup<T>> {
   static const Map<ShortcutActivator, Intent> _shortcuts =
       <ShortcutActivator, Intent>{
-    SingleActivator(LogicalKeyboardKey.arrowLeft):
-        _ToggleGroupFocusIntent(_ToggleGroupFocusKind.previous),
-    SingleActivator(LogicalKeyboardKey.arrowRight):
-        _ToggleGroupFocusIntent(_ToggleGroupFocusKind.next),
-    SingleActivator(LogicalKeyboardKey.home):
-        _ToggleGroupFocusIntent(_ToggleGroupFocusKind.first),
-    SingleActivator(LogicalKeyboardKey.end):
-        _ToggleGroupFocusIntent(_ToggleGroupFocusKind.last),
-  };
+        SingleActivator(LogicalKeyboardKey.arrowLeft): _ToggleGroupFocusIntent(
+          _ToggleGroupFocusKind.previous,
+        ),
+        SingleActivator(LogicalKeyboardKey.arrowRight): _ToggleGroupFocusIntent(
+          _ToggleGroupFocusKind.next,
+        ),
+        SingleActivator(LogicalKeyboardKey.home): _ToggleGroupFocusIntent(
+          _ToggleGroupFocusKind.first,
+        ),
+        SingleActivator(LogicalKeyboardKey.end): _ToggleGroupFocusIntent(
+          _ToggleGroupFocusKind.last,
+        ),
+      };
 
   final List<FocusNode> _nodes = <FocusNode>[];
 
@@ -202,8 +205,8 @@ class _NasikoToggleGroupState<T> extends State<NasikoToggleGroup<T>> {
 
   bool _isSelected(NasikoToggleGroupItem<T> item) =>
       widget.mode == NasikoToggleGroupMode.single
-          ? widget.value == item.value
-          : (widget.values ?? const <Never>{}).contains(item.value);
+      ? widget.value == item.value
+      : (widget.values ?? const <Never>{}).contains(item.value);
 
   void _activate(NasikoToggleGroupItem<T> item) {
     switch (widget.mode) {
@@ -243,8 +246,8 @@ class _NasikoToggleGroupState<T> extends State<NasikoToggleGroup<T>> {
           target = enabledIndexes.first;
         } else {
           final delta = kind == _ToggleGroupFocusKind.next ? 1 : -1;
-          target = enabledIndexes[
-              (position + delta + enabledIndexes.length) %
+          target =
+              enabledIndexes[(position + delta + enabledIndexes.length) %
                   enabledIndexes.length];
         }
     }
@@ -262,8 +265,7 @@ class _NasikoToggleGroupState<T> extends State<NasikoToggleGroup<T>> {
           shortcuts: _shortcuts,
           child: Actions(
             actions: <Type, Action<Intent>>{
-              _ToggleGroupFocusIntent:
-                  CallbackAction<_ToggleGroupFocusIntent>(
+              _ToggleGroupFocusIntent: CallbackAction<_ToggleGroupFocusIntent>(
                 onInvoke: (intent) {
                   _moveFocus(intent.kind);
                   return null;
