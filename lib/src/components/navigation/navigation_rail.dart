@@ -45,35 +45,53 @@ class NasikoNavigationRail extends StatelessWidget {
       curve: motion.move,
       width: width,
       padding: EdgeInsets.only(bottom: spacing.s8),
-      child: Column(
-        children: [
-          ...items.map((item) {
-            final isSelected = item.id == selectedId;
+      // Scrollable when the viewport is shorter than the item stack (short
+      // laptop windows, docked devtools). ConstrainedBox + IntrinsicHeight
+      // preserve the Spacer-driven footer pinning whenever there IS room.
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.hasBoundedHeight
+                    ? constraints.maxHeight
+                    : 0,
+              ),
+              child: IntrinsicHeight(
+                child: Column(
+                  children: [
+                    ...items.map((item) {
+                      final isSelected = item.id == selectedId;
 
-            return _RailItem(
-              item: item,
-              isSelected: isSelected,
-              isExpanded: isExpanded,
-              onTap: () => onSelect(item.id),
-            );
-          }),
+                      return _RailItem(
+                        item: item,
+                        isSelected: isSelected,
+                        isExpanded: isExpanded,
+                        onTap: () => onSelect(item.id),
+                      );
+                    }),
 
-          const Spacer(),
+                    const Spacer(),
 
-          if (footerItems != null)
-            ...footerItems!.map((item) {
-              final isSelected = item.id == selectedId;
+                    if (footerItems != null)
+                      ...footerItems!.map((item) {
+                        final isSelected = item.id == selectedId;
 
-              return _RailItem(
-                item: item,
-                isSelected: isSelected,
-                isExpanded: isExpanded,
-                onTap: () => onSelect(item.id),
-              );
-            }),
+                        return _RailItem(
+                          item: item,
+                          isSelected: isSelected,
+                          isExpanded: isExpanded,
+                          onTap: () => onSelect(item.id),
+                        );
+                      }),
 
-          if (footer != null) footer!,
-        ],
+                    if (footer != null) footer!,
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

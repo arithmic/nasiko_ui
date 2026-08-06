@@ -53,7 +53,9 @@ class NasikoRadioTile<T> extends StatelessWidget {
               label,
               style: typography.bodyPrimary.copyWith(
                 color: contentColor,
-                fontSize: 16.sp,
+                // Clamped like every typography token — an unclamped 16.sp
+                // rendered ~3px at narrow windows and ~23px at 2K.
+                fontSize: 16.sp.clamp(14.0, 18.0),
               ),
             ),
           ],

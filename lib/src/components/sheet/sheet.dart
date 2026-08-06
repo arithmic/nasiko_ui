@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
@@ -71,7 +73,12 @@ Future<T?> showNasikoSheet<T>({
             end: Offset.zero,
           ).animate(curved),
           child: SizedBox(
-            width: width ?? _kDefaultSheetWidth,
+            // Clamp to the viewport so a 400px sheet never exceeds a
+            // narrower window.
+            width: math.min(
+              width ?? _kDefaultSheetWidth,
+              MediaQuery.sizeOf(sheetContext).width,
+            ),
             height: double.infinity,
             child: Material(
               color: colors.backgroundBase,

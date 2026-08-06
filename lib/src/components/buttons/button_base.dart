@@ -301,7 +301,10 @@ NasikoButtonSpec _labelSpec(
             return colors.backgroundDisabled;
           }
           if (states.contains(WidgetState.hovered)) {
-            return colors.foregroundConstantBlackSecondary;
+            // Theme-aware hover shade of the primary fill: sand800 in light
+            // (historical value), sand200 in dark — a constant black here
+            // made the label (foregroundOnAction) invisible in dark mode.
+            return colors.foregroundPrimaryHover;
           }
           if (states.contains(WidgetState.pressed)) {
             return colors.foregroundPrimary;

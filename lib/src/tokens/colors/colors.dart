@@ -48,6 +48,12 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
     required this.foregroundConstantBlack,
     required this.foregroundConstantBlackSecondary,
 
+    // Optional: hover shade of [foregroundPrimary] for inverse/primary
+    // surfaces (e.g. the primary button fill). Falls back to
+    // [foregroundConstantBlackSecondary], which matches the light theme's
+    // historical hover; dark themes should set it to a light shade.
+    Color? foregroundPrimaryHover,
+
     // Foreground Primary (Brand)
     required this.foregroundBrand,
     required this.foregroundBrandHover,
@@ -71,7 +77,7 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
     required this.borderDisabled,
     required this.borderInformation,
     required this.borderInformationOverlay,
-  });
+  }) : _foregroundPrimaryHover = foregroundPrimaryHover;
 
   // Background Default
   final Color backgroundBase;
@@ -115,6 +121,14 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
   final Color foregroundConstantWhite;
   final Color foregroundConstantBlack;
   final Color foregroundConstantBlackSecondary;
+
+  final Color? _foregroundPrimaryHover;
+
+  /// Hover shade of [foregroundPrimary] for inverse/primary surfaces.
+  /// Defaults to [foregroundConstantBlackSecondary] when unset (the light
+  /// theme's historical primary-button hover).
+  Color get foregroundPrimaryHover =>
+      _foregroundPrimaryHover ?? foregroundConstantBlackSecondary;
 
   // Foreground Primary (Brand)
   final Color foregroundBrand;
@@ -174,6 +188,7 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
     Color? foregroundConstantWhite,
     Color? foregroundConstantBlack,
     Color? foregroundConstantBlackSecondary,
+    Color? foregroundPrimaryHover,
     Color? foregroundBrand,
     Color? foregroundBrandHover,
     Color? foregroundBrandLink,
@@ -242,6 +257,7 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
       foregroundConstantBlackSecondary:
           foregroundConstantBlackSecondary ??
           this.foregroundConstantBlackSecondary,
+      foregroundPrimaryHover: foregroundPrimaryHover ?? _foregroundPrimaryHover,
       foregroundBrand: foregroundBrand ?? this.foregroundBrand,
       foregroundBrandHover: foregroundBrandHover ?? this.foregroundBrandHover,
       foregroundBrandLink: foregroundBrandLink ?? this.foregroundBrandLink,
@@ -412,6 +428,11 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
         other.foregroundConstantBlackSecondary,
         t,
       )!,
+      foregroundPrimaryHover: Color.lerp(
+        foregroundPrimaryHover,
+        other.foregroundPrimaryHover,
+        t,
+      ),
       foregroundBrand: Color.lerp(foregroundBrand, other.foregroundBrand, t)!,
       foregroundBrandHover: Color.lerp(
         foregroundBrandHover,
@@ -518,6 +539,7 @@ final NasikoColorTheme lightColors = NasikoColorTheme(
   foregroundConstantWhite: white,
   foregroundConstantBlack: sand900,
   foregroundConstantBlackSecondary: sand800,
+  foregroundPrimaryHover: sand800,
 
   // Foreground Primary (Brand)
   foregroundBrand: yellow600,
@@ -591,6 +613,7 @@ final NasikoColorTheme darkColors = NasikoColorTheme(
   foregroundConstantWhite: white,
   foregroundConstantBlack: black,
   foregroundConstantBlackSecondary: sand900,
+  foregroundPrimaryHover: sand200,
 
   // Foreground Primary (Brand)
   foregroundBrand: yellow400,

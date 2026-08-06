@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
@@ -200,8 +202,14 @@ class NasikoModal extends StatelessWidget {
       ),
       child: Container(
         // Honor the caller's maxWidth (wide content like diagrams); the
-        // classic dialog width stays the default.
-        constraints: BoxConstraints(maxWidth: maxWidth ?? 680),
+        // classic dialog width stays the default. Always clamp to the
+        // viewport so the modal never overflows narrow windows.
+        constraints: BoxConstraints(
+          maxWidth: math.min(
+            maxWidth ?? 680,
+            MediaQuery.sizeOf(context).width - spacing.s32,
+          ),
+        ),
         padding: EdgeInsets.all(spacing.s24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -209,7 +217,9 @@ class NasikoModal extends StatelessWidget {
           children: [
             _buildHeader(context),
             SizedBox(height: spacing.s16),
-            Flexible(child: content),
+            // Scrollable so tall modal bodies stay reachable on short
+            // viewports instead of clipping.
+            Flexible(child: SingleChildScrollView(child: content)),
             if (primaryButtonLabel != null || secondaryButtonLabel != null) ...[
               SizedBox(height: spacing.s16),
               NasikoDivider(axis: NasikoDividerAxis.horizontal),

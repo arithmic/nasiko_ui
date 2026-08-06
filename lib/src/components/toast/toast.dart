@@ -1,5 +1,7 @@
 // lib/src/components/toast/toast.dart
 
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
@@ -75,7 +77,11 @@ class NasikoToast extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: Container(
-        constraints: const BoxConstraints(minWidth: 400),
+        // Clamp to the viewport: a hard 400px minimum overflows windows
+        // narrower than ~432px.
+        constraints: BoxConstraints(
+          minWidth: math.min(400, MediaQuery.sizeOf(context).width - 32),
+        ),
         padding: EdgeInsets.symmetric(
           horizontal: spacing.s16,
           vertical: spacing.s12,

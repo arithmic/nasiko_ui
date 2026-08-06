@@ -61,6 +61,7 @@ class NasikoColorThemeFactory {
       foregroundConstantWhite: white,
       foregroundConstantBlack: sand900,
       foregroundConstantBlackSecondary: sand800,
+      foregroundPrimaryHover: sand800,
 
       // Foreground Primary (Brand)
       foregroundBrand: brandColors.primary,
@@ -140,6 +141,7 @@ class NasikoColorThemeFactory {
       foregroundConstantWhite: white,
       foregroundConstantBlack: black,
       foregroundConstantBlackSecondary: sand900,
+      foregroundPrimaryHover: sand200,
 
       // Foreground Primary (Brand)
       foregroundBrand: brandColors.primaryAccent,
