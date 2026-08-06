@@ -572,14 +572,15 @@ final NasikoColorTheme lightColors = NasikoColorTheme(
 
 final NasikoColorTheme darkColors = NasikoColorTheme(
   // Background Default
-  backgroundBase: black,
-  backgroundGroup: sand900,
-  backgroundSurface: sand800,
-  backgroundSurfaceHover: sand700,
-  backgroundSurfaceActive: sand600,
-  backgroundSurfaceSubtle: sand700,
-  backgroundOverlay: sand900.withValues(alpha: 0.7),
-  backgroundDisabled: sand700,
+  // Warm elevation ramp over a near-black base — see _color_palette.dart.
+  backgroundBase: sandDark950,
+  backgroundGroup: sandDark900,
+  backgroundSurface: sandDark850,
+  backgroundSurfaceHover: sandDark800,
+  backgroundSurfaceActive: sand800,
+  backgroundSurfaceSubtle: sandDark900,
+  backgroundOverlay: black.withValues(alpha: 0.6),
+  backgroundDisabled: sandDark800,
 
   // Background Primary
   backgroundBrand: yellow600,
@@ -628,14 +629,14 @@ final NasikoColorTheme darkColors = NasikoColorTheme(
   foregroundInformation: yellow300,
   foregroundInformationOverlay: sand700,
 
-  // Border Default
-  borderPrimary: sand700,
+  // Border Default — hairlines one ramp-step above their surfaces.
+  borderPrimary: sand800,
   borderSecondary: yellow600,
   borderHover: yellow400,
   borderSuccess: green600,
   borderError: red600,
   borderWarning: orange600,
-  borderDisabled: sand700,
+  borderDisabled: sandDark800,
   borderInformation: yellow700,
   borderInformationOverlay: sand200,
 );

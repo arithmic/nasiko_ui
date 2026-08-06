@@ -99,15 +99,16 @@ class NasikoColorThemeFactory {
     final brandColors = _getBrandColors(palette);
 
     return NasikoColorTheme(
-      // Background Default
-      backgroundBase: black,
-      backgroundGroup: sand900,
-      backgroundSurface: sand800,
-      backgroundSurfaceHover: sand700,
-      backgroundSurfaceActive: sand600,
-      backgroundSurfaceSubtle: sand700,
-      backgroundOverlay: sand900.withValues(alpha: 0.7),
-      backgroundDisabled: sand700,
+      // Background Default — warm elevation ramp over a near-black base
+      // (pure black reads harsh and kills the sense of surface depth).
+      backgroundBase: sandDark950,
+      backgroundGroup: sandDark900,
+      backgroundSurface: sandDark850,
+      backgroundSurfaceHover: sandDark800,
+      backgroundSurfaceActive: sand800,
+      backgroundSurfaceSubtle: sandDark900,
+      backgroundOverlay: black.withValues(alpha: 0.6),
+      backgroundDisabled: sandDark800,
 
       // Background Primary
       backgroundBrand: brandColors.primary,
@@ -156,14 +157,15 @@ class NasikoColorThemeFactory {
       foregroundInformation: brandColors.primaryHover,
       foregroundInformationOverlay: sand700,
 
-      // Border Default
-      borderPrimary: sand700,
+      // Border Default — hairlines one ramp-step above their surfaces;
+      // sand700 is a mid-tone brown that overpowered dark hairlines.
+      borderPrimary: sand800,
       borderSecondary: brandColors.primary,
       borderHover: brandColors.primaryAccent,
       borderSuccess: green600,
       borderError: red600,
       borderWarning: orange600,
-      borderDisabled: sand700,
+      borderDisabled: sandDark800,
       borderInformation: brandColors.primaryDarkAccent,
       borderInformationOverlay: sand200,
     );

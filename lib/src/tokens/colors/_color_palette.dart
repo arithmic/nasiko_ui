@@ -6,6 +6,16 @@ import 'package:flutter/material.dart';
 const Color white = Color(0xFFFFFFFF);
 const Color black = Color(0xFF000000);
 
+// Sand — dark-mode surface ramp.
+// Enterprise dark themes avoid pure black: elevation is expressed by
+// progressively lighter surfaces over a near-black base. These four are
+// hue-matched to the warm sand family (sand800's tone), unlike sand900,
+// which is cool-tinted and reserved for inverse surfaces in light mode.
+const Color sandDark950 = Color(0xFF171412); // base canvas
+const Color sandDark900 = Color(0xFF1E1B18); // grouped / inset surfaces
+const Color sandDark850 = Color(0xFF26221E); // raised surfaces (cards)
+const Color sandDark800 = Color(0xFF2F2A25); // surface hover / disabled
+
 // Sand
 const Color sand50 = Color(0xFFF5F2EC);
 const Color sand100 = Color(0xFFEDE7DC);
