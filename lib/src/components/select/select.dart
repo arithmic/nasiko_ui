@@ -214,10 +214,12 @@ class _NasikoSelectState<T> extends State<NasikoSelect<T>> {
     final borderColor = !interactive
         ? colors.borderDisabled
         : _isFocused
-            ? colors.borderSecondary
+            ? colors.borderFocus
             : _isHovered
                 ? colors.borderHover
-                : colors.borderPrimary;
+                // Functional-border tier: the trigger's border is its
+                // affordance, like an input field's.
+                : colors.borderInput;
 
     final fillColor = !interactive
         ? colors.backgroundDisabled

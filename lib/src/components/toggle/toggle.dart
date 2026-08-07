@@ -129,7 +129,7 @@ class NasikoToggle extends StatelessWidget {
             foreground = colors.foregroundPrimary;
             side = state.isFocused
                 ? BorderSide(
-                    color: colors.borderSecondary,
+                    color: colors.borderFocus,
                     width: borderWidths.w2,
                     strokeAlign: BorderSide.strokeAlignOutside,
                   )
@@ -144,7 +144,7 @@ class NasikoToggle extends StatelessWidget {
                 : colors.foregroundPrimary;
             side = state.isFocused
                 ? BorderSide(
-                    color: colors.borderSecondary,
+                    color: colors.borderFocus,
                     width: borderWidths.w2,
                     strokeAlign: BorderSide.strokeAlignOutside,
                   )

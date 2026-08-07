@@ -67,6 +67,7 @@ class NasikoTheme {
       ),
       extensions: <ThemeExtension<dynamic>>[
         nasikoColors,
+        isLight ? NasikoElevationTheme.light() : NasikoElevationTheme.dark(),
         defaultNasikoSpacing,
         defaultNasikoTypographyWithColor(nasikoColors.foregroundPrimary),
         defaultNasikoBorderRadius,

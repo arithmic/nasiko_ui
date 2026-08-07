@@ -141,13 +141,15 @@ class _RailItemState extends State<_RailItem> {
                 vertical: spacing.s8,
               ),
               decoration: BoxDecoration(
-                color: colors.foregroundConstantBlack,
+                // Inverse-overlay pair — theme-aware tooltip surface (see
+                // NasikoTooltip).
+                color: colors.backgroundInformationOverlay,
                 borderRadius: BorderRadius.circular(radii.r8),
               ),
               child: Text(
                 widget.item.label,
                 style: typography.bodyPrimary.copyWith(
-                  color: colors.foregroundConstantWhite,
+                  color: colors.foregroundInformationOverlay,
                   fontStyle: FontStyle.normal,
                   height: 1.4,
                 ),

@@ -170,13 +170,7 @@ class _NasikoPopoverState extends State<NasikoPopover> {
           color: colors.borderPrimary,
           width: borderWidths.w1,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: spacing.s16,
-            offset: Offset(0, spacing.s4),
-          ),
-        ],
+        boxShadow: context.elevation.overlay,
       ),
       child: Material(
         color: Colors.transparent,

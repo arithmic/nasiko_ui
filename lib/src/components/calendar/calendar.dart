@@ -573,7 +573,7 @@ class _DayCellState extends State<_DayCell> {
 
     // Focus ring wins over the subtle today marker.
     final BoxBorder? border = widget.showFocusRing
-        ? Border.all(color: colors.borderSecondary, width: borderWidths.w2)
+        ? Border.all(color: colors.borderFocus, width: borderWidths.w2)
         : widget.isToday
             ? Border.all(color: colors.borderPrimary, width: borderWidths.w1)
             : null;
@@ -638,7 +638,7 @@ Future<DateTime?> showNasikoDatePicker({
     context: context,
     barrierDismissible: true,
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-    barrierColor: Colors.black54,
+    barrierColor: context.colors.backgroundOverlay,
     transitionDuration: motion.resolve(context, motion.base),
     transitionBuilder: (context, animation, secondaryAnimation, child) {
       final curved = CurvedAnimation(

@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:nasiko_ui/nasiko_ui.dart';
 
-import '../../tokens/colors/_color_palette.dart' show sand900;
 
 /// A multi-line text input component for the Nasiko Design System.
 class NasikoTextBox extends StatefulWidget {
@@ -133,8 +132,9 @@ class _NasikoTextBoxState extends State<NasikoTextBox> {
     final motion = context.motion;
 
     final borderColor = _isFocused
-        ? colors.borderSecondary
-        : colors.borderPrimary;
+        ? colors.borderFocus
+        // Functional-border tier: the border is the input's affordance.
+        : colors.borderInput;
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -455,21 +455,12 @@ class _AttachmentPreviewPopup extends StatelessWidget {
         width: 240,
         height: 160,
         decoration: BoxDecoration(
-          // The preview popup intentionally renders as an inverse (dark)
-          // frame in light mode. No inverse-surface token exists in
-          // [NasikoColorTheme], so derive from brightness: sand900 in light
-          // mode, the elevated surface token in dark mode.
-          color: Theme.of(context).brightness == Brightness.light
-              ? sand900
-              : context.colors.backgroundSurface,
+          // The preview popup renders as an inverse frame: the dedicated
+          // inverse-overlay token (near-black in light mode, light sand in
+          // dark mode — same pair the tooltip uses).
+          color: context.colors.backgroundInformationOverlay,
           borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.20),
-              blurRadius: 16,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          boxShadow: context.elevation.overlay,
         ),
         padding: const EdgeInsets.all(8),
         child: ClipRRect(borderRadius: BorderRadius.circular(6), child: child),

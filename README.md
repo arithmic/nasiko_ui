@@ -75,7 +75,8 @@ class MyButton extends StatelessWidget {
       child: Text(
         'Press Me',
         style: context.typography.bodySM.copyWith(
-          color: context.colors.foregroundOnAction,
+          // Contrast-verified on brand fills in every palette/theme.
+          color: context.colors.foregroundOnBrand,
         ),
       ),
     );

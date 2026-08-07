@@ -6,6 +6,12 @@ import 'package:flutter/material.dart';
 const Color white = Color(0xFFFFFFFF);
 const Color black = Color(0xFF000000);
 
+// Warm ink — the near-black used for primary text and "constant black".
+// sand900 (#242628) is cool/blue-tinted, which clashed with the warm sand
+// surfaces under it; sandInk is hue-matched to the warm ramp (sand800's
+// tone, darkened). 15.95:1 on white, 12.96:1 on sand100.
+const Color sandInk = Color(0xFF26211C);
+
 // Sand — dark-mode surface ramp.
 // Enterprise dark themes avoid pure black: elevation is expressed by
 // progressively lighter surfaces over a near-black base. These four are

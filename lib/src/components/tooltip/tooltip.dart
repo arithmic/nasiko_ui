@@ -56,13 +56,17 @@ class NasikoTooltip extends StatelessWidget {
       // assistive technology as a semantics tooltip. The framework Tooltip
       // hosts no FocusNode of its own, so it never steals keyboard focus.
       excludeFromSemantics: false,
+      // The dedicated inverse-overlay pair: near-black surface with light
+      // text in the light theme, light surface with dark text in the dark
+      // theme (12.34:1 / 9.96:1). A constant-black tooltip was invisible
+      // against the dark theme's near-black canvas.
       textStyle: typography.bodyPrimary.copyWith(
-        color: colors.foregroundConstantWhite,
+        color: colors.foregroundInformationOverlay,
         fontStyle: FontStyle.normal,
         height: 1.4,
       ),
       decoration: BoxDecoration(
-        color: colors.foregroundConstantBlack,
+        color: colors.backgroundInformationOverlay,
         borderRadius: BorderRadius.circular(radii.r8),
       ),
       padding: EdgeInsets.symmetric(

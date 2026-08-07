@@ -128,8 +128,8 @@ class _NasikoDateFieldState extends State<NasikoDateField> {
     final Color borderColor = !enabled
         ? colors.borderDisabled
         : _isFocused
-        ? colors.borderSecondary
-        : colors.borderPrimary;
+        ? colors.borderFocus
+        : colors.borderInput;
     final Color fillColor = enabled
         ? colors.backgroundBase
         : colors.backgroundDisabled;

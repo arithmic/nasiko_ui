@@ -329,13 +329,7 @@ class _NasikoComboboxState<T> extends State<NasikoCombobox<T>> {
         color: colors.backgroundBase,
         borderRadius: BorderRadius.circular(radii.r12),
         border: Border.all(color: colors.borderPrimary, width: borderWidths.w1),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: spacing.s16,
-            offset: Offset(0, spacing.s4),
-          ),
-        ],
+        boxShadow: context.elevation.overlay,
       ),
       child: Material(
         color: Colors.transparent,
@@ -451,8 +445,9 @@ class _NasikoComboboxState<T> extends State<NasikoCombobox<T>> {
     final borderColor = !enabled
         ? colors.borderDisabled
         : _isFocused
-        ? colors.borderSecondary
-        : colors.borderPrimary;
+        ? colors.borderFocus
+        // Functional-border tier (see NasikoSelect).
+        : colors.borderInput;
 
     final field = GestureDetector(
       behavior: HitTestBehavior.opaque,

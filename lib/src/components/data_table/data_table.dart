@@ -843,7 +843,7 @@ class _IndeterminateHeaderCheckboxState
         _isHovering ? colors.backgroundBrandHover : colors.backgroundBrand;
     final Border? border = _isFocused
         ? Border.all(
-            color: colors.borderHover,
+            color: colors.borderFocus,
             width: borderWidths.w2,
             strokeAlign: BorderSide.strokeAlignOutside,
           )
@@ -875,7 +875,7 @@ class _IndeterminateHeaderCheckboxState
                 width: spacing.s12,
                 height: borderWidths.w2,
                 decoration: BoxDecoration(
-                  color: colors.foregroundOnAction,
+                  color: colors.foregroundOnBrand,
                   borderRadius: BorderRadius.circular(borderWidths.w2),
                 ),
               ),

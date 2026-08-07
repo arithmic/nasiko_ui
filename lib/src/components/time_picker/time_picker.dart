@@ -392,8 +392,8 @@ class _NasikoTimePickerState extends State<NasikoTimePicker> {
     final Color borderColor = !enabled
         ? colors.borderDisabled
         : _focusWithin
-            ? colors.borderSecondary
-            : colors.borderPrimary;
+            ? colors.borderFocus
+            : colors.borderInput;
     final Color fillColor =
         enabled ? colors.backgroundBase : colors.backgroundDisabled;
     final Color separatorColor =
@@ -916,8 +916,8 @@ class _NasikoTimeFieldState extends State<NasikoTimeField> {
     final Color borderColor = !enabled
         ? colors.borderDisabled
         : _isFocused
-            ? colors.borderSecondary
-            : colors.borderPrimary;
+            ? colors.borderFocus
+            : colors.borderInput;
     final Color fillColor =
         enabled ? colors.backgroundBase : colors.backgroundDisabled;
     final Color textColor = !enabled

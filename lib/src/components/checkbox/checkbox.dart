@@ -69,7 +69,7 @@ class _NasikoCheckboxState extends State<NasikoCheckbox> {
       // The focus ring is the same as the PrimaryButton
       if (_isFocused) {
         border = Border.all(
-          color: colors.borderHover,
+          color: colors.borderFocus,
           width: borderWidths.w2,
           strokeAlign: BorderSide.strokeAlignOutside,
         );
@@ -79,7 +79,7 @@ class _NasikoCheckboxState extends State<NasikoCheckbox> {
         Icons.check,
         key: const ValueKey('checked'),
         size: iconSizes.s, // 20px
-        color: colors.foregroundOnAction, // White
+        color: colors.foregroundOnBrand, // Ink on light-hue fills, white on dark-hue
       );
     } else {
       // Unchecked

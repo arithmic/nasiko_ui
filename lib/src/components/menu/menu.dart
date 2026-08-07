@@ -427,13 +427,7 @@ class _NasikoPopupMenuSurfaceState extends State<_NasikoPopupMenuSurface> {
           color: _menuSurfaceColor(context),
           borderRadius: BorderRadius.circular(radii.r16),
           border: Border.all(color: colors.borderPrimary),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: spacing.s16,
-              offset: Offset(0, spacing.s4),
-            ),
-          ],
+          boxShadow: context.elevation.overlay,
         ),
         child: Padding(
           padding: EdgeInsets.all(spacing.s12),

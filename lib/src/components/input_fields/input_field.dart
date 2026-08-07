@@ -95,7 +95,10 @@ class NasikoInputField extends StatelessWidget {
     final defaultBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(radii.r8),
       borderSide: BorderSide(
-        color: colors.borderPrimary,
+        // Functional-border tier: inputs are the one place where the border
+        // IS the affordance, so they use the stronger borderInput instead
+        // of the decorative borderPrimary hairline.
+        color: colors.borderInput,
         width: borderWidths.w1,
       ),
     );
@@ -103,8 +106,8 @@ class NasikoInputField extends StatelessWidget {
     final focusedBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(radii.r8),
       borderSide: BorderSide(
-        color: colors.borderSecondary,
-        width: borderWidths.w1,
+        color: colors.borderFocus,
+        width: borderWidths.w2,
       ),
     );
 

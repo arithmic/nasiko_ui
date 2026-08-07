@@ -80,15 +80,7 @@ class NasikoBanner extends StatelessWidget {
         border: Border.all(
           color: colors.borderPrimary, // neutral/300
         ),
-        boxShadow: [
-          BoxShadow(
-            // theme-blind by design: low-alpha neutral drop shadow, reads
-            // acceptably on both light and dark surfaces.
-            color: Color(0xFF64748B).withValues(alpha: 0.12),
-            blurRadius: 16,
-            offset: Offset(0, 8),
-          ),
-        ],
+        boxShadow: context.elevation.low,
       ),
       child: Row(
         children: [
@@ -157,15 +149,7 @@ class NasikoBanner extends StatelessWidget {
           color: colors.borderPrimary, // neutral/300
           width: borderWidths.w1,
         ),
-        boxShadow: [
-          BoxShadow(
-            // theme-blind by design: low-alpha neutral drop shadow, reads
-            // acceptably on both light and dark surfaces.
-            color: Color(0xFF64748B).withValues(alpha: 0.12),
-            blurRadius: 16,
-            offset: Offset(0, 8),
-          ),
-        ],
+        boxShadow: context.elevation.low,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

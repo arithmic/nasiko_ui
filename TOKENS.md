@@ -35,16 +35,19 @@ This document provides detailed reference for all design tokens available in the
 - `backgroundSuccess` - Success state background
 - `backgroundWarning` - Warning state background
 - `backgroundError` - Error state background
-- `backgroundInformation` - Information state background
+- `backgroundSuccessSubtle` / `backgroundWarningSubtle` / `backgroundErrorSubtle` - Extra-light feedback washes for large tinted areas
+- `backgroundInformation` - Information state background (fixed blue — never brand-derived)
+- `backgroundInformationOverlay` - Inverse overlay surface (tooltips): near-black in light mode, light sand in dark mode
 
 ### Foreground Colors (Text & Icons)
 
 **Default Text:**
 
-- `foregroundPrimary` - Primary text color
+- `foregroundPrimary` - Primary text color (warm ink)
 - `foregroundSecondary` - Secondary text color (less prominent)
 - `foregroundDisabled` - Disabled text color
-- `foregroundOnAction` - Text on action elements (buttons)
+- `foregroundOnAction` - Text on the inverse action fill (the primary button's near-black/near-white fill)
+- `foregroundOnBrand` - Text/icons on brand fills (checkmarks, selected days, brand avatars); ink on light-hue palettes, white on dark-hue palettes
 
 **Icons:**
 
@@ -52,11 +55,11 @@ This document provides detailed reference for all design tokens available in the
 - `foregroundIconSecondary` - Secondary icon color
 - `foregroundIconHover` - Icon hover state
 
-**Constants (Non-themeable):**
+**Constants (Non-themeable — identical in light and dark):**
 
 - `foregroundConstantWhite` - Pure white (0xFFFFFFFF)
-- `foregroundConstantBlack` - Pure black (0xFF000000)
-- `foregroundConstantBlackSecondary` - Near-black (0xFF1A1A1A)
+- `foregroundConstantBlack` - Warm ink near-black (0xFF26211C)
+- `foregroundConstantBlackSecondary` - sand800 (0xFF3A3430)
 
 **Brand Text:**
 
@@ -67,21 +70,37 @@ This document provides detailed reference for all design tokens available in the
 
 **Feedback Text:**
 
-- `foregroundSuccess` - Success text color
-- `foregroundWarning` - Warning text color
-- `foregroundError` - Error text color
-- `foregroundInformation` - Information text color
+- `foregroundSuccess` - Success text color (AA on `backgroundSuccess`)
+- `foregroundWarning` - Warning text color (AA on `backgroundWarning`)
+- `foregroundError` - Error text color (AA on `backgroundError`)
+- `foregroundErrorHover` - Hover shade for quiet destructive actions
+- `foregroundInformation` - Information text color (fixed blue)
+- `foregroundInformationOverlay` - Text on the inverse overlay surface
 
 ### Border Colors
 
-- `borderPrimary` - Primary border color
-- `borderSecondary` - Secondary border color
+- `borderPrimary` - Decorative hairline border
+- `borderInput` - Functional border for form controls (the border IS the affordance)
+- `borderSecondary` - Brand accent border
 - `borderHover` - Border on hover states
+- `borderFocus` - Keyboard focus ring (≥3:1 against the page background)
 - `borderSuccess` - Success state border
 - `borderError` - Error state border
 - `borderWarning` - Warning state border
 - `borderInformation` - Information state border
 - `borderDisabled` - Disabled state border
+
+## Elevation Tokens
+
+Shadows are tokenized (`context.elevation`) — components never hand-roll `BoxShadow`s:
+
+| Token | Use |
+|-------|-----|
+| `low` | Resting cards, banners |
+| `overlay` | Menus, popovers, dropdowns, hover cards |
+| `modal` | Dialogs, sheets (above the scrim) |
+
+Light theme shadows are warm-tinted (sand800-based, not pure black); the dark theme carries elevation via the surface ramp and keeps shadows minimal.
 
 ## Spacing Tokens
 

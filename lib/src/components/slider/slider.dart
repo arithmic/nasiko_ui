@@ -422,10 +422,10 @@ class _NasikoSliderState extends State<NasikoSlider> {
                               padding: EdgeInsets.all(spacing.s2),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                // Button-style focus ring: borderSecondary w2.
+                                // Button-style focus ring: borderFocus w2.
                                 border: Border.all(
                                   color: state.isFocused && enabled
-                                      ? colors.borderSecondary
+                                      ? colors.borderFocus
                                       : Colors.transparent,
                                   width: borderWidths.w2,
                                 ),

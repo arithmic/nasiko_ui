@@ -1,3 +1,32 @@
+## 0.1.0
+
+### Color system overhaul (WCAG-verified)
+
+**Accessibility (measured, all 16 palette × brightness variants):**
+
+- Brand fills now pair with a per-palette `foregroundOnBrand` (dark ink on light hues, white on dark hues) — every combination ≥4.5:1; light-hue palettes rest on the brighter 500 weight
+- Brand text/links moved to contrast-safe weights (700/600 light, 300 dark) — previously 2.98:1 on white for yellow
+- Feedback foregrounds now AA on their tinted backgrounds (700-weight light, 300-weight dark)
+- Fixed dark-theme tooltip/inverse overlay (was a translucent 1.64:1 surface; now opaque, 9.96:1); `NasikoTooltip` and rail tooltips use the overlay pair
+- Material `ColorScheme` is now derived 1:1 from `NasikoColorTheme` (`NasikoColorSchemeFactory.fromNasikoColors`) — fixes inverted error roles, the 500/600 primary mismatch, and unreadable `onSurfaceVariant`/`onTertiary` combinations
+- Destructive button hover reds are theme-resolved (hardcoded red700 measured 2.83:1 in dark)
+- New `test/contrast_guard_test.dart` CI gate sweeps every token pairing
+
+**New tokens:**
+
+- `foregroundOnBrand`, `foregroundErrorHover`, `borderFocus`, `borderInput`, `backgroundSuccessSubtle` / `backgroundWarningSubtle` / `backgroundErrorSubtle` (all optional with safe fallbacks)
+- `NasikoElevationTheme` (`context.elevation.low/overlay/modal`) — warm-tinted shadows in light, surface-ramp-led dark; replaces all hand-rolled `BoxShadow`s (including the banner's off-palette slate)
+
+**Color-theory changes:**
+
+- Information is a fixed blue in every palette (was brand-derived — semantics changed with the brand)
+- New warm near-black `foregroundPrimary`/`foregroundConstantBlack` (sandInk #26211C), hue-matched to the sand surfaces; constant tokens now identical across themes
+- Interaction states follow an adjacent-ramp-step rule; disabled fills/borders no longer collide with hover
+- Unified neutral scrim (`backgroundOverlay`, black 45%/60%) used by all sheets/modals/dialogs
+- Keyboard focus rings use dedicated `borderFocus` (distinct from hover); form controls use the stronger `borderInput` tier
+
+**Defaults:** `lightColors`/`darkColors` and `lightColorScheme`/`darkColorScheme` are now delegated to the factories (no drift possible). `lightColorScheme`/`darkColorScheme` changed from `const` to `final`.
+
 ## 0.0.1
 
 ### Initial Release

@@ -82,7 +82,7 @@ class AvatarPage extends StatelessWidget {
                 child: NasikoAvatar(
                   text: 'NK',
                   backgroundColor: context.colors.backgroundBrand,
-                  foregroundColor: context.colors.foregroundOnAction,
+                  foregroundColor: context.colors.foregroundOnBrand,
                 ),
               ),
               LabeledExample(

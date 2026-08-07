@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '_color_palette.dart';
+import 'color_palette_type.dart';
+import 'color_theme_factory.dart';
 
 @immutable
 class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
@@ -54,6 +55,34 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
     // historical hover; dark themes should set it to a light shade.
     Color? foregroundPrimaryHover,
 
+    // Optional: text/icon color that sits ON brand fills ([backgroundBrand]
+    // and its states). Distinct from [foregroundOnAction], which sits on the
+    // inverse (foregroundPrimary-filled) surfaces such as the primary
+    // button. Light-hued brand palettes need dark ink here while the
+    // inverse surface needs white — one token cannot serve both.
+    // Falls back to [foregroundOnAction] for backward compatibility.
+    Color? foregroundOnBrand,
+
+    // Optional: hover shade of [foregroundError] for quiet destructive
+    // actions. Falls back to [foregroundError].
+    Color? foregroundErrorHover,
+
+    // Optional: keyboard focus-ring color. Must clear 3:1 against the page
+    // background (WCAG 1.4.11 / 2.4.13). Falls back to [borderHover].
+    Color? borderFocus,
+
+    // Optional: resting border for form controls (inputs, selects) — the
+    // functional-border tier, stronger than the decorative [borderPrimary]
+    // hairline. Falls back to [borderPrimary].
+    Color? borderInput,
+
+    // Optional: extra-light feedback washes for large tinted areas
+    // (diagram nodes, row highlights). Fall back to the standard feedback
+    // backgrounds.
+    Color? backgroundSuccessSubtle,
+    Color? backgroundWarningSubtle,
+    Color? backgroundErrorSubtle,
+
     // Foreground Primary (Brand)
     required this.foregroundBrand,
     required this.foregroundBrandHover,
@@ -77,7 +106,14 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
     required this.borderDisabled,
     required this.borderInformation,
     required this.borderInformationOverlay,
-  }) : _foregroundPrimaryHover = foregroundPrimaryHover;
+  }) : _foregroundPrimaryHover = foregroundPrimaryHover,
+       _foregroundOnBrand = foregroundOnBrand,
+       _foregroundErrorHover = foregroundErrorHover,
+       _borderFocus = borderFocus,
+       _borderInput = borderInput,
+       _backgroundSuccessSubtle = backgroundSuccessSubtle,
+       _backgroundWarningSubtle = backgroundWarningSubtle,
+       _backgroundErrorSubtle = backgroundErrorSubtle;
 
   // Background Default
   final Color backgroundBase;
@@ -129,6 +165,47 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
   /// theme's historical primary-button hover).
   Color get foregroundPrimaryHover =>
       _foregroundPrimaryHover ?? foregroundConstantBlackSecondary;
+
+  final Color? _foregroundOnBrand;
+  final Color? _foregroundErrorHover;
+  final Color? _borderFocus;
+  final Color? _borderInput;
+  final Color? _backgroundSuccessSubtle;
+  final Color? _backgroundWarningSubtle;
+  final Color? _backgroundErrorSubtle;
+
+  /// Text/icon color on brand fills ([backgroundBrand] and its states):
+  /// checkmarks, selected calendar days, brand avatars. Distinct from
+  /// [foregroundOnAction] (which pairs with the inverse, near-black/near-
+  /// white primary-button fill). Defaults to [foregroundOnAction].
+  Color get foregroundOnBrand => _foregroundOnBrand ?? foregroundOnAction;
+
+  /// Hover shade of [foregroundError] for quiet destructive actions.
+  /// Defaults to [foregroundError].
+  Color get foregroundErrorHover => _foregroundErrorHover ?? foregroundError;
+
+  /// Keyboard focus-ring color, ≥3:1 against the page background.
+  /// Defaults to [borderHover].
+  Color get borderFocus => _borderFocus ?? borderHover;
+
+  /// Resting border for form controls — the functional-border tier.
+  /// Defaults to [borderPrimary].
+  Color get borderInput => _borderInput ?? borderPrimary;
+
+  /// Extra-light success wash for large tinted areas.
+  /// Defaults to [backgroundSuccess].
+  Color get backgroundSuccessSubtle =>
+      _backgroundSuccessSubtle ?? backgroundSuccess;
+
+  /// Extra-light warning wash for large tinted areas.
+  /// Defaults to [backgroundWarning].
+  Color get backgroundWarningSubtle =>
+      _backgroundWarningSubtle ?? backgroundWarning;
+
+  /// Extra-light error wash for large tinted areas.
+  /// Defaults to [backgroundError].
+  Color get backgroundErrorSubtle =>
+      _backgroundErrorSubtle ?? backgroundError;
 
   // Foreground Primary (Brand)
   final Color foregroundBrand;
@@ -189,6 +266,13 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
     Color? foregroundConstantBlack,
     Color? foregroundConstantBlackSecondary,
     Color? foregroundPrimaryHover,
+    Color? foregroundOnBrand,
+    Color? foregroundErrorHover,
+    Color? borderFocus,
+    Color? borderInput,
+    Color? backgroundSuccessSubtle,
+    Color? backgroundWarningSubtle,
+    Color? backgroundErrorSubtle,
     Color? foregroundBrand,
     Color? foregroundBrandHover,
     Color? foregroundBrandLink,
@@ -258,6 +342,15 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
           foregroundConstantBlackSecondary ??
           this.foregroundConstantBlackSecondary,
       foregroundPrimaryHover: foregroundPrimaryHover ?? _foregroundPrimaryHover,
+      foregroundOnBrand: foregroundOnBrand ?? _foregroundOnBrand,
+      foregroundErrorHover: foregroundErrorHover ?? _foregroundErrorHover,
+      borderFocus: borderFocus ?? _borderFocus,
+      borderInput: borderInput ?? _borderInput,
+      backgroundSuccessSubtle:
+          backgroundSuccessSubtle ?? _backgroundSuccessSubtle,
+      backgroundWarningSubtle:
+          backgroundWarningSubtle ?? _backgroundWarningSubtle,
+      backgroundErrorSubtle: backgroundErrorSubtle ?? _backgroundErrorSubtle,
       foregroundBrand: foregroundBrand ?? this.foregroundBrand,
       foregroundBrandHover: foregroundBrandHover ?? this.foregroundBrandHover,
       foregroundBrandLink: foregroundBrandLink ?? this.foregroundBrandLink,
@@ -433,6 +526,33 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
         other.foregroundPrimaryHover,
         t,
       ),
+      foregroundOnBrand: Color.lerp(
+        foregroundOnBrand,
+        other.foregroundOnBrand,
+        t,
+      ),
+      foregroundErrorHover: Color.lerp(
+        foregroundErrorHover,
+        other.foregroundErrorHover,
+        t,
+      ),
+      borderFocus: Color.lerp(borderFocus, other.borderFocus, t),
+      borderInput: Color.lerp(borderInput, other.borderInput, t),
+      backgroundSuccessSubtle: Color.lerp(
+        backgroundSuccessSubtle,
+        other.backgroundSuccessSubtle,
+        t,
+      ),
+      backgroundWarningSubtle: Color.lerp(
+        backgroundWarningSubtle,
+        other.backgroundWarningSubtle,
+        t,
+      ),
+      backgroundErrorSubtle: Color.lerp(
+        backgroundErrorSubtle,
+        other.backgroundErrorSubtle,
+        t,
+      ),
       foregroundBrand: Color.lerp(foregroundBrand, other.foregroundBrand, t)!,
       foregroundBrandHover: Color.lerp(
         foregroundBrandHover,
@@ -491,154 +611,18 @@ class NasikoColorTheme extends ThemeExtension<NasikoColorTheme> {
   }
 }
 
-// --- Default Light Instance ---
-// Mappings are now 1-to-1 with your "Nasiko Light" spec.
-// "default" is assumed to be the 500-weight color.
+// --- Default instances (yellow brand palette) ---
+// Delegated to [NasikoColorThemeFactory] so the default themes and the
+// palette factory can never drift apart: these ARE the factory's yellow
+// output. See color_theme_factory.dart for every value and its measured
+// WCAG contrast ratio.
 
-final NasikoColorTheme lightColors = NasikoColorTheme(
-  // Background Default
-  backgroundBase: white,
-  backgroundGroup: sand50,
-  backgroundSurface: sand100,
-  backgroundSurfaceHover: sand200,
-  backgroundSurfaceActive: sand300,
-  backgroundSurfaceSubtle: sand200,
-  backgroundOverlay: sand600.withValues(alpha: 0.4),
-  backgroundDisabled: sand200,
-
-  // Background Primary
-  backgroundBrand: yellow600,
-  backgroundBrandHover: yellow800,
-  backgroundBrandActive: yellow600,
-  backgroundBrandSubtle: yellow200,
-
-  // Background Secondary
-  backgroundSecondaryBrand: yellow100,
-  backgroundSecondaryBrandHover: yellow200,
-  backgroundSecondaryBrandActive: yellow100,
-
-  // Background Feedback
-  backgroundSuccess: green100,
-  backgroundWarning: orange100,
-  backgroundError: red100,
-  backgroundInformation: yellow50,
-  backgroundInformationOverlay: sand800,
-
-  // Foreground Default
-  foregroundPrimary: sand900,
-  foregroundSecondary: sand700,
-  foregroundDisabled: sand500,
-  foregroundOnAction: white,
-  foregroundIconPrimary: sand900,
-  foregroundIconSecondary: yellow600,
-  foregroundIconTertiary: sand500,
-  foregroundIconHover: yellow800,
-
-  // Foreground Constant
-  // NOTE: Corrected based on swatches, spec labels had typos.
-  foregroundConstantWhite: white,
-  foregroundConstantBlack: sand900,
-  foregroundConstantBlackSecondary: sand800,
-  foregroundPrimaryHover: sand800,
-
-  // Foreground Primary (Brand)
-  foregroundBrand: yellow600,
-  foregroundBrandHover: yellow800,
-  foregroundBrandLink: yellow600,
-  foregroundBrandHighlight: yellow500,
-
-  // Foreground Feedback
-  foregroundSuccess: green600,
-  foregroundWarning: orange600,
-  foregroundError: red600,
-  foregroundInformation: yellow800,
-  foregroundInformationOverlay: sand400,
-
-  // Border Default
-  borderPrimary: sand300,
-  borderSecondary: yellow600,
-  borderHover: yellow800,
-  borderSuccess: green300,
-  borderError: red200,
-  borderWarning: orange300,
-  borderDisabled: sand300,
-  borderInformation: yellow300,
-  borderInformationOverlay: sand800,
+final NasikoColorTheme lightColors = NasikoColorThemeFactory.light(
+  NasikoColorPalette.yellow,
 );
 
-// --- Dark Instance ---
-// This is an assumed dark theme, as no "Nasiko Dark" spec was provided.
-// It logically inverts the light theme roles.
-
-final NasikoColorTheme darkColors = NasikoColorTheme(
-  // Background Default
-  // Warm elevation ramp over a near-black base — see _color_palette.dart.
-  backgroundBase: sandDark950,
-  backgroundGroup: sandDark900,
-  backgroundSurface: sandDark850,
-  backgroundSurfaceHover: sandDark800,
-  backgroundSurfaceActive: sand800,
-  backgroundSurfaceSubtle: sandDark900,
-  backgroundOverlay: black.withValues(alpha: 0.6),
-  backgroundDisabled: sandDark800,
-
-  // Background Primary
-  backgroundBrand: yellow600,
-  backgroundBrandHover: yellow400,
-  backgroundBrandActive: yellow500,
-  backgroundBrandSubtle: yellow900,
-
-  // Background Secondary
-  backgroundSecondaryBrand: yellow900,
-  backgroundSecondaryBrandHover: yellow800,
-  backgroundSecondaryBrandActive: yellow900,
-
-  // Background Feedback
-  backgroundSuccess: green900,
-  backgroundWarning: orange900,
-  backgroundError: red900,
-  backgroundInformation: yellow900,
-  backgroundInformationOverlay: sand200.withValues(alpha: 0.5),
-
-  // Foreground Default
-  foregroundPrimary: sand100,
-  foregroundSecondary: sand400,
-  foregroundDisabled: sand600,
-  foregroundOnAction: sand900,
-  foregroundIconPrimary: sand100,
-  foregroundIconSecondary: yellow600,
-  foregroundIconTertiary: sand400,
-  foregroundIconHover: yellow400,
-
-  // Foreground Constant
-  foregroundConstantWhite: white,
-  foregroundConstantBlack: black,
-  foregroundConstantBlackSecondary: sand900,
-  foregroundPrimaryHover: sand200,
-
-  // Foreground Primary (Brand)
-  foregroundBrand: yellow400,
-  foregroundBrandHover: yellow300,
-  foregroundBrandLink: yellow400,
-  foregroundBrandHighlight: yellow400,
-
-  // Foreground Feedback
-  foregroundSuccess: green400,
-  foregroundWarning: orange400,
-  foregroundError: red400,
-  foregroundInformation: yellow300,
-  foregroundInformationOverlay: sand700,
-
-  // Border Default — hairlines one ramp-step above their surfaces.
-  borderPrimary: sand800,
-  borderSecondary: yellow600,
-  borderHover: yellow400,
-  borderSuccess: green600,
-  borderError: red600,
-  borderWarning: orange600,
-  borderDisabled: sandDark800,
-  borderInformation: yellow700,
-  borderInformationOverlay: sand200,
+final NasikoColorTheme darkColors = NasikoColorThemeFactory.dark(
+  NasikoColorPalette.yellow,
 );
 
 // --- BuildContext Extension ---

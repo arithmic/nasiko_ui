@@ -18,19 +18,6 @@ import 'button_press_scale.dart';
 /// Internal to the package: intentionally not exported from `buttons.dart`
 /// (same policy as `button_layout.dart` and `button_press_scale.dart`).
 
-/// Raw palette red700, historically hardcoded by the destructive variants
-/// (hover foreground/border). Intentionally NOT a semantic token:
-/// `colors.foregroundError` is red600 in light but red400 in dark, while the
-/// design uses this exact value in both themes. Centralized here so the hex
-/// exists in exactly one place.
-const Color kDestructiveHoverRed700 = Color(0xFFB91C1C);
-
-/// Raw palette red600, historically hardcoded as the hover border of
-/// [DestructiveSecondaryButton]. Matches light-theme `foregroundError` by
-/// value only (dark theme differs), so it stays a named constant rather than
-/// a token. See [kDestructiveHoverRed700].
-const Color kDestructiveHoverRed600 = Color(0xFFDC2626);
-
 /// The visual variant of a Nasiko button.
 ///
 /// Library-internal: combined with the button kind (label / icon / text) it
@@ -323,7 +310,7 @@ NasikoButtonSpec _labelSpec(
         side: WidgetStateProperty.resolveWith<BorderSide?>((states) {
           if (states.contains(WidgetState.focused)) {
             return BorderSide(
-              color: colors.borderSecondary,
+              color: colors.borderFocus,
               width: borderWidths.w2,
               strokeAlign: BorderSide.strokeAlignOutside,
             );
@@ -366,7 +353,7 @@ NasikoButtonSpec _labelSpec(
           } else if (states.contains(WidgetState.focused)) {
             // Focused state with border outside and 2px gap
             return BorderSide(
-              color: colors.borderSecondary,
+              color: colors.borderFocus,
               width: borderWidths.w2,
               strokeAlign: BorderSide.strokeAlignOutside,
             );
@@ -412,7 +399,7 @@ NasikoButtonSpec _labelSpec(
             );
           } else if (states.contains(WidgetState.focused)) {
             return BorderSide(
-              color: colors.borderSecondary,
+              color: colors.borderFocus,
               width: borderWidths.w2,
             );
           }
@@ -433,7 +420,7 @@ NasikoButtonSpec _labelSpec(
             return colors.backgroundDisabled;
           }
           if (states.contains(WidgetState.hovered)) {
-            return colors.foregroundError; // red700 for hover
+            return colors.foregroundError; // strong red fill on hover
           }
           if (states.contains(WidgetState.focused)) {
             return colors.backgroundError; // red600
@@ -483,7 +470,7 @@ NasikoButtonSpec _labelSpec(
             return colors.foregroundDisabled;
           }
           if (states.contains(WidgetState.hovered)) {
-            return kDestructiveHoverRed700;
+            return colors.foregroundErrorHover;
           }
           // Default, Focus, Pressed
           return colors.foregroundError;
@@ -496,7 +483,9 @@ NasikoButtonSpec _labelSpec(
             );
           } else if (states.contains(WidgetState.hovered)) {
             return BorderSide(
-              color: kDestructiveHoverRed700,
+              // Theme-resolved hover red (the old hardcoded red700 measured
+              // 2.83:1 against the dark theme's canvas).
+              color: colors.foregroundErrorHover,
               width: borderWidths.w1,
             );
           } else if (states.contains(WidgetState.focused)) {
@@ -543,7 +532,8 @@ NasikoButtonSpec _labelSpec(
             );
           } else if (states.contains(WidgetState.hovered)) {
             return BorderSide(
-              color: kDestructiveHoverRed600,
+              // Theme-resolved (was a hardcoded light-theme red600).
+              color: colors.foregroundError,
               width: borderWidths.w1,
             );
           }
@@ -594,7 +584,7 @@ NasikoButtonSpec _iconSpec(BuildContext context, NasikoButtonVariant variant) {
             );
           } else if (states.contains(WidgetState.focused)) {
             return BorderSide(
-              color: colors.borderSecondary,
+              color: colors.borderFocus,
               width: borderWidths.w2,
             );
           }
@@ -636,7 +626,7 @@ NasikoButtonSpec _iconSpec(BuildContext context, NasikoButtonVariant variant) {
             );
           } else if (states.contains(WidgetState.focused)) {
             return BorderSide(
-              color: colors.borderSecondary,
+              color: colors.borderFocus,
               width: borderWidths.w2,
             );
           }
@@ -718,7 +708,9 @@ NasikoButtonSpec _iconSpec(BuildContext context, NasikoButtonVariant variant) {
             );
           } else if (states.contains(WidgetState.hovered)) {
             return BorderSide(
-              color: kDestructiveHoverRed700,
+              // Theme-resolved hover red (the old hardcoded red700 measured
+              // 2.83:1 against the dark theme's canvas).
+              color: colors.foregroundErrorHover,
               width: borderWidths.w1,
             );
           } else if (states.contains(WidgetState.focused)) {

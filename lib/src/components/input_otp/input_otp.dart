@@ -340,10 +340,10 @@ class _OtpSlot extends StatelessWidget {
       borderColor = colors.borderDisabled;
       borderWidth = borderWidths.w1;
     } else if (isActive) {
-      borderColor = hasError ? colors.borderError : colors.borderSecondary;
+      borderColor = hasError ? colors.borderError : colors.borderFocus;
       borderWidth = borderWidths.w2;
     } else {
-      borderColor = hasError ? colors.borderError : colors.borderPrimary;
+      borderColor = hasError ? colors.borderError : colors.borderInput;
       borderWidth = borderWidths.w1;
     }
 

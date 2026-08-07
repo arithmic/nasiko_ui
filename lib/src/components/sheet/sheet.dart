@@ -44,7 +44,7 @@ Future<T?> showNasikoSheet<T>({
     // DismissAction, which also respects barrierDismissible.
     barrierDismissible: isDismissible,
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-    barrierColor: barrierColor ?? Colors.black54,
+    barrierColor: barrierColor ?? context.colors.backgroundOverlay,
     transitionDuration: motion.resolve(context, motion.panel),
     // The slide lives inside pageBuilder (around the sheet itself) so the
     // fractional offset is relative to the sheet's width, not the screen's.

@@ -54,7 +54,7 @@ Future<T?> showNasikoModal<T>({
     context: context,
     barrierDismissible: isDismissible,
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-    barrierColor: Colors.black54,
+    barrierColor: context.colors.backgroundOverlay,
     transitionDuration: motion.resolve(context, motion.base),
     transitionBuilder: (context, animation, secondaryAnimation, child) {
       final curved = CurvedAnimation(

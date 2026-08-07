@@ -90,7 +90,7 @@ Future<void> showNasikoCommandPalette({
     context: context,
     barrierDismissible: true,
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-    barrierColor: Colors.black54,
+    barrierColor: context.colors.backgroundOverlay,
     transitionDuration: motion.resolve(context, motion.base),
     transitionBuilder: (context, animation, secondaryAnimation, child) {
       final curved = CurvedAnimation(
@@ -337,13 +337,7 @@ class _NasikoCommandPaletteState extends State<_NasikoCommandPalette> {
                   color: colors.borderPrimary,
                   width: borderWidths.w1,
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.08),
-                    blurRadius: spacing.s16,
-                    offset: Offset(0, spacing.s4),
-                  ),
-                ],
+                boxShadow: context.elevation.overlay,
               ),
               // Clip so the highlight and scroll content respect the radius.
               clipBehavior: Clip.antiAlias,

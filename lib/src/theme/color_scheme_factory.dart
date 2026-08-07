@@ -1,150 +1,90 @@
 import 'package:flutter/material.dart';
-import 'package:nasiko_ui/src/tokens/colors/_color_palette.dart';
 import 'package:nasiko_ui/src/tokens/colors/color_palette_type.dart';
+import 'package:nasiko_ui/src/tokens/colors/color_theme_factory.dart';
+import 'package:nasiko_ui/src/tokens/colors/colors.dart';
 
 /// Factory class for creating Material [ColorScheme] instances based on
 /// different color palettes.
+///
+/// The scheme is derived 1:1 from [NasikoColorTheme] rather than
+/// hand-authored, so stock Material widgets (dialogs, date pickers,
+/// snackbars, ripples, text selection) can never drift from Nasiko
+/// components. The previous hand-written scheme had inverted error roles
+/// (error: red100 / onError: red500), a 500-weight primary while Nasiko
+/// used 600, and onSurfaceVariant equal to surfaceContainerHighest (1.00:1).
 class NasikoColorSchemeFactory {
   NasikoColorSchemeFactory._();
 
   /// Creates a Material light color scheme using the specified [palette].
   static ColorScheme light(NasikoColorPalette palette) {
-    final brandColors = _getPaletteColors(palette);
-
-    return ColorScheme(
-      brightness: Brightness.light,
-      primary: brandColors.primary,
-      onPrimary: white,
-      primaryContainer: brandColors.primaryLightest,
-      onPrimaryContainer: sand700,
-      secondary: sand500,
-      onSecondary: sand700,
-      secondaryContainer: sand50,
-      onSecondaryContainer: sand700,
-      tertiary: blue100,
-      onTertiary: white,
-      tertiaryContainer: blue100,
-      onTertiaryContainer: blue500,
-      error: red100,
-      onError: red500,
-      errorContainer: red100,
-      onErrorContainer: red500,
-      surface: sand100,
-      onSurface: sand700,
-      surfaceContainerHighest: sand500,
-      onSurfaceVariant: sand500,
-      outline: sand300,
-      outlineVariant: sand200,
-      shadow: black,
-      scrim: black,
-      inverseSurface: sand800,
-      onInverseSurface: sand100,
-      inversePrimary: brandColors.primary,
-      surfaceTint: brandColors.primary,
+    return fromNasikoColors(
+      NasikoColorThemeFactory.light(palette),
+      Brightness.light,
     );
   }
 
   /// Creates a Material dark color scheme using the specified [palette].
   static ColorScheme dark(NasikoColorPalette palette) {
-    final brandColors = _getPaletteColors(palette);
-
-    return ColorScheme(
-      brightness: Brightness.dark,
-      primary: brandColors.primary,
-      onPrimary: sand900,
-      primaryContainer: brandColors.primaryDarkest,
-      onPrimaryContainer: sand100,
-      secondary: sand700,
-      onSecondary: sand100,
-      secondaryContainer: sand900,
-      onSecondaryContainer: sand100,
-      tertiary: blue900,
-      onTertiary: sand900,
-      tertiaryContainer: blue900,
-      onTertiaryContainer: blue400,
-      error: red900,
-      onError: red400,
-      errorContainer: red900,
-      onErrorContainer: red400,
-      surface: sand800,
-      onSurface: sand100,
-      surfaceContainerHighest: sand700,
-      onSurfaceVariant: sand400,
-      outline: sand700,
-      outlineVariant: sand700,
-      shadow: black,
-      scrim: black,
-      inverseSurface: sand100,
-      onInverseSurface: sand800,
-      inversePrimary: brandColors.primary,
-      surfaceTint: brandColors.primary,
+    return fromNasikoColors(
+      NasikoColorThemeFactory.dark(palette),
+      Brightness.dark,
     );
   }
 
-  /// Helper method to get palette-specific colors
-  static _PaletteColors _getPaletteColors(NasikoColorPalette palette) {
-    switch (palette) {
-      case NasikoColorPalette.yellow:
-        return _PaletteColors(
-          primaryLightest: yellow100,
-          primary: yellow500,
-          primaryDarkest: yellow900,
-        );
-      case NasikoColorPalette.orange:
-        return _PaletteColors(
-          primaryLightest: orange100,
-          primary: orange500,
-          primaryDarkest: orange900,
-        );
-      case NasikoColorPalette.red:
-        return _PaletteColors(
-          primaryLightest: red100,
-          primary: red500,
-          primaryDarkest: red900,
-        );
-      case NasikoColorPalette.purple:
-        return _PaletteColors(
-          primaryLightest: purple100,
-          primary: purple500,
-          primaryDarkest: purple900,
-        );
-      case NasikoColorPalette.blue:
-        return _PaletteColors(
-          primaryLightest: blue100,
-          primary: blue500,
-          primaryDarkest: blue900,
-        );
-      case NasikoColorPalette.teal:
-        return _PaletteColors(
-          primaryLightest: teal100,
-          primary: teal500,
-          primaryDarkest: teal900,
-        );
-      case NasikoColorPalette.green:
-        return _PaletteColors(
-          primaryLightest: green100,
-          primary: green500,
-          primaryDarkest: green900,
-        );
-      case NasikoColorPalette.sand:
-        return _PaletteColors(
-          primaryLightest: sand100,
-          primary: sand500,
-          primaryDarkest: sand900,
-        );
-    }
+  /// Maps a [NasikoColorTheme] onto the Material roles.
+  ///
+  /// Mapping rules:
+  /// * `primary`/`onPrimary` — the brand fill and its verified on-color.
+  /// * `*Container` roles — the corresponding tinted/subtle surfaces with
+  ///   their verified foregrounds.
+  /// * `secondary` — the neutral emphasis fill (foregroundSecondary works
+  ///   as a fill against the base background in both themes).
+  /// * `tertiary` — the information pair (fixed blue), Material's closest
+  ///   analogue for a non-brand accent.
+  /// * `error` — the strong feedback foreground as the fill (red700 light /
+  ///   red300 dark), with the page base as text on it (6.47 / 9.66).
+  /// * `surface`/`onSurface` — the scaffold base and primary text.
+  /// * `outline` — the functional border tier; `outlineVariant` the
+  ///   decorative hairline.
+  /// * `inverseSurface` — the opposite theme's tooltip/overlay pair.
+  static ColorScheme fromNasikoColors(
+    NasikoColorTheme colors,
+    Brightness brightness,
+  ) {
+    return ColorScheme(
+      brightness: brightness,
+      primary: colors.backgroundBrand,
+      onPrimary: colors.foregroundOnBrand,
+      primaryContainer: colors.backgroundBrandSubtle,
+      onPrimaryContainer: colors.foregroundPrimary,
+      secondary: colors.foregroundSecondary,
+      onSecondary: colors.backgroundBase,
+      secondaryContainer: colors.backgroundSecondaryBrand,
+      onSecondaryContainer: colors.foregroundPrimary,
+      tertiary: colors.foregroundInformation,
+      onTertiary: colors.backgroundInformation,
+      tertiaryContainer: colors.backgroundInformation,
+      onTertiaryContainer: colors.foregroundInformation,
+      error: colors.foregroundError,
+      onError: colors.backgroundBase,
+      errorContainer: colors.backgroundError,
+      onErrorContainer: colors.foregroundError,
+      surface: colors.backgroundBase,
+      onSurface: colors.foregroundPrimary,
+      surfaceContainerLowest: colors.backgroundBase,
+      surfaceContainerLow: colors.backgroundGroup,
+      surfaceContainer: colors.backgroundSurface,
+      surfaceContainerHigh: colors.backgroundSurfaceHover,
+      surfaceContainerHighest: colors.backgroundSurfaceActive,
+      onSurfaceVariant: colors.foregroundSecondary,
+      outline: colors.borderInput,
+      outlineVariant: colors.borderPrimary,
+      shadow: Colors.black,
+      scrim: Colors.black,
+      inverseSurface: colors.backgroundInformationOverlay,
+      onInverseSurface: colors.foregroundInformationOverlay,
+      inversePrimary: colors.foregroundBrandHighlight,
+      surfaceTint: colors.backgroundBrand,
+    );
   }
-}
-
-/// Internal helper class for palette color references
-class _PaletteColors {
-  final Color primaryLightest;
-  final Color primary;
-  final Color primaryDarkest;
-
-  _PaletteColors({
-    required this.primaryLightest,
-    required this.primary,
-    required this.primaryDarkest,
-  });
 }

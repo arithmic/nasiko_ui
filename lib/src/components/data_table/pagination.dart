@@ -242,7 +242,7 @@ class _PageNumberButton extends StatelessWidget {
 
         if (states.contains(WidgetState.focused)) {
           borderSide = BorderSide(
-            color: colors.borderSecondary,
+            color: colors.borderFocus,
             width: borderWidths.w2,
             strokeAlign: BorderSide.strokeAlignOutside,
           );
