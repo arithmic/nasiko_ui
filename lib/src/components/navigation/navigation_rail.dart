@@ -125,7 +125,8 @@ class _RailItemState extends State<_RailItem> {
     final typography = context.typography;
 
     final renderBox = this.context.findRenderObject() as RenderBox;
-    final target = (renderBox.localToGlobal(Offset.zero) & renderBox.size).centerRight;
+    final target =
+        (renderBox.localToGlobal(Offset.zero) & renderBox.size).centerRight;
 
     return Positioned.fill(
       child: IgnorePointer(
@@ -187,7 +188,11 @@ class _RailItemState extends State<_RailItem> {
       },
       onExit: (_) {
         setState(() => _hovered = false);
-        _tooltipController.hide();
+        // A rebuild can expand the rail while the pointer is still over this
+        // item. That removes the OverlayPortal before MouseTracker delivers
+        // its exit event, leaving the controller detached. Calling hide() on
+        // that detached controller asserts in OverlayEntry (z-order is null).
+        if (!widget.isExpanded) _tooltipController.hide();
       },
       cursor: widget.item.isDisabled
           ? SystemMouseCursors.basic
