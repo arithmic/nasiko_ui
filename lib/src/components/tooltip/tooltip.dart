@@ -22,6 +22,7 @@ class NasikoTooltip extends StatelessWidget {
     required this.message,
     required this.child,
     this.preferBelow = true,
+    this.verticalOffset,
     this.waitDuration = const Duration(milliseconds: 300),
   });
 
@@ -31,6 +32,11 @@ class NasikoTooltip extends StatelessWidget {
   /// When `true` (default) the tooltip floats below the target; set to `false`
   /// to prefer placement above.
   final bool preferBelow;
+
+  /// Distance from the target's vertical center to the tooltip, in logical
+  /// px. `null` keeps the framework default (24). For a precise gap below a
+  /// target of known height, pass `targetHeight / 2 + gap`.
+  final double? verticalOffset;
 
   final Duration waitDuration;
 
@@ -44,6 +50,7 @@ class NasikoTooltip extends StatelessWidget {
     return Tooltip(
       message: message,
       preferBelow: preferBelow,
+      verticalOffset: verticalOffset,
       waitDuration: waitDuration,
       // Explicit (matches the framework default): keeps [message] exposed to
       // assistive technology as a semantics tooltip. The framework Tooltip
